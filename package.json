@@ -1,0 +1,10 @@
+{
+  "name": "namsvefur",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Námsvefur Orra: fimm prófæfingasíður sameinaðar í eitt forrit",
+  "scripts": {
+    "inventory": "node scripts/inventory-legacy.js"
+  }
+}
