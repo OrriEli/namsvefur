@@ -1,6 +1,6 @@
 # Gagnasnið
 
-29. okt. 2026 · áfangi 0 · **tillaga til samþykktar**
+29. okt. 2026 · áfangi 0 · **samþykkt 30. okt. 2026**
 
 Öll fimm fögin eru lýst með einu sniði. Vélin les `Course`-hlut og þarf aldrei að vita úr hvaða fagi atriði kemur. Sniðið verður skilgreint með JSDoc í `src/schema.js` og prófað með skriftu (sjá „Prófanir“ neðst).
 
@@ -39,6 +39,7 @@ Sniðið byggir á verklýsingunni. Áður en það var skrifað var öllum 1.11
  *  @property {ExamInfo} examInfo       staðreyndir um prófið af gömlu síðunni
  *  @property {number} passScore        einkunn (0–1) sem skrefadæmi þarf til að teljast rétt
  *  @property {Partial<Record<Source,string>>} [sourceLabels]  heiti uppruna í síum, ef önnur en sjálfgefin
+ *  @property {string} [genLabel]       forskeyti á merki rafaldæma, t.d. 'Reikningur' (sjálfgefið 'Rafall')
  *  @property {{key:string, file:string}} legacy   gamli geymslulykillinn og skráin
  */
 
@@ -404,6 +405,7 @@ Blaðið er tekið úr því sem `renderSheet()` gömlu síðunnar skilar, ekki 
  *  @property {string} [format]         'Skriflegt lokapróf, 50% af einkunn. Snið óstaðfest.'
  *  @property {string} [aids]
  *  @property {string} [weight]
+ *  @property {string} [note]           skýringin undir stöðutöflunni á gömlu síðunni
  *  @property {{value:string, label:string}[]} facts   staðreyndareitirnir á forsíðu gömlu síðunnar
  */
 ```
@@ -492,10 +494,14 @@ export const EXAMS = [
 5. `format.js` gefur sama streng og hver gömul `F`-útgáfa.
 6. Samsett Blað = það sem `renderSheet()` gömlu síðunnar skilar (bil á milli merkja jöfnuð).
 
-## Til ákvörðunar
+## Ákvarðanir
 
-1. Samþykkir þú frávikin sjö efst?
-2. **HAG101G 25. nóv. kl. 13:30–16:30**: þú skrifaðir þetta undir spurninguna um lokapróf hinna fjögurra. Er þetta lokapróf HAG101G?
-3. **HAG108G 1. des. kl. 13:30**: gamla síðan segir þetta, verklýsingin segir óstaðfest. Á að nota það?
-4. `passScore` í HAG101G: halda fullu húsi (eins og gamla síðan) eða 0,7 eins og hin?
-5. „§“-villan í þremur 108-textum: flytja orðrétt (sjálfgefið) eða laga?
+Orri samþykkti sniðið 30. okt. 2026 með sjálfgefnu svörunum:
+
+1. Frávikin sjö efst gilda.
+2. HAG101G: lokapróf mið. 25. nóv. 2026 kl. 13:30–16:30 (180 mín.), auk miðannarprófs 5. nóv.
+3. HAG108G: lokapróf 1. des. 2026 kl. 13:30, eins og á gömlu síðunni.
+4. `passScore` í HAG101G er 1 (fullt hús), eins og á gömlu síðunni.
+5. „§“-villan í 108 er flutt orðrétt.
+
+Tvö valkvæð svið bættust við í áfanga 1 svo texti gömlu síðnanna haldist: `Course.genLabel` („Reikningur · …“ í 103 og 107) og `ExamInfo.note`.

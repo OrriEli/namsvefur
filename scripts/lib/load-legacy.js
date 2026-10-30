@@ -21,7 +21,7 @@ export const NAMES = [
   // geymsla
   'KEY', 'STORE_KEY', 'S',
   // föll sem útdrátturinn notar
-  'renderSheet', 'renderPlan', 'instantiate', 'instW', 'instQ', 'parseNum', 'parseAns', 'gradeNum',
+  'renderSheet', 'renderPlan', 'renderHome', 'renderExam', 'buildExam', 'instantiate', 'instW', 'instQ', 'parseNum', 'parseAns', 'gradeNum',
   'F', 'R', 'PROB'
 ];
 

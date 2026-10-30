@@ -5,6 +5,17 @@
   "type": "module",
   "description": "Námsvefur Orra: fimm prófæfingasíður sameinaðar í eitt forrit",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:single": "vite build --mode single",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "extract": "node scripts/extract-legacy.js",
     "inventory": "node scripts/inventory-legacy.js"
+  },
+  "devDependencies": {
+    "vite": "^8.3.5",
+    "vite-plugin-singlefile": "^2.3.4",
+    "vitest": "^4.1.11"
   }
 }
