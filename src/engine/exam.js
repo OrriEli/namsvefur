@@ -4,7 +4,7 @@
 
 import { entriesOf, weightedPick, shuffle, instantiate, inMode } from './practice.js';
 import { recordAnswer } from './review.js';
-import { blank, grade } from './items/index.js';
+import { blank, grade, stepTotal } from './items/index.js';
 
 /** Stig atriðis á prófi: vægi dæmis (skriflegt), stig gerðar (blandað), stig atriðis (HAG107G) eða 1. */
 export function pointsOf(it, format) {
@@ -122,7 +122,11 @@ export function scoreExam(course, exam) {
 /** Metur, skráir hvert svar (röng fara í villubankann) og vistar niðurstöðuna í sögu. */
 export function finishExam(state, course, exam, { timeout = false, now = Date.now() } = {}) {
   const scores = scoreExam(course, exam);
-  exam.items.forEach((it, i) => { if (it.type !== 'card') recordAnswer(state, it.gid, scores[i].frac, { passScore: course.passScore, now }); });
+  exam.items.forEach((it, i) => {
+    if (it.type === 'card') return;
+    const pts = course.engine === 'written' && it.type === 'steps' ? { pts: scores[i].frac * stepTotal(it), max: stepTotal(it) } : {};
+    recordAnswer(state, it.gid, scores[i].frac, { passScore: course.passScore, now, ...pts });
+  });
   const score = scores.reduce((s, x) => s + x.pts, 0), max = scores.reduce((s, x) => s + x.max, 0);
   const used = exam.used ?? Math.min(exam.dur, now - exam.start);
   const res = { course: course.id, format: exam.format, label: exam.label, at: now, used, n: exam.items.filter(it => it.type !== 'card').length, score, max, timeout: exam.timeout ?? timeout };

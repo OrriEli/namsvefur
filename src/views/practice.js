@@ -59,7 +59,8 @@ export function render(ctx) {
   function finish(score) {
     const it = P.cur; if (!it || P.done) return;
     P.done = true; P.n++; P.c += score;
-    const ok = recordAnswer(S, it.gid, score, { passScore: c.passScore });
+    const pts = c.engine === 'written' && it.type === 'steps' ? { pts: score * stepTotal(it), max: stepTotal(it) } : {};
+    const ok = recordAnswer(S, it.gid, score, { passScore: c.passScore, ...pts });
     logActivity(S, c.id, 'practice', score);
     const m = mode();
     if (m && m.adapt && !P.review) adaptAfter(ok);

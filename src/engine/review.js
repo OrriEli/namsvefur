@@ -1,11 +1,13 @@
 // Villubanki, einföld útgáfa (áfangi 1): rangt svar → í bankann, á tíma strax;
 // tvö rétt svör í röð á meðan atriðið er í bankanum → út. Dreifð endurtekning kemur í áfanga 4.
 
-/** Skráir svar á atriði og uppfærir bankann. Skilar true ef svarið telst rétt. */
-export function recordAnswer(state, gid, score, { passScore = 1, now = Date.now() } = {}) {
+/** Skráir svar á atriði og uppfærir bankann. Skilar true ef svarið telst rétt.
+ *  `pts`/`max`: stig skriflegs dæmis (HAG101G), svo staðan sé hlutfall stiga eins og á gömlu síðunni. */
+export function recordAnswer(state, gid, score, { passScore = 1, now = Date.now(), pts, max } = {}) {
   const p = state.items[gid] || (state.items[gid] = { n: 0, c: 0, streak: 0 });
   const ok = score >= passScore - 1e-9;
   p.n++; p.c += score; p.last = now;
+  if (max !== undefined) { p.p = (p.p || 0) + pts; p.m = (p.m || 0) + max; }
   if (ok) {
     p.streak++;
     if (p.box) { p.hits = (p.hits || 0) + 1; if (p.hits >= 2) { delete p.box; delete p.due; delete p.hits; } }

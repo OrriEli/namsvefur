@@ -35,6 +35,13 @@ export const pctTxt = p => p === null || p === undefined ? '–' : Math.round(p 
 // Einkunn á 0–10 með einum aukastaf: 0,73 → „7,3“.
 export const grade10 = p => F.dec(p * 10, 1);
 
+// Dagsetning og tími á íslensku óháð stillingum vafrans: „17. nóv. kl. 16:44“.
+const MON = ['jan.', 'feb.', 'mars', 'apr.', 'maí', 'júní', 'júlí', 'ág.', 'sept.', 'okt.', 'nóv.', 'des.'];
+export function fmtWhen(t) {
+  const d = new Date(t);
+  return `${d.getDate()}. ${MON[d.getMonth()]} kl. ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
+
 // Lengd í mm:ss (eða h:mm:ss).
 export function fmtDur(ms) {
   const s = Math.max(0, Math.round(ms / 1000)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), r = s % 60;

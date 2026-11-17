@@ -94,16 +94,17 @@ export function instantiate(course, e, rnd = Math.random) {
   return b;
 }
 
-/** Staða flokks: tilraunir, rétt, hve margar færslur hafa sést og hlutfall réttra. Spjöld teljast ekki með. */
+/** Staða flokks: tilraunir, rétt, hve margar færslur hafa sést og hlutfall réttra. Spjöld teljast ekki með.
+ *  Skrifleg dæmi með stigum (HAG101G) gilda eftir stigum: hlutfall = Σ stig / Σ hámark, eins og á gömlu síðunni. */
 export function topicStats(course, state, topic, filter = e => e.type !== 'card', level) {
-  let n = 0, c = 0, seen = 0, total = 0;
+  let n = 0, c = 0, seen = 0, total = 0, num = 0, den = 0;
   for (const e of entriesOf(course)) {
     if (e.topic !== topic || !filter(e) || (level !== undefined && e.level !== level)) continue;
     total++;
     const p = state.items[e.gid];
-    if (p) { n += p.n; c += p.c; seen++; }
+    if (p) { n += p.n; c += p.c; seen++; num += p.m ? p.p : p.c; den += p.m ? p.m : p.n; }
   }
-  return { n, c, seen, total, pct: n ? c / n : null };
+  return { n, c, seen, total, pct: den ? num / den : null };
 }
 
 /** k veikustu flokkarnir (upprifjunarflokkar undanskildir), ósnertir taldir 50%. */

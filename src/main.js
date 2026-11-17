@@ -1,4 +1,4 @@
-// Ræsing og leiðsögn. Slóðir: #/fog, #/fag/<id>[/aefing|/prof|/bladid|/aaetlun][?…], #/villur
+// Ræsing og leiðsögn. Slóðir: #/fog, #/fag/<id>[/aefing|/prof|/bladid|/aaetlun][?…], #/villur, #/stillingar
 
 import './ui/base.css';
 import './ui/legacy.css';
@@ -12,13 +12,15 @@ import { $, setTopH } from './ui/dom.js';
 import * as coursesView from './views/courses.js';
 import * as courseView from './views/course.js';
 import * as wrongView from './views/wrong.js';
+import * as settingsView from './views/settings.js';
 
 const store = createStore();
 let current = null;
 
 const NAV = [
   { href: '#/fog', label: 'Fög', match: p => !p[0] || p[0] === 'fog' || p[0] === 'fag' },
-  { href: '#/villur', label: 'Villur', match: p => p[0] === 'villur', pill: true }
+  { href: '#/villur', label: 'Villur', match: p => p[0] === 'villur', pill: true },
+  { href: '#/stillingar', label: 'Stillingar', match: p => p[0] === 'stillingar' }
 ];
 
 function parse() {
@@ -40,6 +42,7 @@ function route() {
   const course = parts[0] === 'fag' ? courseById(parts[1]) : null;
   if (course) current = courseView.render({ ...ctx, course, tab: parts[2] || 'yfirlit' });
   else if (parts[0] === 'villur') current = wrongView.render(ctx);
+  else if (parts[0] === 'stillingar') current = settingsView.render(ctx);
   else current = coursesView.render(ctx);
   renderNav(parts);
   setTopH();

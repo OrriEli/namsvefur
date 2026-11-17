@@ -421,7 +421,7 @@ Prófdagar eru **ekki** í gagnaskránum heldur í `src/config.js`, svo Orri bre
 | Rafall með stigum | `<fag>:<id>@<stig>` | `hag106g:g-ev@2` |
 | Hraðútgáfa rafals (101) | `<fag>:q:<id>` | `hag101g:q:g-mul` |
 
-Auðkenni er klofið á **fyrsta** tvípunkti. Hlutinn á eftir fagi er nákvæmlega lykillinn sem gamla síðan notaði í `st`, `qs` og `wrong`, svo innflutningur gömlu sögunnar er forskeyting.
+Auðkenni er klofið á **fyrsta** tvípunkti. Innflutningurinn er í `src/store/legacy-import.js` og stillingasíðunni (`#/stillingar`). Hann má endurtaka: hlutur gömlu síðunnar er geymdur í `imp` og skipt út, svo ekkert tvítelst, og æfing á nýja vefnum ræður streak og villubanka. Hlutinn á eftir fagi er nákvæmlega lykillinn sem gamla síðan notaði í `st`, `qs` og `wrong`, svo innflutningur gömlu sögunnar er forskeyting.
 
 ```js
 /** Framvinda eins atriðis, geymd undir alþjóðlegu auðkenni.
@@ -443,12 +443,13 @@ Auðkenni er klofið á **fyrsta** tvípunkti. Hlutinn á eftir fagi er nákvæm
 | Gamla geymslan | Nýtt |
 | --- | --- |
 | `st[k] = {n, c, s}` (103, 106, 107, 108) | `n`, `c`, `streak = s` |
-| `st[k] = {n, p, m}` (101, skrifleg) | `n`, `c = n · p / m`, `streak = 0` |
+| `st[k] = {n, p, m}` (101, skrifleg) | `n`, `c = n · p / m`, `p`, `m` (staðan er hlutfall stiga, eins og á gömlu síðunni), `streak = 0` |
 | `qs[k] = {n, c, s}` (101, hraðspurningar) | `n`, `c`, `streak = s` |
-| `wrong[k]` | `box = 1`, `due` = innflutningstími (á tíma strax) |
+| `wrong[k]` | `box = 1`, `due` = innflutningstími (á tíma strax), `hits = wrong[k]` |
 | `cards[id] = {seen, again}` (106, 108) | `n = seen`, `again` |
-| `hist[]` | lotur `{course, kind:'exam', label, at, score, max}`; 103/107 `c/n`, 106/108 `pct`, 101 `score/tot` |
-| `adapt`, `plan`, `start`, `exam` | ekki flutt (stigvaxandi stig byrjar á 1; áætlanir eru liðnar) |
+| `hist[]` | `state.hist` merkt `legacy`; 103/107 `c/n` (eða `pts/max`), 106/108 `pct × 10 / 10`, 101 `score/tot` |
+| `adapt` (106, 108) | stigvaxandi stig, ef ekkert er þegar skráð |
+| `plan`, `start`, `exam`, `last` | ekki flutt (áætlanir hafa breyst; próf í gangi passar ekki) |
 
 ## Sameiginlegar reglur
 

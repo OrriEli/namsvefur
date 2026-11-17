@@ -18,10 +18,13 @@ export const VERSION = 1;
  *  @property {string} [note]
  *  @property {string[]} [tags]
  *  @property {boolean} [again]
+ *  @property {number} [p]            stig fengin samtals (skrifleg dæmi í HAG101G)
+ *  @property {number} [m]            hámarksstig samtals
+ *  @property {{n:number, c:number, p?:number, m?:number}} [imp] hlutur gömlu síðunnar (svo endurtekinn innflutningur tvítelji ekki)
  */
 
 /** @typedef {{course:string, kind:'practice'|'exam', start:number, end:number, n:number, c:number}} Session */
-/** @typedef {{course:string, format:string, label:string, at:number, used:number, n:number, score:number, max:number, timeout:boolean}} ExamResult */
+/** @typedef {{course:string, format:string, label:string, at:number, used:number, n:number, score:number, max:number, timeout:boolean, legacy?:boolean}} ExamResult */
 
 /** @typedef {Object} State
  *  @property {number} v
@@ -29,11 +32,12 @@ export const VERSION = 1;
  *  @property {Session[]} sessions
  *  @property {ExamResult[]} hist
  *  @property {Object<string,*>} exams          próf í gangi, eitt á fag
- *  @property {{plan:Object<string,{done:Object<string,boolean>}>, adapt:Object<string,{lvl:number, up:number, down:number, msg:string}>}} settings
+ *  @property {{plan:Object<string,{done:Object<string,boolean>}>, adapt:Object<string,{lvl:number, up:number, down:number, msg:string}>,
+ *             imported:Object<string,{at:number, key:string, items:number, bank:number, hist:number, skipped:number}>}} settings
  */
 
 /** @returns {State} */
-export const fresh = () => ({ v: VERSION, items: {}, sessions: [], hist: [], exams: {}, settings: { plan: {}, adapt: {} } });
+export const fresh = () => ({ v: VERSION, items: {}, sessions: [], hist: [], exams: {}, settings: { plan: {}, adapt: {}, imported: {} } });
 
 // Flutningsföll á milli útgáfa: MIGRATIONS[n] breytir útgáfu n í n + 1.
 const MIGRATIONS = {};

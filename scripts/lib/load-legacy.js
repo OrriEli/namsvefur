@@ -23,7 +23,7 @@ export const NAMES = [
   'KEY', 'STORE_KEY', 'S',
   // föll sem útdrátturinn notar
   'renderSheet', 'renderPlan', 'renderHome', 'renderExam', 'buildExam', 'instantiate', 'instW', 'instQ', 'parseNum', 'parseAns', 'gradeNum',
-  'maxPts', 'grade', 'blank', 'answered', 'numOK',
+  'maxPts', 'grade', 'blank', 'answered', 'numOK', 'record', 'recordW', 'recordQ', 'topicStats', 'statsW', 'cellStats',
   'F', 'R', 'PROB'
 ];
 

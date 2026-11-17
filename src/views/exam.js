@@ -4,7 +4,7 @@
 
 import { buildExam, finishExam, timeLeft, needsGrading, toGrade, scoreExam, breakdown, pointsOf } from '../engine/exam.js';
 import { answered, renderAnswer, renderSteps, verdictHTML, clickAnswer, inputAnswer, keyToIndex, stepTotal, ptsTxt } from '../engine/items/index.js';
-import { fmtDur, grade10 } from '../ui/format.js';
+import { fmtDur, grade10, fmtWhen } from '../ui/format.js';
 import { esc, plain, clip, barCls, setTopH } from '../ui/dom.js';
 import { itemMeta, topicLabel } from './itemmeta.js';
 
@@ -36,7 +36,7 @@ export function render(ctx) {
   // ---------- uppsetning ----------
   function drawSetup() {
     clearInterval(timer);
-    const last = S.hist.filter(h => h.course === c.id).slice(-8).reverse().map(h => `<tr><td>${esc(h.label)}</td><td class="mono">${fmtPts(h.score)}/${fmtPts(h.max)}</td><td class="mono">${grade10(h.score / (h.max || 1))}</td><td class="hint">${new Date(h.at).toLocaleDateString('is-IS', { day: 'numeric', month: 'short' })} ${new Date(h.at).toLocaleTimeString('is-IS', { hour: '2-digit', minute: '2-digit' })}</td></tr>`).join('');
+    const last = S.hist.filter(h => h.course === c.id).slice(-8).reverse().map(h => `<tr><td>${esc(h.label)}</td><td class="mono">${fmtPts(h.score)}/${fmtPts(h.max)}</td><td class="mono">${grade10(h.score / (h.max || 1))}</td><td class="hint">${fmtWhen(h.at)}${h.legacy ? ' · gamla síðan' : ''}</td></tr>`).join('');
     const hist = last ? `<div class="panel"><h3 style="margin-bottom:8px">Síðustu próf</h3><div class="scroll"><table class="tt"><thead><tr><th>Próf</th><th>Stig</th><th>Einkunn</th><th></th></tr></thead><tbody>${last}</tbody></table></div></div>` : '';
     const lev = c.examFormats.find(f => f.pick.by === 'levels');
     if (lev) return drawLevelsSetup(lev, hist);
