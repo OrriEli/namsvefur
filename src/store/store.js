@@ -29,11 +29,11 @@ export const VERSION = 1;
  *  @property {Session[]} sessions
  *  @property {ExamResult[]} hist
  *  @property {Object<string,*>} exams          próf í gangi, eitt á fag
- *  @property {{plan:Object<string,{start?:string, done:Object<string,boolean>}>}} settings
+ *  @property {{plan:Object<string,{done:Object<string,boolean>}>, adapt:Object<string,{lvl:number, up:number, down:number, msg:string}>}} settings
  */
 
 /** @returns {State} */
-export const fresh = () => ({ v: VERSION, items: {}, sessions: [], hist: [], exams: {}, settings: { plan: {} } });
+export const fresh = () => ({ v: VERSION, items: {}, sessions: [], hist: [], exams: {}, settings: { plan: {}, adapt: {} } });
 
 // Flutningsföll á milli útgáfa: MIGRATIONS[n] breytir útgáfu n í n + 1.
 const MIGRATIONS = {};

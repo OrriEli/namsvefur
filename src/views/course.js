@@ -21,7 +21,7 @@ export function render(ctx) {
   const tabs = TABS.filter(t => !t.when || t.when(c));
   const tab = tabs.find(t => t.id === ctx.tab) || tabs[0];
   const running = ctx.store.state.exams[c.id];
-  app.innerHTML = `<div class="stack" style="gap:18px;--cc:var(${c.color})">
+  app.innerHTML = `<div class="stack c-${c.id}" style="gap:18px;--cc:var(${c.color})">
     <div class="course-head">
       <h1><span class="cchip">${c.code}</span>${esc(c.name)}</h1>
       <span class="count mono" id="cd">${countdownTxt(nextExam(c.id))}</span>

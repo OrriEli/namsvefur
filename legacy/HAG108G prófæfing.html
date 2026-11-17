@@ -255,6 +255,7 @@ pre.code code,.opt code{background:transparent;padding:0}
 .qtext,.expl,.back,.front,.opt span:last-child{overflow-wrap:break-word;min-width:0}
 .qtext>.f,.expl .f{max-width:100%}
 .katex{font-size:1.06em;position:relative}
+.f table.cl td.txt{white-space:normal;padding:3px 0}
 .scroll,.f,.katex-display{position:relative}
 .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
 .f .katex{font-size:1.02em}
@@ -287,14 +288,14 @@ pre.code code,.opt code{background:transparent;padding:0}
 
 <script>
 // ===================== STILLINGAR — breyttu hér =====================
-// NÝR GLÆRUPAKKI (t.d. L08 metlar) — svona er honum bætt við:
-//   1. Taktu L08 úr athugasemd í LECTURES hér fyrir neðan (L09 og L10 eins).
-//   2. Bættu dæmum í BANK með lec:'L08' og einkvæmu id (snið 'L08-hv-…', 'L08-gl-…', 'L08-ny-…').
+// NÝR GLÆRUPAKKI (t.d. L10 aðhvarfsgreining) — svona er honum bætt við:
+//   1. Taktu L10 úr athugasemd í LECTURES hér fyrir neðan.
+//   2. Bættu dæmum í BANK með lec:'L10' og einkvæmu id (snið 'L10-hv-…', 'L10-gl-…', 'L10-ny-…').
 //      Minnst 6 dæmi á hvert stig (lvl 1, 2, 3) og minnst 3 spjöld (kind:'card', lvl:3).
 //      from: 'hv' = heima-/skilaverkefni · 'gl' = dæmi úr glærum · 'ny' = nýtt.
-//   3. Bættu rafala í GENS: { id, lec:'L08', name, f(lvl) { … return num(…) / pnum(…) / mc(…) } }.
+//   3. Bættu rafala í GENS: { id, lec:'L10', name, f(lvl) { … return num(…) / pnum(…) / mc(…) } }.
 //      Stigið á að breyta uppbyggingu spurningarinnar, ekki bara tölunum.
-//   4. Bættu formúlum í SHEET_LEC.L08 (og línu í SHEET_DIST ef ný dreifing bætist við).
+//   4. Bættu formúlum í SHEET_LEC.L10 (og línu í SHEET_DIST ef ný dreifing bætist við).
 //   5. Keyrðu prófanirnar (Node + R + Playwright) áður en þú birtir.
 // R-spurningar fá r:true (rafalar líka) svo prófhamurinn geti tryggt minnst 15% R ef L00 er valið.
 const LECTURES = [
@@ -306,8 +307,8 @@ const LECTURES = [
   { id: 'L05', label: 'L05', name: 'Samfelldar dreifingar', ch: 'SBE 5.3–5.5' },
   { id: 'L06', label: 'L06', name: 'Margvíðar slembibreytur og skilyrt vægi', ch: 'SBE 4.7, 5.6, 7.1–7.4' },
   { id: 'L07', label: 'L07', name: 'Úrtök og höfuðmarkgildissetningin', ch: 'SBE 6.1–6.4' },
-  // { id: 'L08', label: 'L08', name: 'Metlar', ch: 'SBE 9.1–9.4' },
-  // { id: 'L09', label: 'L09', name: 'Tilgátupróf og bilmat', ch: 'SBE 9.1–9.6' },
+  { id: 'L08', label: 'L08', name: 'Metlar og punktamat', ch: 'SBE 9.1–9.4' },
+  { id: 'L09', label: 'L09', name: 'Tilgátupróf og öryggisbil', ch: 'SBE 9.1–9.6' },
   // { id: 'L10', label: 'L10', name: 'Aðhvarfsgreining', ch: 'SBE 11.1–11.9' },
 ];
 
@@ -372,7 +373,8 @@ function splitEq(r) {
 }
 function calc(...rows) {
   return '<div class="f"><table class="cl">' + rows.map(r => r === '' ? '<tr class="sp"><td></td></tr>'
-    : (txt => '<tr>' + splitEq(txt ? String(r).slice(1) : String(r)).map((c, i) => (i ? '<td class="eq">=</td>' : '') + `<td>${txt ? c : c.startsWith('§') ? c.slice(1) : M(c)}</td>`).join('') + '</tr>')(String(r).startsWith('§'))).join('') + '</table></div>';
+    : String(r).startsWith('§') ? `<tr><td colspan="9" class="txt">${String(r).slice(1)}</td></tr>`   // textalína: ein heil reit
+    : '<tr>' + splitEq(String(r)).map((c, i) => (i ? '<td class="eq">=</td>' : '') + `<td>${c.startsWith('§') ? c.slice(1) : M(c)}</td>`).join('') + '</tr>').join('') + '</table></div>';
 }
 const trap = html => `<p class="trap"><b>Gildra.</b> ${html}</p>`;
 const note = html => `<p class="note">${html}</p>`;
@@ -1090,6 +1092,200 @@ GENS.push({ id: 'g-tstat', lec: 'L07', name: 't-prófstærð', f(lvl) {
     [[2 * pT, 'Tvíhliða líkur; spurt er einhliða.'], [pZ, 'Notar N(0, 1) í stað t-dreifingar; þegar σ er metið með S er stærðin t-dreifð.'], [PROB.pt(t, n), `Notar n = ${n} frígráður í stað n − 1 = ${n - 1}.`], [1 - pT, 'Efri halinn.']], fp, pertP(0.003),
     calc(`T \\sim t_{${n - 1}}`, `\\Pr(T \\le ${F.m(t, 2)}) = ${F.m(pT)}`, `§R: <code>pt(${String(t)}, ${n - 1})</code>`) +
     unconf('Glærur 07 (gl. 63 og 69) gefa 0,042 og 0,056 fyrir z = −2,12 og t₉ = −2,06; einhliða gildin eru 0,017 og 0,035. Hvort kennarinn ætlast til einhliða eða tvíhliða er óljóst; spurðu kennarann. Hér er alltaf tekið fram hvort er spurt um.'), { n, t });
+} });
+
+
+// ================= L08 · Metlar og punktamat =================
+const mean = a => a.reduce((s, x) => s + x, 0) / a.length;
+const var1 = a => { const m = mean(a); return a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length - 1); };
+const fmtv = a => a.map(x => F.s(x, 3)).join('; ');
+const rx3 = v => String(+v.toFixed(3));        // R-tala með punkti
+
+GENS.push({ id: 'g-mom', lec: 'L08', name: 'Vægjaaðferðin', f(lvl) {
+  if (lvl === 1) {
+    if (Math.random() < 0.5) { const xb = R.ri(15, 150) / 10; const ans = 2 * xb;
+      return num(`X er jafndreifð á ${M('[0, \\beta]')} þar sem β er óþekkt. Úrtak gefur ${M(`\\bar{x} = ${F.m(xb)}`)}. Metið β með vægjaaðferðinni.`, ans, 0.001, '',
+        calc(`E[X] = \\frac{0 + \\beta}{2}`, `\\bar{x} = \\frac{\\hat\\beta}{2} \\Rightarrow \\hat\\beta = 2 \\cdot ${F.m(xb)} = ${F.m(ans)}`) + note('Sama og dæmið á glæru 29 í 08 (x̄ = 5 gefur β̂ = 10).') + trap(`${F.s(xb)} er matið á E[X], ekki á β. Efri mörkin eru tvöfalt meðaltalið.`), { v: 'U', xb }); }
+    const xb = R.ri(5, 120) / 10; const ans = 1 / xb;
+    return num(`Biðtími X er veldisdreifður með óþekkt λ. Úrtak gefur ${M(`\\bar{x} = ${F.m(xb)}`)}. Metið λ með vægjaaðferðinni.`, ans, 0.0005, '',
+      calc(`E[X] = \\frac{1}{\\lambda}`, `\\bar{x} = \\frac{1}{\\hat\\lambda} \\Rightarrow \\hat\\lambda = \\frac{1}{${F.m(xb)}} = ${F.m(ans)}`) + trap(`λ̂ = ${F.s(xb)} ruglar saman tíðni og meðalbið.`), { v: 'E', xb });
+  }
+  if (lvl === 2) {
+    if (Math.random() < 0.5) { const a = R.ri(-5, 10), k = R.ri(1, 4), w = 6 * k, b = a + w; const xb = (a + b) / 2, s2 = w * w / 12; const which = R.pick(['a', 'b']); const d = Math.sqrt(3 * s2);
+      const ans = which === 'a' ? xb - d : xb + d;
+      return num(`X er jafndreifð á ${M('[\\alpha, \\beta]')} og báðir stikar eru óþekktir. Úrtak gefur ${M(`\\bar{x} = ${F.m(xb)}`)} og ${M(`s^2 = ${F.m(s2)}`)}. Metið ${which === 'a' ? 'α' : 'β'} með vægjaaðferðinni.`, ans, 0.001, '',
+        calc(`\\frac{\\hat\\alpha + \\hat\\beta}{2} = ${F.m(xb)}, \\quad \\frac{(\\hat\\beta - \\hat\\alpha)^2}{12} = ${F.m(s2)}`, `\\hat\\beta - \\hat\\alpha = \\sqrt{12 \\cdot ${F.m(s2)}} = ${w}`, `\\hat\\alpha = ${F.m(xb)} - ${w / 2} = ${F.m(a)}, \\quad \\hat\\beta = ${F.m(xb)} + ${w / 2} = ${F.m(b)}`) +
+        note('Lausnin með α̂ > β̂ er útilokuð. Glæra 31 í 08: x̄ = 8 og S² = 12 gefa α̂ = 2 og β̂ = 14.') + trap(`Að nota √(s²) = ${F.s(Math.sqrt(s2), 3)} sem hálfa breidd gleymir 12 í nefnaranum.`), { v: 'U2', xb, s2, which }); }
+    let xb, s2; do { xb = R.ri(20, 120) / 10; s2 = R.ri(5, Math.floor(xb * 9)) / 10; } while (s2 >= xb * 0.9 || s2 <= xb * 0.1);
+    const ans = 1 - s2 / xb;
+    return pnum(`Fjöldi X er tvíkostadreifður, Bin(n, p), með n og p óþekkt. Úrtak gefur ${M(`\\bar{x} = ${F.m(xb)}`)} og ${M(`s^2 = ${F.m(s2)}`)}. Metið p með vægjaaðferðinni (án þess að námunda n).`, ans, 0.001,
+      calc(`n p = ${F.m(xb)}, \\quad n p (1 - p) = ${F.m(s2)}`, `1 - \\hat p = \\frac{${F.m(s2)}}{${F.m(xb)}} \\Rightarrow \\hat p = 1 - ${F.m(s2 / xb)} = ${F.m(ans)}`, `\\hat n = \\frac{${F.m(xb)}}{${F.m(ans)}} = ${F.m(xb / ans, 3)}`) + note('Deilið seinni jöfnunni með þeirri fyrri; þá hverfur n. Sama aðferð og dæmablað 8, 1c.') + trap(`s²/x̄ = ${F.s(s2 / xb)} er matið á 1 − p, ekki á p.`), { v: 'B', xb, s2 });
+  }
+  // stig 3: gögn → x̄ og S² → p̂0 → n̂ námundað → p̂ = x̄/n̂
+  let k, xb, s2, p0, n0; do { const n = R.ri(5, 14), p = R.ri(50, 85) / 100; k = Array.from({ length: 10 }, () => { let c = 0; for (let i = 0; i < n; i++) c += Math.random() < p ? 1 : 0; return c; });
+    xb = mean(k); s2 = var1(k); p0 = 1 - s2 / xb; n0 = xb / p0; } while (!(s2 > 0 && s2 < xb && n0 <= 40 && Math.round(n0) >= Math.max(...k) && Math.abs(n0 - Math.floor(n0) - 0.5) > 0.06));
+  const nh = Math.round(n0), ans = xb / nh;
+  return pnum(`Fjöldi vina sem mætir í kaffi er skráður tíu sinnum: ${k.join(', ')}. Gerið ráð fyrir Bin(n, p). Metið n og p með vægjaaðferðinni (notið ${M('S^2')}), námundið n að næstu heiltölu og gefið upp matið á p miðað við námundaða n.`, ans, 0.001,
+    calc(`\\bar{x} = ${F.m(xb, 3)}, \\quad S^2 = ${F.m(s2, 4)}`, `\\hat p_0 = 1 - \\frac{S^2}{\\bar{x}} = ${F.m(p0, 4)}`, `\\hat n = \\frac{\\bar{x}}{\\hat p_0} = ${F.m(n0, 3)} \\approx ${nh}`, `\\hat p = \\frac{\\bar{x}}{\\hat n} = \\frac{${F.m(xb, 3)}}{${nh}} = ${F.m(ans, 4)}`) +
+    note('Sama uppsetning og dæmablað 8, dæmi 1. Engin opinber lausn er til; að nota dreifni með n í nefnara (1/n) gefur annað n.') + trap(`p̂₀ = ${F.s(p0, 4)} er matið áður en n er námundað; spurt er um p eftir námundun.`), { v: 'B3', k });
+} });
+
+GENS.push({ id: 'g-mle', lec: 'L08', name: 'Sennileikamat', f(lvl) {
+  if (lvl === 1) {
+    const n = R.ri(5, 9);
+    if (Math.random() < 0.5) { const x = Array.from({ length: n }, () => R.ri(1, 12)); const S = x.reduce((a, b) => a + b, 0); const ans = n / S;
+      return num(`Biðtímar (dagar) eru veldisdreifðir: ${x.join(', ')}. Hvert er sennileikamatið á λ?`, ans, 0.0005, '',
+        calc(`\\ell(\\lambda) = n \\log\\lambda - \\lambda \\sum x_i`, `\\frac{d\\ell}{d\\lambda} = \\frac{n}{\\lambda} - \\sum x_i = 0 \\Rightarrow \\hat\\lambda = \\frac{n}{\\sum x_i} = \\frac{${n}}{${S}} = ${F.m(ans)}`) + note('λ̂ = 1/x̄, sama og vægjaaðferðin gefur hér. Dæmablað 8, 2c.') + trap(`x̄ = ${F.s(S / n, 3)} metur meðalbiðina 1/λ, ekki λ.`), { v: 'E', x }); }
+    const x = Array.from({ length: n }, () => R.ri(0, 8)); const ans = mean(x);
+    return num(`Fjöldi tjóna á dag er Poisson-dreifður og síðustu ${n} dagar gáfu ${x.join(', ')}. Hvert er sennileikamatið á λ?`, ans, 0.0005, '',
+      calc(`\\ell(\\lambda) = -n\\lambda + \\left(\\sum x_i\\right)\\log\\lambda - \\sum \\log(x_i!)`, `\\frac{d\\ell}{d\\lambda} = -n + \\frac{\\sum x_i}{\\lambda} = 0 \\Rightarrow \\hat\\lambda = \\bar{x} = ${F.m(ans, 4)}`) + trap('Síðasti liðurinn inniheldur ekki λ og hverfur við diffrun.'), { v: 'P', x });
+  }
+  if (lvl === 2) {
+    if (Math.random() < 0.5) { const b = R.ri(5, 20); const x = Array.from({ length: R.ri(6, 10) }, () => Math.round(Math.random() * b * 100) / 100); const ans = Math.max(...x);
+      return num(`X er jafndreifð á ${M('[0, \\beta]')}. Úrtakið er ${fmtv(x)}. Hvert er sennileikamatið á β?`, ans, 0.0005, '',
+        calc(`L(\\beta) = \\frac{1}{\\beta^{n}} \\;\\text{ef}\\; \\beta \\ge \\max x_i`, `\\hat\\beta = \\max x_i = ${F.m(ans)}`) + note('L(β) minnkar í β, en β má ekki vera minna en stærsta gildið (þá væru líkurnar 0). Glæra 47 í 08.') + trap(`Vægjaaðferðin gefur 2x̄ = ${F.s(2 * mean(x), 3)}; spurt er um sennileikamat.`), { v: 'U', x }); }
+    const x = Array.from({ length: R.ri(5, 8) }, () => R.ri(-20, 40) / 10); const m = mean(x); const ans = x.reduce((s, v) => s + (v - m) ** 2, 0) / x.length;
+    return num(`Úrtak úr normaldreifingu: ${fmtv(x)}. Hvert er sennileikamatið á ${M('\\sigma^2')}?`, ans, 0.001, '',
+      calc(`\\hat\\mu = \\bar{x} = ${F.m(m, 4)}`, `\\hat\\sigma^2 = \\frac{1}{n}\\sum (x_i - \\bar{x})^2 = ${F.m(ans, 4)}`) + note(`Sennileikamatið deilir með n og er bjagað; S² = ${F.s(var1(x), 4)} deilir með n − 1.`) + slideErr('Á glæru 54 í 08 stendur σ̂² = 1,647 fyrir gögnin á glæru 50; rétt er 2,099 (og S² = 2,332).') + trap(`S² = ${F.s(var1(x), 4)} er óbjagaða matið, ekki sennileikamatið.`), { v: 'N', x });
+  }
+  if (Math.random() < 0.5) { const n = R.ri(5, 20), lam = R.pick([0.1, 0.2, 0.25, 0.5, 1, 2]); const e = n * lam / (n - 1), ans = e - lam;
+    return num(`X<sub>1</sub>, …, X<sub>${n}</sub> eru óháðar og Exp(λ = ${F.s(lam)}). Sennileikametillinn er ${M('\\hat\\lambda = n / \\sum X_i')} og ${M('E[1/\\sum X_i] = \\lambda/(n-1)')}. Hver er bjagi ${M('\\hat\\lambda')}?`, ans, 0.0005, '',
+      calc(`E[\\hat\\lambda] = n \\cdot \\frac{\\lambda}{n - 1} = \\frac{${n} \\cdot ${F.m(lam)}}{${n - 1}} = ${F.m(e, 4)}`, `B(\\hat\\lambda) = E[\\hat\\lambda] - \\lambda = ${F.m(e, 4)} - ${F.m(lam)} = ${F.m(ans, 4)}`) + note('Bjaginn er jákvæður en hverfur þegar n → ∞. Dæmablað 8, 2d.') + trap('E[1/ΣX] ≠ 1/E[ΣX]; Jensen.'), { v: 'Eb', n, lam }); }
+  const n = R.ri(5, 20), a = R.ri(0, 5), b = a + R.ri(4, 20); const e = (n * b + a) / (n + 1), ans = e - b;
+  return num(`X er jafndreifð á [${a}, ${b}] og β̂ = max(X<sub>1</sub>, …, X<sub>${n}</sub>) er sennileikametillinn fyrir β. Hver er bjagi β̂?`, ans, 0.0005, '',
+    calc(`E[\\hat\\beta] = \\frac{n\\beta + \\alpha}{n + 1} = \\frac{${n} \\cdot ${b} + ${a}}{${n + 1}} = ${F.m(e, 4)}`, `B(\\hat\\beta) = ${F.m(e, 4)} - ${b} = -\\frac{\\beta - \\alpha}{n + 1} = ${F.m(ans, 4)}`) + note('Glæra 81 í 08. Hámarkið er alltaf undir β, svo bjaginn er neikvæður.') + trap('Vægjametillinn 2X̄ (þegar α = 0) er óbjagaður, en hefur stærri dreifni.'), { v: 'Ub', n, a, b });
+} });
+
+GENS.push({ id: 'g-bias', lec: 'L08', name: 'Bjagi og meðalferskekkja', f(lvl) {
+  const mu = R.ri(2, 30), sig = R.ri(2, 10), n = R.ri(4, 30);
+  const c = R.pick([0.8, 0.9, 1.1, 1.2, +(n / (n + 1)).toFixed(4)]);
+  if (lvl === 1) { const ans = (c - 1) * mu;
+    return num(`Metillinn ${M(`\\hat\\theta = ${F.m(c)}\\,\\bar{X}`)} er notaður fyrir ${M('\\mu = E[X]')}. Ef μ = ${mu}, hver er bjagi metilsins?`, ans, 0.001, '',
+      calc(`E[\\hat\\theta] = ${F.m(c)} \\cdot E[\\bar{X}] = ${F.m(c)} \\cdot ${mu} = ${F.m(c * mu)}`, `B = E[\\hat\\theta] - \\mu = ${F.m(c * mu)} - ${mu} = ${F.m(ans)}`) + trap(`Formerkið skiptir máli: B = E[θ̂] − θ, ekki θ − E[θ̂] (= ${F.s(-ans)}).`), { v: 1, c, mu }); }
+  if (lvl === 2) { const vr = c * c * sig * sig / n, b = (c - 1) * mu, ans = vr + b * b;
+    return num(`X hefur ${M(`\\mu = ${mu}`)} og ${M(`\\sigma = ${sig}`)}. Metillinn ${M(`\\hat\\theta = ${F.m(c)}\\,\\bar{X}`)} er reiknaður úr úrtaki af stærð n = ${n}. Hver er meðalferskekkjan MSE?`, ans, 0.001, '',
+      calc(`\\mathrm{Var}[\\hat\\theta] = ${F.m(c)}^2 \\cdot \\frac{${sig}^2}{${n}} = ${F.m(vr, 4)}`, `B = (${F.m(c)} - 1) \\cdot ${mu} = ${F.m(b)}`, `\\mathrm{MSE} = \\mathrm{Var} + B^2 = ${F.m(vr, 4)} + ${F.m(b * b, 4)} = ${F.m(ans, 4)}`) +
+      note('MSE = E[(θ̂ − θ)²] = Var[θ̂] + B(θ̂)². Hún tekur bæði dreifni og bjaga með.') + trap(`Að gleyma bjaganum gefur ${F.s(vr, 4)}; að nota σ² í stað σ²/n gefur ${F.s(c * c * sig * sig + b * b, 4)}.`), { v: 2, c, mu, sig, n }); }
+  const s2 = sig * sig; const v = ((n - 1) / n) ** 2 * 2 * s2 * s2 / (n - 1), b = -s2 / n, ans = v + b * b;
+  return num(`Þýðið er normaldreift með ${M(`\\sigma^2 = ${s2}`)} og n = ${n}. Metillinn ${M('\\tilde S^2 = \\frac{1}{n}\\sum (X_i - \\bar X)^2')} er notaður fyrir σ². Hver er MSE fyrir ${M('\\tilde S^2')}? (Notið ${M('\\mathrm{Var}[S^2] = 2\\sigma^4/(n-1)')} úr fyrirlestri 07.)`, ans, Math.max(0.001, ans * 1e-4), '',
+    calc(`\\tilde S^2 = \\frac{n-1}{n} S^2 \\Rightarrow E[\\tilde S^2] = \\frac{${n - 1}}{${n}} \\cdot ${s2} = ${F.m((n - 1) / n * s2, 4)}`, `B = -\\frac{\\sigma^2}{n} = ${F.m(b, 4)}`, `\\mathrm{Var}[\\tilde S^2] = \\left(\\frac{${n - 1}}{${n}}\\right)^2 \\frac{2 \\cdot ${s2}^2}{${n - 1}} = ${F.m(v, 4)}`, `\\mathrm{MSE} = ${F.m(v, 4)} + ${F.m(b * b, 4)} = ${F.m(ans, 4)}`) +
+    note(`Til samanburðar: MSE[S²] = Var[S²] = ${F.s(2 * s2 * s2 / (n - 1), 4)}. Bjagaði metillinn hefur minni MSE, en S² er óbjagaður.`) + trap('Var[cY] = c²Var[Y]; að margfalda dreifnina með c en ekki c² er algeng villa.'), { v: 3, s2, n });
+} });
+
+GENS.push({ id: 'g-ols', lec: 'L08', name: 'Aðferð minnstu kvaðrata', f(lvl) {
+  if (lvl === 1) { const xb = R.ri(10, 80) / 2, b = R.pick([-1, 1]) * R.ri(2, 30) / 10, yb = R.ri(20, 200); const ans = yb - b * xb;
+    return num(`Í einfaldri línulegri aðhvarfsgreiningu ${M('y = \\alpha + \\beta x')} er ${M(`\\bar{x} = ${F.m(xb)}`)}, ${M(`\\bar{y} = ${yb}`)} og ${M(`\\hat\\beta = ${F.m(b)}`)}. Hvert er ${M('\\hat\\alpha')}?`, ans, 0.001, '',
+      calc(`\\hat\\alpha = \\bar{y} - \\hat\\beta \\bar{x} = ${yb} - (${F.m(b)}) \\cdot ${F.m(xb)} = ${F.m(ans)}`) + note('Línan fer alltaf í gegnum (x̄, ȳ).') + trap(`ȳ + β̂x̄ = ${F.s(yb + b * xb)} snýr formerkinu við.`), { xb, b, yb }); }
+  const n = lvl === 2 ? R.ri(4, 5) : R.ri(5, 6); let x, y, sxx;
+  do { x = R.sample(rng(1, 12), n).sort((a, b) => a - b).map(v => v * R.pick([1, 5, 10])); x = [...new Set(x)]; } while (x.length < 4);
+  const a0 = R.ri(20, 120), b0 = R.pick([-1, 1]) * R.ri(5, 30) / 10; y = x.map(v => Math.round(a0 + b0 * v + R.ri(-8, 8)));
+  const xb = mean(x), yb = mean(y); sxx = x.reduce((s, v) => s + (v - xb) ** 2, 0); const sxy = x.reduce((s, v, i) => s + (v - xb) * (y[i] - yb), 0); const b = sxy / sxx, a = yb - b * xb;
+  const tbl = `<div class="scroll"><table class="tt"><tbody><tr><th>x</th>${x.map(v => `<td>${v}</td>`).join('')}</tr><tr><th>y</th>${y.map(v => `<td>${v}</td>`).join('')}</tr></tbody></table></div>`;
+  const steps = calc(`\\bar{x} = ${F.m(xb, 4)}, \\quad \\bar{y} = ${F.m(yb, 4)}`, `\\sum (x_i - \\bar{x})(y_i - \\bar{y}) = ${F.m(sxy, 4)}, \\quad \\sum (x_i - \\bar{x})^2 = ${F.m(sxx, 4)}`, `\\hat\\beta = \\frac{${F.m(sxy, 4)}}{${F.m(sxx, 4)}} = ${F.m(b, 4)}`, `\\hat\\alpha = \\bar{y} - \\hat\\beta\\bar{x} = ${F.m(a, 4)}`);
+  if (lvl === 2) return num(`Metið hallatöluna ${M('\\beta')} í ${M('y = \\alpha + \\beta x + \\epsilon')} með aðferð minnstu kvaðrata.` + tbl, b, 0.001, '', steps + note('Formúlan á glæru 70 í 08. R: <code>coef(lm(y ~ x))</code>.') + trap(`Σ(x−x̄)² / Σ(x−x̄)(y−ȳ) = ${F.s(1 / b, 4)} er umhverfan.`), { x, y, q: 'b', rc: `x <- c(${x.join(', ')}); y <- c(${y.join(', ')}); cat(round(coef(lm(y ~ x))[2], 6))`, rx: String(+b.toFixed(6)) });
+  const x0 = R.ri(Math.min(...x), Math.max(...x)); const ans = a + b * x0;
+  return num(`Metið línuna ${M('y = \\alpha + \\beta x')} með aðferð minnstu kvaðrata og spáið fyrir um y þegar x = ${x0}.` + tbl, ans, 0.002, '', steps + calc(`\\hat{y} = ${F.m(a, 4)} + ${F.m(b, 4)} \\cdot ${x0} = ${F.m(ans, 4)}`) + note('R: <code>predict(lm(y ~ x), data.frame(x = …))</code>.') + trap('Spáin notar metnu stikana, ekki y-gildið í töflunni sjálfri.'), { x, y, q: 'p', x0 });
+} });
+
+// ================= L09 · Tilgátupróf og öryggisbil =================
+const ZTAB = { 0.90: 1.645, 0.95: 1.96, 0.99: 2.58 };       // gildi á glæru 17 í 09
+const t3 = (p, df) => Math.round(PROB.qt(p, df) * 1000) / 1000;   // t-tafla á 3 aukastöfum
+const tailTxt = s => s === 'two' ? 'tvíhliða' : s === 'greater' ? 'einhliða, efri (H₁: μ > μ₀)' : 'einhliða, neðri (H₁: μ < μ₀)';
+
+GENS.push({ id: 'g-ci', lec: 'L09', name: 'Öryggisbil fyrir meðaltal', f(lvl) {
+  const n = lvl === 1 ? R.pick([9, 16, 25, 36, 49, 64, 100]) : R.ri(6, 30); const xb = R.ri(400, 1200) / 10; const sd = R.ri(10, 120) / 10;
+  if (lvl === 1) { const cf = R.pick([0.90, 0.95, 0.99]); const ze = PROB.qnorm(1 - (1 - cf) / 2), zt = ZTAB[cf]; const side = R.pick(['L', 'U']); const se = sd / Math.sqrt(n);
+    const ex = side === 'L' ? xb - ze * se : xb + ze * se, tb = side === 'L' ? xb - zt * se : xb + zt * se;
+    return num(`Þýðið er normaldreift með þekkt ${M(`\\sigma = ${F.m(sd)}`)}. Úrtak af stærð n = ${n} gefur ${M(`\\bar{x} = ${F.m(xb)}`)}. Hver eru ${side === 'L' ? 'neðri' : 'efri'} mörk ${F.pct(cf, 0)} tvíhliða öryggisbils fyrir μ? ${hint('Vikmörkin ná yfir z-gildið á glæru 17 og nákvæmt z.')}`, tb, nTol(ex, tb, 0.005), '',
+      calc(`z_{${F.m((1 - cf) / 2, 3)}} = ${F.m(zt)}, \\quad \\frac{\\sigma}{\\sqrt{n}} = \\frac{${F.m(sd)}}{${Math.sqrt(n)}} = ${F.m(se, 4)}`, `${F.m(xb)} ${side === 'L' ? '-' : '+'} ${F.m(zt)} \\cdot ${F.m(se, 4)} = ${F.m(tb, 3)}`) + note('Tvíhliða bil notar z<sub>α/2</sub>; Pr(Z < z<sub>α/2</sub>) = 1 − α/2.') + trap(`Að nota z<sub>α</sub> (einhliða gildið) í tvíhliða bili, eða σ í stað σ/√n.`), { n, xb, sd, cf, side }); }
+  if (lvl === 2) { const cf = R.pick([0.90, 0.95, 0.99]); const tq = t3(1 - (1 - cf) / 2, n - 1), te = PROB.qt(1 - (1 - cf) / 2, n - 1); const se = sd / Math.sqrt(n); const side = R.pick(['L', 'U']);
+    const ex = side === 'L' ? xb - te * se : xb + te * se, tb = side === 'L' ? xb - tq * se : xb + tq * se;
+    return num(`Þýðið er normaldreift og σ óþekkt. Úrtak af stærð n = ${n} gefur ${M(`\\bar{x} = ${F.m(xb)}`)} og ${M(`s = ${F.m(sd)}`)}. Hver eru ${side === 'L' ? 'neðri' : 'efri'} mörk ${F.pct(cf, 0)} tvíhliða öryggisbils fyrir μ? Notið ${M(`t_{${n - 1},\\,${F.m((1 - cf) / 2, 3)}} = ${F.m(tq, 3)}`)}.`, tb, nTol(ex, tb, 0.005), '',
+      calc(`\\frac{s}{\\sqrt{n}} = \\frac{${F.m(sd)}}{\\sqrt{${n}}} = ${F.m(se, 4)}`, `${F.m(xb)} ${side === 'L' ? '-' : '+'} ${F.m(tq, 3)} \\cdot ${F.m(se, 4)} = ${F.m(tb, 3)}`) + note(`R: <code>qt(${1 - (1 - cf) / 2}, ${n - 1})</code> = ${F.s(te, 4)}. Glæra 24 í 09.`) + trap(`z = ${F.s(PROB.qnorm(1 - (1 - cf) / 2), 3)} í stað t gerir bilið of þröngt þegar σ er metið.`), { n, xb, sd, cf, side, tq }); }
+  const cf = R.pick([0.90, 0.95, 0.99]); const side = R.pick(['L', 'U']); const te = PROB.qt(cf, n - 1), tq = t3(cf, n - 1); const se = sd / Math.sqrt(n);
+  const ex = side === 'L' ? xb - te * se : xb + te * se, tb = side === 'L' ? xb - tq * se : xb + tq * se;
+  return num(`Laun eru normaldreifð og σ óþekkt. Úrtak af stærð n = ${n} gefur ${M(`\\bar{x} = ${F.m(xb)}`)} og ${M(`s = ${F.m(sd)}`)}. Finnið ${F.pct(cf, 0)} <b>${side === 'L' ? 'neðra' : 'efra'}</b> (einhliða) öryggisbil fyrir μ og gefið upp ${side === 'L' ? 'neðri' : 'efri'} mörkin. ${hint('t-tafla leyfð; vikmörkin ná yfir t á þremur aukastöfum.')}`, tb, nTol(ex, tb, 0.005), '',
+    calc(`t_{${n - 1},\\,${F.m(1 - cf, 2)}} = ${F.m(tq, 3)} \\;(\\text{einhliða: } \\alpha \\text{ í öðrum halanum})`, `${F.m(xb)} ${side === 'L' ? '-' : '+'} ${F.m(tq, 3)} \\cdot \\frac{${F.m(sd)}}{\\sqrt{${n}}} = ${F.m(tb, 3)}`) + note(`Bilið er ${side === 'L' ? `[${F.s(tb, 3)}; ∞)` : `(−∞; ${F.s(tb, 3)}]`}. Dæmablað 9, 1b–c.`) + trap(`t<sub>α/2</sub> = ${F.s(PROB.qt(1 - (1 - cf) / 2, n - 1), 3)} á við tvíhliða bil.`), { n, xb, sd, cf, side, tq });
+} });
+
+GENS.push({ id: 'g-ttest', lec: 'L09', name: 't-próf fyrir meðaltal', r: [3], f(lvl) {
+  const n = R.ri(8, 60), mu0 = R.ri(20, 200) / 2, s = R.ri(10, 80) / 10; const t0 = R.pick([-1, 1]) * R.ri(2, 35) / 10; const xb = Math.round((mu0 + t0 * s / Math.sqrt(n)) * 100) / 100;
+  const T = (xb - mu0) / (s / Math.sqrt(n));
+  if (lvl === 1) return num(`Úrtak af stærð n = ${n} gefur ${M(`\\bar{x} = ${F.m(xb)}`)} og ${M(`s = ${F.m(s)}`)}. Reiknið t-prófstærðina fyrir ${M(`H_0: \\mu = ${F.m(mu0)}`)}.`, T, 0.002, '',
+    calc(`T = \\frac{\\bar{x} - \\mu_0}{s / \\sqrt{n}} = \\frac{${F.m(xb)} - ${F.m(mu0)}}{${F.m(s)} / \\sqrt{${n}}} = \\frac{${F.m(xb - mu0)}}{${F.m(s / Math.sqrt(n), 4)}} = ${F.m(T, 3)}`) + trap(`Að deila með s (ekki s/√n) gefur ${F.s((xb - mu0) / s, 3)}.`), { n, mu0, s, xb });
+  if (lvl === 2) { const side = R.pick(['two', 'greater', 'less']); const a = R.pick([0.05, 0.01, 0.10]);
+    const cq = side === 'two' ? t3(1 - a / 2, n - 1) : t3(1 - a, n - 1); const other = side === 'two' ? t3(1 - a, n - 1) : t3(1 - a / 2, n - 1);
+    const rej = side === 'two' ? Math.abs(T) > cq : side === 'greater' ? T > cq : T < -cq;
+    const H1 = side === 'two' ? `\\mu \\neq ${F.m(mu0)}` : side === 'greater' ? `\\mu > ${F.m(mu0)}` : `\\mu < ${F.m(mu0)}`;
+    const Ts = F.s(T, 2), crit = side === 'less' ? '−' + F.s(cq, 3) : F.s(cq, 3);
+    const okTxt = rej ? `Hafna H₀: T = ${Ts} er á höfnunarsvæðinu (mörk ${side === 'two' ? '±' : ''}${crit})` : `Ekki hafna H₀: T = ${Ts} er utan höfnunarsvæðisins (mörk ${side === 'two' ? '±' : ''}${crit})`;
+    const flip = rej ? `Ekki hafna H₀: T = ${Ts} er utan höfnunarsvæðisins (mörk ${side === 'two' ? '±' : ''}${crit})` : `Hafna H₀: T = ${Ts} er á höfnunarsvæðinu (mörk ${side === 'two' ? '±' : ''}${crit})`;
+    const otherRej = side === 'two' ? Math.abs(T) > other : side === 'greater' ? T > other : T < -other;
+    const d2 = `${otherRej ? 'Hafna' : 'Ekki hafna'} H₀: borið saman við ${side === 'less' ? '−' : ''}${F.s(other, 3)} (${side === 'two' ? 'einhliða' : 'tvíhliða'} gildið)`;
+    const Tz = (xb - mu0) / s; const d3 = `${(side === 'two' ? Math.abs(Tz) > cq : side === 'greater' ? Tz > cq : Tz < -cq) ? 'Hafna' : 'Ekki hafna'} H₀: T = ${F.s(Tz, 2)} þegar deilt er með s`;
+    const d4 = `Samþykkja H₀: gögnin sanna að ${M(`\\mu = ${F.m(mu0)}`)}`;
+    const o = [okTxt, flip, d2, d3, d4];
+    return mc(`Normaldreift þýði, σ óþekkt. Úrtak af stærð n = ${n} gefur ${M(`\\bar{x} = ${F.m(xb)}`)} og ${M(`s = ${F.m(s)}`)}. Prófið ${M(`H_0: \\mu ${side === 'two' ? '=' : side === 'greater' ? '\\le' : '\\ge'} ${F.m(mu0)}`)} gegn ${M(`H_1: ${H1}`)} með α = ${F.s(a)}. Notið ${M(`t_{${n - 1},\\,${F.m(side === 'two' ? a / 2 : a, 3)}} = ${F.m(cq, 3)}`)} og ${M(`t_{${n - 1},\\,${F.m(side === 'two' ? a : a / 2, 3)}} = ${F.m(other, 3)}`)}.`, o,
+      calc(`T = \\frac{${F.m(xb)} - ${F.m(mu0)}}{${F.m(s)}/\\sqrt{${n}}} = ${F.m(T, 3)}`, `§Próf: ${tailTxt(side)} → viðmiðsgildi ${side === 'two' ? '±' : side === 'less' ? '−' : ''}${F.s(cq, 3)}`, `§Niðurstaða: ${rej ? 'hafna H₀' : 'ekki hafna H₀'}`) +
+      '<p class="note"><b>Rangir kostir</b></p>' + traps([[flip.split(':')[0], 'Rangur samanburður við viðmiðsgildið.'], [d2.split(':')[0] + ' (rangt gildi)', side === 'two' ? 'Tvíhliða próf notar t<sub>α/2</sub>.' : 'Einhliða próf notar t<sub>α</sub>, allt α í öðrum halanum.'], ['Deilt með s', 'Prófstærðin deilir með s/√n.'], ['Samþykkja H₀', 'Tilgátupróf getur ekki sannað H₀; í mesta lagi er henni ekki hafnað.']]), rej ? 1 : 0, { n, mu0, s, xb, side, a, cq });
+  }
+  const side = R.pick(['two', 'greater', 'less']); const pv = side === 'two' ? 2 * (1 - PROB.pt(Math.abs(T), n - 1)) : side === 'greater' ? 1 - PROB.pt(T, n - 1) : PROB.pt(T, n - 1);
+  const Tr = rx3(T); const rc = side === 'two' ? `cat(round(2 * (1 - pt(abs(${Tr}), ${n - 1})), 6))` : side === 'greater' ? `cat(round(1 - pt(${Tr}, ${n - 1}), 6))` : `cat(round(pt(${Tr}, ${n - 1}), 6))`;
+  const pvR = side === 'two' ? 2 * (1 - PROB.pt(Math.abs(+Tr), n - 1)) : side === 'greater' ? 1 - PROB.pt(+Tr, n - 1) : PROB.pt(+Tr, n - 1);
+  return pnum(`t-prófstærðin er T = ${F.s(+Tr, 3)} með ${n - 1} frígráðum. Hvert er p-gildið fyrir ${tailTxt(side)} próf? Hvaða R-skipun gefur það? ${hint('Svarið með R; vikmörk ±0,001.')}`, pvR, 0.001,
+    calc(side === 'two' ? `p = 2\\min\\{\\Pr(T \\ge t), \\Pr(T \\le t)\\} = 2(1 - F_{${n - 1}}(|${F.m(+Tr, 3)}|)) = ${F.m(pvR, 4)}` : side === 'greater' ? `p = \\Pr(T \\ge ${F.m(+Tr, 3)}) = 1 - F_{${n - 1}}(${F.m(+Tr, 3)}) = ${F.m(pvR, 4)}` : `p = \\Pr(T \\le ${F.m(+Tr, 3)}) = F_{${n - 1}}(${F.m(+Tr, 3)}) = ${F.m(pvR, 4)}`) +
+    out(rc.replace(/^cat\(round\((.*), 6\)\)$/, '$1')) + note('Glæra 40 í 09. Í R gefur <code>t.test()</code> p-gildið beint.') + trap(side === 'two' ? `Einhliða gildið ${F.s(pvR / 2, 4)} er helmingur þess tvíhliða.` : `Tvíhliða gildið væri ${F.s(2 * Math.min(pvR, 1 - pvR), 4)}; ${side === 'greater' ? '<code>pt(T, df)</code> gefur vinstri halann' : '<code>1 - pt(T, df)</code> gefur hægri halann'} (${F.s(1 - pvR, 4)}).`), { n, T: +Tr, side, rc, rx: String(+pvR.toFixed(6)) });
+} });
+
+GENS.push({ id: 'g-welch', lec: 'L09', name: 'Mismunur tveggja meðaltala (Welch)', f(lvl) {
+  const n1 = R.ri(8, 40), n2 = R.ri(8, 40), s1 = R.ri(5, 30) / 10, s2 = R.ri(5, 30) / 10, x1 = R.ri(50, 90) / 10, x2 = R.ri(50, 90) / 10;
+  const v1 = s1 * s1 / n1, v2 = s2 * s2 / n2, se = Math.sqrt(v1 + v2), T = (x1 - x2) / se, nu = (v1 + v2) ** 2 / (v1 * v1 / (n1 - 1) + v2 * v2 / (n2 - 1));
+  const ctx = `Hagfræðinemar (n₁ = ${n1}) hafa meðaleinkunn ${F.s(x1)} og staðalfrávik ${F.s(s1)}; viðskiptafræðinemar (n₂ = ${n2}) ${F.s(x2)} og ${F.s(s2)}.`;
+  const base = calc(`\\frac{s_1^2}{n_1} = \\frac{${F.m(s1)}^2}{${n1}} = ${F.m(v1, 4)}, \\quad \\frac{s_2^2}{n_2} = \\frac{${F.m(s2)}^2}{${n2}} = ${F.m(v2, 4)}`, `SE = \\sqrt{${F.m(v1, 4)} + ${F.m(v2, 4)}} = ${F.m(se, 4)}`);
+  if (lvl === 1) return num(`${ctx} Hver er staðalskekkja mismunarins ${M('\\bar{x}_1 - \\bar{x}_2')}?`, se, 0.0005, '', base + trap(`Staðalfrávikin leggjast ekki saman: √(s₁²/n₁) + √(s₂²/n₂) = ${F.s(Math.sqrt(v1) + Math.sqrt(v2), 4)}.`), { n1, n2, s1, s2, x1, x2 });
+  if (lvl === 2) return num(`${ctx} Reiknið Welch t-prófstærðina fyrir ${M('H_0: \\mu_1 = \\mu_2')}.`, T, 0.002, '', base + calc(`T = \\frac{${F.m(x1)} - ${F.m(x2)} - 0}{${F.m(se, 4)}} = ${F.m(T, 3)}`) + note('Glæra 70 í 09. R: <code>t.test(x, y)</code> reiknar Welch-útgáfuna sjálfgefið.') + trap(`Að nota s₁² + s₂² án þess að deila með n gefur ${F.s((x1 - x2) / Math.sqrt(s1 * s1 + s2 * s2), 3)}.`), { n1, n2, s1, s2, x1, x2 });
+  return num(`${ctx} Hve margar frígráður ν hefur Welch t-prófið?`, nu, 0.05, '', base + calc(`\\nu = \\frac{(${F.m(v1, 4)} + ${F.m(v2, 4)})^2}{\\frac{${F.m(v1, 4)}^2}{${n1 - 1}} + \\frac{${F.m(v2, 4)}^2}{${n2 - 1}}} = ${F.m(nu, 2)}`) + note('Glæra 73 í 09 (ν ≈ 46,9). Í töflu er yfirleitt námundað niður.') + trap(`n₁ + n₂ − 2 = ${n1 + n2 - 2} á við sameinaða t-prófið með jafnri dreifni, ekki Welch.`), { n1, n2, s1, s2, x1, x2 });
+} });
+
+GENS.push({ id: 'g-varchi', lec: 'L09', name: 'χ²-próf og öryggisbil fyrir dreifni', f(lvl) {
+  const n = R.ri(8, 40), s2 = R.ri(10, 400) / 10, s02 = R.ri(10, 400) / 10; const X2 = (n - 1) * s2 / s02;
+  if (lvl === 1) { const sd = Math.round(Math.sqrt(s2) * 100) / 100, sd0 = Math.round(Math.sqrt(s02) * 10) / 10; const X = (n - 1) * sd * sd / (sd0 * sd0);
+    return num(`Úrtak af stærð n = ${n} úr normaldreifðu þýði hefur staðalfrávik ${M(`s = ${F.m(sd)}`)}. Reiknið χ²-prófstærðina fyrir ${M(`H_0: \\sigma = ${F.m(sd0)}`)}.`, X, 0.002, '',
+      calc(`\\chi^2 = \\frac{(n - 1) s^2}{\\sigma_0^2} = \\frac{${n - 1} \\cdot ${F.m(sd)}^2}{${F.m(sd0)}^2} = ${F.m(X, 3)}`) + note('Dæmablað 9, 3a: tilgáta um staðalfrávik er prófuð sem tilgáta um dreifni.') + trap(`Staðalfrávik í stað dreifni gefur ${F.s((n - 1) * sd / sd0, 3)}; n í stað n − 1 gefur ${F.s(n * sd * sd / (sd0 * sd0), 3)}.`), { n, sd, sd0 }); }
+  if (lvl === 2) { const side = R.pick(['greater', 'less']); const a = 0.05; const lo = PROB.qchisq(a, n - 1), hi = PROB.qchisq(1 - a, n - 1), lo2 = PROB.qchisq(a / 2, n - 1), hi2 = PROB.qchisq(1 - a / 2, n - 1);
+    const rej = side === 'greater' ? X2 > hi : X2 < lo; const cv = side === 'greater' ? hi : lo;
+    const X2s = F.s(X2, 2);
+    const ok = rej ? `Hafna H₀: χ² = ${X2s} ${side === 'greater' ? '>' : '<'} ${F.s(cv, 2)}` : `Ekki hafna H₀: χ² = ${X2s} ${side === 'greater' ? '≤' : '≥'} ${F.s(cv, 2)}`;
+    const wrong1 = side === 'greater' ? `${X2 < lo ? 'Hafna' : 'Ekki hafna'} H₀: borið saman við neðra gildið ${F.s(lo, 2)}` : `${X2 > hi ? 'Hafna' : 'Ekki hafna'} H₀: borið saman við efra gildið ${F.s(hi, 2)}`;
+    const wrong2 = side === 'greater' ? `${X2 > hi2 ? 'Hafna' : 'Ekki hafna'} H₀: borið saman við ${F.s(hi2, 2)} (α/2)` : `${X2 < lo2 ? 'Hafna' : 'Ekki hafna'} H₀: borið saman við ${F.s(lo2, 2)} (α/2)`;
+    const Xs = (n - 1) * Math.sqrt(s2) / Math.sqrt(s02); const wrong3 = `${(side === 'greater' ? Xs > hi : Xs < lo) ? 'Hafna' : 'Ekki hafna'} H₀: χ² = ${F.s(Xs, 2)} reiknað með staðalfrávikum`;
+    const wrong4 = rej ? `Ekki hafna H₀: χ² = ${X2s} er nálægt n − 1 = ${n - 1}` : `Hafna H₀: χ² = ${X2s} er langt frá σ₀² = ${F.s(s02)}`;
+    return mc(`Normaldreift þýði; úrtak af stærð n = ${n} gefur ${M(`s^2 = ${F.m(s2)}`)}. Prófið ${M(`H_0: \\sigma^2 ${side === 'greater' ? '\\le' : '\\ge'} ${F.m(s02)}`)} gegn ${M(`H_1: \\sigma^2 ${side === 'greater' ? '>' : '<'} ${F.m(s02)}`)} með α = 0,05. χ²-gildi með ${n - 1} frígráðum: Pr(χ² < c) = 0,025: ${F.s(lo2, 2)} · 0,05: ${F.s(lo, 2)} · 0,95: ${F.s(hi, 2)} · 0,975: ${F.s(hi2, 2)}.`, [ok, wrong1, wrong2, wrong3, wrong4],
+      calc(`\\chi^2 = \\frac{${n - 1} \\cdot ${F.m(s2)}}{${F.m(s02)}} = ${F.m(X2, 3)}`, `§${side === 'greater' ? 'Efra' : 'Neðra'} einhliða próf: allt α = 0,05 í ${side === 'greater' ? 'hægri' : 'vinstri'} halanum → ${F.s(cv, 2)}`, `§Niðurstaða: ${rej ? 'hafna' : 'ekki hafna'} H₀`) +
+      note('Á glærum 81 og 86 í 09 er χ²-gildum gefið nafn á tvo vegu (hlutfallsmark neðan frá á gl. 81, efri hali á gl. 86). Lesið alltaf hvaða hala gildið á við.') + '<p class="note"><b>Rangir kostir</b></p>' + traps([['Rangur hali', 'H₁ ræður hvorum megin höfnunarsvæðið er.'], ['α/2', 'Einhliða próf: α fer allt í annan halann.'], ['Staðalfrávik', 'Prófstærðin notar dreifnir.'], ['„Nálægt" eða „langt frá"', 'Ákvörðunin byggir á viðmiðsgildinu, ekki á tilfinningu.']]), rej ? 1 : 0, { n, s2, s02, side });
+  }
+  const cf = R.pick([0.90, 0.95, 0.99]); const a = 1 - cf; const qL = PROB.qchisq(a / 2, n - 1), qU = PROB.qchisq(1 - a / 2, n - 1); const qLr = Math.round(qL * 1000) / 1000, qUr = Math.round(qU * 1000) / 1000;
+  const which = R.pick(['L', 'U']); const ans = which === 'L' ? (n - 1) * s2 / qUr : (n - 1) * s2 / qLr; const ex = which === 'L' ? (n - 1) * s2 / qU : (n - 1) * s2 / qL;
+  return num(`Normaldreift þýði; úrtak af stærð n = ${n} gefur ${M(`s^2 = ${F.m(s2)}`)}. Finnið ${which === 'L' ? 'neðri' : 'efri'} mörk ${F.pct(cf, 0)} öryggisbils fyrir ${M('\\sigma^2')}. χ²-hlutfallsmörk með ${n - 1} frígráðum: ${M(`\\chi^2_{${F.m(a / 2, 3)}} = ${F.m(qLr, 3)}`)} og ${M(`\\chi^2_{${F.m(1 - a / 2, 3)}} = ${F.m(qUr, 3)}`)} (Pr(χ² < c)).`, ans, nTol(ex, ans, 0.005), '',
+    calc(`\\hat\\sigma^2_L = \\frac{(n - 1)s^2}{\\chi^2_{1 - \\alpha/2}} = \\frac{${n - 1} \\cdot ${F.m(s2)}}{${F.m(qUr, 3)}} = ${F.m((n - 1) * s2 / qUr, 3)}`, `\\hat\\sigma^2_U = \\frac{(n - 1)s^2}{\\chi^2_{\\alpha/2}} = \\frac{${n - 1} \\cdot ${F.m(s2)}}{${F.m(qLr, 3)}} = ${F.m((n - 1) * s2 / qLr, 3)}`) +
+    note('Glærur 81–82 í 09. Stærra χ²-gildið er í nefnara <b>neðri</b> markanna. Bilið er ekki samhverft um s².') + trap('Að víxla χ²-gildunum gefur neðri mörk sem eru stærri en efri mörkin.'), { n, s2, cf, which, qLr, qUr });
+} });
+
+GENS.push({ id: 'g-ftest', lec: 'L09', name: 'F-próf fyrir tvær dreifnir', r: [3], f(lvl) {
+  const n1 = R.ri(6, 30), n2 = R.ri(6, 30), sd1 = R.ri(5, 40) / 10, sd2 = R.ri(5, 40) / 10; const Fv = sd1 * sd1 / (sd2 * sd2);
+  const ctx = `Tvö óháð úrtök úr normaldreifðum þýðum: n₁ = ${n1} með staðalfrávik ${F.s(sd1)} og n₂ = ${n2} með staðalfrávik ${F.s(sd2)}.`;
+  if (lvl === 1) return num(`${ctx} Reiknið F-prófstærðina ${M('F = S_1^2 / S_2^2')}.`, Fv, 0.002, '', calc(`F = \\frac{${F.m(sd1)}^2}{${F.m(sd2)}^2} = \\frac{${F.m(sd1 * sd1, 4)}}{${F.m(sd2 * sd2, 4)}} = ${F.m(Fv, 3)}`) + note(`Frígráður: (${n1 - 1}, ${n2 - 1}).`) + trap(`Hlutfall staðalfrávika ${F.s(sd1 / sd2, 3)} er ekki F-prófstærðin.`), { n1, n2, sd1, sd2 });
+  if (lvl === 2) { const lo = PROB.qf(0.025, n1 - 1, n2 - 1), hi = PROB.qf(0.975, n1 - 1, n2 - 1); const rej = Fv < lo || Fv > hi; const Fs = F.s(Fv, 2);
+    const ok = rej ? `Hafna H₀: F = ${Fs} er utan [${F.s(lo, 3)}; ${F.s(hi, 3)}]` : `Ekki hafna H₀: F = ${Fs} er innan [${F.s(lo, 3)}; ${F.s(hi, 3)}]`;
+    const hi1 = PROB.qf(0.95, n1 - 1, n2 - 1); const Fsd = sd1 / sd2;
+    const o = [ok, rej ? `Ekki hafna H₀: F = ${Fs} er innan bilsins` : `Hafna H₀: F = ${Fs} er utan bilsins`, `${Fv > hi1 ? 'Hafna' : 'Ekki hafna'} H₀: borið aðeins saman við ${F.s(hi1, 3)} (α í einum hala)`, `${(Fsd < lo || Fsd > hi) ? 'Hafna' : 'Ekki hafna'} H₀: F = ${F.s(Fsd, 2)} (hlutfall staðalfrávika)`, `Hafna H₀ af því að F ≠ 1`];
+    return mc(`${ctx} Prófið ${M('H_0: \\sigma_1^2 = \\sigma_2^2')} gegn ${M('H_1: \\sigma_1^2 \\neq \\sigma_2^2')} með α = 0,05. F-hlutfallsmörk með (${n1 - 1}, ${n2 - 1}) frígráðum: Pr(F < c) = 0,025: ${F.s(lo, 3)} · 0,95: ${F.s(hi1, 3)} · 0,975: ${F.s(hi, 3)}.`, o,
+      calc(`F = \\frac{${F.m(sd1)}^2}{${F.m(sd2)}^2} = ${F.m(Fv, 3)}`, `§Tvíhliða: hafna ef F < ${F.s(lo, 3)} eða F > ${F.s(hi, 3)}`, `§Niðurstaða: ${rej ? 'hafna' : 'ekki hafna'} H₀`) +
+      slideErr('Á glæru 96 í 09 er efra viðmiðsgildið F<sub>9,9</sub> sagt 4,96; rétt er 4,03 (qf(0.975, 9, 9)). Niðurstaðan þar breytist ekki.') + '<p class="note"><b>Rangir kostir</b></p>' + traps([['Öfug niðurstaða', 'Rangur samanburður við bilið.'], ['Einn hali', 'H₁: ≠ er tvíhliða, svo α/2 í hvorum hala.'], ['Hlutfall staðalfrávika', 'F notar dreifnir.'], ['F ≠ 1', 'F er nánast aldrei nákvæmlega 1; spurningin er hvort munurinn sé marktækur.']]), rej ? 1 : 0, { n1, n2, sd1, sd2 }); }
+  const s1r = rx3(sd1 * sd1), s2r = rx3(sd2 * sd2); const Fr = +s1r / +s2r; const pv = 2 * Math.min(PROB.pf(Fr, n1 - 1, n2 - 1), 1 - PROB.pf(Fr, n1 - 1, n2 - 1));
+  const rc = `F <- ${s1r} / ${s2r}; cat(round(2 * min(pf(F, ${n1 - 1}, ${n2 - 1}), 1 - pf(F, ${n1 - 1}, ${n2 - 1})), 6))`;
+  return pnum(`${ctx} Hvert er tvíhliða p-gildi F-prófsins fyrir ${M('H_0: \\sigma_1^2 = \\sigma_2^2')}? ${hint('Notið R; vikmörk ±0,001.')}`, pv, 0.001,
+    calc(`F = ${F.m(Fr, 4)}, \\quad (${n1 - 1}, ${n2 - 1}) \\text{ frígráður}`, `p = 2\\min\\{F_{F}(${F.m(Fr, 3)}), 1 - F_{F}(${F.m(Fr, 3)})\\} = ${F.m(pv, 4)}`) + out(rc) + note('Sama og <code>var.test(x, y)</code> gefur úr gögnunum (glæra 98 í 09).') + trap('Að tvöfalda ekki gefur einhliða p-gildi; að tvöfalda stærri halann gefur gildi yfir 1.'), { n1, n2, s1r: +s1r, s2r: +s2r, rc, rx: String(+pv.toFixed(6)) });
 } });
 
 
@@ -2014,6 +2210,250 @@ MCQ('L03-hv-25', 'L03', 1, 'hv', 'Verkefni 4, 2a', 'Líkur á að einstaklingur 
 PNUM('L02-hv-19', 'L02', 1, 'hv', 'Dæmablað 2, 1b', 'Stjörnudreifingin hefur Pr(X = k) = 0,25; 0,25; 0,15; 0,15; 0,1; 0,1 fyrir k = 1, …, 6. Hvert er F(4)?', 0.8, 0.001, calc('F(4) = 0{,}25 + 0{,}25 + 0{,}15 + 0{,}15 = 0{,}8') + trap('f(4) = 0,15 er aðeins einn liður.'));
 
 
+// ================= L08 · Metlar og punktamat =================
+{ const L = 'L08', G = 'Glærur 08 Metlar og punktamöt', D8 = 'Dæmablað 8';
+const NOSOL = ' · engin opinber lausn';
+const kaffi = '5, 4, 1, 4, 2, 5, 4, 4, 5, 5';
+const lan = '5, 4, 1, 4, 3, 5, 4, 4, 5, 5';
+// ---------- stig 1 ----------
+MCQ('L08-gl-1', L, 1, 'gl', G + ', gl. 7', 'Hvenær er metillinn θ̂ óbjagaður fyrir θ?',
+  [[M('E[\\hat\\theta] = \\theta')], [M('\\mathrm{Var}[\\hat\\theta] = 0'), 'Það væri metill án óvissu; óbjagi snýst um væntigildið.'], [M('\\hat\\theta = \\theta') + ' í hverju úrtaki', 'Metill hittir nánast aldrei nákvæmlega; óbjagi segir að hann hitti að jafnaði.'], [M('\\lim_{n\\to\\infty}\\mathrm{Var}[\\hat\\theta] = 0'), 'Það er samkvæmni (gl. 17), ekki óbjagi.'], [M('\\mathrm{Var}[\\hat\\theta]') + ' er minni en dreifni annarra metla', 'Það er skilvirkni (gl. 14).']],
+  calc('B(\\hat\\theta) = E[\\hat\\theta] - \\theta = 0') + note('Eiginleikarnir þrír: óbjagaður (væntigildi), skilvirkur (dreifni), samkvæmur (hegðun þegar n → ∞).'));
+NUM('L08-gl-2', L, 1, 'gl', G + ', gl. 8', 'Metill θ̂ hefur E[θ̂] = 47 þegar rétt gildi er θ = 50. Hver er bjagi metilsins?', -3, 0.001, '',
+  calc('B(\\hat\\theta) = E[\\hat\\theta] - \\theta = 47 - 50 = -3') + note('Neikvæður bjagi: metillinn vanmetur θ að jafnaði.') + trap('θ − E[θ̂] = 3 snýr formerkinu við.'));
+MCQ('L08-gl-3', L, 1, 'gl', G + ', gl. 9–11', 'Hver er munurinn á beinni meðalskekkju (MAE) og meðalferskekkju (MSE)?',
+  [['MSE refsar stórum skekkjum hlutfallslega meira en MAE, því skekkjan er sett í annað veldi'], ['MAE refsar stórum skekkjum meira', 'Í MAE vex framlagið línulega; í MSE vex það með öðru veldi.'], ['Þær gefa alltaf sömu röðun á metlum', 'Ekki endilega; metill með fáar en stórar skekkjur getur haft lága MAE en háa MSE.'], ['MSE tekur aðeins tillit til formerkis skekkjunnar', 'Hvorug tekur tillit til formerkis; |·| og (·)² fjarlægja það.'], ['MAE er sama og bjagi', 'Bjagi E[θ̂] − θ getur verið 0 þótt MAE sé stór, því jákvæðar og neikvæðar skekkjur jafnast út.']],
+  calc('\\mathrm{MAE} = E[|\\hat\\theta - \\theta|], \\quad \\mathrm{MSE} = E[(\\hat\\theta - \\theta)^2]'));
+MCQ('L08-gl-4', L, 1, 'gl', G + ', gl. 15–16', 'Bæði X̄ og Ẋ = X<sub>1</sub> (fyrsta stakið) eru óbjagaðir metlar fyrir E[X]. Hvor er skilvirkari ef n > 1, og hvers vegna?',
+  [['X̄, því Var[X̄] = Var[X]/n er minni en Var[Ẋ] = Var[X]'], ['Ẋ, því hann er einfaldari', 'Skilvirkni ræðst af dreifni, ekki einfaldleika.'], ['Þeir eru jafn skilvirkir því báðir eru óbjagaðir', 'Óbjagi er forsenda samanburðarins; skilvirkni ber saman dreifnirnar.'], ['X̄, því hann er bjagaður en Ẋ ekki', 'Báðir eru óbjagaðir: E[X̄] = E[Ẋ] = E[X].'], ['Ẋ, því Var[Ẋ] = Var[X]/n', 'Ẋ notar aðeins eitt stak, svo dreifni hans er Var[X].']],
+  calc('\\mathrm{Var}[\\bar X] = \\frac{\\mathrm{Var}[X]}{n} < \\mathrm{Var}[X] = \\mathrm{Var}[\\dot X]') + slideErr('Á glæru 15 stendur „Bæði X̄ og X̃"; átt er við Ẋ = X<sub>1</sub>.'));
+NUM('L08-gl-5', L, 1, 'gl', G + ', gl. 29', 'X er jafndreifð á [0, β] með β óþekkt. Úrtak gefur x̄ = 5. Metið β með vægjaaðferðinni.', 10, 0.001, '',
+  calc('E[X] = \\frac{0 + \\beta}{2}', '5 = \\frac{0 + \\hat\\beta}{2} \\Rightarrow \\hat\\beta = 10') + trap('β̂ = 5 ruglar saman matinu á E[X] og matinu á β.'));
+NUM('L08-gl-6', L, 1, 'gl', G + ', gl. 58–62', 'Eftirspurn Q = α + βP. Gögnin eru P = 10, 20, 30, 40 og Q = 100, 90, 80, 70. Hvert er matið á α með aðferð minnstu kvaðrata?', 110, 0.001, '',
+  calc('4\\alpha + 100\\beta = 340, \\quad 100\\alpha + 3000\\beta = 8000', '\\alpha = 85 - 25\\beta \\Rightarrow 8500 + 500\\beta = 8000 \\Rightarrow \\beta = -1', '\\alpha = 85 - 25 \\cdot (-1) = 110') + note('Punktarnir liggja nákvæmlega á línunni Q = 110 − P, svo summa kvaðratanna er 0.') + trap('85 er α ef β gleymist (α = 85 − 25β með β = 0).'));
+NUM('L08-gl-7', L, 1, 'gl', G + ', gl. 45–47', 'X er jafndreifð á [0, β]. Úrtakið er 4,11; 1,58; 8,39; 6,57; 9,11; 9,22; 8,92; 8,46; 5,23; 6,53. Hvert er sennileikamatið á β?', 9.22, 0.0005, '',
+  calc('L(\\beta) = \\frac{1}{\\beta^{10}} \\;\\text{ef}\\; \\beta \\ge 9{,}22', '\\hat\\beta = \\max x_i = 9{,}22') + note('L(β) minnkar þegar β stækkar, en β má ekki vera undir stærsta gildinu.') + trap('Vægjaaðferðin gefur 2x̄ = 13,624; það er annar metill.'));
+MCQ('L08-gl-8', L, 1, 'gl', G + ', gl. 4–5', 'Forstjórinn biður um mat á hagnaði næsta árs. Hvað af eftirfarandi er bilmat?',
+  [['„Hagnaðurinn verður líklega á bilinu 80–120 m.kr."'], ['„Hagnaðurinn verður 100 m.kr."', 'Eitt gildi er punktamat.'], ['„Meðalhagnaður síðustu ára er 95 m.kr."', 'Úrtaksmeðaltal er punktamat.'], ['„Hagnaðurinn verður jákvæður"', 'Það er fullyrðing, ekki bil utan um einkennandi gildi.'], ['„Staðalfrávik hagnaðar er 15 m.kr."', 'Það er punktamat á öðrum stika.']],
+  note('Punktamat: eitt gildi (t.d. X̄ fyrir E[X]). Bilmat: bil utan um gildið; fjallað um það í 09.'));
+MCQ('L08-gl-9', L, 1, 'gl', G + ', gl. 20–23', 'Hvers vegna er X̄ kallað stikalaus metill fyrir E[X]?',
+  [['Það þarf enga forsendu um dreifingu þýðisins, aðeins að væntigildið sé til'], ['Af því að það hefur enga stika', 'X̄ metur stika (væntigildið); „stikalaus" vísar til forsendna um dreifingu þýðisins.'], ['Af því að það er alltaf normaldreift', 'X̄ er aðeins nálægt normaldreift fyrir stórt n (CLT); það skiptir ekki máli hér.'], ['Af því að það er bjagað', 'X̄ er óbjagaður.'], ['Af því að það er reiknað í tölvu', 'K-næsti nágranni er dæmi um reiknifrekan stikalausan metil, en það er ekki skilgreiningin.']],
+  note('Stikabundnir metlar gefa sér dreifingu (t.d. normaldreifingu) og geta ályktað meira, en eru viðkvæmari fyrir röngum forsendum.'));
+NUM('L08-hv-1', L, 1, 'hv', D8 + ', 1a' + NOSOL, `Fjöldi vina sem mætir í kaffi síðustu tíu skipti: ${kaffi}. Metið meðalfjöldann sem mætir.`, 3.9, 0.001, '',
+  calc('\\bar{x} = \\frac{5 + 4 + 1 + 4 + 2 + 5 + 4 + 4 + 5 + 5}{10} = \\frac{39}{10} = 3{,}9') + note('Vægjaaðferðin: úrtaksmeðaltalið metur E[X].'));
+// ---------- stig 2 ----------
+NUM('L08-gl-10', L, 2, 'gl', G + ', gl. 30–31', 'X er jafndreifð á [α, β] og báðir stikar óþekktir. Úrtak gefur x̄ = 8 og S² = 12. Hvert er mat vægjaaðferðarinnar á β?', 14, 0.001, '',
+  calc('\\frac{\\hat\\alpha + \\hat\\beta}{2} = 8, \\quad \\frac{(\\hat\\beta - \\hat\\alpha)^2}{12} = 12', '\\hat\\beta - \\hat\\alpha = 12, \\quad \\hat\\alpha + \\hat\\beta = 16', '\\hat\\alpha = 2, \\quad \\hat\\beta = 14') + note('Hin lausnin (α̂ = 14, β̂ = 2) er útilokuð því α < β. Tveir óþekktir stikar þurfa tvö vægi.') + trap('√12 = 3,46 sem hálf breidd gleymir 12 í nefnaranum.'));
+NUM('L08-gl-11', L, 2, 'gl', G + ', gl. 50–53', 'Úrtak úr N(μ, σ²): 2,32; 2,23; 0,34; 0,61; −0,73; 2,43; 1,53; −0,92; 0,56; 3,91. Hvert er sennileikamatið á μ?', 1.228, 0.0005, '',
+  calc('\\frac{\\partial \\ell}{\\partial \\mu} = \\frac{\\sum (x_i - \\hat\\mu)}{\\hat\\sigma^2} = 0 \\Rightarrow \\hat\\mu = \\bar{x}', '\\hat\\mu = \\frac{12{,}28}{10} = 1{,}228'));
+NUM('L08-gl-12', L, 2, 'gl', G + ', gl. 54–55', 'Sama úrtak (2,32; 2,23; 0,34; 0,61; −0,73; 2,43; 1,53; −0,92; 0,56; 3,91), μ̂ = 1,228. Hvert er sennileikamatið á σ²?', 2.098996, 0.001, '',
+  calc('\\hat\\sigma^2 = \\frac{1}{n}\\sum (x_i - 1{,}228)^2 = \\frac{20{,}990}{10} = 2{,}099') + note('Sennileikamatið deilir með n og er bjagað; S² = 20,990/9 = 2,332 er óbjagaða matið. Bjaginn hverfur þegar n vex.') +
+  slideErr('Á glæru 54 stendur σ̂² = 1,647. Rétt gildi fyrir gögnin á glæru 50 er 2,099 (staðfest í R).') + trap('2,332 deilir með n − 1; spurt er um sennileikamatið.'), { r: true, rc: 'x <- c(2.32,2.23,0.34,0.61,-0.73,2.43,1.53,-0.92,0.56,3.91); cat(round(sum((x - mean(x))^2) / 10, 6))', rx: '2.098996' });
+NUM('L08-gl-13', L, 2, 'gl', G + ', gl. 67–70', 'Gögnin eru nú P = 10, 20, 30, 40 og Q = 107, 85, 81, 63 (með skekkju). Metið β í Q = α + βP + ε með aðferð minnstu kvaðrata.', -1.36, 0.001, '',
+  calc('\\bar{P} = 25, \\quad \\bar{Q} = 84', '\\sum (P_i - \\bar P)(Q_i - \\bar Q) = (-15)(23) + (-5)(1) + 5(-3) + 15(-21) = -680', '\\sum (P_i - \\bar P)^2 = 225 + 25 + 25 + 225 = 500', '\\hat\\beta = \\frac{-680}{500} = -1{,}36') + note('Glærurnar setja dæmið upp en reikna það ekki; svarið er staðfest með lm() í R.'), { r: true, rc: 'P <- c(10,20,30,40); Q <- c(107,85,81,63); cat(coef(lm(Q ~ P))[2])', rx: '-1.36' });
+NUM('L08-gl-14', L, 2, 'gl', G + ', gl. 67–70', 'P = 10, 20, 30, 40 og Q = 107, 85, 81, 63, og β̂ = −1,36. Hvert er α̂?', 118, 0.001, '',
+  calc('\\hat\\alpha = \\bar{Q} - \\hat\\beta \\bar{P} = 84 - (-1{,}36) \\cdot 25 = 84 + 34 = 118') + trap('84 − 34 = 50 gleymir að mínus sinnum mínus er plús.'));
+NUM('L08-hv-2', L, 2, 'hv', D8 + ', 2c' + NOSOL, `Afgreiðslutími lána (dagar), veldisdreifður: ${lan}. Hvert er sennileikamatið á λ?`, 0.25, 0.0005, '',
+  calc('\\ell(\\lambda) = 10\\log\\lambda - \\lambda\\sum x_i = 10\\log\\lambda - 40\\lambda', '\\frac{d\\ell}{d\\lambda} = \\frac{10}{\\lambda} - 40 = 0 \\Rightarrow \\hat\\lambda = \\frac{10}{40} = 0{,}25') + note('Meðalafgreiðslutíminn er metinn 1/λ̂ = 4 dagar.') + trap('λ̂ = x̄ = 4 er matið á meðalbiðinni, ekki á tíðninni.'));
+NUM('L08-hv-3', L, 2, 'hv', D8 + ', 1b' + NOSOL, `Kaffigögnin: ${kaffi}. Metið dreifni fjöldans sem mætir (notið S²).`, 16.9 / 9, 0.001, '',
+  calc('\\sum (x_i - 3{,}9)^2 = 1{,}21 + 0{,}01 + 8{,}41 + 0{,}01 + 3{,}61 + 1{,}21 + 0{,}01 + 0{,}01 + 1{,}21 + 1{,}21 = 16{,}9', 'S^2 = \\frac{16{,}9}{9} = 1{,}878') + note('Dæmablaðið segir „metið dreifingu"; átt er við dreifnina, sem er seinna vægið í lið c.') + trap('16,9/10 = 1,69 deilir með n.'));
+NUM('L08-hv-4', L, 2, 'hv', D8 + ', 1c' + NOSOL, `Kaffigögnin (${kaffi}) eru talin Bin(n, p). Metið n með vægjaaðferðinni og námundið að næstu heiltölu.`, 8, 0, 'vinir',
+  calc('np = 3{,}9, \\quad np(1 - p) = 1{,}878', '1 - \\hat p = \\frac{1{,}878}{3{,}9} = 0{,}4815 \\Rightarrow \\hat p = 0{,}5185', '\\hat n = \\frac{3{,}9}{0{,}5185} = 7{,}52 \\approx 8') +
+  unconf('Engin lausn er til. Með dreifni sem deilir með n (1,69) fæst n̂ = 6,88 ≈ 7. Hér er S² notað, eins og í dæmi glæru 30.') + trap('n̂ = 5 (stærsta gildið í gögnunum) er ekki vægjamat; það er aðeins neðri mörk fyrir n.'));
+PNUM('L08-hv-5', L, 2, 'hv', D8 + ', 1c' + NOSOL, `Með n̂ = 8 (námundað), hvert er þá matið á p fyrir kaffigögnin (x̄ = 3,9)?`, 3.9 / 8, 0.001,
+  calc('\\hat p = \\frac{\\bar{x}}{\\hat n} = \\frac{3{,}9}{8} = 0{,}4875') + note('Eftir námundun á n er p endurmetið úr fyrsta væginu, svo E[X] = n̂p̂ standist áfram.') + unconf('Óljóst hvort dæmablaðið vill p̂ fyrir eða eftir námundun (0,5185 eða 0,4875).'));
+MCQ('L08-hv-6', L, 2, 'hv', D8 + ', 2a–b' + NOSOL, `Afgreiðslutímar lána ${lan} (summa 40) eru úr Exp(λ). Hver er logrinn af sennileikafallinu, einfaldaður?`,
+  [[M('\\ell(\\lambda) = 10\\log\\lambda - 40\\lambda')], [M('\\ell(\\lambda) = \\lambda^{10} e^{-40\\lambda}'), 'Það er sennileikafallið L(λ) sjálft, ekki logrinn.'], [M('\\ell(\\lambda) = \\log\\lambda - 40\\lambda'), 'Gleymir að log λ kemur fyrir einu sinni fyrir hvert af 10 gildum.'], [M('\\ell(\\lambda) = 10\\log\\lambda + 40\\lambda'), 'log(e<sup>−λx</sup>) = −λx; formerkið snýst ekki.'], [M('\\ell(\\lambda) = -10\\log\\lambda - 40\\lambda'), 'log(λe<sup>−λx</sup>) = log λ − λx, svo log λ er jákvætt.']],
+  calc('L(\\lambda) = \\prod_{i=1}^{10} \\lambda e^{-\\lambda x_i} = \\lambda^{10} e^{-\\lambda \\sum x_i}', '\\ell(\\lambda) = 10\\log\\lambda - \\lambda \\cdot 40'));
+MCQ('L08-hv-7', L, 2, 'hv', D8 + ', 3a–b' + NOSOL, 'Laga á parabólu y = αx² + βx að 10 punktum (x<sub>i</sub>, y<sub>i</sub>) með aðferð minnstu kvaðrata. Hvaða vandamál er leyst?',
+  [[M('\\arg\\min_{\\alpha,\\beta} \\sum_{i=1}^{n} (y_i - \\alpha x_i^2 - \\beta x_i)^2')], [M('\\arg\\max_{\\alpha,\\beta} \\sum (y_i - \\alpha x_i^2 - \\beta x_i)^2'), 'Summan á að lágmarka, ekki hámarka.'], [M('\\arg\\min_{\\alpha,\\beta} \\sum (y_i - \\alpha x_i - \\beta)^2'), 'Það er bein lína, ekki parabólan y = αx² + βx.'], [M('\\arg\\min_{\\alpha,\\beta} \\sum |y_i - \\alpha x_i^2 - \\beta x_i|'), 'Það er minnsta beina frávik, ekki minnstu kvaðröt.'], [M('\\arg\\min_{\\alpha,\\beta} \\sum (x_i - \\alpha y_i^2 - \\beta y_i)^2'), 'x og y hafa víxlast; spáð er fyrir um y.']],
+  calc('g(x_i \\mid \\alpha, \\beta) = \\alpha x_i^2 + \\beta x_i') + note('Líkanið er ólínulegt í x en línulegt í stikunum α og β, svo aðferð minnstu kvaðrata virkar (gl. 72).'));
+NUM('L08-gl-15', L, 2, 'gl', G + ', gl. 13 og 76–79', 'X hefur Var[X] = 9 og n = 4. Hvert er E[S̃²] þar sem S̃² = (1/n)Σ(X<sub>i</sub> − X̄)²?', 6.75, 0.001, '',
+  calc('E[\\tilde S^2] = \\frac{n - 1}{n}\\mathrm{Var}[X] = \\frac{3}{4} \\cdot 9 = 6{,}75') + note('Bjaginn er −Var[X]/n = −2,25; hann hverfur þegar n → ∞, svo metillinn er samkvæmur.') + trap('9 gildir fyrir S² (deilt með n − 1), sem er óbjagaður.'));
+MCQ('L08-gl-16', L, 2, 'gl', G + ', gl. 17–18', 'Hvers vegna er Ẋ = X<sub>1</sub> ekki samkvæmur metill fyrir E[X]?',
+  [['Dreifni hans er Var[X] óháð n, svo hún stefnir ekki á 0'], ['Af því að hann er bjagaður', 'Ẋ er óbjagaður: E[X<sub>1</sub>] = E[X].'], ['Af því að Var[Ẋ] = Var[X]/n', 'Það er dreifni X̄. Ẋ notar aðeins eitt stak.'], ['Hann er samkvæmur, því hann er óbjagaður', 'Óbjagi og samkvæmni eru ólíkir eiginleikar.'], ['Af því að Ẋ getur verið neikvætt', 'Formerkið skiptir ekki máli.']],
+  calc('\\lim_{n\\to\\infty} \\mathrm{Var}[\\dot X] = \\mathrm{Var}[X] \\neq 0, \\quad \\lim_{n\\to\\infty} \\mathrm{Var}[\\bar X] = \\lim \\frac{\\mathrm{Var}[X]}{n} = 0') +
+  note('Glæra 17 skilgreinir samkvæmni með lim Var[θ̂] = 0. Nákvæmar þarf líka bjaginn að stefna á 0 (MSE → 0): fasti eins og θ̂ = 5 hefur dreifni 0 en er ekki samkvæmur.'));
+NUM('L08-ny-1', L, 2, 'ny', 'Ný spurning · MSE = Var + bjagi² (gl. 8–10)', 'Metill hefur Var[θ̂] = 4 og bjaga B(θ̂) = −1,5. Hver er meðalferskekkjan?', 6.25, 0.001, '',
+  calc('\\mathrm{MSE} = \\mathrm{Var}[\\hat\\theta] + B(\\hat\\theta)^2 = 4 + (-1{,}5)^2 = 6{,}25') + note('MSE = E[(θ̂ − θ)²] skiptist í dreifni og bjaga í öðru veldi.') + trap('4 − 1,5 = 2,5 notar bjagann án þess að setja hann í annað veldi.'));
+// ---------- stig 3 ----------
+NUM('L08-hv-8', L, 3, 'hv', D8 + ', 2d' + NOSOL, 'Sennileikametillinn fyrir veldisdreifingu er λ̂ = n/ΣX<sub>i</sub>, og E[1/ΣX<sub>i</sub>] = λ/(n − 1). Ef n = 10 og rétt λ = 0,25, hvert er E[λ̂]?', 10 * 0.25 / 9, 0.0005, '',
+  calc('E[\\hat\\lambda] = n \\cdot E\\left[\\frac{1}{\\sum X_i}\\right] = \\frac{n\\lambda}{n - 1} = \\frac{10 \\cdot 0{,}25}{9} = 0{,}2778') + note('E[λ̂] ≠ λ, svo metillinn er bjagaður (ofmetur λ um 11%). Óbjagaður metill: (n − 1)/ΣX<sub>i</sub>.') + trap('E[n/ΣX] = n/E[ΣX] = λ væri rétt aðeins ef 1/x væri línulegt (Jensen).'));
+STEP('L08-hv-9', L, 'hv', D8 + ', dæmi 2 (heilt)' + NOSOL, `Afgreiðslutímar 10 lána (dagar) eru ${lan} og veldisdreifðir. a) Sennileikafall b) logri þess c) sennileikamat á λ d) sýnið að metillinn er bjagaður.`,
+  [['a) Sennileikafall', 1, calc('L(\\lambda) = \\prod_{i=1}^{10} \\lambda e^{-\\lambda x_i} = \\lambda^{10} e^{-\\lambda \\sum x_i} = \\lambda^{10} e^{-40\\lambda}')],
+   ['b) Logri', 1, calc('\\ell(\\lambda) = 10\\log\\lambda - 40\\lambda')],
+   ['c) Hámörkun', 1, calc('\\frac{d\\ell}{d\\lambda} = \\frac{10}{\\lambda} - 40 = 0 \\Rightarrow \\hat\\lambda = \\frac{10}{40} = 0{,}25', '\\frac{d^2\\ell}{d\\lambda^2} = -\\frac{10}{\\lambda^2} < 0 \\;(\\text{hámark})')],
+   ['d) Bjagi', 2, calc('E[\\hat\\lambda] = E\\left[\\frac{n}{\\sum X_i}\\right] = n \\cdot \\frac{\\lambda}{n - 1} = \\frac{10}{9}\\lambda \\neq \\lambda') + note('Bjaginn λ/(n − 1) hverfur þegar n → ∞.')]]);
+NUM('L08-hv-10', L, 3, 'hv', D8 + ', 3c' + NOSOL, 'Laga á y = αx² + βx að punktunum x = −5; −3,8; −2,7; −1,6; −0,55; 0,52; 1,6; 2,7; 3,8; 5 og y = 26,1; 16,87; 14,74; 3,58; 3,81; −1,88; 2,25; 9,8; 21,5; 19 með aðferð minnstu kvaðrata. Hvert er α̂?', 1.0500573, 0.001, '',
+  calc('\\frac{\\partial}{\\partial\\alpha}: \\; \\alpha\\sum x_i^4 + \\beta\\sum x_i^3 = \\sum x_i^2 y_i', '\\frac{\\partial}{\\partial\\beta}: \\; \\alpha\\sum x_i^3 + \\beta\\sum x_i^2 = \\sum x_i y_i', '1786{,}587\\,\\alpha - 0{,}0258\\,\\beta = 1876{,}028', '-0{,}0258\\,\\alpha + 99{,}153\\,\\beta = -36{,}445', '\\hat\\alpha = 1{,}0501, \\quad \\hat\\beta = -0{,}3673') + note('R: <code>coef(lm(y ~ 0 + I(x^2) + x))</code>. „0 +" tekur fastaliðinn út, því líkanið hefur engan.'),
+  { r: true, rc: 'x <- c(-5,-3.8,-2.7,-1.6,-0.55,0.52,1.6,2.7,3.8,5); y <- c(26.1,16.87,14.74,3.58,3.81,-1.88,2.25,9.8,21.5,19); cat(round(coef(lm(y ~ 0 + I(x^2) + x))[1], 4))', rx: '1.0501' });
+NUM('L08-hv-11', L, 3, 'hv', D8 + ', 3c' + NOSOL, 'Sama parabóla y = αx² + βx og sömu 10 punktar (dæmablað 8, dæmi 3). Hvert er β̂?', -0.3672918, 0.001, '',
+  calc('\\hat\\beta = \\frac{\\sum x_i y_i - \\hat\\alpha \\sum x_i^3}{\\sum x_i^2} = \\frac{-36{,}445 + 1{,}0501 \\cdot 0{,}0258}{99{,}153} = -0{,}3673') + note('x-gildin eru nánast samhverf um 0, svo Σx³ ≈ 0 og jöfnurnar tvær eru nánast óháðar.'),
+  { r: true, rc: 'x <- c(-5,-3.8,-2.7,-1.6,-0.55,0.52,1.6,2.7,3.8,5); y <- c(26.1,16.87,14.74,3.58,3.81,-1.88,2.25,9.8,21.5,19); cat(round(coef(lm(y ~ 0 + I(x^2) + x))[2], 4))', rx: '-0.3673' });
+NUM('L08-gl-17', L, 3, 'gl', G + ', gl. 49 og 80–81', 'X ~ Unif(0, 10) og β̂ = max(X<sub>1</sub>, …, X<sub>10</sub>). Hvert er E[β̂]?', 100 / 11, 0.0005, '',
+  calc('F_{\\hat\\beta}(x) = \\left(\\frac{x - \\alpha}{\\beta - \\alpha}\\right)^n \\Rightarrow f_{\\hat\\beta}(x) = \\frac{n(x - \\alpha)^{n-1}}{(\\beta - \\alpha)^n}', 'E[\\hat\\beta] = \\frac{n\\beta + \\alpha}{n + 1} = \\frac{10 \\cdot 10 + 0}{11} = 9{,}0909') + note('Bjagi −(β − α)/(n + 1) = −0,909. Óbjagaður metill: (n + 1)/n · max.') + trap('10 væri rétt ef metillinn væri óbjagaður; hámarkið er alltaf undir β.'));
+STEP('L08-gl-18', L, 'gl', G + ', gl. 76–79', 'Sýnið að S̃² = (1/n)Σ(X<sub>i</sub> − X̄)² er bjagaður metill fyrir Var[X], en samkvæmur.',
+  [['Hjálparjafna', 1, calc('\\sum (X_i - \\bar X)^2 = \\sum (X_i - \\mu)^2 - n(\\bar X - \\mu)^2')],
+   ['Væntigildi', 2, calc('E\\left[\\sum (X_i - \\mu)^2\\right] = n\\mathrm{Var}[X], \\quad E[n(\\bar X - \\mu)^2] = n\\mathrm{Var}[\\bar X] = \\mathrm{Var}[X]')],
+   ['Niðurstaða', 1, calc('E[\\tilde S^2] = \\frac{n\\mathrm{Var}[X] - \\mathrm{Var}[X]}{n} = \\frac{n - 1}{n}\\mathrm{Var}[X] \\neq \\mathrm{Var}[X]') + note('Þegar n → ∞ fer (n − 1)/n → 1, svo bjaginn hverfur og metillinn er samkvæmur.')]]);
+MCQ('L08-ny-2', L, 3, 'ny', 'Ný spurning · gl. 49 og 81 (vægjamat vs sennileikamat)', 'X ~ Unif(0, β) og n = 10. Vægjametillinn 2X̄ er óbjagaður með Var = β²/(3n) = β²/30. Sennileikametillinn max X<sub>i</sub> hefur MSE = 2β²/((n + 1)(n + 2)) = β²/66. Hvor er betri?',
+  [['Það fer eftir mælikvarðanum: 2X̄ er óbjagaður, en max X<sub>i</sub> hefur minni MSE'], ['2X̄ er betri í öllu tilliti', 'Óbjagi er kostur, en MSE vægjametilsins (β²/30) er meira en tvöfalt MSE sennileikametilsins (β²/66).'], ['max X<sub>i</sub> er óbjagaður', 'E[max] = nβ/(n + 1) < β.'], ['Þeir eru jafn góðir því báðir eru samkvæmir', 'Báðir eru samkvæmir, en það gerir þá ekki jafna fyrir gefið n.'], ['2X̄ getur aldrei gefið mat sem er minna en stærsta gildið', 'Það getur gerst, t.d. ef flest gildin eru lítil; þá gefur 2X̄ ómögulegt mat.']],
+  calc('\\mathrm{MSE}[2\\bar X] = \\frac{\\beta^2}{30} \\approx 0{,}0333\\beta^2', '\\mathrm{MSE}[\\max X_i] = \\frac{2\\beta^2}{11 \\cdot 12} \\approx 0{,}0152\\beta^2') + note('Glæra 49 segir að vægjaaðferðin sé betri hér; það á við um bjaga. Miðað við MSE er sennileikametillinn betri. Í gögnunum á glæru 45 gefur 2x̄ = 13,62 en max = 9,22.'));
+STEP('L08-ny-3', L, 'ny', 'Ný spurning · sennileikamat (gl. 41–44)', 'X<sub>1</sub>, …, X<sub>n</sub> eru óháðar og Poisson(λ). Leiðið út sennileikamatið á λ.',
+  [['Sennileiki', 1, calc('L(\\lambda) = \\prod_{i=1}^n \\frac{e^{-\\lambda}\\lambda^{x_i}}{x_i!}')],
+   ['Logri', 1, calc('\\ell(\\lambda) = -n\\lambda + \\log\\lambda \\sum x_i - \\sum \\log(x_i!)')],
+   ['Fyrsta stigs skilyrði', 1, calc('\\frac{d\\ell}{d\\lambda} = -n + \\frac{\\sum x_i}{\\lambda} = 0 \\Rightarrow \\hat\\lambda = \\bar{x}') + note('Síðasti liðurinn inniheldur ekki λ. Hér er sennileikametillinn óbjagaður, því E[X̄] = λ.')]]);
+MCQ('L08-gl-19', L, 3, 'gl', G + ', gl. 73', 'Hagfræðingur metur eftirspurnarfall Q = α + βP með aðferð minnstu kvaðrata úr gögnum um verð og sölumagn á markaði. Hvers vegna er matið líklega bjagað?',
+  [['Hver athugun er jafnvægi framboðs og eftirspurnar, svo gögnin rekja ekki eftirspurnarferilinn einan'], ['Af því að aðferð minnstu kvaðrata er alltaf bjöguð', 'Hún er óbjöguð þegar forsendurnar halda, t.d. E[ε | P] = 0.'], ['Af því að líkanið er línulegt', 'Línuleiki í stikum er kostur, ekki ástæða bjaga.'], ['Af því að úrtakið er of lítið', 'Bjaginn hverfur ekki með stærra úrtaki; vandinn er í gögnunum sjálfum.'], ['Af því að skekkjan ε er normaldreifð', 'Normaldreifing skekkju veldur ekki bjaga.']],
+  note('Verð og magn ákvarðast saman (samtímajöfnur, e. simultaneous equations). Til að meta eftirspurn rétt þarf að meta framboðið samtímis eða einangra áhrifin á annan hátt.'));
+// ---------- spjöld ----------
+CARD('L08-c1', L, 'Spjald · glæra 6–18', 'Hverjir eru þrír eftirsóknarverðir eiginleikar metla og hvernig eru þeir skilgreindir?',
+  'Óbjagaður: E[θ̂] = θ, metillinn hittir að jafnaði á rétt gildi. Skilvirkur: af tveimur óbjöguðum metlum er sá skilvirkari sem hefur minni dreifni, og nýtir þá upplýsingarnar betur (X̄ er skilvirkari en X<sub>1</sub>). Samkvæmur: matið nálgast rétt gildi þegar n vex, lim Var[θ̂] = 0. Eiginleikarnir eru óháðir: X<sub>1</sub> er óbjagaður en ekki samkvæmur, og S̃² er bjagaður en samkvæmur.',
+  ['E[θ̂] = θ', 'Minni dreifni = skilvirkari', 'Var → 0 þegar n → ∞', 'X₁ og S̃² sem gagndæmi']);
+CARD('L08-c2', L, 'Spjald · glæra 19 og 27–74', 'Berðu saman vægjaaðferð, sennileikamat og aðferð minnstu kvaðrata.',
+  'Vægjaaðferðin setur úrtaksvægi (x̄, s²) jöfn vægjum þýðisins og leysir fyrir stikana; eitt vægi þarf fyrir hvern stika. Hún er einföld og oft notuð í flóknum hagfræðilíkönum. Sennileikamat velur stikana sem gera úrtakið sem líklegast; það er mjög almennt en getur verið bjagað (t.d. max fyrir jafndreifingu, σ̂² sem deilir með n). Aðferð minnstu kvaðrata lágmarkar Σ(y − g(x, θ))² og hentar best fyrir líkön sem eru línuleg í stikunum. Þumalputtareglan: veldu skilvirkasta óbjagaða metilinn, annars samkvæman, og byrjaðu á einföldustu aðferðinni.',
+  ['Vægi úrtaks = vægi þýðis', 'arg max sennileikans', 'arg min Σ frávika²', 'Einn stiki = eitt vægi']);
+CARD('L08-c3', L, 'Spjald · glæra 20–26', 'Hver er munurinn á stikabundnum og stikalausum metlum, og hvert er „trade-off"-ið?',
+  'Stikabundnir metlar gefa sér að þýðið fylgi tiltekinni dreifingu (t.d. normaldreifingu) og meta stika hennar. Þá má álykta mikið, t.d. reikna líkur, en matið getur orðið rangt ef forsendan bregst. Stikalausir metlar (X̄, K-næsti nágranni) þurfa færri forsendur og eru því sterkari gagnvart forsendubresti, en svara ekki öllum spurningum og krefjast oft meiri reikninga.',
+  ['Forsenda um dreifingu', 'Meiri ályktanir en viðkvæmari', 'Færri forsendur, minna svarað', 'X̄ og KNN sem stikalaus dæmi']);
+CARD('L08-c4', L, 'Spjald · glæra 41–44', 'Hvers vegna er unnið með logra sennileikans í stað sennileikans sjálfs?',
+  'Fyrir slembiúrtak er sennileikinn margfeldi n líkinda, sem verður fljótt örsmá tala og er erfitt að diffra. Logrinn breytir margfeldinu í summu, sem er auðveldara að diffra og reikna í tölvu. Af því að log er stranglega vaxandi fall er hámarkið á sama stað: arg max L(θ) = arg max ℓ(θ). Síðan er ℓ diffrað, sett jafnt 0 og leyst fyrir θ.',
+  ['Margfeldi verður summa', 'log er vaxandi: sama hámark', 'Tölulegur stöðugleiki', 'dℓ/dθ = 0']);
+}
+
+
+// ================= L09 · Tilgátupróf og öryggisbil =================
+{ const L = 'L09', G = 'Glærur 09 Tilgátupróf og öryggisbil', D9 = 'Dæmablað 9';
+const NOSOL = ' · engin opinber lausn';
+const gl = '670, 636, 695, 743, 716, 699, 636, 686, 683, 700, 642, 601, 662, 610, 636, 585, 690, 534, 614, 591';
+const glR = 'g <- c(670,636,695,743,716,699,636,686,683,700,642,601,662,610,636,585,690,534,614,591)';
+const gu = '662, 610, 575, 587, 585, 692, 577, 646, 553, 601, 667, 630';
+const guR = 'G <- c(662,610,575,587,585,692,577,646,553,601,667,630)';
+const se9 = 52.07735 / Math.sqrt(20);   // s/√n fyrir launagögnin
+// ---------- stig 1 ----------
+MCQ('L09-gl-1', L, 1, 'gl', G + ', gl. 13 og 17', 'Hvaða z-gildi er notað í 95% tvíhliða öryggisbili þegar σ er þekkt?',
+  [['1,96'], ['1,645', 'z<sub>0,05</sub> = 1,645 á við 90% tvíhliða bil eða 95% einhliða bil.'], ['2,58', 'z<sub>0,005</sub> = 2,58 á við 99% tvíhliða bil.'], ['2,33', 'z<sub>0,01</sub> = 2,33 á við 99% einhliða bil.'], ['0,975', 'Það eru líkurnar Pr(Z < z), ekki z-gildið sjálft.']],
+  calc('\\alpha = 0{,}05 \\Rightarrow \\Pr(Z < z_{\\alpha/2}) = 1 - 0{,}025 = 0{,}975 \\Rightarrow z_{0{,}025} = 1{,}96'));
+NUM('L09-gl-2', L, 1, 'gl', G + ', gl. 14', 'Y ~ N(10, 4) og n = 10. Hver eru neðri mörk 95% öryggisbilsins fyrir E[Ȳ]?', 10 - 1.96 * 2 / Math.sqrt(10), 0.005, '',
+  calc('\\hat\\theta_L = 10 - z_{0{,}025}\\frac{\\sigma}{\\sqrt{n}} = 10 - 1{,}96 \\cdot \\frac{2}{\\sqrt{10}} = 10 - 1{,}240 = 8{,}76') + note('Efri mörkin eru 11,24. σ = √4 = 2.') + trap('Að nota σ² = 4 í stað σ = 2 gefur 7,52.'));
+MCQ('L09-gl-3', L, 1, 'gl', G + ', gl. 37 og 43', 'Hvað er villa af gerð 1?',
+  [['Að hafna H₀ þótt hún sé sönn'], ['Að hafna ekki H₀ þótt hún sé ósönn', 'Það er villa af gerð 2 (líkur β).'], ['Að hafna H₀ þegar hún er ósönn', 'Það er rétt niðurstaða (styrkur, 1 − β).'], ['Að reikna prófstærðina rangt', 'Villurnar eru tölfræðilegar, ekki reikningsvillur.'], ['Að velja einhliða próf í stað tvíhliða', 'Það er val á tilgátu, ekki villa af gerð 1.']],
+  note('Líkurnar á villu af gerð 1 eru α, marktæknikrafan. Stundum kölluð fölsk jákvæð niðurstaða.'));
+MCQ('L09-gl-4', L, 1, 'gl', G + ', gl. 39–40', 'Hvað er p-gildi?',
+  [['Lægsta α sem leiðir til höfnunar H₀ með þessum gögnum'], ['Líkurnar á að H₀ sé sönn', 'p-gildið er reiknað miðað við að H₀ sé sönn; það eru ekki líkur á H₀.'], ['Líkurnar á villu af gerð 2', 'Það er β.'], ['Marktæknikrafan sem valin er fyrir prófið', 'α er valið fyrir fram; p-gildið kemur úr gögnunum.'], ['Styrkur prófsins', 'Styrkur er 1 − β.']],
+  calc('§Hægri hali: p = Pr(T ≥ t | H₀) · vinstri: Pr(T ≤ t | H₀) · tvíhliða: 2·min{…}') + note('Hafna H₀ ef p < α. Lægra p-gildi þýðir sterkari vísbendingu gegn H₀.'));
+MCQ('L09-gl-5', L, 1, 'gl', G + ', gl. 41–42', 'Hvað er styrkur (power) tilgátuprófs?',
+  [['Líkurnar á að hafna H₀ þegar hún er ósönn, 1 − β'], ['Líkurnar á að hafna H₀ þegar hún er sönn', 'Það er α.'], ['1 − α', 'Það eru líkurnar á að hafna ekki sannri H₀.'], ['p-gildið', 'p-gildið kemur úr gögnum; styrkur er eiginleiki prófsins.'], ['Prófstærðin T', 'T er reiknað gildi, ekki líkur.']],
+  note('Styrkur vex með úrtaksstærð og stærð áhrifanna. Einhliða próf hafa meiri styrk en tvíhliða, ef stefnan er rétt.'));
+NUM('L09-gl-6', L, 1, 'gl', G + ', gl. 54–55', 'Úrtak 25 hagfræðinema hefur meðaleinkunn 6,8 og staðalfrávik 1,2. Reiknið t-prófstærðina fyrir H₀: μ ≤ 6,5.', 1.25, 0.001, '',
+  calc('t = \\frac{6{,}8 - 6{,}5}{1{,}2/\\sqrt{25}} = \\frac{0{,}3}{0{,}24} = 1{,}25') + note('Efra einhliða próf: t<sub>24; 0,05</sub> = 1,711. Þar sem 1,25 < 1,711 er H₀ ekki hafnað (p = 0,112).') + slideErr('Á glæru 55 stendur „tilgátu um að μ sé minna en μ₀"; gagntilgátan er μ > 6,5, svo átt er við „stærra".') + trap('Að deila með 1,2 (ekki 1,2/√25) gefur 0,25.'));
+NUM('L09-gl-7', L, 1, 'gl', G + ', gl. 87–88', 'Úrtak 10 ára af hagvexti hefur dreifni s² = 3,19. Reiknið χ²-prófstærðina fyrir H₀: σ² ≤ 3.', 9.57, 0.001, '',
+  calc('\\chi^2 = \\frac{(n - 1)s^2}{\\sigma_0^2} = \\frac{9 \\cdot 3{,}19}{3} = 9{,}57') + note('Viðmiðsgildi χ²<sub>9</sub> fyrir efri hala 5% er 16,919. H₀ er ekki hafnað.') + trap('10 · 3,19/3 = 10,63 notar n í stað n − 1.'));
+MCQ('L09-gl-8', L, 1, 'gl', G + ', gl. 99–101', 'Hver er núlltilgáta Jarque–Bera prófsins?',
+  [['Gögnin fylgja normaldreifingu'], ['Gögnin fylgja ekki normaldreifingu', 'Það er gagntilgátan.'], ['Meðaltalið er 0', 'JB prófar skeifni og ferilris, ekki meðaltal.'], ['Dreifnin er 1', 'JB prófar lögun dreifingarinnar.'], ['Gögnin eru veldisdreifð', 'Prófið ber aðeins saman við normaldreifingu.']],
+  note('Normaldreifing hefur skeifni 0 og ferilris 3. JB getur hafnað normaldreifingu en ekki sannað hana.'));
+MCQ('L09-gl-9', L, 1, 'gl', G + ', gl. 57–58', 'Vektorinn x geymir einkunnir. Hvaða R-skipun prófar H₀: μ ≤ 6,5 gegn H₁: μ > 6,5?',
+  [['<code>t.test(x, mu = 6.5, alternative = "greater")</code>'], ['<code>t.test(x, mu = 6.5)</code>', 'Sjálfgefið er tvíhliða próf (alternative = "two.sided").'], ['<code>t.test(x, mu = 6.5, alternative = "less")</code>', '"less" prófar H₁: μ < 6,5.'], ['<code>t.test(x > 6.5)</code>', 'Það prófar hlutfall rökgilda, ekki meðaltalið á móti 6,5.'], ['<code>var.test(x, mu = 6.5)</code>', 'var.test ber saman dreifni tveggja úrtaka.']],
+  note('alternative lýsir gagntilgátunni H₁.'), { r: true });
+NUM('L09-gl-10', L, 1, 'gl', G + ', gl. 19', 'Y er normaldreift með þekkt σ² = 4. Úrtak af stærð 10 gefur ȳ = 9,5. Hver eru efri mörk 95% öryggisbils fyrir μ?', 9.5 + 1.96 * 2 / Math.sqrt(10), 0.005, '',
+  calc('9{,}5 + 1{,}96 \\cdot \\frac{2}{\\sqrt{10}} = 9{,}5 + 1{,}240 = 10{,}74') + note('Bilið [8,26; 10,74] er mat: í 95% endurtekinna úrtaka lendir μ innan bilsins sem reiknað er.'));
+// ---------- stig 2 ----------
+NUM('L09-gl-11', L, 2, 'gl', G + ', gl. 24', 'Y er normaldreift með óþekkt μ og σ². Úrtak af stærð 10 gefur ȳ = 9,5 og s² = 4. Hver eru efri mörk 95% öryggisbils fyrir μ? (t<sub>9; 0,025</sub> = 2,262)', 9.5 + 2.262 * 2 / Math.sqrt(10), 0.005, '',
+  calc('9{,}5 + t_{9;\\,0{,}025}\\frac{s}{\\sqrt{n}} = 9{,}5 + 2{,}262 \\cdot \\frac{2}{\\sqrt{10}} = 9{,}5 + 1{,}431 = 10{,}93') + note('Bilið [8,07; 10,93] er breiðara en z-bilið [8,26; 10,74], því óvissa er um σ.') + trap('z = 1,96 í stað t gefur 10,74.'));
+NUM('L09-gl-12', L, 2, 'gl', G + ', gl. 72–73', 'Hagfræðinemar (n = 25): meðaltal 6,8, staðalfrávik 1,2. Viðskiptafræðinemar (n = 25): 7 og 1,4. Reiknið Welch t-prófstærðina fyrir H₀: μ₁ = μ₂.', -0.2 / Math.sqrt(0.136), 0.002, '',
+  calc('T = \\frac{6{,}8 - 7}{\\sqrt{\\frac{1{,}2^2}{25} + \\frac{1{,}4^2}{25}}} = \\frac{-0{,}2}{\\sqrt{0{,}0576 + 0{,}0784}} = \\frac{-0{,}2}{0{,}3688} = -0{,}542') + note('|−0,54| < t<sub>47; 0,025</sub> ≈ 2,01, svo H₀ er ekki hafnað (p = 0,59).') + trap('Að deila staðalfrávikunum með n (ekki dreifnunum) gefur rangt SE.'));
+MCQ('L09-gl-14', L, 2, 'gl', G + ', gl. 56 og 61', 'Með 100 hagfræðinemum (meðaltal 6,8, staðalfrávik 1,2) er t = 2,5 fyrir H₀: μ ≤ 6,5. Viðmiðsgildið er t<sub>99; 0,05</sub> = 1,660. Hver er niðurstaðan við α = 0,05?',
+  [['Hafna H₀: meðaleinkunnin er marktækt hærri en 6,5 (p ≈ 0,007)'], ['Ekki hafna H₀, því 2,5 < 2,58', '2,58 er z<sub>0,005</sub> (tvíhliða 1%); einhliða 5% gildið er 1,660.'], ['Hafna H₀ og sanna að μ = 6,8', 'Tilgátupróf sannar ekki gildi μ; 6,8 er punktamat.'], ['Ekki hafna H₀, því sama meðaltal gaf ekki höfnun með n = 25', 'Stærra úrtak minnkar s/√n og gefur hærra t.'], ['Hafna H₀ af því að 6,8 > 6,5', 'Munurinn verður að vera marktækur miðað við óvissuna, ekki aðeins jákvæður.']],
+  calc('t = \\frac{0{,}3}{1{,}2/\\sqrt{100}} = \\frac{0{,}3}{0{,}12} = 2{,}5 > 1{,}660'));
+NUM('L09-gl-15', L, 2, 'gl', G + ', gl. 95–98', 'F-próf fyrir dreifni hagvaxtar á Íslandi (s² = 3,19, n = 10) og í Danmörku (s² = 0,942, n = 10), tvíhliða með α = 0,05. Hvert er efra viðmiðsgildið, Pr(F<sub>9,9</sub> < c) = 0,975?', 4.025994, 0.01, '',
+  calc('F = \\frac{3{,}19}{0{,}942} = 3{,}39', 'c_{0{,}025} = 0{,}248, \\quad c_{0{,}975} = 4{,}026') + note('0,248 < 3,39 < 4,03, svo H₀ er ekki hafnað (p = 0,083). R: <code>qf(0.975, 9, 9)</code>.') +
+  slideErr('Á glæru 96 stendur að efra viðmiðsgildið sé 4,96; rétt er 4,03. Það sést líka á öryggisbilinu í R-úttakinu á glæru 98 (3,39/4,026 = 0,842). Niðurstaðan breytist ekki.') + trap('1/0,248 = 4,03; neðra og efra gildið eru umhverf þegar frígráðurnar eru jafnar.'), { r: true, rc: 'cat(round(qf(0.975, 9, 9), 6))', rx: '4.025994' });
+NUM('L09-hv-1', L, 2, 'hv', D9 + ', 1a' + NOSOL, `Laun sumarstarfsmanna Gleðibankans (þús. kr.), normaldreifð: ${gl}. Hver eru neðri mörk 95% tvíhliða öryggisbils fyrir meðallaun? (t<sub>19; 0,025</sub> = 2,093)`, 651.45 - PROB.qt(0.975, 19) * se9, 0.01, 'þús. kr.',
+  calc('\\bar{x} = 651{,}45, \\quad s = 52{,}077, \\quad \\frac{s}{\\sqrt{20}} = 11{,}645', '651{,}45 - 2{,}093 \\cdot 11{,}645 = 627{,}08') + note('Bilið er [627,08; 675,82]. R: <code>t.test(g)$conf.int</code>.') + trap('z = 1,96 í stað t gefur 628,63.'),
+  { r: true, rc: glR + '; cat(round(t.test(g)$conf.int[1], 4))', rx: '627.0771' });
+NUM('L09-hv-2', L, 2, 'hv', D9 + ', 1a' + NOSOL, `Sömu launagögn (n = 20, x̄ = 651,45, s = 52,077). Hver eru efri mörk 95% tvíhliða öryggisbilsins?`, 651.45 + PROB.qt(0.975, 19) * se9, 0.01, 'þús. kr.',
+  calc('651{,}45 + 2{,}093 \\cdot 11{,}645 = 675{,}82'), { r: true, rc: glR + '; cat(round(t.test(g)$conf.int[2], 4))', rx: '675.8229' });
+NUM('L09-hv-3', L, 2, 'hv', D9 + ', 1b' + NOSOL, 'Launagögnin (n = 20, x̄ = 651,45, s = 52,077). Hver eru mörk 99% neðra (einhliða) öryggisbils fyrir meðallaun? (t<sub>19; 0,01</sub> = 2,539)', 651.45 - PROB.qt(0.99, 19) * se9, 0.01, 'þús. kr.',
+  calc('651{,}45 - 2{,}539 \\cdot 11{,}645 = 621{,}88') + note('Bilið er [621,88; ∞). Einhliða: allt α = 0,01 í öðrum halanum, svo t<sub>α</sub>, ekki t<sub>α/2</sub>.') + trap('t<sub>19; 0,005</sub> = 2,861 (tvíhliða 99%) gefur 618,13.'),
+  { r: true, rc: glR + '; cat(round(t.test(g, conf.level = 0.99, alternative = "greater")$conf.int[1], 4))', rx: '621.8781' });
+NUM('L09-hv-4', L, 2, 'hv', D9 + ', 1c' + NOSOL, 'Launagögnin (n = 20, x̄ = 651,45, s = 52,077). Hver eru mörk 90% efra (einhliða) öryggisbils? (t<sub>19; 0,10</sub> = 1,328)', 651.45 + PROB.qt(0.90, 19) * se9, 0.01, 'þús. kr.',
+  calc('651{,}45 + 1{,}328 \\cdot 11{,}645 = 666{,}91') + note('Bilið er (−∞; 666,91].'),
+  { r: true, rc: glR + '; cat(round(t.test(g, conf.level = 0.90, alternative = "less")$conf.int[2], 4))', rx: '666.9112' });
+NUM('L09-hv-5', L, 2, 'hv', D9 + ', 2a' + NOSOL, 'Vinur segir sumarstarfsmenn fá yfir 800 þúsund. Prófið H₀: μ ≤ 800 gegn H₁: μ > 800 með launagögnunum (n = 20, x̄ = 651,45, s = 52,077). Hver er t-prófstærðin?', (651.45 - 800) / se9, 0.005, '',
+  calc('t = \\frac{651{,}45 - 800}{52{,}077/\\sqrt{20}} = \\frac{-148{,}55}{11{,}645} = -12{,}76') + note('Efri einhliða próf: hafna ef t > 1,729. Hér er t langt neðan við, svo H₀ er ekki hafnað (p ≈ 1). Gögnin styðja alls ekki fullyrðingu vinarins.') + trap('Að fá stórt |t| þýðir ekki höfnun: í einhliða prófi skiptir stefnan máli.'),
+  { r: true, rc: glR + '; cat(round(t.test(g, mu = 800, alternative = "greater")$statistic, 4))', rx: '-12.7567' });
+MCQ('L09-hv-6', L, 2, 'hv', D9 + ', 2b' + NOSOL, 'Vinkona segir meðallaunin nær 670. Prófið H₀: μ = 670 gegn H₁: μ ≠ 670 (n = 20, x̄ = 651,45, s = 52,077, α = 0,05). Hver er niðurstaðan?',
+  [['t = −1,59; |t| < 2,093, svo H₀ er ekki hafnað (p = 0,13)'], ['t = −1,59; hafna H₀ því t < 0', 'Formerkið eitt ræður ekki; bera þarf |t| saman við t<sub>α/2</sub>.'], ['t = −1,59; |t| < 1,729, svo H₀ er ekki hafnað', 'Niðurstaðan er sú sama, en 1,729 er einhliða gildið; tvíhliða próf notar 2,093.'], ['t = −0,36; H₀ er ekki hafnað', 'Það deilir með s (52,077) í stað s/√n.'], ['H₀ er samþykkt: meðallaunin eru 670', 'Að hafna ekki H₀ sannar hana ekki; 670 er aðeins samrýmanlegt gögnunum.']],
+  calc('t = \\frac{651{,}45 - 670}{11{,}645} = -1{,}593, \\quad t_{19;\\,0{,}025} = 2{,}093') + note('670 er innan 95% öryggisbilsins [627,08; 675,82], sem gefur sömu niðurstöðu.'));
+NUM('L09-hv-7', L, 2, 'hv', D9 + ', 3a' + NOSOL, 'Sérfræðistörf: n = 50, staðalfrávik launa 98 þús. Prófið H₀: σ ≤ 110 gegn H₁: σ > 110. Hver er χ²-prófstærðin?', 49 * 98 * 98 / (110 * 110), 0.005, '',
+  calc('\\chi^2 = \\frac{(n - 1)s^2}{\\sigma_0^2} = \\frac{49 \\cdot 98^2}{110^2} = \\frac{470\\,596}{12\\,100} = 38{,}89') + note('Efri hali: χ²<sub>49; 0,05</sub> = 66,34. 38,89 < 66,34, svo H₀ er ekki hafnað (p = 0,85).') + trap('Tilgátan um σ = 110 verður σ² = 12.100; 49 · 98/110 = 43,65 notar staðalfrávik.'));
+MCQ('L09-hv-8', L, 2, 'hv', D9 + ', 3b' + NOSOL, 'Leikskólakennsla: n = 34, staðalfrávik 106 þús. Prófið H₀: σ ≥ 130 gegn H₁: σ < 130 með α = 0,05. Pr(χ²<sub>33</sub> < 20,867) = 0,05. Hver er niðurstaðan?',
+  [['χ² = 21,94 > 20,867, svo H₀ er ekki hafnað (p = 0,071)'], ['χ² = 21,94 < 47,40, svo H₀ er hafnað', '47,40 er efri 5% gildið; H₁: σ < 130 hefur höfnunarsvæðið í vinstri halanum.'], ['χ² = 26,91 > 20,867, svo H₀ er ekki hafnað', '33 · 106/130 = 26,91 notar staðalfrávik í stað dreifni.'], ['χ² = 21,94; hafna H₀ því s = 106 < 130', 'Mismunurinn verður að vera marktækur, ekki aðeins í rétta átt.'], ['χ² = 22,61 > 20,867, svo H₀ er ekki hafnað', '34 · 106²/130² = 22,61 notar n í stað n − 1.']],
+  calc('\\chi^2 = \\frac{33 \\cdot 106^2}{130^2} = 21{,}94') + note('Nálægt mörkunum en ekki marktækt við 5%; við α = 0,10 yrði H₀ hafnað.'));
+MCQ('L09-gl-16', L, 2, 'gl', G + ', gl. 58–59', 'R skilar eftirfarandi úttaki. Hvað má álykta við α = 0,05?' + out('One Sample t-test\ndata:  x\nt = 1.25, df = 24, p-value = 0.1117\nalternative hypothesis: true mean is greater than 6.5\n95 percent confidence interval:\n 6.389388      Inf\nsample estimates:\nmean of x \n      6.8'),
+  [['Ekki er hægt að hafna því að μ ≤ 6,5, því p = 0,11 > 0,05'], ['Meðaltalið er marktækt hærra en 6,5, því 6,8 > 6,5', 'Punktamatið eitt nægir ekki; p-gildið er yfir α.'], ['H₀ er sönn: μ = 6,5', 'Að hafna ekki sannar ekki H₀.'], ['Hafna H₀ því 6,5 er innan öryggisbilsins', 'Öfugt: 6,5 innan [6,389; ∞) samrýmist H₀, svo henni er ekki hafnað.'], ['Hafna H₀ því t > 0', 'Bera þarf t saman við t<sub>24; 0,05</sub> = 1,711.']],
+  note('Einhliða öryggisbilið [6,389; ∞) inniheldur 6,5, sem jafngildir því að hafna ekki H₀.'), { r: true });
+PNUM('L09-gl-17', L, 2, 'gl', G + ', gl. 89–91', 'Í dreifniprófinu á glæru 89 er p-gildi efra einhliða prófs reiknað sem <code>1 - pchisq(test_stat, df = n - 1)</code>. Hvað skilar <code>1 - pchisq(9.57, 9)</code>?', 1 - PROB.pchisq(9.57, 9), 0.001,
+  calc('p = \\Pr(\\chi^2_9 \\ge 9{,}57) = 1 - F_{\\chi^2_9}(9{,}57) = 0{,}386') + note('Glæran fær 0,3856 með óstýfðri prófstærð 9,579.') + trap('<code>pchisq(9.57, 9)</code> = 0,614 gefur vinstri halann.'), { r: true, rc: 'cat(round(1 - pchisq(9.57, 9), 6))', rx: String(+(1 - PROB.pchisq(9.57, 9)).toFixed(6)) });
+MCQ('L09-gl-18', L, 2, 'gl', G + ', gl. 64–67', 'Aðhvarfsgreining lokaeinkunnar (0–10) á mætingu í % gefur stikann atndrte = 0,013341 (staðalskekkja 0,003623, t = 3,683, p = 0,000249). Hvað segir þetta?',
+  [['Mæting hefur marktæk áhrif: 100% mæting tengist að jafnaði um 1,33 hærri einkunn en engin mæting'], ['Áhrifin eru ekki marktæk því stikinn er nálægt 0', 'Stærð stikans segir ekki til um marktækni; t = 3,68 gerir það.'], ['Hvert prósentustig í mætingu hækkar einkunn um 1,33', 'Það er áhrif 100 prósentustiga; hvert stig gefur 0,0133.'], ['p-gildið segir að líkurnar á að stikinn sé 0 séu 0,025%', 'p-gildið eru líkurnar á svona öfgafullu t ef stikinn væri 0.'], ['t-gildið er 0,013341/3,683', 't = stiki/staðalskekkja = 0,013341/0,003623.']],
+  calc('t = \\frac{0{,}013341}{0{,}003623} = 3{,}683', '0{,}013341 \\cdot 100 = 1{,}334') + note('H₀: β = 0 er hafnað. Glæra 67 segir „um 1,35"; nákvæmara er 1,33.'));
+MCQ('L09-ny-1', L, 2, 'ny', 'Ný spurning · öryggisbil og tilgátupróf (gl. 30)', '95% tvíhliða öryggisbil fyrir μ er [12,4; 15,1]. Hvað má segja um tvíhliða próf á H₀: μ = 16 við α = 0,05?',
+  [['H₀ er hafnað, því 16 er utan bilsins'], ['H₀ er ekki hafnað, því bilið er breitt', 'Breidd skiptir ekki máli; spurningin er hvort μ₀ sé innan bilsins.'], ['Ekki hægt að segja án prófstærðarinnar', 'Tvíhliða próf við α og 1 − α tvíhliða bil gefa alltaf sömu niðurstöðu.'], ['H₀ er hafnað við α = 0,01 líka', 'Ekki víst: 99% bilið er breiðara og gæti innihaldið 16.'], ['H₀ er ekki hafnað, því 16 > 15,1', 'Utan bilsins þýðir höfnun.']],
+  note('Höfnunarsvæði prófs með marktækni α er það sem fellur utan 1 − α öryggisbils.'));
+MCQ('L09-gl-19', L, 2, 'gl', G + ', gl. 45–46', 'Hvað gerist, að öðru óbreyttu, ef α er lækkað úr 0,05 í 0,01?',
+  [['Minni líkur á villu af gerð 1, en meiri líkur á villu af gerð 2'], ['Minni líkur á báðum villum', 'α og β hreyfast í gagnstæða átt fyrir fasta úrtaksstærð.'], ['Meiri styrkur', 'Höfnunarsvæðið minnkar, svo styrkurinn 1 − β minnkar.'], ['Öryggisbilið þrengist', 'Það breikkar: 99% bil er breiðara en 95% bil.'], ['p-gildið lækkar', 'p-gildið ræðst af gögnunum, ekki af α.']],
+  note('Eina leiðin til að minnka báðar villur í einu er stærra úrtak (eða sterkari áhrif).'));
+// ---------- stig 3 ----------
+NUM('L09-gl-13', L, 3, 'gl', G + ', gl. 73', 'Hagfræðinemar n₁ = 25, s₁ = 1,2; viðskiptafræðinemar n₂ = 25, s₂ = 1,4. Hve margar frígráður ν hefur Welch t-prófið?', 0.136 ** 2 / ((0.0576 ** 2 + 0.0784 ** 2) / 24), 0.05, '',
+  calc('\\nu = \\frac{(0{,}0576 + 0{,}0784)^2}{\\frac{0{,}0576^2}{24} + \\frac{0{,}0784^2}{24}} = \\frac{0{,}018496}{0{,}00039435} = 46{,}90') + note('R gefur df = 46.903 (glæra 75). Í töflu er yfirleitt námundað niður.') + trap('n₁ + n₂ − 2 = 48 á við sameinaða t-prófið með jafnri dreifni.'));
+NUM('L09-hv-9', L, 3, 'hv', D9 + ', 2c' + NOSOL, `Laun hjá Gleðibankanum (n = 20): ${gl}. Hjá Radíobúð Gumma (n = 12): ${gu}. Prófið H₀: μ<sub>G</sub> ≤ μ<sub>R</sub> gegn H₁: μ<sub>G</sub> > μ<sub>R</sub> með Welch t-prófi. Hver er prófstærðin?`, 2.103936, 0.002, '',
+  calc('\\bar{x}_G = 651{,}45, \\; s_G = 52{,}077; \\quad \\bar{x}_R = 615{,}42, \\; s_R = 43{,}504', 'SE = \\sqrt{\\frac{52{,}077^2}{20} + \\frac{43{,}504^2}{12}} = \\sqrt{135{,}60 + 157{,}72} = 17{,}127', 'T = \\frac{651{,}45 - 615{,}42}{17{,}127} = 2{,}104, \\quad \\nu = 26{,}6') +
+  note('t<sub>26; 0,05</sub> = 1,706 < 2,104, svo H₀ er hafnað (p = 0,022): Gleðibankinn borgar marktækt betur.') +
+  unconf('Dæmablaðið leyfir að gera ráð fyrir sömu dreifni (sameinað t-próf: t = 2,009, 30 frígráður, p = 0,027), en glærurnar kenna aðeins Welch-prófið. Báðar leiðir gefa höfnun við 5%.'),
+  { r: true, rc: glR + '; ' + guR + '; cat(round(t.test(g, G, alternative = "greater")$statistic, 6))', rx: '2.103936' });
+STEP('L09-hv-10', L, 'hv', D9 + ', dæmi 2 (heilt)' + NOSOL, 'Á að taka tilboði Gleðibankans? a) Er líklegt að meðallaunin séu yfir 800? b) Gætu þau verið 670? c) Borgar Gleðibankinn betur en Radíobúð Gumma?',
+  [['a) H₀: μ ≤ 800, H₁: μ > 800', 1, calc('t = \\frac{651{,}45 - 800}{11{,}645} = -12{,}76 < 1{,}729') + note('H₀ er ekki hafnað; gögnin benda þvert á móti til að launin séu langt undir 800.')],
+   ['b) H₀: μ = 670, H₁: μ ≠ 670', 1, calc('t = -1{,}593, \\quad |t| < t_{19;\\,0{,}025} = 2{,}093') + note('H₀ er ekki hafnað; 670 er innan 95% bilsins [627,08; 675,82].')],
+   ['c) H₀: μ_G ≤ μ_R, H₁: μ_G > μ_R', 2, calc('T = 2{,}104, \\; \\nu = 26{,}6, \\quad t_{26;\\,0{,}05} = 1{,}706') + note('H₀ er hafnað (p = 0,022). Ef aðeins launin skipta máli á að taka tilboði Gleðibankans.')]]);
+NUM('L09-hv-11', L, 3, 'hv', D9 + ', 3c' + NOSOL, 'Sérfræðistörf: s = 98, n = 50. Leikskólakennsla: s = 106, n = 34. Reiknið F = s²<sub>leiksk.</sub>/s²<sub>sérfr.</sub> fyrir tvíhliða F-próf á jafnri dreifni.', 106 * 106 / (98 * 98), 0.002, '',
+  calc('F = \\frac{106^2}{98^2} = \\frac{11\\,236}{9\\,604} = 1{,}170', '§Frígráður (33, 49); viðmiðsgildi 0,520 og 1,847') + note('0,520 < 1,170 < 1,847, svo H₀ er ekki hafnað (p = 0,61). Enginn marktækur munur er á dreifni launa milli greinanna.') + trap('106/98 = 1,082 er hlutfall staðalfrávika.'));
+STEP('L09-hv-12', L, 'hv', D9 + ', dæmi 3c–d' + NOSOL, 'Er marktækur munur á dreifni launa í sérfræðistörfum (s = 98, n = 50, meðallaun 928) og leikskólakennslu (s = 106, n = 34, meðallaun 688)? Hvað segir það um ójöfnuð?',
+  [['Tilgátur', 1, calc('H_0: \\sigma_1^2 = \\sigma_2^2, \\quad H_1: \\sigma_1^2 \\neq \\sigma_2^2')],
+   ['Prófstærð og ákvörðun', 2, calc('F = \\frac{106^2}{98^2} = 1{,}170, \\quad F_{33,49}: [0{,}520;\\; 1{,}847]') + note('F er innan bilsins, svo H₀ er ekki hafnað.')],
+   ['d) Túlkun', 2, 'Dreifni launa, mæld í þúsundum króna, er svipuð í báðum greinum. En meðallaunin eru mjög ólík (928 og 688), svo sama staðalfrávik er hlutfallslega meiri dreifing í leikskólakennslu (breytistuðull 106/688 = 15% á móti 98/928 = 11%). Hvort ójöfnuður er „meiri" fer eftir því hvort hann er mældur í krónum eða hlutfallslega.']]);
+NUM('L09-gl-20', L, 3, 'gl', G + ', gl. 81–82 og 87', 'Hagvöxtur á Íslandi: n = 10, s² = 3,19. Finnið neðri mörk 95% öryggisbils fyrir σ². (Pr(χ²<sub>9</sub> < 2,700) = 0,025 og Pr(χ²<sub>9</sub> < 19,023) = 0,975)', 9 * 3.19 / PROB.qchisq(0.975, 9), 0.005, '',
+  calc('\\hat\\sigma^2_L = \\frac{(n - 1)s^2}{\\chi^2_{0{,}975}} = \\frac{9 \\cdot 3{,}19}{19{,}023} = \\frac{28{,}71}{19{,}023} = 1{,}509', '\\hat\\sigma^2_U = \\frac{28{,}71}{2{,}700} = 10{,}63') + note('Bilið [1,51; 10,63] er ekki samhverft um 3,19, því χ²-dreifingin er skekkt.') +
+  note('Glæra 81 notar χ²<sub>α/2</sub> fyrir neðra hlutfallsmarkið, en glæra 86 notar χ²<sub>n−1,α</sub> fyrir efri halann. Lestu alltaf hvorn halann gildið á við.') + trap('Að deila með 2,700 gefur efri mörkin, ekki neðri.'));
+NUM('L09-gl-21', L, 3, 'gl', G + ', gl. 100–101', 'Úrtak af stærð n = 40 hefur skeifni −0,5 og ferilris 4,5. Reiknið Jarque–Bera prófstærðina.', 40 / 6 * (0.25 + 0.25 * 2.25), 0.002, '',
+  calc('JB = \\frac{n}{6}\\left(S^2 + \\frac{(K - 3)^2}{4}\\right) = \\frac{40}{6}\\left(0{,}25 + \\frac{1{,}5^2}{4}\\right) = 6{,}667 \\cdot 0{,}8125 = 5{,}417') + note('χ²<sub>2</sub> við 5% er 5,99. 5,42 < 5,99, svo normaldreifingu er ekki hafnað.') +
+  slideErr('Á glæru 100 er S² sagt vera dreifni úrtaksins. S er <b>skeifni</b> úrtaksins og S² skeifnin í öðru veldi. Formúlan á glæru 101 („JB = n/6 S² ∼ χ²₂") er líka brengluð: undir H₀ er JB ∼ χ²₂.') + trap('(K − 3)² gleymir að draga 3 frá: (4,5)² = 20,25.'));
+PNUM('L09-ny-2', L, 3, 'ny', 'Ný spurning · styrkur prófs (gl. 41–47)', 'H₀: μ = 10 gegn H₁: μ > 10, σ = 2 þekkt, n = 16, α = 0,05. Ef rétt μ er 11, hver er styrkur prófsins? ' + hint(TABNOTE), 1 - PROB.pnorm((10 + PROB.qnorm(0.95) * 0.5 - 11) / 0.5), nTol(1 - PROB.pnorm((10 + 1.645 * 0.5 - 11) / 0.5), PROB.tabPhi(0.355)),
+  calc('\\text{Hafna ef } \\bar{x} > 10 + 1{,}645 \\cdot \\frac{2}{\\sqrt{16}} = 10{,}8225', '1 - \\beta = \\Pr(\\bar X > 10{,}8225 \\mid \\mu = 11) = \\Pr\\left(Z > \\frac{10{,}8225 - 11}{0{,}5}\\right) = \\Pr(Z > -0{,}355) = 0{,}639') + note('β = 0,361. Glærurnar skilgreina styrk en reikna hann ekki; dæmið sýnir hvers vegna stærra n eða stærri áhrif auka hann.') + trap('Pr(Z > 0,355) = 0,361 er β, ekki styrkurinn.'));
+NUM('L09-gl-22', L, 3, 'gl', G + ', gl. 76–78', 'Vektorinn vid_alt á glæru 77 hefur ȳ = 7,4 og s = 0,4 (n = 25); hagfræðiúrtakið x hefur x̄ = 6,8 og s = 1,2 (n = 25). Reiknið Welch t-prófstærðina.', -0.6 / Math.sqrt(0.0576 + 0.0064), 0.002, '',
+  calc('T = \\frac{6{,}8 - 7{,}4}{\\sqrt{0{,}0576 + 0{,}0064}} = \\frac{-0{,}6}{0{,}2530} = -2{,}372') + note('Þetta er t = −2,3717 sem R skilar á glæru 78.') +
+  slideErr('Handreikningurinn á glæru 76 notar ȳ = 7,5 og s = 1,1 (T = −2,15, ν = 47,64), en gögnin í R-kóðanum hafa ȳ = 7,4 og s = 0,4 (staðfest í R), og R-úttakið prentar „mean of y 7.5". Báðar leiðir hafna H₀ við 5%.'), { r: true, rc: 'x <- c(6.131834,6.550493,8.817937,6.931617,7.006121,9.016122,7.426466,5.238759,5.971649,6.277362,8.393792,7.298317,7.350232,6.982539,6.137708,9.107191,7.473281,4.349525,7.731228,6.242975,5.488761,6.565960,5.541768,5.918364,6.049998); v <- c(7.177278,7.316831,8.072646,7.443872,7.468707,8.138707,7.608822,6.879586,7.123883,7.225787,7.931264,7.566106,7.583411,7.460846,7.179236,8.169064,7.624427,6.583175,7.710409,7.214325,6.962920,7.321987,6.980589,7.106121,7.149999); cat(round(t.test(x, v)$statistic, 4))', rx: '-2.3717' });
+PNUM('L09-gl-23', L, 3, 'gl', G + ', gl. 60–61', 'Einhliða t-próf (H₁: μ > 6,5) með n = 100 gefur t = 2,5 og p = 0,007031. Hvert væri p-gildið fyrir tvíhliða próf (H₁: μ ≠ 6,5) með sömu gögnum?', 2 * (1 - PROB.pt(2.5, 99)), 0.0005,
+  calc('p_{\\text{tvíhliða}} = 2\\min\\{\\Pr(T \\ge 2{,}5), \\Pr(T \\le 2{,}5)\\} = 2 \\cdot 0{,}007031 = 0{,}01406') + note('Tvíhliða próf hafnar líka við 5% en ekki við 1%.') + trap('0,0035 deilir með 2 í stað þess að margfalda.'));
+// ---------- spjöld ----------
+CARD('L09-c1', L, 'Spjald · glæra 18–21 og 35', 'Hvernig á að túlka 95% öryggisbil sem reiknað er úr úrtaki?',
+  'Ef við tökum endurtekið ný úrtök og reiknum bil úr hverju, lendir rétt μ innan bilsins í 95% tilvika. Bilið er sjálft mat og breytist milli úrtaka; μ er fast. Þegar μ var þekkt (gl. 14) mátti segja að X̄ lenti innan bilsins með 95% líkum, sem er sterkari fullyrðing. Bil sem reiknað er með s í stað σ notar t-dreifingu og er breiðara.',
+  ['95% endurtekinna bila innihalda μ', 'Bilið er slembið, μ fast', 'Mat, ekki rétta bilið', 't þegar σ er metið']);
+CARD('L09-c2', L, 'Spjald · glæra 36–47', 'Útskýrðu villur af gerð 1 og 2 og tengsl α og β.',
+  'Villa af gerð 1 er að hafna sannri H₀ (líkur α, fölsk jákvæð); villa af gerð 2 er að hafna ekki ósannri H₀ (líkur β, fölsk neikvæð). Styrkur er 1 − β. Fyrir gefið úrtak hreyfast α og β í gagnstæða átt: lægra α minnkar höfnunarsvæðið og eykur β. Venjan er að festa α (0,05 eða 0,01), því verra þykir að staðfesta ranga niðurstöðu, og minnka β með stærra úrtaki.',
+  ['Gerð 1: hafna sannri H₀ (α)', 'Gerð 2: hafna ekki ósannri H₀ (β)', 'α ↓ ⇒ β ↑', 'Stærra n minnkar β']);
+CARD('L09-c3', L, 'Spjald · glæra 22 og 51', 'Hvenær á að nota z og hvenær t?',
+  'z (normaldreifing) þegar σ er þekkt, eða þegar úrtakið er nógu stórt til að höfða til höfuðmarkgildissetningarinnar. t með n − 1 frígráðum þegar þýðið er normaldreift og σ er metið með s. t-dreifingin hefur þyngri hala, svo viðmiðsgildin eru hærri og bilin breiðari; munurinn hverfur þegar n vex. R notar t sjálfgefið, sem er varfærnara (minni hætta á villu af gerð 1).',
+  ['σ þekkt eða n stórt: z', 'σ metið, normalt þýði: t(n − 1)', 'Þyngri halar, breiðari bil', 'Munurinn hverfur fyrir stórt n']);
+CARD('L09-c4', L, 'Spjald · glæra 27 og 99', 'Hvers vegna má aldrei segja að H₀ hafi verið „sönnuð" eða „samþykkt"?',
+  'Tilgátupróf mælir hvort gögnin séu ólíkleg ef H₀ er sönn. Ef þau eru það ekki, segir það aðeins að gögnin samrýmist H₀, en þau gætu líka samrýmst mörgum öðrum gildum (t.d. bæði 670 og 650 í launadæminu). Of lítið úrtak (lítill styrkur) gefur oft enga höfnun þótt H₀ sé röng. Jarque–Bera getur því hafnað normaldreifingu en ekki sannað hana. Rétt orðalag er „ekki hægt að hafna H₀".',
+  ['Ekki hafnað ≠ sannað', 'Mörg gildi samrýmast gögnunum', 'Lítill styrkur', '„Ekki hægt að hafna H₀"']);
+CARD('L09-c5', L, 'Spjald · glæra 30 og 49–50', 'Hvenær á að nota einhliða próf og hvenær tvíhliða?',
+  'Tvíhliða (H₁: μ ≠ μ₀) þegar frávik í báðar áttir skipta máli; α skiptist þá á tvo hala og viðmiðsgildið er t<sub>α/2</sub>. Einhliða (H₁: μ > μ₀ eða μ < μ₀) þegar spurningin snýst um aðra áttina, t.d. hvort laun séu yfir 800; allt α fer í annan halann, viðmiðsgildið er t<sub>α</sub> og prófið hefur meiri styrk. Á móti kemur forsendan um stefnuna, sem þarf að rökstyðja fyrir fram, ekki eftir að gögnin hafa sést. Tvíhliða p-gildi er tvöfalt einhliða gildið.',
+  ['≠: tvíhliða, α/2', '> eða <: einhliða, α', 'Meiri styrkur en forsenda', 'p tvíhliða = 2 · p einhliða']);
+}
+
+
 // ===================== BLAÐIÐ =====================
 // Formúlur eftir fyrirlestrum (lykill = id úr LECTURES). Til að bæta L08 við: bættu við lykli hér.
 const SHEET_LEC = {
@@ -2024,7 +2464,9 @@ const SHEET_LEC = {
   L04: calc('F(x) = \\int_{-\\infty}^x f(t)\\,dt, \\quad f(x) = F\'(x)', 'f \\ge 0, \\quad \\int_{-\\infty}^{\\infty} f = 1 \\quad (f \\text{ má vera} > 1)', '\\Pr(a < X < b) = F(b) - F(a), \\quad \\Pr(X = x) = 0', 'E[X] = \\int x f(x)\\,dx, \\quad E[X^2] = \\int x^2 f(x)\\,dx', '§Miðgildi: F(x) = 0,5 · p-hlutfallsmark: F(x) = p', '§Uppskrift: heilda f → F · F(∞) = 1 · líkur = mismunur · vægi með heildum · F(x) = p'),
   L05: calc('Z = \\frac{X - \\mu}{\\sigma} \\sim N(0, 1), \\quad \\Phi(-z) = 1 - \\Phi(z)', 'aX + b \\sim N(a\\mu + b,\\; a^2\\sigma^2)', '\\sum X_i \\sim N\\left(\\sum \\mu_i,\\; \\sum \\sigma_i^2\\right) \\;(\\text{óháðar})', '\\chi^2(k) = Z_1^2 + \\dots + Z_k^2, \\quad F = \\frac{Y_1/k_1}{Y_2/k_2}, \\quad T = \\frac{Z}{\\sqrt{Y/k}}', '§68,3% / 95,4% / 99,7% innan 1σ / 2σ / 3σ', '§Hermun: X = F⁻¹(U), U ~ Unif(0, 1)'),
   L06: calc('F(x, y) = \\Pr(X \\le x, Y \\le y)', 'f_X(x) = \\sum_y f(x, y) \\;\\text{ eða }\\; \\int f(x, y)\\,dy', '\\Pr(x_1 < X < x_2, y_1 < Y < y_2) = F(x_2,y_2) - F(x_1,y_2) - F(x_2,y_1) + F(x_1,y_1)', '\\mathrm{Cov}[X,Y] = E[XY] - E[X]E[Y], \\quad \\rho = \\frac{\\mathrm{Cov}}{\\sigma_X\\sigma_Y} \\in [-1, 1]', '\\Sigma = \\begin{pmatrix} \\mathrm{Var}[X] & \\mathrm{Cov} \\\\ \\mathrm{Cov} & \\mathrm{Var}[Y] \\end{pmatrix}', 'f_{Y|X}(y \\mid x) = \\frac{f(x, y)}{f_X(x)}, \\quad E[X] = E[E[X \\mid Y]]', '§Óháðar ⇔ f(x, y) = f<sub>X</sub>(x)f<sub>Y</sub>(y)'),
-  L07: calc('\\bar{X} = \\frac{1}{n}\\sum X_i, \\quad E[\\bar{X}] = \\mu, \\quad \\mathrm{Var}[\\bar{X}] = \\frac{\\sigma^2}{n}', 'S^2 = \\frac{1}{n-1}\\sum (X_i - \\bar{X})^2 = \\frac{\\sum X_i^2 - n\\bar{X}^2}{n - 1}, \\quad E[S^2] = \\sigma^2', '\\mathrm{Var}[S^2] = \\frac{2\\sigma^4}{n-1} \\;(\\text{normalt þýði})', '\\text{CLT: } \\frac{\\bar{X} - \\mu}{\\sigma/\\sqrt{n}} \\approx N(0, 1)', '\\frac{\\bar{X} - \\mu}{S/\\sqrt{n}} \\sim t_{n-1} \\;(\\text{normalt þýði, } \\sigma \\text{ óþekkt})', 'z = \\frac{\\hat{p} - p}{\\sqrt{p(1-p)/n}}', '§Veldisdreifing: λ̂ = 1/X̄')
+  L07: calc('\\bar{X} = \\frac{1}{n}\\sum X_i, \\quad E[\\bar{X}] = \\mu, \\quad \\mathrm{Var}[\\bar{X}] = \\frac{\\sigma^2}{n}', 'S^2 = \\frac{1}{n-1}\\sum (X_i - \\bar{X})^2 = \\frac{\\sum X_i^2 - n\\bar{X}^2}{n - 1}, \\quad E[S^2] = \\sigma^2', '\\mathrm{Var}[S^2] = \\frac{2\\sigma^4}{n-1} \\;(\\text{normalt þýði})', '\\text{CLT: } \\frac{\\bar{X} - \\mu}{\\sigma/\\sqrt{n}} \\approx N(0, 1)', '\\frac{\\bar{X} - \\mu}{S/\\sqrt{n}} \\sim t_{n-1} \\;(\\text{normalt þýði, } \\sigma \\text{ óþekkt})', 'z = \\frac{\\hat{p} - p}{\\sqrt{p(1-p)/n}}', '§Veldisdreifing: λ̂ = 1/X̄'),
+  L08: calc('B(\\hat\\theta)=E[\\hat\\theta] - \\theta, \\quad \\text{óbjagaður ef } B=0', '\\mathrm{MAE}=E[|\\hat\\theta - \\theta|], \\quad \\mathrm{MSE}=E[(\\hat\\theta - \\theta)^2]=\\mathrm{Var}[\\hat\\theta] + B^2', '§Skilvirkari: minni dreifni (af óbjöguðum) · samkvæmur: Var[θ̂] → 0 þegar n → ∞', 'E[\\tilde S^2]=\\frac{n-1}{n}\\sigma^2 \\quad (\\tilde S^2 \\text{ deilir með } n)', '§Vægjaaðferð: úrtaksvægi = vægi þýðis, eitt vægi á hvern stika', '\\text{Unif}(\\alpha,\\beta): \\; \\frac{\\hat\\alpha + \\hat\\beta}{2}=\\bar x, \\; \\frac{(\\hat\\beta - \\hat\\alpha)^2}{12}=S^2', '\\text{Bin}(n,p): \\; \\hat p=1 - \\frac{S^2}{\\bar x}, \\; \\hat n=\\frac{\\bar x}{\\hat p}', '\\hat\\theta=\\arg\\max_\\theta \\ell(\\theta), \\quad \\ell(\\theta)=\\sum \\log f(x_i \\mid \\theta), \\quad \\frac{d\\ell}{d\\theta}=0', '§Sennileikamat: Exp λ̂ = n/Σxᵢ · Poisson λ̂ = x̄ · Unif(0, β) β̂ = max xᵢ · N: μ̂ = x̄, σ̂² = Σ(xᵢ − x̄)²/n (bjagað)', 'E[\\max X_i]=\\frac{n\\beta + \\alpha}{n + 1}', '\\hat\\beta=\\frac{\\sum (x_i - \\bar x)(y_i - \\bar y)}{\\sum (x_i - \\bar x)^2}, \\quad \\hat\\alpha=\\bar y - \\hat\\beta \\bar x'),
+  L09: calc('\\bar x \\pm z_{\\alpha/2}\\frac{\\sigma}{\\sqrt n} \\;(\\sigma \\text{ þekkt}), \\quad \\bar x \\pm t_{n-1,\\alpha/2}\\frac{s}{\\sqrt n} \\;(\\sigma \\text{ metið})', '§Einhliða bil: z<sub>α</sub> eða t<sub>α</sub> og aðeins önnur mörkin · z<sub>0,05</sub> = 1,645 · z<sub>0,025</sub> = 1,96 · z<sub>0,01</sub> = 2,33 · z<sub>0,005</sub> = 2,58', 'T=\\frac{\\bar x - \\mu_0}{s/\\sqrt n} \\sim t_{n-1}', '§Hafna H₀: efra einhliða T > t(n−1; α) · neðra T < −t(n−1; α) · tvíhliða |T| > t(n−1; α/2)', 'T=\\frac{\\bar x - \\bar y - D_0}{\\sqrt{s_1^2/n_1 + s_2^2/n_2}}, \\quad \\nu=\\frac{(s_1^2/n_1 + s_2^2/n_2)^2}{\\frac{(s_1^2/n_1)^2}{n_1 - 1} + \\frac{(s_2^2/n_2)^2}{n_2 - 1}}', '\\chi^2=\\frac{(n-1)s^2}{\\sigma_0^2} \\sim \\chi^2_{n-1}', '\\left[\\frac{(n-1)s^2}{\\chi^2_{1-\\alpha/2}},\\; \\frac{(n-1)s^2}{\\chi^2_{\\alpha/2}}\\right] \\;(\\text{hlutfallsmörk neðan frá})', 'F=\\frac{s_1^2}{s_2^2} \\sim F_{n_1 - 1,\\, n_2 - 1}', 'JB=\\frac{n}{6}\\left(S^2 + \\frac{(K-3)^2}{4}\\right) \\sim \\chi^2_2, \\quad S=\\text{skeifni}, \\; K=\\text{ferilris}', '§p-gildi: efri Pr(T ≥ t) · neðri Pr(T ≤ t) · tvíhliða 2·min · hafna ef p < α', '§Villa 1: hafna sannri H₀ (α) · villa 2: hafna ekki ósannri H₀ (β) · styrkur 1 − β')
 };
 
 // Ein tafla yfir allar dreifingar. * = R-fallið er ekki nefnt í glærunum (sama d/p/q/r-regla).
@@ -2035,7 +2477,7 @@ const SHEET_DIST = [
   ['Unif(a, b)', M('\\frac{1}{b-a}'), M('\\frac{x-a}{b-a}'), M('\\frac{a+b}{2}'), M('\\frac{(b-a)^2}{12}'), '<code>punif runif</code>'],
   ['Exp(λ)', M('\\lambda e^{-\\lambda x}'), M('1 - e^{-\\lambda x}'), M('1/\\lambda'), M('1/\\lambda^2'), '<code>pexp(x, rate = λ) qexp rexp</code>'],
   ['N(μ, σ²)', M('\\frac{1}{\\sqrt{2\\pi}\\sigma}e^{-\\frac{1}{2}(\\frac{x-\\mu}{\\sigma})^2}'), M('\\Phi\\left(\\frac{x-\\mu}{\\sigma}\\right)'), M('\\mu'), M('\\sigma^2'), '<code>pnorm(x, mean, sd)</code> · <b>sd, ekki σ²</b>'],
-  ['χ²(k)', 'Gamma-fall', 'tafla / R', M('k'), M('2k'), '<code>pchisq(x, k)</code>*'],
+  ['χ²(k)', 'Gamma-fall', 'tafla / R', M('k'), M('2k'), '<code>pchisq(x, k) qchisq</code>'],
   ['t(k)', 'flókin', 'tafla / R', '0 (k &gt; 1)', M('\\frac{k}{k-2}') + ' (k &gt; 2)', '<code>pt(x, k)</code>*'],
   ['F(k₁, k₂)', 'Beta-fall', 'tafla / R', M('\\frac{k_2}{k_2-2}') + ' (k₂ &gt; 2)', M('\\frac{2k_2^2(k_1+k_2-2)}{k_1(k_2-2)^2(k_2-4)}'), '<code>pf(x, k1, k2)</code>*']
 ];
@@ -2068,7 +2510,14 @@ const SHEET_DECIDE = [
   ['Summa háðra breyta', 'Bæta ±2Cov við'],
   ['Hlutfallsmark strjálrar breytu', 'min{x : F(x) ≥ p}; brúun aðeins fyrir flokkuð gögn'],
   ['Hlutfallsmark samfelldrar breytu', 'Leysa F(x) = p'],
-  ['Spurt um líkur á prófstærð', 'Taka alltaf fram <b>einhliða</b> eða <b>tvíhliða</b>']
+  ['Spurt um líkur á prófstærð', 'Taka alltaf fram <b>einhliða</b> eða <b>tvíhliða</b>'],
+  ['Tilgáta um eitt meðaltal', '<b>t-próf</b> (σ metið) eða z (σ þekkt)'],
+  ['Tvö óháð úrtök, munur á meðaltölum', '<b>Welch t-próf</b> með ν frígráðum'],
+  ['Tilgáta um dreifni eða staðalfrávik eins þýðis', '<b>χ²-próf</b> með n − 1 frígráðum (staðalfrávik → dreifni)'],
+  ['Tvær dreifnir bornar saman', '<b>F-próf</b>, F = s₁²/s₂² með (n₁ − 1, n₂ − 1)'],
+  ['Eru gögnin normaldreifð?', '<b>Jarque–Bera</b>, χ²₂; hafna ef JB &gt; 5,99 (α = 0,05)'],
+  ['H₁ með ≠', 'Tvíhliða: α/2 í hvorum hala'],
+  ['H₁ með &gt; eða &lt;', 'Einhliða: allt α í þeim hala sem H₁ bendir á']
 ];
 
 // R-svindlblað
@@ -2082,6 +2531,8 @@ const SHEET_R = [
   ['Föll', '<code>f &lt;- function(x, y = 3) { return(x + y) }</code> · skilar síðustu segð eða return()'],
   ['Pakkar', '<code>install.packages("nafn")</code> einu sinni · <code>library(nafn)</code> í hverri keyrslu · <code>pakki::fall</code> tekur af vafa'],
   ['Dreifingar', 'd = þéttleiki · p = F(x) · q = hlutfallsmark · r = slembidráttur · <code>pnorm(x, mean, sd)</code>'],
+  ['Próf', '<code>t.test(x, mu = 6.5, alternative = "greater")</code> · <code>t.test(x, y)</code> (Welch) · <code>var.test(x, y)</code> (F) · <code>$statistic</code>, <code>$p.value</code>, <code>$conf.int</code> · <code>jarque.bera.test(x)</code> (pakkinn tseries)'],
+  ['Aðhvarf', '<code>m &lt;- lm(y ~ x)</code> · <code>coef(m)</code> · <code>summary(m)</code> gefur t-gildi og p-gildi fyrir H₀: β = 0 · <code>lm(y ~ 0 + I(x^2) + x)</code> án fastaliðar'],
   ['Annað', '<code>na.rm = TRUE</code> · <code>var()</code>, <code>sd()</code> deila með n − 1 · <code>prod(365 - 1:n + 1)</code> · <code>table(x)/length(x)</code> mælt PMF · <code>replicate(n, {…})</code>']
 ];
 
@@ -2102,7 +2553,14 @@ const SHEET_TRAPS = [
   'Staðalfrávik leggjast ekki saman: √(a + b) ≠ √a + √b',
   'Pr(X ≤ k) vs Pr(X &lt; k) í strjálum dreifingum',
   'Einhliða vs tvíhliða líkur',
-  'Að deila með σ en ekki σ/√n þegar spurt er um X̄'
+  'Að deila með σ en ekki σ/√n þegar spurt er um X̄',
+  'Sennileikamatið σ̂² deilir með n og er bjagað; S² deilir með n − 1',
+  'Einhliða bil og próf nota t<sub>α</sub>; tvíhliða nota t<sub>α/2</sub>',
+  'χ²- og F-gildi eru skrifuð á tvo vegu á glærum 09 (neðan frá á gl. 81, efri hali á gl. 86 og 93): lesið hvaða hala gildið á við',
+  'Tilgáta um staðalfrávik (σ ≤ 110) er prófuð með dreifnum: s² og σ₀² = 110²',
+  'Að hafna ekki H₀ sannar hana ekki; „ekki hægt að hafna H₀"',
+  'Í einhliða prófi skiptir stefna T máli: stórt neikvætt T hafnar ekki H₀: μ ≤ μ₀',
+  'F = s₁²/s₂², ekki hlutfall staðalfrávika'
 ];
 
 // Villur á glærum (sannreyndar með útreikningi eða í R). Notaðu rétta gildið á prófi og sýndu útreikninginn.
@@ -2123,6 +2581,14 @@ const SHEET_ERRATA = [
   ['06, gl. 69', 'Fylgni 0 ⇒ óháðar', 'Aðeins öfugt: óháðar ⇒ fylgni 0'],
   ['07, gl. 56', '1 − (1 − e<sup>0,288·5</sup>)', 'e<sup>−0,288·5</sup> = 0,237'],
   ['07, gl. 63 og 69', '0,042 og 0,056', 'Einhliða: 0,017 (z = −2,12) og 0,035 (t₉ = −2,06); óstaðfest hvað er átt við'],
+  ['08, gl. 15', '„Bæði X̄ og X̃"', 'Ẋ = X<sub>1</sub>'],
+  ['08, gl. 54', 'σ̂² = 1,647', '2,099 fyrir gögnin á gl. 50 (S² = 2,332)'],
+  ['09, gl. 55', '„tilgátu um að μ sé minna en μ₀"', 'H₁: μ &gt; 6,5, svo „stærra"'],
+  ['09, gl. 67', '„um 1,35 lægri"', '0,013341 · 100 = 1,33'],
+  ['09, gl. 76–78', 'ȳ = 7,5 og s = 1,1 gefa T = −2,15', 'R-gögnin hafa ȳ = 7,4 og s = 0,4: T = −2,37 (eins og R skilar)'],
+  ['09, gl. 85', '„S² er metið staðalfrávik"', 'S² er dreifni úrtaksins'],
+  ['09, gl. 96', 'F<sub>9,9; 0,025</sub> = 4,96', '4,03 (qf(0.975, 9, 9)); niðurstaðan breytist ekki'],
+  ['09, gl. 100–101', 'S² = dreifni úrtaksins', 'S = skeifni; S² er skeifnin í öðru veldi. Undir H₀ er JB ∼ χ²₂'],
   ['Dæmablað 4, 4b-ii', 'Miðja bils: (u<sub>i</sub> − l<sub>i</sub>)/2', '(u<sub>i</sub> + l<sub>i</sub>)/2 (verkefni 5 rétt)']
 ];
 
@@ -2132,8 +2598,11 @@ const UNCONFIRMED = [
   'Hvort formúlublaðið er eigið eða frá kennara; staðsetning prófsins.',
   'Strjált miðgildi: formúla glæru 16 (min{x : F(x) ≥ 0,5}) og lausn verkefnis 3 (2d: 15 í stað 20) stangast á; lausn dæmablaðs 2 (2d) brúar 70% hlutfallsmörk (3⅓) þar sem reglan gefur 4.',
   'Einhliða eða tvíhliða líkur á glærum 07 (gl. 63 og 69) — spurðu kennarann.',
-  'pchisq, pt og pf koma hvergi fyrir í glærum eða lausnum; gert ráð fyrir sömu d/p/q/r-reglu og pnorm/dpois/ppois/qexp.',
-  'Lausnir vantar fyrir verkefni 1 og dæmablöð 6–9; svörin hér eru reiknuð sjálfstætt og staðfest tölulega.'
+  'pchisq og qchisq koma fyrir á glæru 89 í 09, en pt og pf hvergi (t.test og var.test reikna þau innbyrðis); gert ráð fyrir sömu d/p/q/r-reglu.',
+  'Dæmablað 8, 1c: óljóst hvort nota á S² (n̂ = 8, p̂ = 0,4875) eða dreifni með n í nefnara (n̂ = 7), og hvort p̂ er gefið fyrir eða eftir námundun n.',
+  'Dæmablað 9, 2c leyfir sameinað t-próf með jafnri dreifni, en glærurnar kenna aðeins Welch. Báðar leiðir hafna H₀ við 5%.',
+  'Samantektin (skjalið) nær ekki enn yfir glærur 08 og 09; efni þeirra hér byggir eingöngu á glærunum og dæmablöðum 8–9.',
+  'Lausnir vantar fyrir verkefni 1 og dæmablöð 6–9 (líka 8 og 9); svörin hér eru reiknuð sjálfstætt og staðfest tölulega.'
 ];
 
 </script>
@@ -2541,6 +3010,15 @@ function phiTable() {
   const rows = [...Array(35).keys()].map(r => `<tr><th>${F.dec(r / 10, 1)}</th>${cols.map(c => `<td>${F.dec(PROB.pnorm(r / 10 + c / 100), 4)}</td>`).join('')}</tr>`).join('');
   return `<table class="phi"><thead><tr><th>z</th>${cols.map(c => `<th>,0${c}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>`;
 }
+function tTable() {
+  const al = [0.10, 0.05, 0.025, 0.01, 0.005]; const dfs = [...Array(30).keys()].map(i => i + 1).concat([40, 60, 120]);
+  const row = df => `<tr><th>${df}</th>${al.map(a => `<td>${F.dec(PROB.qt(1 - a, df), 3)}</td>`).join('')}</tr>`;
+  return `<table class="phi"><thead><tr><th>df</th>${al.map(a => `<th>${F.dec(a, a < 0.01 ? 3 : a < 0.1 ? 3 : 2)}</th>`).join('')}</tr></thead><tbody>${dfs.map(row).join('')}<tr><th>∞</th>${al.map(a => `<td>${F.dec(PROB.qnorm(1 - a), 3)}</td>`).join('')}</tr></tbody></table>`;
+}
+function chiTable() {
+  const ps = [0.005, 0.01, 0.025, 0.05, 0.95, 0.975, 0.99, 0.995]; const dfs = [...Array(30).keys()].map(i => i + 1).concat([40, 50, 60, 80, 100]);
+  return `<table class="phi"><thead><tr><th>df</th>${ps.map(p => `<th>${F.dec(p, 3)}</th>`).join('')}</tr></thead><tbody>${dfs.map(df => `<tr><th>${df}</th>${ps.map(p => `<td>${F.dec(PROB.qchisq(p, df), df < 3 && p < 0.05 ? 4 : 2)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+}
 function renderSheet() {
   const lec = LECTURES.filter(L => SHEET_LEC[L.id]).map(L => `<section><h2><span class="n">${L.label}</span>${esc(L.name)}</h2><div class="scroll">${SHEET_LEC[L.id]}</div></section>`).join('');
   $('#app').innerHTML = `<div class="sheet">
@@ -2551,6 +3029,8 @@ function renderSheet() {
     <section><h2><span class="n">✓</span>Ákvörðunarreglur</h2><div class="scroll"><table class="tt"><thead><tr><th>Þegar…</th><th>…þá</th></tr></thead><tbody>${SHEET_DECIDE.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</tbody></table></div></section>
     <section><h2><span class="n">R</span>R í hnotskurn</h2><div class="scroll"><table class="tt"><tbody>${SHEET_R.map(r => `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td></tr>`).join('')}</tbody></table></div></section>
     <section><h2><span class="n">Φ</span>Staðlaða normaldreifingin Φ(z) = Pr(Z ≤ z)</h2><p class="hint">Röð = z með einum aukastaf, dálkur = annar aukastafur. Fyrir neikvætt z: Φ(−z) = 1 − Φ(z).</p><div class="scroll">${phiTable()}</div></section>
+    <section><h2><span class="n">t</span>t-dreifing: t<sub>df; α</sub> með Pr(T &gt; t) = α</h2><p class="hint">Efri hali. Tvíhliða próf eða bil með α: lesið dálkinn α/2. Neðri hali: −t.</p><div class="scroll">${tTable()}</div></section>
+    <section><h2><span class="n">χ²</span>χ²-dreifing: c með Pr(χ² &lt; c) = p</h2><p class="hint">Hlutfallsmörk neðan frá. Efri hali α: dálkurinn p = 1 − α.</p><div class="scroll">${chiTable()}</div></section>
     <section><h2><span class="n">✗</span>Gildrulisti</h2><ul>${SHEET_TRAPS.map(t => `<li>${t}</li>`).join('')}</ul></section>
     <section><h2><span class="n">!</span>Villur á glærum og í lausnum</h2><p class="hint">Á prófi: notaðu rétta gildið og sýndu útreikninginn.</p><div class="scroll"><table class="tt"><thead><tr><th>Hvar</th><th>Stendur</th><th>Rétt</th></tr></thead><tbody>${SHEET_ERRATA.map(r => `<tr><td class="mono">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table></div></section>
     <div class="callout"><b>Óstaðfest</b><ul>${UNCONFIRMED.map(x => `<li>${x}</li>`).join('')}</ul></div>

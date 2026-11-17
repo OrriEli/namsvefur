@@ -6,11 +6,11 @@
 /** @type {ExamDate[]} */
 export const EXAMS = [
   { course: 'hag101g', kind: 'midannar', label: 'Miðannarpróf', at: '2026-11-05T16:00:00Z', minutes: 90 },
-  { course: 'hag101g', kind: 'loka', label: 'Lokapróf', at: '2026-11-25T13:30:00Z', minutes: 180 },
-  { course: 'hag108g', kind: 'loka', label: 'Lokapróf', at: '2026-12-01T13:30:00Z', minutes: 180 },  // af gömlu síðunni
-  { course: 'hag103g', kind: 'loka', label: 'Lokapróf', at: null },                                   // óstaðfest
-  { course: 'hag106g', kind: 'loka', label: 'Lokapróf', at: null, minutes: 180 },                     // óstaðfest
-  { course: 'hag107g', kind: 'loka', label: 'Lokapróf', at: null }                                    // óstaðfest
+  { course: 'hag101g', kind: 'loka', label: 'Lokapróf', at: '2026-11-25T13:30:00Z', minutes: 180 },   // Á301
+  { course: 'hag108g', kind: 'loka', label: 'Lokapróf', at: '2026-12-01T13:30:00Z', minutes: 180 },
+  { course: 'hag107g', kind: 'loka', label: 'Lokapróf', at: '2026-12-04T13:30:00Z', minutes: 180 },   // S-261
+  { course: 'hag103g', kind: 'loka', label: 'Lokapróf', at: '2026-12-07T13:30:00Z', minutes: 180 },   // HT103
+  { course: 'hag106g', kind: 'loka', label: 'Lokapróf', at: null, minutes: 180 }                      // óstaðfest
 ];
 
 // Markmið á hvert fag, t.d. { hag107g: '6,5 á lokaprófi' }. Stillanlegt síðar í stillingum.

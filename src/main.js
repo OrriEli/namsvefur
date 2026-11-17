@@ -1,6 +1,10 @@
 // Ræsing og leiðsögn. Slóðir: #/fog, #/fag/<id>[/aefing|/prof|/bladid|/aaetlun][?…], #/villur
 
+import './ui/base.css';
+import './ui/legacy.css';
+import 'katex/dist/katex.min.css';
 import './ui/styles.css';
+import renderMathInElement from 'katex/contrib/auto-render';
 import { createStore } from './store/store.js';
 import { courseById } from './courses/index.js';
 import { bankIds } from './engine/review.js';
@@ -41,6 +45,21 @@ function route() {
   setTopH();
   window.scrollTo(0, 0);
 }
+
+// Stærðfræði: KaTeX teiknar \( \) og \[ \] í hvert sinn sem #app breytist (eins og í HAG108G).
+const MATHOPT = {
+  delimiters: [{ left: '\\[', right: '\\]', display: true }, { left: '\\(', right: '\\)', display: false }],
+  ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'], throwOnError: false,
+  // Nokkur dæmi í HAG101G skrifa prím sem \' (t.d. f\'\'(1)); það er ógilt TeX svo það er skilgreint hér sem prím.
+  macros: { "\\'": "'" }
+};
+const app = $('#app');
+let queued = false;
+const mathObs = new MutationObserver(() => {
+  if (queued) return; queued = true;
+  queueMicrotask(() => { queued = false; mathObs.disconnect(); try { renderMathInElement(app, MATHOPT); } catch (e) { console.warn(e); } mathObs.observe(app, { childList: true, subtree: true }); });
+});
+mathObs.observe(app, { childList: true, subtree: true });
 
 store.onChange(() => renderNav(parse().parts));
 window.addEventListener('hashchange', route);

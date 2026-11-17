@@ -10,9 +10,10 @@ import vm from 'node:vm';
 export const NAMES = [
   // gögn
   'OLD', 'NEW', 'GENS', 'STATIC', 'QUICK', 'BANK', 'CARDS', 'SHEET_PROBS', 'NEW_PROBS', 'QGENS',
+  'OLD2', 'NEW2', 'GENS2', 'GEN', 'OLDALL', 'FINAL_PROBS', 'A4_HTML',
   // efnisflokkar og próf
   'TOPICS', 'ORDER', 'MIX', 'BLUEPRINT', 'OLD_EXAM', 'EXAM_AT', 'EXAM', 'LECTURES', 'LEVELS', 'MIXES',
-  'LEN', 'XC', 'R_SHARE', 'KIND_LABEL', 'FROM',
+  'LEN', 'XC', 'R_SHARE', 'KIND_LABEL', 'FROM', 'MIX2', 'FIRST', 'SECOND', 'EXAM_SETS', 'PART', 'AP', 'NMIX', 'TY_LABEL',
   // færslur í æfingapotti
   'ENTRIES', 'W_ENTRIES', 'Q_ENTRIES',
   // blaðið og áætlun
@@ -22,6 +23,7 @@ export const NAMES = [
   'KEY', 'STORE_KEY', 'S',
   // föll sem útdrátturinn notar
   'renderSheet', 'renderPlan', 'renderHome', 'renderExam', 'buildExam', 'instantiate', 'instW', 'instQ', 'parseNum', 'parseAns', 'gradeNum',
+  'maxPts', 'grade', 'blank', 'answered', 'numOK',
   'F', 'R', 'PROB'
 ];
 
@@ -110,4 +112,12 @@ export function renderToHtml(loaded, fnName, arg) {
   if (typeof fn !== 'function') return null;
   fn(arg || {});
   return loaded.ctx.document.querySelector('#app').innerHTML;
+}
+
+/** Kallar á onclick-meðhöndlun #app með gervismelli á eigindi, t.d. clickApp(L, '[data-tab]', {tab:'a4'}). */
+export function clickApp(loaded, selector, dataset) {
+  const app = loaded.ctx.document.querySelector('#app');
+  const target = { closest: sel => sel === selector ? { dataset, disabled: false } : null, matches: () => false };
+  app.onclick({ target, preventDefault() {} });
+  return app.innerHTML;
 }

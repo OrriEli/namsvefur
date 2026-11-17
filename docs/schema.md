@@ -1,6 +1,6 @@
 # Gagnasnið
 
-29. okt. 2026 · áfangi 0 · **samþykkt 30. okt. 2026**
+29. okt. 2026 · áfangi 0 · **samþykkt 30. okt. 2026** · útvíkkað 17. nóv. 2026 fyrir lokaprófsútgáfur gömlu síðnanna (sjá *Útvíkkun 17. nóv.* neðst; þar sem hún stangast á við fyrri kafla gildir hún)
 
 Öll fimm fögin eru lýst með einu sniði. Vélin les `Course`-hlut og þarf aldrei að vita úr hvaða fagi atriði kemur. Sniðið verður skilgreint með JSDoc í `src/schema.js` og prófað með skriftu (sjá „Prófanir“ neðst).
 
@@ -505,3 +505,58 @@ Orri samþykkti sniðið 30. okt. 2026 með sjálfgefnu svörunum:
 5. „§“-villan í 108 er flutt orðrétt.
 
 Tvö valkvæð svið bættust við í áfanga 1 svo texti gömlu síðnanna haldist: `Course.genLabel` („Reikningur · …“ í 103 og 107) og `ExamInfo.note`.
+
+## Útvíkkun 17. nóv. 2026
+
+Orri uppfærði allar fimm gömlu síðurnar fyrir lokaprófin og bað um að vefurinn yrði byggður á þeim. Nýju síðurnar kalla á eftirfarandi viðbætur. Ekkert eldra svið breytti um merkingu.
+
+### Nýjar gerðir og svið
+
+| Svið | Gildi | Úr |
+| --- | --- | --- |
+| `type: 'multi'` | „Veldu allt sem á við“: `o`, `a` = númer allra réttra kosta. Hlutastig = (rétt − rangt) / fjöldi réttra, minnst 0 | 107 |
+| `type: 'match'` | Pörun: `rows: [{t, a}]`, `cols: string[]`, `ord?` (halda röð raða). Hlutastig = hlutfall réttra raða | 107 |
+| `num.parts` | Tölusvar með liðum: `[{l, ans, tol}]`; vikmörk sett í útdrætti (0,6% af svari, minnst 0,011, nema liðurinn gefi önnur) | 107 |
+| `pts` | Stig á prófi: kross 2, veldu allt 3, pörun ⌈raðir/2⌉ (minnst 2), tölusvar 2 á lið | 107 |
+| `quick` | Hraðspurning (101); skilur hraðæfingu frá skriflegum dæmum | 101 |
+| `mc.o` | 2–12 valkostir (var 2–5) | 107 |
+| `Topic.part` | Hluti námskeiðs, t.d. „Hluti 1 · framboð, eftirspurn og íhlutanir“ | 103, 107 |
+| `Course.engine` | `'mcq'`, `'lecture'` eða `'written'` | öll |
+| `Course.modes` | Æfingahættir: `{id, label, quick?, adapt?, cards?}` | 101, 106, 108 |
+| `Sheet.a4` | `{head, html}`: A4-formúlublaðið | 106 |
+| `ExamInfo.callout` | HTML-reitur á forsíðu („Óstaðfest“) | 108 |
+| `Generator.types`, `Generator.quick` | Gerðir sem rafall skilar; hraðútgáfa rafals | 101 |
+
+### Prófsnið (`pick.by`)
+
+| `by` | Svið | Fög |
+| --- | --- | --- |
+| `quota` | `quota: {flokkur: fjöldi}` | 103 (*Fullt lokapróf* 50, *Seinni hlutinn* 20), 107 (*Lokapróf* 48, *Hálft*, *Hluti 1–3*) |
+| `fixed` | `ids: string[]`; í skriflegu sniði gildir `examWeight` hvers dæmis | 103 (*Lokapróf 2024*, *2025*), 101 (*Lokapróf 2023*, *2025*, *Miðannarpróf 2025*) |
+| `gens` | `n` | 103, 107 (*Reikningapróf* 15) |
+| `blueprint` | `sections: [{topics, weight}]`, `minPoints`, `gensOnly?` | 101 (*Blandað*, *Rafalapróf*: 7 hlutar, 100 stig) |
+| `levels` | `mixes`, `lengths`, `defaultLength`, `explain`, `stepCapL3`, `points`, `rShare?` | 106, 108 |
+
+Samsetning, fjöldi og tími hvers prófsniðs eru lesin með því að keyra `buildExam()` gömlu síðunnar í útdrættinum; `tests/exam.test.js` ber hvert snið saman við hana.
+
+### Skrár (kemur í stað fráviks 6)
+
+```
+src/courses/
+  legacy/<fag>.js     gagnablokk gömlu síðunnar orðrétt sem ES-eining (atriði, rafalar, hjálparföll);
+                      aðeins skilgreiningu síðunnar á F er skipt út fyrir sameiginlegu eininguna
+  <fag>.js            lýsigögn (flokkar, prófsnið, Blaðið, áætlun) + kall á millilag vélarinnar
+  adapters/mcq.js     varpar atriðum og rafölum krossavélarinnar (103, 107) á sniðið
+  adapters/lecture.js sama fyrir fyrirlestravélina (106, 108)
+  adapters/written.js sama fyrir skriflegu vélina (101)
+```
+
+Atriðin eru því ekki fryst sem JSON heldur reiknuð úr orðréttum kóða gömlu síðunnar þegar vefurinn hleðst. Það er nauðsynlegt í 101 og 108, þar sem atriðin eru búin til með sömu hjálparföllum og rafalarnir. `tests/extract.test.js` staðfestir að hvert atriði sé eins og það sem gamla síðan sjálf býr til.
+
+### Hegðun sem var samræmd
+
+- **Skrefadæmi** í öllum fögum nota skrefaspilara HAG101G (vísbending, næsta skref, öll skref, rétt/vantaði á hvert skref). HAG106G/108G sýndu áður öll skref í einu með hökum; stigin eru reiknuð eins.
+- **Blandað próf (106, 108):** skriflegu dæmin eru metin á sérstökum yfirferðarskjá eftir skil (eins og í 101), í stað haka í niðurstöðunni.
+- **Stærðfræði:** KaTeX í öllum fögum; allt TeX í öllum fögum teiknast villulaust (`tests/katex.test.js`).
+- **Rafall sem skilar NaN, Infinity eða undefined** í texta er keyrður aftur (sjá úttektina).
+

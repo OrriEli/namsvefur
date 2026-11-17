@@ -1,351 +1,290 @@
 // Búið til af scripts/extract-legacy.js úr legacy/HAG103G prófæfing.html. Ekki breyta í höndunum.
-import gens from './hag103g.gens.js';
+import * as L from './legacy/hag103g.js';
+import adapt from './adapters/mcq.js';
 
-/** @type {import('../schema.js').Course} */
-export default {
-  id: "hag103g",
-  code: "HAG103G",
-  name: "Heildahagfræði I",
-  short: "Heild",
-  color: "--c-hag103g",
-  topics: [
+export const meta = {
+  "id": "hag103g",
+  "code": "HAG103G",
+  "name": "Heildahagfræði I",
+  "short": "Heild",
+  "color": "--c-hag103g",
+  "engine": "mcq",
+  "topics": [
+    {
+      "id": "key",
+      "name": "Keynes og IS-LM",
+      "ref": "MT26–27",
+      "part": "Seinni hlutinn · nýtt efni"
+    },
+    {
+      "id": "asd",
+      "name": "Heildarframboð og -eftirspurn",
+      "ref": "MT28",
+      "part": "Seinni hlutinn · nýtt efni"
+    },
+    {
+      "id": "hag",
+      "name": "Peningastefna og ríkisfjármál",
+      "ref": "MT29",
+      "part": "Seinni hlutinn · nýtt efni"
+    },
+    {
+      "id": "phi",
+      "name": "Phillips-kúrfan og Taylor-regla",
+      "ref": "MT30",
+      "part": "Seinni hlutinn · nýtt efni"
+    },
+    {
+      "id": "frb",
+      "name": "Framboðsstefna",
+      "ref": "MT31",
+      "part": "Seinni hlutinn · nýtt efni"
+    },
+    {
+      "id": "kre",
+      "name": "Fjármálakreppur",
+      "ref": "MT32",
+      "part": "Seinni hlutinn · nýtt efni"
+    },
+    {
+      "id": "evr",
+      "name": "Evran og myntsvæði",
+      "ref": "MT33",
+      "part": "Seinni hlutinn · nýtt efni"
+    },
+    {
+      "id": "umh",
+      "name": "Ytri áhrif og loftslag",
+      "ref": "MT34",
+      "part": "Seinni hlutinn · nýtt efni"
+    },
     {
       "id": "pen",
       "name": "Peningar, bankar og verðbólga",
-      "ref": "MT24"
+      "ref": "MT24",
+      "part": "Fyrri hlutinn · efni hlutaprófsins"
     },
     {
       "id": "vin",
       "name": "Vinnumarkaður og atvinnuleysi",
-      "ref": "MT15, 22"
+      "ref": "MT15, 22",
+      "part": "Fyrri hlutinn · efni hlutaprófsins"
     },
     {
       "id": "opi",
       "name": "Opið hagkerfi",
-      "ref": "MT25"
+      "ref": "MT25",
+      "part": "Fyrri hlutinn · efni hlutaprófsins"
     },
     {
       "id": "rei",
       "name": "Fastir reikningar og mælingar",
-      "ref": "MT20, 23"
+      "ref": "MT20, 23",
+      "part": "Fyrri hlutinn · efni hlutaprófsins"
     },
     {
       "id": "vox",
       "name": "Hagvöxtur og Solow",
-      "ref": "MT20–21"
+      "ref": "MT20–21",
+      "part": "Fyrri hlutinn · efni hlutaprófsins"
     },
     {
       "id": "ojo",
       "name": "Ójöfnuður og fátækt",
-      "ref": "MT16"
+      "ref": "MT16",
+      "part": "Fyrri hlutinn · efni hlutaprófsins"
     },
     {
       "id": "spa",
       "name": "Sparnaður og lánsfjármarkaður",
-      "ref": "MT23"
+      "ref": "MT23",
+      "part": "Fyrri hlutinn · efni hlutaprófsins"
     },
     {
       "id": "vid",
       "name": "Alþjóðaviðskipti",
-      "ref": "MT17"
+      "ref": "MT17",
+      "part": "Fyrri hlutinn · efni hlutaprófsins"
     },
     {
       "id": "gru",
       "name": "Grunnhugtök",
       "ref": "MT1–2",
-      "review": true
+      "review": true,
+      "part": "Fyrri hlutinn · efni hlutaprófsins"
     }
   ],
-  items: [
-    {"id":"H25-1","type":"mc","topic":"rei","source":"old","src":"H25 #1","q":"Verg landsframleiðsla er 120 m.kr., einkaneysla er 50 m.kr., fjárfesting er 20 m.kr., innflutningur er 40 m.kr. og útflutningur er 60 m.kr. Finnið útgjöld hins opinbera.","o":["30 m.kr.","70 m.kr.","10 m.kr.","50 m.kr.","90 m.kr."],"a":0,"e":"<div class=\"f\">G = Y − C − I − (X − M)<br>G = 120 − 50 − 20 − (60 − 40) = 30</div>Gildran er 70: að gleyma að NX = X − M og draga ekkert frá fyrir utanríkisviðskipti."},
-    {"id":"H25-2","type":"mc","topic":"vox","source":"old","src":"H25 #2","q":"Lykillinn að því að auka lífskjör til lengri tíma felst í því að:","o":["Vernda innlenda framleiðslu frá erlendri samkeppni með tollum","Hefta innflutning til að verja störf og laun íbúa","Auka framleiðni hagkerfisins, t.d. með tækniframförum og aukinni menntun","Hækka lágmarkslaun","Sterk verkalýðsfélög sem knýja fram hærri laun"],"a":2,"e":"Lífskjör til langs tíma ráðast af framleiðni: fjármagni, mannauði, náttúruauðlindum og tækniþekkingu. Tollar, lágmarkslaun og verkalýðsfélög breyta ekki framleiðslugetunni."},
-    {"id":"H25-3","type":"mc","topic":"vox","source":"old","src":"H25 #3","q":"Thomas Robert Malthus fjallaði um tengsl lífskjara og mannfjölda. Hann taldi að","o":["Lönd ættu að hámarka útflutning og lágmarka innflutning til þess að auka landsframleiðslu","Mannfjöldi hefði engin áhrif á lífskjör til lengri tíma","Sjálfsþurftarbúskapur gæti skilað jafn góðri niðurstöðu og alþjóðaviðskipti","Meiri fólksfjölgun skilaði sér í fleiri hugmyndum sem leiddi til tækninýjunga, hagvaxtar og lífskjarabata","Ómögulegt væri að bæta lífskjör til lengri tíma. Aukin landsframleiðsla á mann myndi sjálfkrafa leiða til fólksfjölgunar sem drægi úr framleiðslu á mann á ný"],"a":4,"e":"Malthus: betri lífskjör → fólki fjölgar → minnkandi meðalframleiðni → lífskjör aftur niður í lágmarksframfærslu. Valkosturinn um fleiri hugmyndir er nútímasvarið við Malthus, ekki kenning hans."},
-    {"id":"H25-6","type":"mc","topic":"ojo","source":"old","src":"H25 #6 = L24 #12","q":"Tekjur einstaklinga í hagkerfi: Bjarki 15.000, Elísa 5.000, Sara 80.000. Gini-stuðulinn má nálga með<div class=\"f\">G = (n + 1)/n − 2·Σ(n + 1 − i)·xᵢ / (n·Σxᵢ)</div>þar sem tekjum er raðað frá lægstu (i = 1) til hæstu. Hver er Gini-stuðullinn?","o":["0,4","0,8","0,5","0,7","0,6"],"a":2,"e":"Raða fyrst: 5.000, 15.000, 80.000 (samtals 100.000).<div class=\"f\">Σ(n+1−i)xᵢ = 3·5.000 + 2·15.000 + 1·80.000 = 125.000<br>G = 4/3 − 2·125.000/(3·100.000) = 1,333 − 0,833 = 0,5</div>Ef þú raðar ekki færðu 0,43, sem er ekki valkostur. Þetta dæmi hefur komið tvisvar orðrétt."},
-    {"id":"H25-7","type":"mc","topic":"ojo","source":"old","src":"H25 #7","q":"Hvert af eftirfarandi er ekki dæmi um úrræði sem beitt er til að draga úr ójöfnuði?","o":["Lágmarkslaun","Millifærslur á vöru og þjónustu","Lorenz-kúrfan","Almannatryggingar","Neikvæður tekjuskattur"],"a":2,"e":"Lorenz-kúrfan er mælitæki á ójöfnuð, ekki úrræði. Hin fjögur eru öll úrræðin sem talin eru upp í MT16."},
-    {"id":"H25-8","type":"mc","topic":"vin","source":"old","src":"H25 #8","q":"Vinnumarkaður er í jafnvægi. Stjórnvöld stytta skólagöngu um eitt ár svo hver einstaklingur er einu ári lengur á vinnumarkaði. Hvernig hefur það áhrif?","o":["Eftirspurn eftir vinnuafli eykst, laun hækka og fjöldi starfa eykst","Eftirspurn eftir vinnuafli dregst saman, laun lækka og fjöldi starfa dregst saman","Skólaganga hefur engin áhrif á framboð og eftirspurn á vinnumarkaði","Framboð vinnuafls dregst saman, laun hækka og fjöldi starfa dregst saman","Framboð vinnuafls eykst, laun lækka og fjöldi starfa eykst"],"a":4,"e":"Fleiri á vinnumarkaði → framboðsferill vinnuafls hliðrast til hægri → laun lækka og störfum fjölgar. Styttri skólaganga er nefnd sem dæmi um hliðrun framboðs í MT15."},
-    {"id":"H25-9","type":"mc","topic":"vin","source":"old","src":"H25 #9 = L24 #16","q":"Atvinnuleysi má skipta í:","o":["Hagsveiflubundið atvinnuleysi og leitaratvinnuleysi","Náttúrulegt atvinnuleysi og leitaratvinnuleysi","Hagsveiflubundið atvinnuleysi og skipulagsatvinnuleysi","Náttúrulegt atvinnuleysi og skipulagsatvinnuleysi","Náttúrulegt atvinnuleysi og hagsveiflubundið atvinnuleysi"],"a":4,"e":"<div class=\"f\">Atvinnuleysi = leitar + skipulags + hagsveiflubundið<br>Náttúrulegt = leitar + skipulags</div>Skiptingin í tvennt er því náttúrulegt + hagsveiflubundið. Hinir valkostirnir blanda saman hluta og heild."},
-    {"id":"H25-10","type":"mc","topic":"vin","source":"old","src":"H25 #10","q":"Mannfjöldi er 383 þúsund og þar af eru 96 þúsund ekki á vinnumarkaði. Atvinnulausir eru 21 þúsund. Hvert er atvinnuleysishlutfallið?","o":["8,9%","3,6%","9,7%","5,5%","7,3%"],"a":4,"e":"<div class=\"f\">Vinnuafl = 383 − 96 = 287<br>u = 21 / 287 = 7,3%</div>5,5% fæst ef deilt er í allan mannfjöldann (21/383). Það er algengasta villan."},
-    {"id":"H25-12","type":"mc","topic":"spa","source":"old","src":"H25 #12 = L24 #18","q":"Hver eftirtalinna fullyrðinga á við um lokað hagkerfi?","o":["Ef sparnaður er minni en fjárfesting er viðskiptahalli","Ef sparnaður er meiri en fjárfesting þá hljóta a.m.k. annað hvort einkaaðilar eða hið opinbera að vera að spara","Hið opinbera getur ekki haft nein áhrif á þjóðhagslegan sparnað","Sparnaður og fjárfesting eru alltaf jöfn í lokuðu hagkerfi","Þjóðhagslegur sparnaður er jafn framleiðslu (Y) að frádreginni einkaneyslu"],"a":3,"e":"<div class=\"f\">Y = C + I + G ⇒ Y − C − G = I ⇒ S = I</div>Viðskiptahalli er ekki til í lokuðu hagkerfi, S &gt; I getur ekki gerst, hið opinbera hefur áhrif með T − G, og S = Y − C − G, ekki Y − C."},
-    {"id":"H25-13","type":"mc","topic":"rei","source":"old","src":"H25 #13","q":"Guðrún vann í lottó. Hún getur fengið 5.000.000 kr. í dag (A) eða 1.250.000 kr. á ári fimm sinnum, fyrsta greiðsla í dag (B). Hún getur fengið 8% ávöxtun. PV = X/(1 + r)^N. Hvert er núvirði B og hvorn á hún að velja?","o":["Núvirði B er 5.390.159, Guðrún á að velja B","Núvirði B er 4.925.149, Guðrún á að velja A","Núvirði B er 5.787.037, Guðrún á að velja B","Núvirði B er 6.250.000, Guðrún á að velja B","Núvirði B er 4.593.937, Guðrún á að velja A"],"a":0,"e":"Greiðslur á árum 0, 1, 2, 3 og 4. Ár 0 er ekki afvaxtað.<div class=\"f\">PV = 1,25m × (1 + 1/1,08 + 1/1,08² + 1/1,08³ + 1/1,08⁴)<br>PV = 1,25m × 4,312127 = 5.390.159 &gt; 5.000.000</div>6.250.000 er án nokkurrar afvöxtunar og 5.787.037 = 6.250.000/1,08, þ.e. allt afvaxtað um eitt ár."},
-    {"id":"H25-14","type":"mc","topic":"pen","source":"old","src":"H25 #14 = L24 #25","q":"Hver er munurinn á vörumyntum (e. commodity money) og pappírsmyntum (e. fiat money)?","o":["Peningur til kaupa á vörum er kallaður vörumynt en peningur til kaupa á þjónustu er kallaður pappírsmynt","Vörumynt á við um peninga sem notaðir voru áður en seðlar voru prentaðir. Pappírsmynt á við um alla peninga eftir að peningaprentun kom til","Vörumynt er tengd undirliggjandi vöru t.d. gulli og skipta má myntinni fyrir ákveðið magn af undirliggjandi vöru, en pappírsmynt hefur ekkert virði í sjálfu sér","Flestir gjaldmiðlar eru vörumynt, pappírsmynt á við um seðla frá Ítalíu og nafnið kemur frá Fiat","Vörumynt eru krónupeningar en pappírsmynt eru seðlar"],"a":2,"e":"Orðrétt skilgreining glæranna í MT24. Virði pappírsmyntar kemur frá trausti á að hægt verði að greiða með henni í framtíðinni."},
-    {"id":"H25-15","type":"mc","topic":"pen","source":"old","src":"H25 #15","q":"Frá 1927 og þar til Seðlabanki Íslands var stofnaður 1961 hafði einn íslenskur viðskiptabanki seðlaprentunarvald. Hvaða banki?","o":["Útvegsbankinn","Arion banki","Landsbankinn","Íslandsbanki","Búnaðarbankinn"],"a":2,"e":"1927 var Landsbankanum afhent seðlaprentunarvaldið og Íslandsbanka skipað að draga inn sína seðla. 1957 var Landsbankanum skipt og 1961 varð Seðlabanki Íslands sjálfstæður."},
-    {"id":"H25-16","type":"mc","topic":"pen","source":"old","src":"H25 #16","q":"Hver af eftirfarandi fullyrðingum á EKKI við um grunnfé/seðlabankafé?","o":["Innistæður fjármálastofnana hjá seðlabanka vegna bindiskyldu teljast til grunnfés","Seðlar og mynt eru hluti af grunnfé","Viðskiptabankar geta búið til grunnfé, t.d. í gegnum söguna af peningamargfaldaranum","Almennar innistæður fjármálastofnana hjá seðlabanka teljast til grunnfés","Einungis seðlabankinn getur búið til grunnfé"],"a":2,"e":"Viðskiptabankar búa til bankafé (innlán), ekki grunnfé. Grunnfé (M0) = seðlar og mynt + almennar innstæður + bindiskylduinnstæður hjá SÍ."},
-    {"id":"H25-17","type":"mc","topic":"pen","source":"old","src":"H25 #17","q":"Hver er helsta orsök verðbólgu til lengri tíma samkvæmt peningamagnskenningunni?","o":["Þegar framleiðsla eykst hraðar en verðlag myndast verðbólga","Of lítið peningamagn neyðir fyrirtæki til að hækka verð","Verðtrygging gerir það að verkum að peningastefna virkar ekki sem skyldi","Verðbólga verður til þegar veltuhraði peninga minnkar","Aukning í peningamagni er helsta orsök verðbólgu til lengri tíma litið"],"a":4,"e":"<div class=\"f\">MV = PY, V stöðugt, Y ræðst af raunþáttum ⇒ M ↑ ⇒ P ↑</div>Minni veltuhraði myndi lækka verðlag, ekki hækka það."},
-    {"id":"H25-18","type":"mc","topic":"pen","source":"old","src":"H25 #18","q":"Hvert er EKKI eitt dæmi um almennt hlutverk bindiskyldu í nútíma peningakerfi samkvæmt Seðlabanka Íslands?","o":["Peningamargfaldarinn er andhverfa bindiskyldunnar og því er bindiskylda ráðandi fyrir peningamargfaldara hagkerfisins","Bindiskylda gegnir varúðarhlutverki, hún gerir bankana öruggari fyrir bankaáhlaupi eða öðrum skyndilegum kröfum um grunnfé","Aukin bindiskylda getur stuðlað að skilvirkari miðlun peningastefnu með því að skapa stöðuga eftirspurn eftir grunnfé","Bindiskylda getur verið virkt stjórntæki peningastefnu með því að breyta eftirspurn eftir grunnfé og þannig leitt til breytinga á vöxtum"],"a":0,"e":"Minnisblað SÍ nefnir þrjú hlutverk: varúðarhlutverk, virkt stjórntæki og skilvirkari miðlun. Glæran segir beint: „ekkert fjallað um peningamargfaldara“."},
-    {"id":"H25-19","type":"mc","topic":"vid","source":"old","src":"H25 #19 = L24 #32","q":"Hvert af eftirfarandi á EKKI við um alþjóðaviðskipti?","o":["Þegar opnað er fyrir alþjóðaviðskipti aðlagast verð innanlands heimsmarkaðsverði","Í alþjóðaviðskiptum borgar sig fyrir lönd að sérhæfa sig í vörum sem þau hafa hlutfallslega yfirburði í","Neytendaábati innlendra neytenda dregst aldrei saman við þátttöku í alþjóðaviðskiptum","Innflutningskvótar geta leitt til aukins framleiðendaábata fyrir innlenda framleiðendur","Samfélagslegur ábati eykst með alþjóðaviðskiptum"],"a":2,"e":"Í útflutningslandi hækkar verð innanlands upp í heimsmarkaðsverð og neytendaábati minnkar um B. Framleiðendur græða B + D, svo heildin eykst um D."},
-    {"id":"H25-20","type":"mc","topic":"opi","source":"old","src":"H25 #20","q":"Hver af eftirfarandi jöfnum er rétt fyrir opið hagkerfi? (NCO = hreint útstreymi fjármagns, NX = hreinn útflutningur, I = innlend fjárfesting, Y = landsframleiðsla, S = sparnaður)","o":["NX + I = NCO","NCO + I = NX","S − I = NX","S + NX + NCO = I","Y = NCO − NX"],"a":2,"e":"<div class=\"f\">Y = C + I + G + NX<br>Y − C − G = I + NX<br>S = I + NX ⇒ S − I = NX = NCO</div>"},
-    {"id":"L25-1","type":"mc","topic":"rei","source":"old","src":"L25 #1","q":"Verg landsframleiðsla er 250 m.kr., einkaneysla 140 m.kr., útgjöld hins opinbera 50 m.kr., innflutningur 60 m.kr. og útflutningur 80 m.kr. Hver er fjárfesting (I)?","o":["80 m.kr.","60 m.kr.","20 m.kr.","40 m.kr.","100 m.kr."],"a":3,"e":"<div class=\"f\">I = 250 − 140 − 50 − (80 − 60) = 40</div>60 fæst ef NX er sleppt."},
-    {"id":"L25-2","type":"mc","topic":"rei","source":"old","src":"L25 #2","q":"Vísitala neysluverðs (1988 = 100). Hver var verðbólgan í ágúst 2025 mæld á ársgrundvelli?<table class=\"dt\"><tr><th>Mánuður</th><th>VNV</th></tr><tr><td>2024M07</td><td>633,2</td></tr><tr><td>2024M08</td><td>633,8</td></tr><tr><td>2024M09</td><td>632,3</td></tr><tr><td>…</td><td>…</td></tr><tr><td>2025M07</td><td>658,6</td></tr><tr><td>2025M08</td><td>657,6</td></tr><tr><td>2025M09</td><td>658,3</td></tr></table>","o":["2,4%","5,8%","0,8%","3,8%","4,2%"],"a":3,"e":"<div class=\"f\">π = VNV(ágú 2025) / VNV(ágú 2024) − 1 = 657,6 / 633,8 − 1 = 3,8%</div>Berðu saman sama mánuð með 12 mánaða millibili, ekki við næsta mánuð á undan."},
-    {"id":"L25-3","type":"mc","topic":"rei","source":"old","src":"L25 #3","q":"Nafnvextir eru 75% á ári og verðbólga 25% á ári. Hverjir eru raunvextirnir, reiknaðir nákvæmlega?","o":["−40%","40%","−50%","25%","50%"],"a":1,"e":"<div class=\"f\">r = (1 + i)/(1 + π) − 1 = 1,75 / 1,25 − 1 = 0,40 = 40%</div>50% er nálgunin i − π, sem er röng þegar verðbólga er mikil."},
-    {"id":"L25-4","type":"mc","topic":"vox","source":"old","src":"L25 #4","q":"Hver er EKKI ein af ástæðum þess að þjóðir styðjast við VLF á mann sem mælikvarða á lífskjör?","o":["VLF á mann er samanburðarhæfur mælikvarði yfir tíma og á milli þjóða","VLF á mann tekur tillit til tekjudreifingar innan hagkerfis og framlags ólaunaðra starfa","VLF á mann má mæla nokkuð auðveldlega","VLF á mann hentar vel til markmiðasetningar og stefnumótunar stjórnvalda","VLF á mann hefur sterka fylgni við mikilvæga mælikvarða lífsgæða s.s. heilsufar og menntunarstig"],"a":1,"e":"VLF segir ekkert um dreifingu tekna og mælir ekki heimilisframleiðslu eða ólaunuð störf (MT20)."},
-    {"id":"L25-5","type":"mc","topic":"vox","source":"old","src":"L25 #5","q":"Aðföngin sem við notum til að framleiða vörur og þjónustu köllum við framleiðsluþætti. Hvert af eftirfarandi er EKKI framleiðsluþáttur?","o":["Tækniþekking","Hagvöxtur","Fjármagn","Náttúruauðlindir","Mannauður"],"a":1,"e":"Framleiðsluþættirnir fjórir í MT21: fjármagn, mannauður, náttúruauðlindir og tækniþekking. Hagvöxtur er afleiðing þeirra."},
-    {"id":"L25-8","type":"mc","topic":"vox","source":"old","src":"L25 #8","q":"Hagkerfi er í jafnvægi samkvæmt Solow-líkaninu. Ný framleiðslutækni uppgötvast sem er skilvirkari en sú fyrri. Hvaða áhrif hefur það samkvæmt líkaninu?","o":["Engin áhrif á framleiðslu eða fjármagn, hvorki til skemmri né lengri tíma","Sparnaður íbúa eykst og þar með fjárfesting, sem skapar hagvöxt til skemmri tíma","Hægt er að framleiða meira fyrir sama fjármagn. Með óbreyttu sparnaðarhlutfalli eykst fjárfesting (I = sY). Bæði fjármagn á mann og framleiðsla á mann aukast","Eldri þekking tapast, A lækkar og hagkerfið verður varanlega með minni framleiðslu","Afskriftarhlutfallið eykst, fjármagn á mann dregst saman og langtímajafnvægi verður við lægri framleiðslu"],"a":2,"e":"A ↑ → framleiðsluferillinn og fjárfestingarferillinn sY hliðrast upp → nýtt jafnvægi með hærra k* og y*. Sparnaðarhlutfallið s breytist ekki."},
-    {"id":"L25-9","type":"mc","topic":"ojo","source":"old","src":"L25 #9","q":"Hvað má lesa út úr lögun Lorenz-kúrfunnar?","o":["45 gráðu línan lýsir tekjudreifingu samfélagsins","Því fjær sem kúrfan er 45 gráðu línu, því meiri ójöfnuður er í samfélagi","Lögun Lorenz-kúrfunnar segir til um samband verðbólgu og atvinnuleysis","Því nær sem kúrfan er 45 gráðu línu, því meiri ójöfnuður","Því brattari sem Lorenz-kúrfan er, því meiri hagvöxtur"],"a":1,"e":"45° línan er fullkominn jöfnuður. Svæðið milli línunnar og kúrfunnar (A) er það sem Gini mælir."},
-    {"id":"L25-10","type":"mc","topic":"ojo","source":"old","src":"L25 #10","q":"Algjör fátækt (e. absolute poverty) er þegar...?","o":["Einstaklingar eru undir miðgildi launa","Einstaklingar hafa ekki getu til að sjá sér fyrir grunnþörfum (skjól, föt, matur...)","Einstaklingar geta ekki farið oftar en tvisvar til útlanda á ári","Einstaklingar hafa ekki getu til að uppfylla samfélagslega skilgreind viðmið um lífsgæði","Einstaklingar komast ekki í gegnum greiðslumat fyrir fasteignalán"],"a":1,"e":"Valkosturinn um samfélagslega skilgreind viðmið er skilgreiningin á hlutfallslegri fátækt. Gildran er að rugla þeim saman."},
-    {"id":"L25-12","type":"mc","topic":"vin","source":"old","src":"L25 #12","q":"Mannfjöldi (16–74 ára) er 285.700 og þar af eru 50.800 ekki á vinnumarkaði. Atvinnulausir eru 7.900. Hvert er atvinnuleysishlutfallið?","o":["3,4%","17,8%","2,8%","5,7%","15,6%"],"a":0,"e":"<div class=\"f\">Vinnuafl = 285.700 − 50.800 = 234.900<br>u = 7.900 / 234.900 = 3,4%</div>2,8% fæst ef deilt er í allan mannfjöldann."},
-    {"id":"L25-14","type":"mc","topic":"vin","source":"old","src":"L25 #14","q":"Fyrirtæki með framleiðslufall þar sem L er eini framleiðsluþátturinn: L = 0,1,2,3,4,5,6 gefur Q = 0, 100, 195, 280, 340, 385, 415. Verð P = 5 og laun W = 400. Hagnaðarhámarkandi fyrirtæki ræður meðan P × MPL ≥ W. Hversu marga starfsmenn ræður það?","o":["3","5","6","2","4"],"a":0,"e":"<table class=\"dt\"><tr><th>L</th><th>MPL</th><th>VMPL = 5·MPL</th><th>≥ 400?</th></tr><tr><td>1</td><td>100</td><td>500</td><td>já</td></tr><tr><td>2</td><td>95</td><td>475</td><td>já</td></tr><tr><td>3</td><td>85</td><td>425</td><td>já</td></tr><tr><td>4</td><td>60</td><td>300</td><td>nei</td></tr></table>Fjórði starfsmaðurinn skilar 300 en kostar 400."},
-    {"id":"L25-15","type":"mc","topic":"vin","source":"old","src":"L25 #15","q":"Laun yfir markaðsjafnvægi eru talin helsta skýring á þrálátu atvinnuleysi. Hverjar eru þrjár ástæður þess að laun haldast yfir jafnvægi?","o":["Verðteygni eftirspurnar eftir vinnuafli, árstíðabundið atvinnuleysi og lögmál Okuns","Mismunun, markaðsáhrif launaveitenda og eiginleikar starfa","Hæfileikar, framlag og heppni","Lágmarkslaun, máttur verkalýðsfélaga og afkastalaun","Leitaratvinnuleysi, skipulagsatvinnuleysi og hagsveiflubundið atvinnuleysi"],"a":3,"e":"MT22: lágmarkslaun, verkalýðsfélög og afkastalaun. Mismunun og hæfileikar skýra launamun (MT15), ekki laun yfir jafnvægi."},
-    {"id":"L25-16","type":"mc","topic":"spa","source":"old","src":"L25 #16","q":"Lánsfjármarkaður í lokuðu hagkerfi. Stjórnvöld auka ríkisútgjöld án þess að breyta skattheimtu. Hverjar eru afleiðingarnar?","o":["Eftirspurnarkúrfan hliðrast til hægri, vextir hækka og lánsfé eykst","Framboðskúrfan hliðrast til vinstri, vextir hækka og lánsfé dregst saman","Framboðskúrfan hliðrast til hægri, vextir lækka og lánsfé eykst","Aðgerðir hins opinbera hafa ekki áhrif á lánsfjármarkað í lokuðu hagkerfi","Eftirspurnarkúrfan hliðrast til vinstri, vextir lækka og lánsfé dregst saman"],"a":1,"e":"G ↑ með óbreyttu T → opinber sparnaður (T − G) ↓ → framboð lánsfjár ← → r ↑, magn ↓. Ríkishalli er á framboðshliðinni, ekki eftirspurnarhliðinni."},
-    {"id":"L25-17","type":"mc","topic":"pen","source":"old","src":"L25 #17","q":"1. júlí 1886 opnaði fyrsti banki Íslands, aðeins opinn frá 12:00–14:00. Hann fékk stofnfé að láni frá ríkissjóði og leyfi til að gefa út íslenskar krónur. Hver var bankinn?","o":["Búnaðarbankinn","Landsbankinn","Arion banki","Alþýðubankinn","Íslandsbanki"],"a":1,"e":"Landsbanki Íslands, við Bakarabrekku (nú Bankastræti). Íslandsbanki var stofnaður 1904 af dönskum og norskum fjárfestum."},
-    {"id":"L25-18","type":"mc","topic":"pen","source":"old","src":"L25 #18","q":"Hver eru þrjú hlutverk peninga?","o":["Mælikvarði á verðbólgu, gjaldmiðill, framleiðslueining","Gjaldmiðill, reiknieining, geymslueining","Geymslueining, reiknieining, grunnur verðtryggingar","Gjaldmiðill, mælikvarði á verðbólgu, mælikvarði á framleiðni","Reiknieining, greiðsluhæfi, fjárfestingartæki"],"a":1,"e":"Gjaldmiðill (e. medium of exchange), reiknieining (unit of account), geymslueining (store of value)."},
-    {"id":"L25-19","type":"mc","topic":"pen","source":"old","src":"L25 #19","q":"Hver af eftirfarandi fullyrðingum á við um útlán, innlán og peningamyndun í nútíma bankakerfi?","o":["Seðlabankinn er sá eini sem getur búið til bankafé","Bankar þurfa að vera með jafn mikið af innistæðum hjá Seðlabanka og þeir lána út","Útlán banka eru takmörkuð af peningamargfaldaranum","Bankafé eykst einungis þegar viðskiptavinir leggja grunnfé inn í viðskiptabanka","Bankar þurfa ekki innlán til að veita útlán, þeir búa til ný innlán jafnóðum"],"a":4,"e":"Lán til Önnu: útlán +100 og innistæða +100 í einni bókhaldsfærslu. Takmörkin eru eftirspurn eftir lánum, eigið fé (Basel III), grunnfé til uppgjörs og stýrivextir."},
-    {"id":"L25-20","type":"mc","topic":"pen","source":"old","src":"L25 #20 = L24 #22","q":"David Hume (1711–1776) leit svo á að raunstærðir breyttust ekki með breytingum peningamagns. Samkvæmt klassískri verðbólgufræði er ástæða verðbólgu til lengri tíma fyrst og fremst:","o":["Of háir stýrivextir","Skortur á leiguþaki á húsnæðismarkaði","Of mikill vöxtur peningamagns","Of mikil einkaneysla","Of hátt húsnæðisverð"],"a":2,"e":"Hlutleysi peninga + peningamagnskenningin: höfuðuppspretta verðbólgu er ofvöxtur peningamagns."},
-    {"id":"L25-21","type":"mc","topic":"pen","source":"old","src":"L25 #21","q":"MV = PY. Seðlabankinn eykur peningamagn með því að kaupa ríkisskuldabréf. Hvernig breytist verðlag til lengri tíma samkvæmt peningamagnskenningunni?","o":["Meira peningamagn eykur framleiðslu til lengri tíma og því hækkar verðlag","Peningar eru hlutlausir til lengri tíma og því hefur peningamagn engin áhrif á verðlag","Veltuhraði eykst þegar peningamagn eykst svo verðlag helst óbreytt","Af því að seðlabankinn breytir ekki stýrivöxtum eru engin áhrif á verðlag","Veltuhraði er stöðugur til langs tíma. Peningamagn hefur engin áhrif á raunstærðir svo verðlag hlýtur að hækka"],"a":4,"e":"V fast, Y fast (raunstærð) ⇒ M ↑ ⇒ P ↑ í sama hlutfalli. Hlutleysi peninga þýðir engin áhrif á <b>raun</b>stærðir, ekki á verðlag."},
-    {"id":"L25-22","type":"mc","topic":"pen","source":"old","src":"L25 #22","q":"Hvert af eftirfarandi er EKKI einn af kostnaðarþáttum verðbólgu?","o":["Skósólakostnaður","Skattaskekkjur","Handahófskennd endurdreifing auðs","Matseðlakostnaður","Jaðarkostnaður"],"a":4,"e":"Sex kostnaðarþættir í MT24: skósóla, matseðla, breytileg verðhlutföll, skattaskekkjur, ruglingur og óþægindi, endurdreifing auðs."},
-    {"id":"L25-23","type":"mc","topic":"rei","source":"old","src":"L25 #23","q":"Fyrirtæki fær 10.000.000 kr. eftir 5 ár. Markaðsvextir eru 7%. Hvert er núvirðið? PV = X/(1 + r)^N","o":["9.345.794","14.025.517","7.835.262","7.129.862","12.762.816"],"a":3,"e":"<div class=\"f\">PV = 10.000.000 / 1,07⁵ = 10.000.000 / 1,402552 = 7.129.862</div>14.025.517 er framtíðarvirði (margfaldað í stað þess að deila)."},
-    {"id":"L25-24","type":"mc","topic":"vid","source":"old","src":"L25 #24","q":"Magn (m. tonna) sem framleiða má á einum mánuði:<table class=\"dt\"><tr><th>Land</th><th>Baunir</th><th>Hrísgrjón</th></tr><tr><td>Argentína</td><td>400</td><td>1200</td></tr><tr><td>Indland</td><td>800</td><td>1600</td></tr></table>Hvort land á að sérhæfa sig í hvoru?","o":["Argentína í hvoru tveggja","Argentína í hrísgrjónum og Indland í baunum","Indland í hrísgrjónum og Argentína í baunum","Óljóst út frá forsendum","Indland í hvoru tveggja"],"a":1,"e":"<div class=\"f\">Fórnarkostnaður 1 baunar: Argentína 1200/400 = 3 hrísgrjón, Indland 1600/800 = 2 hrísgrjón</div>Indland hefur lægri fórnarkostnað af baunum ⇒ Indland baunir, Argentína hrísgrjón. Indland hefur algera yfirburði í báðum, en það ræður ekki sérhæfingu."},
-    {"id":"L25-27","type":"mc","topic":"opi","source":"old","src":"L25 #27","q":"Opið hagkerfi: sparnaður er 20 mkr. og innlend fjárfesting 12 mkr. Hreinn útflutningur er þá?","o":["20 mkr.","−8 mkr.","8 mkr.","32 mkr.","12 mkr."],"a":2,"e":"<div class=\"f\">NX = S − I = 20 − 12 = 8</div>"},
-    {"id":"L25-28","type":"mc","topic":"opi","source":"old","src":"L25 #28","q":"Opið hagkerfi í jafnvægi. Smekkur fólks breytist svo það kýs að spara minna við sama vaxtastig. Hver eru áhrifin á raunvexti og raungengi?","o":["Eftirspurn á gjaldeyrismarkaði eykst sem hækkar raungengi. Hreinn útflutningur er óbreyttur","Framboð á lánsfjármarkaði eykst, raunvextir lækka. NCO eykst, framboð á gjaldeyrismarkaði eykst og raungengi lækkar","Eftirspurn eftir lánsfé eykst, raunvextir hækka. NCO dregst saman, framboð á gjaldeyrismarkaði minnkar og raungengi hækkar","Framboð á lánsfjármarkaði dregst saman, raunvextir hækka. NCO dregst saman, framboð á gjaldeyrismarkaði minnkar og raungengi hækkar","Eftirspurn eftir lánsfé dregst saman, raunvextir lækka. NCO eykst, framboð á gjaldeyrismarkaði eykst og raungengi lækkar"],"a":3,"e":"S ↓ → framboð lánsfjár ← → r ↑ → NCO ↓ → framboð króna ← → E ↑. Valkosturinn sem byrjar á „eftirspurn eftir lánsfé eykst“ hefur rétta lokaniðurstöðu en rangan fyrsta hlekk."},
-    {"id":"L25-29","type":"mc","topic":"opi","source":"old","src":"L25 #29","q":"Opið hagkerfi í jafnvægi. Innstreymi fjármagns eykst skyndilega. Hver eru áhrifin á raunvexti og raungengi?","o":["Eftirspurn á gjaldeyrismarkaði eykst sem hækkar raungengi. NX og NCO óbreytt svo engin áhrif á vexti","NCO eykst, eftirspurn á lánsfjármarkaði dregst saman svo vextir lækka. NCO eykur framboð á gjaldeyrismarkaði og raungengi lækkar","NCO dregst saman, eftirspurn á lánsfjármarkaði dregst saman svo vextir lækka. Minna NCO dregur úr framboði á gjaldeyrismarkaði og raungengi hækkar","NCO dregst saman, eftirspurn á lánsfjármarkaði eykst svo vextir hækka. Raungengi hækkar","NCO eykst, eftirspurn á lánsfjármarkaði eykst svo vextir hækka. Raungengi lækkar"],"a":2,"e":"Innstreymi = útlendingar kaupa innlendar eignir → NCO ↓ → eftirspurn eftir lánsfé (I + NCO) ← → r ↓; framboð króna ← → E ↑. Spegilmynd fjármagnsflótta."},
-    {"id":"L25-30","type":"mc","topic":"opi","source":"old","src":"L25 #30","q":"Þegar land stendur frammi fyrir fjármagnsflótta er líklegast að:","o":["Raunvextir hækki og raungengi lækki","Raunvextir hækki og raungengi hækki","Raunvextir lækki og raungengi lækki","Raunvextir lækki og raungengi hækki","Raunvextir lækki en raungengi sé óbreytt"],"a":0,"e":"NCO ↑ → eftirspurn eftir lánsfé → → r ↑; framboð króna → → E ↓. Mexíkó 1994, Asía 1997, Ísland 2008."},
-    {"id":"L25-31","type":"mc","topic":"opi","source":"old","src":"L25 #31 = L24 #28","q":"e = nafngengi, P = innlent verðlag, P* = erlent verðlag. Hvaða jafna gildir um raungengið E þegar gengið er mælt með erlendu gjaldeyrisinnihaldi innlendrar myntar (t.d. fjölda evra í hverri krónu)?","o":["E = P/P*","E = e/P*","E = e","E = e/P","E = eP/P*"],"a":4,"e":"<div class=\"f\">E = e × P / P*</div>Ein af þremur jöfnunum sem Haukur sagðist ætlast til að þið kunnið."},
-    {"id":"L25-32","type":"mc","topic":"opi","source":"old","src":"L25 #32","q":"Hvað segir kaupmáttarjafnvirðiskenningin (PPP)?","o":["Að þjóðartekjur aukist við aukinn innflutning","Að ein eining gjaldmiðils eigi að kaupa sömu vörukörfu í öllum ríkjum","Að innflutningur hafi meiri áhrif á gengi en útflutningur","Að nafngengi sé stöðugt yfir tíma","Að innlent verðlag hafi meiri áhrif á viðskiptajöfnuð en erlent verðlag"],"a":1,"e":"Lögmálið um eitt verð. Afleiðing: raungengið E er fasti (= 1) og nafngengið er e = P*/P. Það er raungengið sem er stöðugt, ekki nafngengið."},
-    {"id":"L24-1","type":"mc","topic":"rei","source":"old","src":"L24 #1","q":"Verg landsframleiðsla er 100 m.kr., fjárfesting 10 m.kr., útgjöld hins opinbera 20 m.kr., innflutningur 20 m.kr. og útflutningur 30 m.kr. Finnið einkaneyslu.","o":["80 m.kr.","20 m.kr.","40 m.kr.","50 m.kr.","60 m.kr."],"a":4,"e":"<div class=\"f\">C = 100 − 10 − 20 − (30 − 20) = 60</div>"},
-    {"id":"L24-2","type":"mc","topic":"rei","source":"old","src":"L24 #2","q":"Hver var verðbólgan í maí 2024 mæld á ársgrundvelli?<table class=\"dt\"><tr><th>Mánuður</th><th>VNV</th></tr><tr><td>2023M04</td><td>588,3</td></tr><tr><td>2023M05</td><td>590,6</td></tr><tr><td>2023M06</td><td>595,6</td></tr><tr><td>…</td><td>…</td></tr><tr><td>2024M04</td><td>623,7</td></tr><tr><td>2024M05</td><td>627,3</td></tr><tr><td>2024M06</td><td>630,3</td></tr></table>","o":["0,6%","4,7%","36,7%","6,2%","8,1%"],"a":3,"e":"<div class=\"f\">π = 627,3 / 590,6 − 1 = 6,2%</div>0,6% er breytingin frá apríl til maí 2024 (627,3/623,7)."},
-    {"id":"L24-3","type":"mc","topic":"rei","source":"old","src":"L24 #3","q":"Ef verðbólga er 60% á ári, hver er þá meðalverðbólgan á mánuði?","o":["3%","4%","5%","6%","7%"],"a":1,"e":"<div class=\"f\">(1 + 0,60)^(1/12) − 1 = 1,6^(0,0833) − 1 = 0,040 = 4%</div>5% fæst með 60/12, sem gleymir vaxtavöxtunum."},
-    {"id":"L24-4","type":"mc","topic":"rei","source":"old","src":"L24 #4","q":"Nafnvextir eru 40% á ári og verðbólga 100% á ári. Hverjir eru raunvextirnir?","o":["60%","30%","−60%","−40%","−30%"],"a":4,"e":"<div class=\"f\">r = 1,40 / 2,00 − 1 = −0,30 = −30%</div>−60% er nálgunin i − π."},
-    {"id":"L24-5","type":"mc","topic":"vin","source":"old","src":"L24 #5","q":"Lögmál Okuns lýsir neikvæðu sambandi milli","o":["Einkaneyslu og raungengis","Verðbólgu og atvinnuleysis","Sparnaðar og landsframleiðslu","Atvinnuleysis og hagvaxtar","Vaxta og peningaeftirspurnar"],"a":3,"e":"<div class=\"f\">Δuₜ = α + β·gₜ, β &lt; 0 (á Íslandi β ≈ −0,23)</div>Verðbólga og atvinnuleysi er Phillips-kúrfan, sem kemur síðar í námskeiðinu."},
-    {"id":"L24-6","type":"mc","topic":"vox","source":"old","src":"L24 #6","q":"Stjórnvöld geta stuðlað að auknum hagvexti á mann og bættum lífskjörum til langs tíma með því að","o":["Hafa stjórn á einkaneyslu t.d. með því að hækka skatta","Vernda innlenda framleiðslu gegn erlendri samkeppni með tollum","Fjárfesta í menntun, ýta undir nýsköpun og tækniframfarir","Auka peningamagn í umferð til að stuðla að auknum viðskiptum","Auka umsvif ríkisins til að vernda fólk frá gróðahyggju kapítalismans"],"a":2,"e":"Mannauður og tækniþekking auka framleiðni. Peningamagn er hlutlaust til langs tíma."},
-    {"id":"L24-7","type":"mc","topic":"vox","source":"old","src":"L24 #7","q":"Hagkerfi í jafnvægi samkvæmt Solow-líkaninu. Skyndilegt eldgos eyðileggur mikilvæga innviði. Hvaða áhrif hefur það samkvæmt líkaninu?","o":["Mikilvæg þekking tapast, A lækkar og hagkerfið verður varanlega með minni framleiðslu","Sparnaður íbúa eykst sem skapar hagvöxt til skemmri tíma","Engin áhrif á framleiðslu eða fjármagn","Afskriftarhlutfallið eykst, δk hliðrast til vinstri, fjármagn á mann dregst saman til lengri tíma","Fjármagn á mann dregst saman, framleiðsla og neysla á mann minnka. Til lengri tíma jafnar fjármagnsstofninn sig því langtímajafnvægið er óbreytt"],"a":4,"e":"Ferlarnir (sY, δk) eru óbreyttir; aðeins k færist til vinstri á ásnum. Þar er sY &gt; δk svo k vex aftur upp í sama k*."},
-    {"id":"L24-10","type":"mc","topic":"ojo","source":"old","src":"L24 #10","q":"Hvert af eftirfarandi hefur EKKI verið nýtt sem úrræði til að draga úr ójöfnuði og minnka fátækt?","o":["Lágmarkslaun","Almannatryggingakerfi","Neikvæður tekjuskattur og persónuafsláttur","Gjafir á nauðsynjavörum","Bankaskattur"],"a":4,"e":"Úrræðin í MT16: lágmarkslaun, almannatryggingar, millifærslur í vöru og þjónustu og neikvæður tekjuskattur."},
-    {"id":"L24-11","type":"mc","topic":"ojo","source":"old","src":"L24 #11","q":"Mynd sýnir Lorenz-kúrfu (bláa línu) og 45° línu. Stjórnvöld lækka mikið tekjuskatt á hæstu tekjur og lækka fjármagnstekjuskatt. Hvernig breytist myndin?","o":["Engin áhrif á tekjudreifingu þar sem markmiðið er að örva heildarframboð","Bláa línan breytist þannig að svæðið milli línanna stækkar","Bláa línan breytist þannig að svæðið milli línanna minnkar","45° línan hliðrast upp","45° línan verður 60° lína"],"a":1,"e":"Ráðstöfunartekjur hinna tekjuhæstu aukast hlutfallslega → Lorenz-kúrfan sígur frá 45° línunni → svæði A og Gini aukast. 45° línan breytist aldrei."},
-    {"id":"L24-14","type":"mc","topic":"vin","source":"old","src":"L24 #14","q":"Vinnumarkaður í jafnvægi. Straumur ferðamanna eykst og vöruverð hækkar. Hvaða áhrif hefur verðhækkun vöru á vinnumarkaðinn?","o":["Eftirspurn eftir vinnuafli eykst, laun hækka og fjöldi starfa eykst","Eftirspurn eftir vinnuafli dregst saman, laun lækka og störfum fækkar","Framboð vinnuafls eykst, laun lækka og störfum fjölgar","Framboð vinnuafls dregst saman, laun hækka og störfum fækkar","Vöruverð hefur engin áhrif"],"a":0,"e":"Eftirspurn eftir vinnuafli er afleidd: VMPL = P × MPL. P ↑ → VMPL ↑ → eftirspurnarferill → → W ↑, L ↑."},
-    {"id":"L24-19","type":"mc","topic":"spa","source":"old","src":"L24 #19","q":"Í lokuðu hagkerfi má skilgreina sparnað sem","o":["S = (Y − T − C) + (T − G)","S = C + G","S = Y − C + T","S = T + G − C","S = (Y − C) + (Y − G)"],"a":0,"e":"Einkasparnaður (Y − T − C) + opinber sparnaður (T − G). T styttist út og eftir stendur Y − C − G."},
-    {"id":"L24-20","type":"mc","topic":"spa","source":"old","src":"L24 #20","q":"Líkan af lánsfjármarkaði í lokuðu hagkerfi. Botnið: „Lægri skattar á sparnað...","o":["...draga úr framboði lánsfjár, vextir hækka og lánsfé dregst saman“","...auka eftirspurn eftir lánsfé, vextir hækka og lánsfé eykst“","...auka framboð lánsfjár, vextir hækka og lánsfé dregst saman“","...hafa engin áhrif“","...auka framboð lánsfjár, vextir lækka og lánsfé í umferð eykst“"],"a":4,"e":"Hærri afrakstur sparnaðar eftir skatt → meiri sparnaður við hvert r → framboð → → r ↓, magn ↑."},
-    {"id":"L24-21","type":"mc","topic":"pen","source":"old","src":"L24 #21","q":"Hvaða þrjá banka tók íslenska ríkið yfir í byrjun október 2008?","o":["Glitni, Íslandsbanka, Búnaðarbankann","Landsbankann, Arion banka, Kaupþing","Glitni, Íslandsbanka, Kaupþing","Landsbankann, Útvegsbankann, Alþýðubankann","Landsbankann, Glitni, Kaupþing"],"a":4,"e":"Neyðarlögin 6. október 2008. FME tók yfir Landsbankann 7. okt., Glitni og Kaupþing (áður Búnaðarbanka) 9. okt. Glitnir var áður Íslandsbanki, svo „Glitni og Íslandsbanka“ er sami bankinn tvisvar."},
-    {"id":"L24-23","type":"mc","topic":"pen","source":"old","src":"L24 #23","q":"Hver af eftirfarandi fullyrðingum á EKKI við um peninga í nútímahagkerfi?","o":["Einungis seðlabankar geta búið til grunnfé","Viðskiptabankar eru takmarkaðir í sinni peningamyndun af peningamargfaldaranum","Viðskiptabankar geta búið til bankafé en ekki seðlabankafé","M2 er seðlar og mynt, veltiinnlán og almennt sparifé sem ekki er bundið til lengri tíma","M1 er seðlar og mynt auk veltiinnlána"],"a":1,"e":"Sagan af peningamargfaldaranum er einföldun: bindiskylda er almennt ekki hamlandi og bankar þurfa ekki innlán til að lána."},
-    {"id":"L24-24","type":"mc","topic":"pen","source":"old","src":"L24 #24","q":"MV = PY. Seðlabankinn dregur úr peningamagni með því að selja ríkisskuldabréf. Hvernig breytist verðlag til lengri tíma samkvæmt peningamagnskenningunni?","o":["Veltuhraði er stöðugur til langs tíma. Peningamagn hefur engin áhrif á raunstærðir svo verðlag hlýtur að lækka","Peningar eru hlutlausir og því hefur peningamagn engin áhrif á verðlag","Af því að stýrivextir breytast ekki eru engin áhrif á verðlag","Minna peningamagn dregur úr framleiðslu og verðlag hækkar","Veltuhraði eykst þegar peningamagn minnkar svo verðlag helst óbreytt"],"a":0,"e":"Spegilmynd L25 #21. Sala ríkisbréfa → M ↓ → P ↓."},
-    {"id":"L24-26","type":"mc","topic":"vid","source":"old","src":"L24 #26","q":"Líkan Ricardos sýnir hvernig ríki geta bætt lífskjör með sérhæfingu og viðskiptum. Hvað ræður því í líkaninu hvaða vöru ríki sérhæfa sig í?","o":["Algerir yfirburðir í framleiðslu","Framleiðnari ríki framleiða dýrari vörur","Ríki framleiða það sem þau hafa algera yfirburði í og setja háa tolla á annað","Efnaðri ríki framleiða dýrari vörur en fátækari ódýrari","Hlutfallslegir yfirburðir í framleiðslu"],"a":4,"e":"Hlutfallslegir yfirburðir = lægri fórnarkostnaður. Ricardo, 1816/1817."},
-    {"id":"L24-27","type":"mc","topic":"vid","source":"old","src":"L24 #27","q":"Magn (m. tonna) sem framleiða má á einni viku:<table class=\"dt\"><tr><th>Land</th><th>Kaffi</th><th>Te</th></tr><tr><td>Brasilía</td><td>10</td><td>30</td></tr><tr><td>Kenía</td><td>20</td><td>40</td></tr></table>Hvort land á að sérhæfa sig í hvoru?","o":["Brasilía í te og Kenía í kaffi","Kenía í hvoru tveggja","Kenía í te og Brasilía í kaffi","Óljóst út frá forsendum","Brasilía í hvoru tveggja"],"a":0,"e":"<div class=\"f\">Fórnarkostnaður 1 kaffis: Brasilía 30/10 = 3 te, Kenía 40/20 = 2 te</div>Kenía hefur lægri fórnarkostnað af kaffi ⇒ Kenía kaffi, Brasilía te."},
-    {"id":"L24-29","type":"mc","topic":"opi","source":"old","src":"L24 #29","q":"Opið hagkerfi: sparnaður er 8 mkr. og innlend fjárfesting 6 mkr. Hreinn útflutningur er þá?","o":["14 mkr.","2 mkr.","−14 mkr.","6 mkr.","−2 mkr."],"a":1,"e":"<div class=\"f\">NX = S − I = 8 − 6 = 2</div>"},
-    {"id":"L24-30","type":"mc","topic":"vid","source":"old","src":"L24 #30","q":"Veldu þá fullyrðingu um tolla sem er RÖNG.","o":["Tollar leiða til lægra verðs fyrir innlenda framleiðendur","Tollar draga úr hagkvæmni og valda allratapi","Tollar auka kostnað við alþjóðaviðskipti","Tollar auka framleiðendaábata á kostnað neytenda","Tollar geta stutt við persónulega hagsmuni stjórnmálamanna"],"a":0,"e":"Tollur hækkar verð innanlands um tollinn, svo innlendir framleiðendur fá hærra verð og ábati þeirra fer úr G í G + C."},
-    {"id":"L24-31","type":"mc","topic":"opi","source":"old","src":"L24 #31","q":"Opið hagkerfi í jafnvægi. Smekkur fólks breytist svo það kýs að spara meira við sama vaxtastig. Hver eru áhrifin á raunvexti og raungengi?","o":["Eftirspurn á gjaldeyrismarkaði eykst sem hækkar raungengi. NX óbreytt","Eftirspurn eftir lánsfé dregst saman, raunvextir lækka. NCO eykst og raungengi lækkar","Framboð á lánsfjármarkaði eykst, raunvextir lækka. NCO eykst sem eykur framboð á gjaldeyrismarkaði og raungengi lækkar","Eftirspurn eftir lánsfé eykst, raunvextir hækka. NCO dregst saman og raungengi hækkar","Framboð á lánsfjármarkaði dregst saman, raunvextir hækka. NCO dregst saman og raungengi hækkar"],"a":2,"e":"S ↑ → framboð lánsfjár → → r ↓ → NCO ↑ → framboð króna → → E ↓ → NX ↑. Valkostur B hefur rétta niðurstöðu en byrjar á rangri kúrfu."},
-    {"id":"p01","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Úr hverju samanstendur grunnfé seðlabankans (M0)?","o":["Seðlum og mynt, almennum innstæðum fjármálastofnana hjá SÍ og innstæðum vegna bindiskyldu","Seðlum og mynt í umferð auk veltiinnlána","Seðlum og mynt, veltiinnlánum og óbundnu sparifé","Öllum innlánum í viðskiptabönkum, bundnum og óbundnum","Útlánum viðskiptabanka til heimila og fyrirtækja"],"a":0,"e":"M0 er skuld seðlabankans. M1 = seðlar og mynt + veltiinnlán, M2 = M1 + óbundið sparifé, M3 = M2 + bundin innlán."},
-    {"id":"p02","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvað bætist við M2 til að fá M3?","o":["Bundin innlán, t.d. verðtryggð innlán og viðbótarlífeyrissparnaður","Óbundið (almennt) sparifé","Veltiinnlán","Hlutdeildarskírteini peningamarkaðssjóða","Innstæður fjármálastofnana hjá seðlabanka"],"a":0,"e":"M3 = M2 + bundin innlán. Peningamarkaðssjóðir og stutt verðbréfaútgáfa bankanna bætast við í M3+. Óbundið sparifé er það sem bætist við M1 til að fá M2."},
-    {"id":"p03","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Um það bil hve stór hluti peningamagns (M3) á Íslandi eru seðlar og mynt?","o":["Um 2%","Um 25%","Um 50%","Um 75%","Um 98%"],"a":0,"e":"Um 98% af M3 eru innlán, þ.e. skuldir banka. Greiðslukerfi nútímans byggir að langmestu leyti á bankafé."},
-    {"id":"p04","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Anna tekur 100 kr. lán hjá Banka B og lánsféð er lagt inn á reikning hennar í sama banka. Hvað gerist strax?","o":["Útlán (eign) og innistæða Önnu (skuld) aukast bæði um 100. M3 eykst um 100 en grunnfé er óbreytt","Grunnfé bankans eykst um 100 og M3 eykst um 100","M3 er óbreytt, því bankinn lánaði sparifé sem aðrir höfðu lagt inn","Bankinn verður fyrst að fá 100 kr. í ný innlán áður en hann getur lánað","Grunnfé bankans minnkar um 100 en M3 er óbreytt"],"a":0,"e":"Bankinn býr til peninga með einni bókhaldsfærslu: útlán +100 og innistæða +100. Enginn þurfti að leggja inn fyrst. Viðskiptabankar geta aðeins búið til bankafé, ekki grunnfé."},
-    {"id":"p05","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Ári síðar greiðir Anna 10 kr. afborgun af láninu af reikningi sínum í sama banka. Hvað gerist við peningamagn (M3)?","o":["M3 minnkar um 10 kr.","M3 er óbreytt, peningarnir færast bara til bankans","M3 eykst um 10 kr. vegna vaxtanna","Grunnfé minnkar um 10 kr. en M3 er óbreytt","M3 minnkar um 20 kr."],"a":0,"e":"Innistæða Önnu −10 og lánið −10. Endurgreiðsla láns eyðir peningum á sama hátt og lánveiting býr þá til. Vaxtagreiðsla færist hins vegar yfir í eigið fé bankans."},
-    {"id":"p06","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Seðlabankinn kaupir verðbréf af viðskiptabanka fyrir 20 m.kr. og greiðir með því að leggja inn á reikning bankans í Seðlabankanum. Hvað gerist?","o":["Grunnfé (M0) eykst um 20 m.kr. en M3 er óbreytt","Bæði M0 og M3 aukast um 20 m.kr.","M3 eykst um 20 m.kr. en M0 er óbreytt","M0 minnkar um 20 m.kr.","Ekkert gerist, þetta eru eignaskipti"],"a":0,"e":"Bankinn skiptir verðbréfum fyrir innstæðu í SÍ, sem er nýtt grunnfé. Innlán almennings breytast ekki, svo M3 er óbreytt. Ef SÍ keypti af einkaaðila utan bankakerfisins yrði líka til nýtt innlán hjá seljandanum."},
-    {"id":"p07","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvað af eftirfarandi er EKKI eitt af því sem takmarkar peningamyndun viðskiptabanka samkvæmt nútímaskilningi?","o":["Magn innlána sem sparifjáreigendur hafa áður lagt inn","Eftirspurn eftir lánum og arðsemi útlána","Eigið fé og reglur (Basel III)","Grunnfé til að gera upp við aðra banka","Stýrivextir Seðlabankans"],"a":0,"e":"Bankar þurfa ekki innlán til að veita útlán; þeir búa til innlán jafnóðum. Hinir fjórir þættirnir eru taldir upp á glærunni „Bankinn býr til peninga með einni bókhaldsfærslu“."},
-    {"id":"p08","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvað er magnbundin íhlutun (e. quantitative easing)?","o":["Seðlabanki kaupir lengri og áhættumeiri verðbréf á eftirmarkaði, oft þegar vextir eru komnir nálægt 0%","Seðlabanki hækkar bindiskyldu til að draga úr útlánum","Ríkið eykur útgjöld án þess að auka skatta","Seðlabanki selur ríkisskuldabréf til að minnka peningamagn","Seðlabanki festir gengi gjaldmiðilsins við evru"],"a":0,"e":"Munurinn á QE og hefðbundnum markaðsaðgerðum er hve löng og áhættusöm bréfin eru. Notað í BNA og á evrusvæðinu 2011–2020 og á Íslandi 2020."},
-    {"id":"p09","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvert er verðbólgumarkmið Seðlabanka Íslands og hvað gerist ef verðbólga víkur of mikið frá því?","o":["2,5%. Víki verðbólga meira en 1,5 prósentu frá markmiðinu þarf bankinn að gera ríkisstjórninni opinberlega grein fyrir ástæðum og viðbrögðum","2%. Ef verðbólga fer yfir 4% er bankastjóri sjálfkrafa leystur frá störfum","2,5%. Ef verðbólga fer yfir markmið er stýrivöxtum sjálfkrafa breytt eftir Taylor-reglu","0%. Öll verðbólga er talin óæskileg","4%. Víki verðbólga meira en 1 prósentu frá markmiði tekur ríkisstjórnin yfir peningastefnuna"],"a":0,"e":"Markmiðið er 2,5% og þolmörkin ±1,5 prósentur. Helsta tækið til að ná því eru meginvextir Seðlabankans."},
-    {"id":"p10","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvert er helsta tæki peningastefnunefndar Seðlabanka Íslands til að ná verðbólgumarkmiðinu?","o":["Meginvextir bankans (stýrivextir)","Bindiskylda","Gengisskráning","Útgáfa nýrra seðla","Fjárlög ríkisins"],"a":0,"e":"Meginvextir eru vextir bankans í viðskiptum við fjármálafyrirtæki. Bindiskylda getur gegnt sama hlutverki en vaxtatækið er gagnsærra og skilvirkara."},
-    {"id":"p11","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Árið 1904 var stofnaður banki á Íslandi sem var hlutafélag í erlendri eigu, skráður í Kaupmannahöfn, og hafði rétt til að gefa út gulltryggða seðla. Hvaða banki var það?","o":["Íslandsbanki","Landsbankinn","Útvegsbankinn","Búnaðarbankinn","Iðnaðarbankinn"],"a":0,"e":"Danskir og norskir fjárfestar stofnuðu Íslandsbanka. Undir H. Tofte frá 1913 var eiginfjárhlutfall lækkað og seðlaprentun sjöfaldaðist. Bankinn lokaði 1930."},
-    {"id":"p12","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Árið 1930 hafnaði Alþingi aðstoð við Íslandsbanka og bankinn lokaði. Hvaða banki var stofnaður til að yfirtaka eignir hans og skuldir?","o":["Útvegsbankinn","Búnaðarbankinn","Landsbankinn","Seðlabanki Íslands","Kaupþing"],"a":0,"e":"Útvegsbankinn, ásamt Búnaðarbankanum (stofnaður 1930) og Landsbankanum, myndaði þriggja ríkisbanka kerfi með pólitískt skipuðum bankastjórum."},
-    {"id":"p13","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Fjármagnshöftum var komið á á Íslandi í október 1931. Hvenær lauk þeim?","o":["Við inngöngu Íslands í EES árið 1993","Við stofnun Seðlabankans árið 1961","Með Ólafslögum árið 1979","Þegar vextir urðu frjálsir árið 1985","Eftir hrunið árið 2008"],"a":0,"e":"Höftin stóðu í rúm sextíu ár. EES tryggði frjálst flæði vinnuafls, fjármagns, vöru og þjónustu. Aftur voru sett gjaldeyrishöft 2008–2017."},
-    {"id":"p14","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvað fólst í svonefndum Ólafslögum árið 1979?","o":["Verðtrygging var heimiluð í lánaviðskiptum","Seðlabanki Íslands var stofnaður","Fjármagnshöftum var aflétt","Vextir voru gefnir frjálsir","Bankarnir voru einkavæddir"],"a":0,"e":"Tilgangur verðtryggingar er að fjarlægja verðbólguáhættu og tryggja jákvæða raunávöxtun. Áður brann sparifé upp í verðbólgu vegna neikvæðra raunvaxta."},
-    {"id":"p15","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvenær urðu vextir frjálsir á Íslandi (í stað þess að vera ákveðnir með stjórnvaldsákvörðun)?","o":["1985","1961","1979","1993","2001"],"a":0,"e":"Fram að 1985 voru vextir festir með stjórnvaldsákvörðun, sem leiddi til verulegra neikvæðra raunvaxta. Sparifé var í raun millifært til lántakenda."},
-    {"id":"p16","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Árið 1990 var Íslandsbanki (hinn nýi) stofnaður þegar ríkið seldi Útvegsbankann. Hvaða bankar sameinuðust honum?","o":["Alþýðubankinn, Iðnaðarbankinn og Verslunarbankinn","Landsbankinn, Búnaðarbankinn og Kaupþing","Samvinnubankinn og Búnaðarbankinn","Glitnir og Kaupþing","Arion banki og Landsbankinn"],"a":0,"e":"Viðskiptabönkum fækkaði úr 7 í 3: Landsbankinn, Íslandsbanki og Búnaðarbanki. Landsbankinn hafði keypt Samvinnubankann 1989–1990."},
-    {"id":"p17","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvaða banka sameinaðist Kaupþing í apríl 2003?","o":["Búnaðarbankanum","Landsbankanum","Íslandsbanka","Útvegsbankanum","Glitni"],"a":0,"e":"Búnaðarbankinn keypti 50% í Kaupþingi 1990 og bankarnir sameinuðust 2003. Þess vegna er Kaupþing merkt „(Búnaðarbanki)“ á glærunni um yfirtökuna 2008."},
-    {"id":"p18","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hve stórt var íslenska bankakerfið miðað við landsframleiðslu í aðdraganda hrunsins 2008?","o":["Um tíföld landsframleiðsla","Um helmingur landsframleiðslu","Um það bil jafnstórt landsframleiðslu","Um tvöföld landsframleiðsla","Um hundraðföld landsframleiðsla"],"a":0,"e":"Erlendar skuldir bankanna voru um 750% af VLF en gjaldeyrisforði Seðlabankans aðeins um 21% af VLF. Ólíklegt var talið að ríkið gæti bjargað bönkunum."},
-    {"id":"p19","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Upp að hvaða fjárhæð eru innstæður í íslenska bankakerfinu tryggðar samkvæmt lögum?","o":["€100.000 (um 15 m.kr.)","€20.000 (um 3 m.kr.)","€1.000.000 (um 150 m.kr.)","Allar innstæður eru tryggðar að fullu","Engar innstæður eru tryggðar"],"a":0,"e":"Innstæðutrygging dregur úr hættu á bankaáhlaupi. Icesave-deilan snerist um hvort íslenska ríkið ætti að tryggja innstæður í útibúum erlendis."},
-    {"id":"p20","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvers vegna eru bankar viðkvæmir fyrir bankaáhlaupi?","o":["Þeir breyta skammtímaskuldum (innlánum) í langtímaeignir (útlán) með lítið greiðsluhæfi","Þeir geyma alltaf öll innlán sem seðla í hvelfingu","Seðlabankinn bannar þeim að eiga grunnfé","Útlán þeirra eru öll til skamms tíma","Þeir mega ekki taka lán hjá öðrum bönkum"],"a":0,"e":"Þetta kallast maturity transformation. Ef margir vilja taka út samtímis geta bankarnir ekki breytt langtímalánum í seðla nógu hratt."},
-    {"id":"p21","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Frá 1944 til 1971 var Bretton Woods-kerfið við lýði. Hvað einkenndi það?","o":["Bandaríkjadollari var á gullfæti og fjöldi annarra gjaldmiðla var tengdur dollaranum","Allir gjaldmiðlar voru fljótandi","Evran var tengd gulli","Gullfótur var afnuminn í öllum ríkjum","Íslenska krónan var tengd breska pundinu"],"a":0,"e":"Gullfótur var grunnur flestra peningakerfa frá um 1870 til 1930. Frá 1971 hafa gjaldmiðlar heims verið pappírsmyntir."},
-    {"id":"p22","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvaða hlutverk peninga uppfylla rafmyntir (t.d. Bitcoin) samkvæmt glærum námskeiðsins?","o":["Ekki gjaldmiðil né reiknieiningu, en mögulega geymslueiningu","Öll þrjú hlutverkin","Gjaldmiðil og reiknieiningu, en ekki geymslueiningu","Aðeins reiknieiningu","Ekkert hlutverkanna og geta ekki geymt verðmæti"],"a":0,"e":"Rafmyntir virka á markaði eins og fjárfestingarvara, líkt og gull. Pappírsmyntir eru hins vegar góður gjaldmiðill og reiknieining en slæm geymslueining til langs tíma."},
-    {"id":"p23","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvað lýsir greiðsluhæfi (e. liquidity) eignar?","o":["Hversu auðveldlega má skipta eigninni yfir í peninga","Hversu mikla ávöxtun eignin gefur","Hversu áhættusöm eignin er","Hve lengi eignin endist","Hvort eignin er verðtryggð"],"a":0,"e":"Seðlar hafa meira greiðsluhæfi en bundin innlán. Röðin M0 → M1 → M2 → M3 → M3+ er í minnkandi greiðsluhæfi."},
-    {"id":"p24","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvað segja Fisher-áhrifin?","o":["Aukning verðbólgu um eitt prósentustig leiðir til hækkunar nafnvaxta um eitt prósentustig til langs tíma","Aukning verðbólgu um eitt prósentustig lækkar raunvexti um tvö prósentustig","Nafnvextir eru alltaf jafnir verðbólgu","Raunvextir hækka þegar peningamagn eykst","Verðbólga hefur engin áhrif á nafnvexti"],"a":0,"e":"<div class=\"f\">(1 + i) = (1 + r)(1 + π) ⇒ i ≈ r + π</div>Til langs tíma eru peningar hlutlausir, svo r breytist ekki og i fylgir π."},
-    {"id":"p25","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hið opinbera rekur hallarekstur. Hver af þessum fjármögnunarleiðum skapar verðbólguskatt?","o":["Lántaka hjá bankakerfinu eða seðlabanka, því þá verða til nýjar innistæður og M eykst","Skattahækkun","Lántaka hjá lífeyrissjóðum og heimilum","Sala ríkiseigna til almennings","Niðurskurður útgjalda"],"a":0,"e":"Lán frá sparifjáreigendum færir til peninga sem þegar eru til (vextir hækka, ruðningsáhrif). Lán frá bankakerfinu býr til nýja peninga: M ↑ → P ↑. Það er falin skattheimta á alla sem eiga peninga."},
-    {"id":"p26","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvenær er talað um óðaverðbólgu samkvæmt skilgreiningu námskeiðsins?","o":["Þegar verðbólga er yfir 50% á mánuði","Þegar verðbólga er yfir 10% á ári","Þegar verðbólga er yfir 50% á ári","Þegar verðbólga er yfir 100% á ári","Þegar verðbólga fer yfir verðbólgumarkmið"],"a":0,"e":"Óðaverðbólga > 50% á mánuði. Dæmi: Þýskaland 1923, Simbabve 2008, Venesúela 2018."},
-    {"id":"p27","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvað er skósólakostnaður verðbólgu?","o":["Kostnaðurinn við að fólk dregur úr peningaeign sinni, t.d. tími sem fer í aukaferðir í bankann","Kostnaðurinn við að prenta nýja verðlista","Kostnaður við að laun hækka hraðar en verðlag","Kostnaðurinn við að skattur er lagður á nafnvexti","Kostnaður við að skór hækka meira í verði en aðrar vörur"],"a":0,"e":"Verðbólga rýrir verðgildi peninga og hvetur fólk til að eiga minna af þeim. Kostnaður við að uppfæra verð er matseðlakostnaður."},
-    {"id":"p28","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Raunvextir eru 4% og verðbólga 8%, svo nafnvextir eru um 12%. Skattur á vaxtatekjur er 22% af nafnvöxtum. Hver er raunávöxtun eftir skatt, um það bil?","o":["Um 1,4%","Um 3,1%","Um 4,0%","Um 9,4%","Um −8,0%"],"a":0,"e":"<div class=\"f\">Nafnávöxtun e. skatt = 12% × (1 − 0,22) = 9,36%<br>Raunávöxtun e. skatt ≈ 9,36% − 8% = 1,4%</div>Án verðbólgu hefði hún verið 4% × 0,78 = 3,1%. Skatturinn tekur 66% af raunávöxtuninni í stað 22%: þetta eru skattaskekkjur."},
-    {"id":"p29","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Óvænt verðbólga verður meiri en búist var við. Hverjir tapa á henni samkvæmt umfjöllun um handahófskennda endurdreifingu auðs?","o":["Sparifjáreigendur og lánveitendur með óverðtryggðar kröfur","Skuldarar með óverðtryggð lán","Ríkissjóður, sem skuldar óverðtryggt","Enginn, því laun hækka alltaf jafn mikið","Eigendur fasteigna"],"a":0,"e":"Óvænt verðbólga færir auð frá sparifjáreigendum til skuldara. Þau sem fá hann unnu ekki fyrir honum og þau sem greiða fá ekkert í staðinn."},
-    {"id":"p30","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvert af eftirfarandi er EKKI rök fyrir því að verðbólgumarkmið sé nokkuð yfir 0%?","o":["Verðbólga eykur kaupmátt launa til langs tíma","Fyrirtæki eiga erfitt með að lækka nafnlaun","Verðhjöðnun eykur raunbyrði óverðtryggðra skulda","Í verðhjöðnun borgar sig að fresta kaupum","Of lítil verðbólga veldur vandræðum ekki síður en of mikil"],"a":0,"e":"Kaupmáttur ræðst til langs tíma af framleiðni (W/P = MPL), ekki af verðbólgu."},
-    {"id":"p31","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Samkvæmt MT24 dregur verðbólga ein og sér ekki úr kaupmætti til lengri tíma. Hvað ræður kaupmætti launa til langs tíma?","o":["Framleiðni vinnuafls: W/P = MPL","Peningamagn í umferð","Stýrivextir Seðlabankans","Verðbólgumarkmiðið","Nafngengi krónunnar"],"a":0,"e":"Þegar verðlag hækkar hratt hækka laun yfirleitt hratt líka. Framleiðni ræðst af mannauði, náttúruauðlindum, fjármagni og tækni."},
-    {"id":"p32","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Á árunum 2000–2009 óx M3 um ~19% á ári en verðbólga var aðeins ~6% að meðaltali. Hvernig skýrir MT24 undantekninguna?","o":["Nýju peningarnir fóru í eignaverð og innflutning (sterk króna) og veltuhraðinn féll","Raunhagvöxtur var 13% á ári","Peningamagnskenningin gildir ekki á Íslandi","Seðlabankinn hækkaði bindiskyldu","Verðtrygging kom í veg fyrir verðbólgu"],"a":0,"e":"<div class=\"f\">%ΔM + %ΔV ≈ %ΔP + %ΔY</div>Ef V fellur getur M vaxið hratt án þess að P hækki jafn mikið. Verðbólgan kom 2008 þegar krónan féll."},
-    {"id":"p33","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Í líkaninu af peningamarkaðnum er virði peninga (1/P) á lóðrétta ásnum. Hvað gerist þegar seðlabankinn eykur peningaframboð?","o":["Lóðrétti framboðsferillinn hliðrast til hægri, virði peninga lækkar og verðlag hækkar","Eftirspurnarferillinn hliðrast til hægri og verðlag lækkar","Framboðsferillinn hliðrast til hægri og virði peninga hækkar","Ekkert, því framboðið er lóðrétt","Verðlag lækkar því meira er til af peningum"],"a":0,"e":"Framboðið er lóðrétt því seðlabankinn ræður því að lokum. Meira peningamagn → hver króna kaupir minna (1/P ↓) → P ↑."},
-    {"id":"p34","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvað af eftirfarandi er raunstærð en ekki nafnstærð?","o":["Kaupmáttur launa","Mánaðarlaun í krónum","Útgjöld heimila í krónum á verðlagi hvers árs","Nafnvirði VLF","Verð á mjólkurlítra"],"a":0,"e":"Raunstærðir eru mældar í magni eða á föstu verðlagi. Raunvirði = nafnvirði / verðvísitala."},
-    {"id":"p35","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hver eru þrjú lykilhlutverk bindiskyldu samkvæmt minnisblaði Seðlabanka Íslands?","o":["Varúðarhlutverk, virkt stjórntæki peningastefnu og skilvirkari miðlun peningastefnu","Að ákvarða peningamargfaldarann, stjórna útlánum og tryggja innstæður","Að fjármagna ríkissjóð, verja gengið og ákveða verðbólgumarkmið","Varúðarhlutverk, innstæðutrygging og gengisskráning","Að takmarka útlán við tífalt grunnfé"],"a":0,"e":"SÍ hækkaði bindiskyldu í apríl 2024 til að láta vaxtabreytingar sínar hafa meiri áhrif. Glæran tekur fram að ekkert sé fjallað um peningamargfaldara."},
-    {"id":"p36","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Hvert er hlutverk seðlabanka sem „lánveitandi til þrautavara“ (e. lender of last resort)?","o":["Að lána fjármálastofnunum þegar þær geta ekki fengið fé annars staðar, t.d. í lausafjárkreppu","Að lána heimilum sem fá ekki lán í banka","Að lána ríkissjóði til að fjármagna halla","Að kaupa skuldabréf fyrirtækja í gjaldþroti","Að greiða innstæðueigendum ef banki fellur"],"a":0,"e":"Seðlabankinn er banki bankanna og lánveitandi í neyð. Hann sér líka um seðlaútgáfu, gjaldeyrisforða og eftirlit með fjármálastofnunum."},
-    {"id":"p37","type":"mc","topic":"pen","source":"new","src":"Ný spurning","q":"Íslenska krónan hefur frá 1939 tapað um 99,997% af verðgildi sínu. Hvaða hlutverk peninga uppfyllir pappírsmynt verst samkvæmt þessu?","o":["Geymslueining","Gjaldmiðill","Reiknieining","Greiðsluhæfi","Lögeyrir"],"a":0,"e":"Pappírsmyntir eru nafnverðseignir sem verðbólga rýrir. Raunvirðiseignir eins og gull og húsnæði halda verðgildi betur."},
-    {"id":"v01","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Hver eftirtalinna telst atvinnulaus samkvæmt skilgreiningu Hagstofunnar?","o":["Ásta missti vinnuna, hefur sótt um störf síðustu þrjár vikur og getur byrjað strax","Bjarni er í fullu námi og vinnur ekki","Kristín er komin á eftirlaun","Davíð hefur gefist upp á að leita sér að vinnu","Eva er heimavinnandi og leitar ekki að vinnu"],"a":0,"e":"Atvinnulaus = án vinnu, hefur leitað síðustu fjórar vikur og getur byrjað innan tveggja vikna (eða bíður eftir að hefja störf). Hinir eru utan vinnumarkaðar."},
-    {"id":"v02","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Nokkur hópur atvinnulausra gefst upp á atvinnuleit. Hvað gerist við mælt atvinnuleysishlutfall og atvinnuþátttöku?","o":["Atvinnuleysishlutfallið lækkar og atvinnuþátttakan lækkar","Atvinnuleysishlutfallið hækkar og atvinnuþátttakan lækkar","Hvorugt breytist","Atvinnuleysishlutfallið lækkar en atvinnuþátttakan hækkar","Atvinnuleysishlutfallið hækkar og atvinnuþátttakan hækkar"],"a":0,"e":"Þau fara úr hópi atvinnulausra yfir í „utan vinnumarkaðar“. Teljarinn í u minnkar meira hlutfallslega en nefnarinn, og vinnuaflið minnkar miðað við mannfjölda."},
-    {"id":"v03","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Forritari segir upp starfi sínu og tekur sér tvo mánuði í að finna starf sem hentar betur. Hvaða tegund atvinnuleysis er þetta?","o":["Leitaratvinnuleysi","Skipulagsatvinnuleysi","Hagsveiflubundið atvinnuleysi","Árstíðabundið atvinnuleysi","Langvarandi atvinnuleysi"],"a":0,"e":"Leitaratvinnuleysi stafar af því að vinnuleit er tímafrek. Það er óhjákvæmilegt og hluti af náttúrulegu atvinnuleysi."},
-    {"id":"v04","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Fiskvinnsla lokar í litlu sveitarfélagi og starfsfólkið getur ekki flutt til að sækja vinnu annars staðar. Hvaða tegund atvinnuleysis er þetta?","o":["Skipulagsatvinnuleysi","Leitaratvinnuleysi","Hagsveiflubundið atvinnuleysi","Árstíðabundið atvinnuleysi","Ekkert atvinnuleysi"],"a":0,"e":"Skipulagsatvinnuleysi myndast þegar vinnuframboð er umfram eftirspurn við ríkjandi laun: landfræðilegar ástæður, tæknibreytingar eða laun yfir jafnvægi."},
-    {"id":"v05","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Hvað er náttúrulegt atvinnuleysi?","o":["Það atvinnuleysi sem væri til staðar ef hagkerfið væri í jafnvægi: leitaratvinnuleysi + skipulagsatvinnuleysi","Atvinnuleysi sem stafar af niðursveiflu","Atvinnuleysi sem er 0% í uppsveiflu","Árstíðabundið atvinnuleysi yfir sumarið","Atvinnuleysi þeirra sem hafa gefist upp á leit"],"a":0,"e":"Á Íslandi hefur árstíðaleiðrétt atvinnuleysi sveiflast í kringum ~4,5%, sem bendir til náttúrulegs atvinnuleysis nálægt því."},
-    {"id":"v06","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Lögmál Okuns á Íslandi er metið sem Δu = 0,0069 − 0,2283·g. Ef hagvöxtur er 5%, hvað gerist við atvinnuleysi samkvæmt þessu?","o":["Það lækkar um u.þ.b. 0,45 prósentustig","Það hækkar um u.þ.b. 0,45 prósentustig","Það lækkar um u.þ.b. 1,14 prósentustig","Það lækkar um u.þ.b. 5 prósentustig","Það breytist ekki"],"a":0,"e":"<div class=\"f\">Δu = 0,0069 − 0,2283 × 0,05 = 0,0069 − 0,0114 = −0,0045</div>Atvinnuleysi lækkar um ~0,45 prósentustig. −1,14 fæst ef fastanum 0,0069 er sleppt."},
-    {"id":"v07","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Beveridge-kúrfan lýsir sambandi atvinnuleysis og lausra starfa. Hvað þýðir hliðrun hennar til hægri?","o":["Vinnumarkaðurinn er orðinn minna skilvirkur í að para saman fólk og störf","Vinnumarkaðurinn er orðinn skilvirkari","Hagkerfið er komið í uppsveiflu","Verðbólga hefur aukist","Náttúrulegt atvinnuleysi hefur minnkað"],"a":0,"e":"Covid hliðraði Beveridge-kúrfunni í BNA til hægri: fleiri laus störf við sama atvinnuleysi. Kúrfan gefur vísbendingu um skipulagsatvinnuleysi."},
-    {"id":"v08","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Hvert af eftirfarandi er EKKI ástæða fyrir því að fyrirtæki greiða afkastalaun (laun yfir jafnvægi)?","o":["Lög krefjast þess að laun séu yfir jafnvægislaunum","Betur launað starfsfólk heldur betri heilsu","Vel launað starfsfólk er síður líklegt til að skipta um vinnu","Hærri laun hvetja starfsfólk til að leggja sig fram","Hærri laun laða að betra starfsfólk"],"a":0,"e":"Afkastalaun eru ákvörðun fyrirtækisins sjálfs: heilbrigði, minni vinnuvelta, ánægja/vinnuframlag og gæði starfsfólks. Lögbundin laun yfir jafnvægi eru lágmarkslaun."},
-    {"id":"v09","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Lágmarkslaun eru hækkuð upp fyrir jafnvægislaun á tveimur mörkuðum með sama framboð vinnuafls. Á markaði A er eftirspurn eftir vinnuafli mjög teygin, á markaði B óteygin. Hvar verður atvinnuleysið meira?","o":["Á markaði A, því þar fækkar störfum meira við hærri laun","Á markaði B, því þar fækkar störfum meira","Jafn mikið á báðum, því framboðið er það sama","Hvergi, lágmarkslaun valda aldrei atvinnuleysi","Á markaði B, því þar er eftirspurnin brattari"],"a":0,"e":"Teygin eftirspurn = flatur ferill: við hærri laun dregst eftirspurn mikið saman. Teygni er oft há þar sem auðvelt er að skipta vinnuafli út, t.d. sjálfsafgreiðslu í láglaunastörfum."},
-    {"id":"v10","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Lágmarkslaun eru sett undir markaðsjafnvægislaunum. Hver eru áhrifin?","o":["Engin, lágmarkslaunin eru ekki bindandi","Atvinnuleysi eykst","Laun lækka niður í lágmarkslaunin","Störfum fjölgar","Framboð vinnuafls dregst saman"],"a":0,"e":"Verðgólf hefur aðeins áhrif ef það er yfir markaðsverði. Lágmarkslaun á Íslandi eru samningsbundin, í BNA lögbundin."},
-    {"id":"v11","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Hvers vegna er eftirspurn eftir vinnuafli kölluð afleidd eftirspurn?","o":["Hún leiðir af eftirspurn eftir vörunum og þjónustunni sem vinnuaflið framleiðir","Hún er reiknuð út frá launum annarra starfsstétta","Hún er ákveðin af stjórnvöldum","Hún leiðir af framboði vinnuafls","Hún fer eingöngu eftir menntun"],"a":0,"e":"Fyrirtæki ráða fólk til að framleiða. Þess vegna hliðrast eftirspurn eftir vinnuafli þegar vöruverð (P) eða framleiðni (MPL) breytist."},
-    {"id":"v12","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Hagnaðarhámarkandi fyrirtæki á samkeppnismarkaði ræður starfsfólk þar til...","o":["W = P × MPL, þ.e. raunlaun W/P eru jöfn jaðarframleiðni vinnuafls","MPL er í hámarki","Heildarframleiðsla Q er í hámarki","W = MPL / P","Meðalframleiðni er jöfn launum"],"a":0,"e":"<div class=\"f\">W = P × MPL ⇔ W/P = MPL ⇔ P = W/MPL = MC</div>W/MPL er jaðarkostnaður einnar viðbótareiningar."},
-    {"id":"v13","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Mikill fjöldi erlends vinnuafls flytur til landsins. Hvað gerist á vinnumarkaði samkvæmt líkaninu?","o":["Framboð vinnuafls eykst, laun lækka og störfum fjölgar","Eftirspurn eftir vinnuafli eykst, laun hækka","Framboð vinnuafls minnkar, laun hækka","Ekkert, því innflutt vinnuafl tekur bara störf frá öðrum","Eftirspurn eftir vinnuafli minnkar, laun lækka og störfum fækkar"],"a":0,"e":"Innflutningur vinnuafls hliðrar framboðsferlinum til hægri. Sama á við um hærri eftirlaunaaldur og styttri skólagöngu."},
-    {"id":"v14","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Ný tækni eykur jaðarframleiðni starfsfólks í ákveðinni grein. Hvað gerist á vinnumarkaði þeirrar greinar?","o":["Eftirspurn eftir vinnuafli eykst, laun hækka og störfum fjölgar","Framboð vinnuafls eykst og laun lækka","Eftirspurn eftir vinnuafli minnkar því vélarnar vinna störfin","Engin áhrif, því laun eru óháð framleiðni","Framboð vinnuafls minnkar"],"a":0,"e":"VMPL = P × MPL. MPL ↑ → VMPL ↑ → eftirspurnarferill hliðrast til hægri. Á glærunum eru tækniframfarir taldar með hliðrunum eftirspurnar."},
-    {"id":"v15","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Laun hækka. Hver eru staðkvæmdaráhrifin á framboð vinnu?","o":["Fórnarkostnaður frítíma eykst svo fólk vill vinna meira","Fólk getur unnið minna og samt haft sömu neyslu","Fólk vill vinna minna því það er orðið ríkara","Engin áhrif","Fólk skiptir yfir í aðra vinnu"],"a":0,"e":"Tekjuáhrifin vinna í hina áttina: hærri tekjur → meiri frítími. Til að byrja með eru staðkvæmdaráhrifin oft ráðandi, en við háar tekjur geta tekjuáhrifin orðið ráðandi."},
-    {"id":"v16","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Sumir hagfræðingar telja að menntun auki ekki framleiðni heldur sé leið fyrir nemendur til að sýna vinnuveitendum hæfileika sína. Hvað kallast þessi sýn?","o":["Menntun sem merkimiði (e. signalling)","Mannauðskenningin","Afkastalaun","Ofurstjörnuáhrif","Markaðsáhrif vinnuveitenda"],"a":0,"e":"Mannauðskenningin segir að menntun auki þekkingu og framleiðni og þar með laun. Merkimiðakenningin segir að prófgráðan gefi til kynna eiginleika sem þurfti til að ljúka henni."},
-    {"id":"v17","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Hvað skýrir launalægð hjúkrunarfræðinga og kennara samkvæmt umfjöllun um markaðsáhrif fyrirtækja í MT15?","o":["Einn stór vinnuveitandi (hið opinbera, Landspítali) hefur mikið markaðsvald og getur haldið launum lægri","Framboð þessara starfsstétta er mjög lítið","Þessi störf hafa enga framleiðni","Lágmarkslaun eru of há","Afkastalaun eru greidd í þessum greinum"],"a":0,"e":"Þegar fáir stórir vinnuveitendur ráða markaðnum eru þeir ekki verðþolar. Lágmarkslaun geta verið leið til að draga úr slíku markaðsvaldi."},
-    {"id":"v18","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Í dæmi úr MT22 er vinnuafl 100 ársverk (5.200 vikur). 3 eru atvinnulausir í heilt ár (156 vikur) og 52 eru atvinnulausir í eina viku hver (52 vikur). Hve stór hluti af heildaratvinnuleysinu (í vikum) er langtímaatvinnuleysi?","o":["75%","5,5%","4%","25%","3%"],"a":0,"e":"<div class=\"f\">Atvinnuleysi = (156 + 52) / 5.200 = 4%<br>Hlutur langtíma = 156 / 208 = 75%</div>5,5% er hlutfall langtímaatvinnulausra af fjölda atvinnulausra (3/55). Fáir einstaklingar geta vegið þungt."},
-    {"id":"v19","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Atvinnuleysi á Íslandi er mælt á tvo vegu. Hverjir?","o":["Með vinnumarkaðskönnun Hagstofunnar og með fjölda þeirra sem fá atvinnuleysisbætur hjá Vinnumálastofnun","Með skattframtölum og tollskýrslum","Með Okun-lögmálinu og Beveridge-kúrfunni","Með vísitölu neysluverðs og launavísitölu","Með manntali á tíu ára fresti"],"a":0,"e":"Hvorug aðferðin er fullkomin: kannanir geta verið ónákvæmar og ekki fá allir atvinnulausir bætur."},
-    {"id":"v20","type":"mc","topic":"vin","source":"new","src":"Ný spurning","q":"Hvað einkennir markaði þar sem „ofurstjörnur“ myndast (fáir þéna gríðarlega mikið en flestir lítið)?","o":["Allir neytendur vilja vöru besta framleiðandans og tæknin gerir honum kleift að ná til allra á lágu verði","Mikil verkalýðsfélög","Lögbundin lágmarkslaun","Fullkomin samkeppni og engin stærðarhagkvæmni","Mikil mismunun á vinnumarkaði"],"a":0,"e":"Dæmi: tónlistarfólk og knattspyrnumenn í dag miðað við fortíð. Launamunur tónlistarmanna er miklu meiri en hjúkrunarfræðinga."},
-    {"id":"o01","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Íslendingur kaupir hlutabréf í Tesla. Hvaða áhrif hefur það á hreint útstreymi fjármagns (NCO) frá Íslandi?","o":["NCO eykst","NCO minnkar","NCO er óbreytt","NX minnkar en NCO er óbreytt","Óljóst"],"a":0,"e":"NCO = kaup innlendra aðila á erlendum eignum − kaup erlendra aðila á innlendum eignum. Íslendingur eignast erlenda eign → NCO ↑."},
-    {"id":"o02","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Færeyingur kaupir íslensk ríkisskuldabréf. Hvaða áhrif hefur það á NCO frá Íslandi?","o":["NCO minnkar","NCO eykst","NCO er óbreytt","NX eykst en NCO er óbreytt","Óljóst"],"a":0,"e":"Útlendingur kaupir innlenda eign → seinni liðurinn í NCO stækkar → NCO ↓ (innstreymi fjármagns)."},
-    {"id":"o03","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Íslenskt ferðaþjónustufyrirtæki selur þýskum ferðamanni jöklaferð fyrir 100€ og geymir evrurnar á gjaldeyrisreikningi. Hvað gerist?","o":["NX eykst um 100€ og NCO eykst um 100€","NX eykst um 100€ en NCO er óbreytt","NX eykst um 100€ og NCO minnkar um 100€","NX er óbreytt en NCO eykst","Hvorugt breytist fyrr en evrunum er skipt"],"a":0,"e":"Útflutningur → NX ↑. Evruinnstæða er krafa á útlendinga, þ.e. erlend eign → NCO ↑. Öll viðskipti hafa tvær hliðar, svo NX = NCO alltaf."},
-    {"id":"o04","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Íslenskt fyrirtæki selur þýskum ferðamanni jöklaferð fyrir 100€ og skiptir evrunum í krónur. Bankinn selur evrurnar innflytjanda sem kaupir þýskan bíl fyrir 100€. Hver eru heildaráhrif allra viðskiptanna á NX og NCO?","o":["NX og NCO eru bæði óbreytt (+100 − 100 = 0)","NX og NCO aukast bæði um 100€","NX eykst um 100€ en NCO er óbreytt","NX minnkar um 100€ en NCO eykst","NCO eykst um 200€"],"a":0,"e":"Evrurnar fara aðeins úr landi ef þær greiða fyrir innflutning, og þá lækka NX og NCO saman."},
-    {"id":"o05","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Land er með viðskiptahalla (NX < 0). Hvað gildir þá um NCO?","o":["NCO < 0: fjármagn streymir inn í landið (landið selur eignir eða tekur lán)","NCO > 0: fjármagn streymir út","NCO = 0","NCO er óháð NX","NCO < 0 og S > I"],"a":0,"e":"Eins og námsmaður sem eyðir 4,5 m.kr. en þénar 4,0: hallinn er greiddur með því að ganga á sparnað eða taka lán, þ.e. fjármagn streymir inn. Og S − I = NX < 0 ⇒ S < I."},
-    {"id":"o06","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Hvað segir jafnan S = I + NCO?","o":["Þjóðhagslegur sparnaður fer annaðhvort í innlenda fjárfestingu eða í kaup á erlendum eignum","Sparnaður er alltaf meiri en fjárfesting í opnu hagkerfi","Erlend fjárfesting er alltaf jöfn innlendri","Sparnaður fer eingöngu í innlenda fjárfestingu","NCO er alltaf jákvætt"],"a":0,"e":"S = I_innlend + I_erlend. Þetta er líka ástæðan fyrir því að á lánsfjármarkaði opins hagkerfis er framboð = S og eftirspurn = I + NCO."},
-    {"id":"o07","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Verð evru fer úr 140 kr. í 130 kr. Hvað hefur gerst?","o":["Gengi krónunnar hefur hækkað (króna styrkst)","Gengi krónunnar hefur lækkað (króna veikst)","Raungengið hefur örugglega lækkað","Ekkert hefur breyst fyrir íslenska neytendur","Evran hefur styrkst"],"a":0,"e":"Ein króna kaupir nú meira af evrum (1/130 > 1/140). Verðlækkun á erlendum gjaldeyri jafngildir gengishækkun krónunnar."},
-    {"id":"o08","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Hvert af eftirfarandi myndi LÆKKA raungengi krónunnar, E = eP/P*?","o":["Verðlag erlendis (P*) hækkar","Nafngengi krónunnar (e) hækkar","Innlent verðlag (P) hækkar","Erlent verðlag (P*) lækkar","Innlent verðlag hækkar meira en erlent"],"a":0,"e":"e ↑, P ↑ og P* ↓ hækka öll E og draga úr NX. P* ↑ lækkar E: íslenskar vörur verða hlutfallslega ódýrari og NX eykst."},
-    {"id":"o09","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Raungengi krónunnar lækkar. Hvað gerist samkvæmt MT25?","o":["Íslenskar vörur verða hlutfallslega ódýrari, útflutningur eykst, innflutningur minnkar og NX eykst","Íslenskar vörur verða dýrari og NX minnkar","NX er óbreytt því NX = NCO","Innflutningur eykst og útflutningur minnkar","Verðbólga á Íslandi lækkar örugglega"],"a":0,"e":"Neikvætt samband er milli raungengis og NX. Þess vegna hallar eftirspurnarferillinn á gjaldeyrismarkaði niður."},
-    {"id":"o10","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Ef kaupmáttarjafnvirðiskenningin (KJK) gildir, hvað gildir þá um raungengið og nafngengið?","o":["Raungengið er fasti (E = 1) og nafngengið er e = P*/P","Nafngengið er fasti en raungengið sveiflast","Bæði eru föst","Raungengið er alltaf hærra en nafngengið","e = P/P*"],"a":0,"e":"<div class=\"f\">1/P = e/P* ⇒ 1 = eP/P* = E ⇒ e = P*/P</div>Nafngengið endurspeglar mun á verðlagi landanna."},
-    {"id":"o11","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Samkvæmt KJK, hvað gerist við nafngengi krónunnar ef Seðlabankinn prentar mikið af peningum og innlent verðlag hækkar?","o":["Gengi krónunnar lækkar, hver króna kaupir minna af erlendum gjaldeyri","Gengi krónunnar hækkar","Gengi krónunnar breytist ekki","Raungengið hækkar varanlega","Erlent verðlag hækkar"],"a":0,"e":"e = P*/P. P ↑ ⇒ e ↓. Gjaldmiðlar eru eins og vörur að þessu leyti: meira framboð lækkar virðið."},
-    {"id":"o12","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Hvert af eftirfarandi er EKKI takmörkun á kaupmáttarjafnvirðiskenningunni samkvæmt MT25?","o":["Seðlabankar geta ekki haft nein áhrif á verðlag","Margar vörur, t.d. klipping, er erfitt að eiga viðskipti með yfir landamæri","Vörur frá ólíkum löndum koma ekki alltaf hver í stað annarrar","Flutningskostnaður er ekki 0","Nafngengi breytist á mínútu fresti en verðlag mun hægar"],"a":0,"e":"Takmarkanirnar fjórar á glærunum eru óverslunarhæfar vörur, ólíkar vörur, flutningskostnaður og tregbreytanlegt verðlag. KJK er almennt viðurkennd til lengri tíma."},
-    {"id":"o13","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Hvað einkennir fastgengisstefnu eins og hjá dönsku krónunni?","o":["Seðlabankinn er virkur á gjaldeyrismarkaði til að halda genginu nálægt viðmiði (€1 = 7,46 DKK, ±2,25%)","Gengið ræðst eingöngu af framboði og eftirspurn án afskipta","Gengið breytist aldrei, óháð framboði og eftirspurn","Landið hefur sjálfstæða peningastefnu og frjálst fjármagnsflæði","Landið notar evru sem gjaldmiðil"],"a":0,"e":"Fastgengi þýðir ekki að framboð og eftirspurn hafi ekki áhrif; seðlabankinn verður stöðugt að vega á móti, og þarf til þess stóran gjaldeyrisforða."},
-    {"id":"o14","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Samkvæmt ómöguleikaþríhyrningnum, hvaða tveimur af þremur markmiðum hefur Ísland haldið frá 2001?","o":["Frjálsu fjármagnsflæði og sjálfstæðri peningastefnu (fljótandi gengi)","Föstu gengi og frjálsu fjármagnsflæði","Föstu gengi og sjálfstæðri peningastefnu","Öllum þremur","Engu þeirra"],"a":0,"e":"Danmörk og evrusvæðið: fast gengi + frjálst flæði. Bretton Woods og Kína: fast gengi + sjálfstæð peningastefna með höftum."},
-    {"id":"o15","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Þrýstingur er á fastgengi til lækkunar. Hvert af eftirfarandi er EKKI eitt af tækjum seðlabanka til að verja það?","o":["Lækka vexti","Selja gjaldeyrisforða og kaupa eigin gjaldmiðil","Hækka vexti svo innlendar eignir verði eftirsóknarverðari","Setja gjaldeyrishöft","Ekkert ofangreint er tæki"],"a":0,"e":"Lægri vextir myndu auka NCO og þrýsta genginu enn frekar niður. Englandsbanki keypti pund og hækkaði vexti 16. sept. 1992 en gafst upp sama kvöld."},
-    {"id":"o16","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Hvað ákvarðar framboð og eftirspurn króna á gjaldeyrismarkaði í líkaninu af opnu hagkerfi?","o":["Framboð = NCO (lóðrétt, óháð raungengi), eftirspurn = NX (niðurhallandi). Raungengið aðlagast","Framboð = S, eftirspurn = I. Raunvextir aðlagast","Framboð = NX, eftirspurn = NCO. Nafngengið aðlagast","Framboð = M, eftirspurn = PY. Verðlagið aðlagast","Framboð = útflutningur, eftirspurn = innflutningur. Vextir aðlagast"],"a":0,"e":"Krónur eru boðnar fram til að kaupa erlendar eignir (NCO) og útlendingar vilja krónur til að kaupa hreinan útflutning (NX). NCO tengir lánsfjármarkaðinn og gjaldeyrismarkaðinn."},
-    {"id":"o17","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Ríkið eykur hallarekstur í opnu hagkerfi. Hver er rétta keðjan samkvæmt líkaninu?","o":["S ↓ → r ↑ → NCO ↓ → framboð króna minnkar → E ↑ → NX ↓","S ↓ → r ↓ → NCO ↑ → E ↓ → NX ↑","Eftirspurn eftir lánsfé ↑ → r ↑ → NCO ↑ → E ↓","Eftirspurn eftir krónum ↑ → E ↑ → NX óbreytt","S ↑ → r ↓ → NCO ↑ → E ↓"],"a":0,"e":"Þetta kallast tvíburahalli: halli á rekstri ríkisins fylgir halli í viðskiptum við útlönd. Auk þess ryður hann burt innlendri fjárfestingu."},
-    {"id":"o18","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Stjórnvöld leggja innflutningstoll á allar innfluttar vörur. Hvað gerist samkvæmt líkaninu af opnu hagkerfi ef S og I eru óbreytt?","o":["Eftirspurn eftir krónum eykst, raungengið hækkar og NX er á endanum óbreytt. Raunvextir og NCO óbreytt","NX eykst varanlega og viðskiptahallinn hverfur","Raunvextir hækka og NCO minnkar","Raungengið lækkar og NX eykst","Framboð króna eykst og raungengið lækkar"],"a":0,"e":"Tollurinn eykur NX við gefið E, en E hækkar þar til áhrifin á NX hverfa, því NX = S − I. Viðskiptahalli BNA var 903,5 ma.$ 2024 og 901,5 ma.$ 2025 þrátt fyrir tollahækkanir."},
-    {"id":"o19","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Lífeyrissjóðirnir ákveða að kaupa meira af erlendum eignum við hvert vaxtastig. Hver eru áhrifin?","o":["NCO ↑ → eftirspurn eftir lánsfé eykst → r ↑; framboð króna eykst → E ↓ → NX ↑","NCO ↓ → r ↓ → E ↑ → NX ↓","Framboð lánsfjár eykst → r ↓ → E ↓","Engin áhrif á vexti, aðeins á gengið","S ↓ → r ↑ → E ↑"],"a":0,"e":"Sama keðja og fjármagnsflótti, bara minni. Skilaverkefni 3 dæmi 5c."},
-    {"id":"o20","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Raunvextir á Íslandi hækka miðað við raunvexti erlendis (r − r* eykst). Hvað gerist við NCO samkvæmt líkaninu?","o":["NCO minnkar, því innlendar eignir verða eftirsóknarverðari","NCO eykst","NCO er óháð vöxtum","NX eykst strax","Raungengið lækkar"],"a":0,"e":"NCO er niðurhallandi fall af raunvöxtum, alveg eins og innlend fjárfesting. Aukinn vaxtamunur við útlönd → innstreymi fjármagns."},
-    {"id":"o21","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Hvaða tæki hefur Seðlabanki Íslands til að draga úr hvata til skammtímafjárfestinga útlendinga í krónum (svo-kallaðra vaxtamunarviðskipta)?","o":["Fjárstreymistækið: fjárfestar þurfa að binda hluta fjárfestingar á 0% vöxtum","Bindiskyldu á heimili","Magnbundna íhlutun","Innstæðutryggingu","Verðtryggingu"],"a":0,"e":"Fjárstreymistækið dregur úr væntum hagnaði. Önnur ráð gegn fjármagnsflótta: gjaldeyrisforði og ábyrg ríkisfjármálastefna."},
-    {"id":"o22","type":"mc","topic":"opi","source":"new","src":"Ný spurning","q":"Opið hagkerfi: Y = 5.200, C = 2.750, I = 1.330, G = 1.300 (ma.kr.). Hver er hreinn útflutningur og hvert streymir fjármagn?","o":["NX = −180 ma.kr.; NCO = −180, fjármagn streymir inn í landið","NX = 180 ma.kr.; fjármagn streymir út","NX = −180 ma.kr.; fjármagn streymir út","NX = 0","NX = 1.150 ma.kr."],"a":0,"e":"<div class=\"f\">S = Y − C − G = 5.200 − 2.750 − 1.300 = 1.150<br>NX = S − I = 1.150 − 1.330 = −180 = NCO</div>NCO &lt; 0 þýðir hreint innstreymi fjármagns. (Skilaverkefni 3, dæmi 5.)"},
-    {"id":"r01","type":"mc","topic":"rei","source":"new","src":"Ný spurning","q":"Hvað af eftirfarandi telst til vergrar landsframleiðslu Íslands árið 2026?","o":["Byggingarfyrirtæki lýkur við nýja íbúð árið 2026 sem er enn óseld í árslok","Bílasala selur notaðan bíl sem var framleiddur 2020","Bakarí kaupir hveiti sem það notar í brauð sem selt er sama ár","Ríkið greiðir atvinnuleysisbætur","Íslendingur kaupir hlutabréf í Marel"],"a":0,"e":"Óseld íbúð telst til birgðabreytinga, sem eru hluti fjárfestingar. Notaðar vörur voru taldar þegar þær voru framleiddar, hveitið er aðfang (tvítalning), bætur eru millifærsla og hlutabréfakaup eru sparnaður."},
-    {"id":"r02","type":"mc","topic":"rei","source":"new","src":"Ný spurning","q":"Heimili kaupir nýbyggða íbúð. Undir hvaða lið VLF flokkast það?","o":["Fjárfestingu (I)","Einkaneyslu (C)","Ríkisútgjöld (G)","Hreinan útflutning (NX)","Telst ekki til VLF"],"a":0,"e":"Húsnæðiskaup teljast til fjárfestingar, ekki einkaneyslu. Einkaneysla nær ekki yfir kaup á íbúðarhúsnæði eða notuðum vörum."},
-    {"id":"r03","type":"mc","topic":"rei","source":"new","src":"Ný spurning","q":"Hvað af eftirfarandi telst til ríkisútgjalda (G) í VLF?","o":["Laun kennara í grunnskóla","Atvinnuleysisbætur","Ellilífeyrir","Barnabætur","Vaxtagreiðslur ríkissjóðs"],"a":0,"e":"G eru kaup ríkis og sveitarfélaga á vörum og þjónustu, þar með talin laun. Millifærslur eru ekki greiddar fyrir nýja framleiðslu."},
-    {"id":"r04","type":"mc","topic":"rei","source":"new","src":"Ný spurning","q":"Hvers vegna eykst VLF ekki þótt innflutningur dragist saman (sbr. dæmið um landsframleiðslu á tunglinu)?","o":["Innflutningur er dreginn frá því hann er þegar talinn í C, I og G; minni innflutningur lækkar þá liði jafn mikið","Innflutningur er ekki hluti af VLF-jöfnunni","Innflutningur er alltaf jafn útflutningi","Minni innflutningur eykur alltaf VLF","Innflutningur er talinn tvisvar"],"a":0,"e":"<div class=\"f\">0 = 100 + 0 + 0 + 0 − 100 og 0 = 50 + 0 + 0 + 0 − 50</div>VLF mælir innlenda framleiðslu. Að draga úr innflutningi eykur hana ekki sjálfkrafa."},
-    {"id":"r05","type":"mc","topic":"rei","source":"new","src":"Ný spurning","q":"Verð á innfluttum farsímum hækkar um 20% en verð allrar innlendrar framleiðslu er óbreytt. Hvað gerist líklegast?","o":["Vísitala neysluverðs hækkar en verðvísitala VLF ekki","Verðvísitala VLF hækkar en VNV ekki","Báðar hækka jafn mikið","Hvorug breytist","Báðar lækka"],"a":0,"e":"VVLF mælir verð innlendrar framleiðslu. VNV mælir verð þess sem neytendur kaupa, þar með talið innfluttar vörur."},
-    {"id":"r06","type":"mc","topic":"rei","source":"new","src":"Ný spurning","q":"Hvert af eftirfarandi er EKKI galli á vísitölu neysluverðs sem mælikvarða á framfærslukostnað?","o":["Hún tekur með innfluttar vörur","Karfan breytist hægt þótt neytendur færi sig yfir í vörur sem eru orðnar hlutfallslega ódýrari","Hún nær illa yfir nýjar vörur, t.d. síma og fartölvur","Hún tekur ekki nægilega tillit til aukinna vörugæða","Allir ofangreindir eru gallar"],"a":0,"e":"Að taka með innfluttar vörur er einmitt rétt fyrir mælikvarða á það sem neytendur kaupa. Hinir þrír eru gallarnir sem taldir eru upp í MT20."},
-    {"id":"r07","type":"mc","topic":"rei","source":"new","src":"Ný spurning","q":"Hver er munurinn á vergri landsframleiðslu (VLF) og vergri þjóðarframleiðslu (VÞF)?","o":["VÞF telur framleiðslu Íslendinga erlendis en dregur frá framleiðslu útlendinga hér á landi","VÞF telur aðeins framleiðslu hins opinbera","VÞF er VLF að frádregnum afskriftum","VÞF er VLF á föstu verðlagi","Enginn munur"],"a":0,"e":"VLF mælir framleiðslu innan landamæra, óháð þjóðerni framleiðandans."},
-    {"id":"r08","type":"mc","topic":"rei","source":"new","src":"Ný spurning","q":"Barn brýtur glugga og foreldrið borgar fyrir viðgerð. VLF eykst. Hvað bendir Bastiat (1850) á?","o":["Fórnarkostnaðinn: peningarnir hefðu annars farið í annað, t.d. skó, og barnið ætti þá skó og gluggi væri heill","Að það sé gott fyrir hagkerfið að brjóta glugga","Að VLF mæli ekki viðgerðir","Að glerframleiðsla sé innflutningur","Að VLF hækki aðeins ef glugginn er innfluttur"],"a":0,"e":"Hærri VLF þýðir ekki betri lífskjör ef framleiðslan fer í að bæta upp tjón."},
-    {"id":"r09","type":"mc","topic":"rei","source":"new","src":"Ný spurning","q":"Nafnvirði VLF jókst um 10% á milli ára en verðvísitala VLF hækkaði um 6%. Hver var raunhagvöxtur, nákvæmlega?","o":["Um 3,8%","4,0%","16,6%","6,0%","1,7%"],"a":0,"e":"<div class=\"f\">Raunvirði = Nafnvirði / Verðvísitala<br>1,10 / 1,06 − 1 = 0,0377 ≈ 3,8%</div>4% er nálgunin 10% − 6%."},
-    {"id":"r10","type":"mc","topic":"rei","source":"new","src":"Ný spurning","q":"Óverðtryggðir fastir vextir til 3 ára eru 8,75% en verðtryggðir 4,64%. Samkvæmt einföldun MT20, hvað endurspeglar munurinn?","o":["Væntanlega verðbólgu auk óvissuálags","Raunvexti","Skattaskekkjur","Bindiskyldu bankanna","Vaxtamun banka"],"a":0,"e":"Óverðtryggðir vextir ≈ raunvextir + verðbólga + óvissuálag; verðtryggðir ≈ raunvextir (verðbólgan bætist ofan á höfuðstólinn)."},
-    {"id":"r11","type":"mc","topic":"rei","source":"new","src":"Ný spurning","q":"Hver er verðvísitala VLF ef nafnvirði VLF er 10.000 ma.kr. og raunvirði 5.000 ma.kr.?","o":["200","50","2","0,5","100"],"a":0,"e":"<div class=\"f\">VVLF = Nafnvirði / Raunvirði × 100 = 10.000 / 5.000 × 100 = 200</div>(Sýnidæmi 3, dæmi 2a.)"},
-    {"id":"x01","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Sparnaðarhlutfallið eykst varanlega í hagkerfi í Solow-jafnvægi. Hvað gerist?","o":["Tímabundinn hagvöxtur, en framleiðsla á mann verður varanlega hærri í nýju jafnvægi","Varanlega hærri hagvöxtur","Engin áhrif til langs tíma á framleiðslu á mann","Framleiðsla á mann lækkar því neysla minnkar","Afskriftir hætta"],"a":0,"e":"sY hliðrast upp → I > δK → k vex upp í nýtt k** → y** > y*. Hagvöxtur stöðvast svo vegna minnkandi jaðarframleiðni fjármagns."},
-    {"id":"x02","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Samkvæmt Solow-líkaninu, hvað er eina uppspretta varanlegs hagvaxtar á mann til langs tíma?","o":["Tækniframfarir","Aukinn sparnaður","Aukin fjárfesting í fjármagni","Fólksfjölgun","Aukið peningamagn"],"a":0,"e":"Aðrir þættir auka hagvöxt aðeins tímabundið vegna minnkandi jaðarframleiðni fjármagns."},
-    {"id":"x03","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Framleiðslufall er Y = A·L^0,6·K^0,6. Hvers konar stærðarhagkvæmni ríkir?","o":["Vaxandi stærðarhagkvæmni (a + b = 1,2 > 1)","Föst stærðarhagkvæmni","Fallandi stærðarhagkvæmni","Ekki hægt að segja án þess að vita A","Neikvæð stærðarhagkvæmni"],"a":0,"e":"<div class=\"f\">Y(λL, λK) = λ^(a+b)·Y = λ^1,2·Y &gt; λY</div>Solow gerir ráð fyrir fastri stærðarhagkvæmni, a + b = 1."},
-    {"id":"x04","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Blómapottafyrirtæki með 1 starfsmann og 1 vél framleiðir 50 potta á ári. Það ræður annan starfsmann og kaupir aðra vél og framleiðir nú 90 potta. Hvers konar stærðarhagkvæmni er þetta?","o":["Fallandi stærðarhagkvæmni","Föst stærðarhagkvæmni","Vaxandi stærðarhagkvæmni","Fallandi jaðarframleiðni vinnuafls","Ekki hægt að segja"],"a":0,"e":"Aðföng tvöfaldast (+100%) en framleiðsla eykst aðeins um 80%. Föst væri 100 pottar, vaxandi meira en 100."},
-    {"id":"x05","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Cobb-Douglas-fall: Y = A·L^0,7·K^0,3. Hvað gerist ef fjármagn eykst um 1% en vinnuafl er óbreytt?","o":["Framleiðsla eykst um 0,3%","Framleiðsla eykst um 0,7%","Framleiðsla eykst um 1%","Framleiðsla eykst um 0,21%","Framleiðsla breytist ekki"],"a":0,"e":"Veldisvísarnir lýsa jaðaráhrifum (teygni): 1% meira K → 0,3% meira Y; 1% meira L → 0,7% meira Y."},
-    {"id":"x06","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Hvers vegna vaxa fátækari ríki oft hraðar en rík ríki samkvæmt Solow-líkaninu?","o":["Þau eru langt undir jafnvægisfjármagni og vegna minnkandi jaðarframleiðni skilar hver eining fjármagns þar meiru","Þau hafa betri tækni","Þau spara meira","Afskriftir eru engar í fátækum ríkjum","Þau hafa fleiri náttúruauðlindir"],"a":0,"e":"Meðalhagvöxtur 2015–2025: millitekjuríki ~4,3%, hátekjuríki ~2,0%. Rík ríki eru oft nálægt jafnvægi."},
-    {"id":"x07","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Fólki fjölgar í Solow-hagkerfi. Hvað þarf til að fjármagn á mann haldist óbreytt?","o":["Fjárfesting þarf að vera meiri en afskriftir sem nemur fólksfjölguninni","Fjárfesting þarf að vera jöfn afskriftum","Ekkert, fjármagn á mann helst sjálfkrafa","Sparnaðarhlutfallið þarf að lækka","Afskriftir þurfa að aukast"],"a":0,"e":"Annars dreifist fjármagnið á fleiri hendur: K/L lækkar, framleiðni minnkar og lífskjör versna. Fólksfjölgun getur þó líka aukið tækniframfarir (fleiri hugmyndir)."},
-    {"id":"x08","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Hagkerfi Hong Kong og Singapúr eru notuð í MT21 sem dæmi um hvað?","o":["Að náttúruauðlindir eru ekki nauðsynleg forsenda mikillar framleiðni","Að fólksfjölgun dregur úr lífskjörum","Að tollar auka hagvöxt","Að kommúnismi skilar meiri hagvexti","Að Malthus hafði rétt fyrir sér"],"a":0,"e":"„Bara malbik!“ Mannauður, fjármagn og tækni geta borið uppi mikla framleiðni án auðlinda."},
-    {"id":"x09","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Erlent fyrirtæki reisir álver á Íslandi og rekur það sjálft. Hvers konar fjárfesting er það?","o":["Bein erlend fjárfesting","Óbein erlend fjárfesting","Innlend fjárfesting fjármögnuð með innlendum sparnaði","Opinber fjárfesting","Ekki fjárfesting í hagfræðilegum skilningi"],"a":0,"e":"Bein: fjármagnið í eigu útlendinga og rekið af þeim. Óbein: í eigu útlendinga en rekið af innlendum aðilum. Ný tækni fylgir oft erlendri fjárfestingu."},
-    {"id":"x10","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Hvað sýndi „náttúrulega tilraunin“ með Austur- og Vestur-Þýskalandi eftir 1949?","o":["Lítill menningarmunur og sama tungumál, en meiri hagvöxtur í markaðshagkerfinu í vestri","Að kommúnískt hagkerfi skilaði meiri hagvexti","Að hagvöxtur ræðst eingöngu af náttúruauðlindum","Að tungumál skiptir mestu máli fyrir hagvöxt","Að enginn munur var á hagvexti"],"a":0,"e":"Stofnanir skipta sköpum: eignaréttur, markaðir og hagnaðarhvati. Skoda í kommúnisma og kapítalisma er annað dæmi á glærunum."},
-    {"id":"x11","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"VLF fer úr 100 í 133 á 6 árum. Meðaltal árlegra hlutfallsbreytinga er 4,93%. Hver er réttur meðalvöxtur á ári?","o":["4,87%","4,93%","5,50%","33%","5,00%"],"a":0,"e":"<div class=\"f\">(133/100)^(1/6) − 1 = 1,048677 − 1 = 4,87%</div>Einfalt meðaltal ofmetur: 100·1,0493⁶ = 133,47 ≠ 133."},
-    {"id":"x12","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Hvers vegna sveiflast einkaneysla minna en fjárfesting samkvæmt MT20?","o":["Vegna fallandi jaðarnytja vill fólk jafna neyslu yfir æviskeiðið með lántöku og sparnaði; fyrirtæki fjárfesta hins vegar eftir væntingum","Vegna þess að ríkið stjórnar einkaneyslu","Einkaneysla er alltaf föst upphæð","Fjárfesting er mæld með meiri skekkju","Fyrirtæki vilja jafna fjárfestingu yfir tíma"],"a":0,"e":"Einkaneysla er sveiflujafnari. Þau sem hafa ekki aðgang að lánsfé geta þó ekki jafnað neyslu jafn vel."},
-    {"id":"x13","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Í einföldu leikjafræðilíkani í MT20 velja tvö fyrirtæki samtímis hvort þau fjárfesta. Hvað einkennir jafnvægin?","o":["Tvö Nash-jafnvægi: að gera það sama og hinn. Aðeins jafnvægið þar sem báðir fjárfesta er Pareto-skilvirkt","Eitt Nash-jafnvægi þar sem hvorugt fjárfestir","Ekkert Nash-jafnvægi er til","Bæði jafnvægin eru jafn skilvirk","Ríkjandi stefna beggja er að fjárfesta ekki"],"a":0,"e":"Þetta skýrir hvers vegna fjárfesting kemur í bylgjum og fylgir væntingum. Í Nash-jafnvægi tekur hver bestu ákvörðun miðað við ákvarðanir hinna."},
-    {"id":"x14","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Hvað af eftirfarandi er EKKI nefnt í MT21 sem einkenni misheppnaðs kapítalisma (t.d. í Argentínu)?","o":["Of mikil samkeppni á mörkuðum","Spilling","Opinber afskipti af mörkuðum","Pólitískur óstöðugleiki","Eignaréttur ekki varinn"],"a":0,"e":"Samkeppni er einmitt hluti af því sem lætur markaðshagkerfi virka."},
-    {"id":"x15","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Hvers vegna varð fyrsta iðnbyltingin í Bretlandi samkvæmt MT21?","o":["Meðal annars vegna þess að vinnuafl var hlutfallslega dýrt en kol ódýr, sem hvatti til nýrra véla","Vegna þess að vinnuafl var mjög ódýrt","Vegna þess að Bretland hafði engin kol","Vegna þess að konungsvald var algjört","Vegna gullfótarins"],"a":0,"e":"Aðrar ástæður: aðgangur að fjármagni, kolanámur, upplýsingin, takmörkun konungsvalds eftir 1688, menning og nýlendur."},
-    {"id":"x16","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Hvað mælir lögmál Okuns og hvar á það heima í námsefninu?","o":["Línulegt samband hagvaxtar og breytinga í atvinnuleysi; það lýsir hagsveiflubundnu atvinnuleysi","Samband verðbólgu og atvinnuleysis","Samband sparnaðar og fjárfestingar","Samband peningamagns og verðlags","Samband raunvaxta og gengis"],"a":0,"e":"<div class=\"f\">Δuₜ = α + β·gₜ</div>Arthur Okun var ráðgjafi Kennedy. Verðbólga og atvinnuleysi er Phillips-kúrfan."},
-    {"id":"x17","type":"mc","topic":"vox","source":"new","src":"Ný spurning","q":"Hvað er „creative destruction“ í umfjöllun MT21 um iðnbyltinguna?","o":["Nýir framleiðsluhættir ryðja burt gömlum fyrirtækjum og losa vinnuafl og fjármagn til nýrrar framleiðslu","Stríðsrekstur sem eykur VLF","Afskriftir fjármagns","Þegar ríkið bannar nýja tækni","Þegar seðlabanki prentar peninga"],"a":0,"e":"Luddítar voru textílverkamenn sem börðust gegn nýjum vélum."},
-    {"id":"j01","type":"mc","topic":"ojo","source":"new","src":"Ný spurning","q":"Hvert er fyrsta skrefið við að teikna Lorenz-kúrfu?","o":["Raða einstaklingum eftir tekjum frá þeim lægstu til þeirra hæstu","Reikna meðaltekjur","Raða einstaklingum frá hæstu tekjum til lægstu","Teikna 45° línuna og reikna Gini","Skipta mannfjölda eftir aldri"],"a":0,"e":"Síðan er skipt í jafnstóra hópa og reiknaður hlutur hvers í heildartekjum. Kúrfan sýnir uppsafnað hlutfall tekna á móti uppsöfnuðu hlutfalli mannfjölda."},
-    {"id":"j02","type":"mc","topic":"ojo","source":"new","src":"Ný spurning","q":"Hvað þýðir Gini-stuðull upp á 1?","o":["Fullkominn ójöfnuð tekna: einn fær allt","Fullkominn jöfnuð","Að Lorenz-kúrfan falli saman við 45° línuna","Að tekjur hafi tvöfaldast","Að helmingur fólks sé undir lágtekjumörkum"],"a":0,"e":"G = A/(A + B) er á bilinu 0 (fullkominn jöfnuður) til 1 (fullkominn ójöfnuður)."},
-    {"id":"j03","type":"mc","topic":"ojo","source":"new","src":"Ný spurning","q":"Allir í samfélagi fylgja nákvæmlega sama ævitekjuferli (lágar tekjur ung, háar miðaldra, lágar á eftirlaunum). Hvað mælir Gini-stuðullinn?","o":["Hann mælir ójöfnuð þótt allir séu á sama ferli, og hann breytist eftir aldurssamsetningu","Hann er 0","Hann er 1","Hann mælir aðeins ójöfnuð milli kynslóða","Hann er óskilgreindur"],"a":0,"e":"Dæmi úr MT16: tekjur 500/1000/300. G = 0,20 með 600/200/200 í hópunum en 0,27 með 200/400/400. Annað vandamál: Gini fangar ekki muninn á nútímatekjum og ævitekjum."},
-    {"id":"j04","type":"mc","topic":"ojo","source":"new","src":"Ný spurning","q":"Á pizzastað vinna 4 bakarar með 500.000 kr. og forstjóri með 3.000.000 kr. á mánuði. Hver eru meðallaun og miðgildi?","o":["Meðallaun 1.000.000 kr., miðgildi 500.000 kr.","Meðallaun 700.000 kr., miðgildi 500.000 kr.","Meðallaun 500.000 kr., miðgildi 1.000.000 kr.","Hvort tveggja 1.000.000 kr.","Meðallaun 1.750.000 kr., miðgildi 500.000 kr."],"a":0,"e":"<div class=\"f\">Meðaltal = (4 × 500.000 + 3.000.000) / 5 = 5.000.000 / 5 = 1.000.000</div>Miðgildi = 3. talan í röð = 500.000. Tekjudreifingar hafa langa hala svo miðgildi er meira lýsandi."},
-    {"id":"j05","type":"mc","topic":"ojo","source":"new","src":"Ný spurning","q":"Við hvað eru lágtekjumörk (fátæktarmörk) almennt miðuð í Evrópu?","o":["60% af miðgildi launa","50% af meðallaunum","Lágmarkslaun","Atvinnuleysisbætur","Neðstu 10% tekjudreifingarinnar"],"a":0,"e":"Á Íslandi er fátækt mæld með lágtekjumörkum og skorti á efnislegum gæðum (þrennt af níu atriðum á lista)."},
-    {"id":"j06","type":"mc","topic":"ojo","source":"new","src":"Ný spurning","q":"Hvaða stjórnmálaheimspeki byggir á því að hámarka eigi summu nytja allra og að fallandi jaðarnyt réttlæti endurdreifingu, þó án þess að eyða hvötum?","o":["Nytjastefna (e. utilitarianism)","Frjálslyndisstefna Rawls (e. liberalism)","Frjálshyggja (e. libertarianism)","Malthusarkenning","Kenning Hume"],"a":0,"e":"Nytjastefnuyfirvöld vega ábata af jöfnuði á móti tapinu af bjöguðum hvötum til vinnu."},
-    {"id":"j07","type":"mc","topic":"ojo","source":"new","src":"Ný spurning","q":"John Rawls lagði til að við ákvæðum reglur um endurdreifingu áður en við vitum inn í hvaða aðstæður við fæðumst. Hvað taldi hann að ætti að hámarka?","o":["Lágmarksnyt í samfélaginu, þ.e. hag þeirra sem verst eru settir","Summu nytja allra","Meðaltekjur","Hagvöxt","Ekkert; ríkið á ekki að endurdreifa"],"a":0,"e":"Rawls taldi þó ekki æskilegt að útrýma allri misdreifingu, því hvatar geta aukið getu samfélagsins til að hjálpa þeim tekjulægstu."},
-    {"id":"j08","type":"mc","topic":"ojo","source":"new","src":"Ný spurning","q":"Hver er afstaða frjálshyggju (e. libertarianism) til endurdreifingar tekna samkvæmt MT16?","o":["Ríkið á að tryggja sanngjarnt ferli og jöfn tækifæri, en ekki endurdreifa tekjum eftir á","Ríkið á að hámarka summu nytja","Ríkið á að hámarka hag þeirra verst settu","Ríkið á að jafna allar tekjur","Ríkið á að ákveða laun allra"],"a":0,"e":"Frjálshyggja hafnar því að tekjur séu samfélagsleg gæði sem hægt sé að endurdreifa; einstaklingar þéna þær."},
-    {"id":"j09","type":"mc","topic":"ojo","source":"new","src":"Ný spurning","q":"Neikvæður tekjuskattur: Skattur = ⅓ af tekjum − 200.000. Hvað greiðir einstaklingur með 400.000 kr. í tekjur á mánuði?","o":["−66.667 kr., hann fær greitt frá skattinum","133.333 kr.","66.667 kr.","0 kr.","−200.000 kr."],"a":0,"e":"<div class=\"f\">400.000 / 3 − 200.000 = 133.333 − 200.000 = −66.667</div>Með 1.000.000 kr. greiðir einstaklingur 333.333 − 200.000 = 133.333."},
-    {"id":"j10","type":"mc","topic":"ojo","source":"new","src":"Ný spurning","q":"Lífeyrisþegi með 400 þ.kr. í laun hefur 487.199 kr. í ráðstöfunartekjur. Ef hann tekur aukavakt og fær 410 þ.kr. hækka ráðstöfunartekjurnar í 489.873 kr. Hver er jaðarskatturinn?","o":["Um 73%","Um 27%","Um 2,7%","Um 50%","Um 22%"],"a":0,"e":"<div class=\"f\">1 − (489.873 − 487.199) / 10.000 = 1 − 2.674/10.000 = 0,73</div>Af 10.000 kr. viðbót heldur hann aðeins 2.674. Úrræði gegn fátækt fela oft í sér háa jaðarskatta."},
-    {"id":"j11","type":"mc","topic":"ojo","source":"new","src":"Ný spurning","q":"Hvað gildir um eignaójöfnuð samanborið við tekjuójöfnuð?","o":["Eignir dreifast ójafnar en tekjur í flestum löndum","Eignir dreifast jafnar en tekjur","Enginn munur","Eignaójöfnuður er aðeins til í fátækum löndum","Gini fyrir eignir er alltaf 0"],"a":0,"e":"Á Íslandi er eignaójöfnuður meiri en tekjuójöfnuður en lítill í alþjóðlegu samhengi; miðgildi eigna á mann er það hæsta í heiminum."},
-    {"id":"j12","type":"mc","topic":"ojo","source":"new","src":"Ný spurning","q":"Hver eftirtalinna fullyrðinga er stefnugreining (e. normative) en ekki staðreyndagreining?","o":["Ríkið ætti að hækka örorkubætur","Hækkun lágmarkslauna getur dregið úr störfum ef eftirspurn er teygin","Gini-stuðullinn á Íslandi er með þeim lægstu í heiminum","Eignir dreifast ójafnar en tekjur","Neikvæður tekjuskattur endurdreifir tekjum"],"a":0,"e":"Stefnugreining segir hvernig heimurinn á að vera; staðreyndagreining hvernig hann virkar. Mikið af umfjöllun um ójöfnuð er stefnugreining."},
-    {"id":"j13","type":"mc","topic":"ojo","source":"new","src":"Ný spurning","q":"Hvað sýnir tíundastuðull launa?","o":["Hlutfallið milli heildarlauna efsta tíundahluta og neðsta tíundahluta","Hlutfall launþega undir meðaltali","Gini-stuðul fyrir tíu stærstu fyrirtækin","Meðallaun deilt með miðgildi","Tíu prósent af miðgildi"],"a":0,"e":"Á Íslandi hefur tíundastuðull reglulegra heildarlauna verið á bilinu ~3,4–4,1 á árunum 2014–2025."},
-    {"id":"s01","type":"mc","topic":"spa","source":"new","src":"Ný spurning","q":"Hvað af eftirfarandi telst fjárfesting í hagfræðilegum skilningi?","o":["Hótel kaupir nýjar þvottavélar","Heimili kaupir hlutabréf í Icelandair","Lífeyrissjóður kaupir ríkisskuldabréf","Einstaklingur leggur inn á sparireikning","Fjárfestir kaupir notaða verksmiðju af öðru fyrirtæki"],"a":0,"e":"Fjárfesting = útgjöld til fjárfestingarvara (vélar, verksmiðjur, hótel, skip). Kaup á verðbréfum eru sparnaður, og kaup á notuðu eigni eru eignatilfærsla."},
-    {"id":"s02","type":"mc","topic":"spa","source":"new","src":"Ný spurning","q":"Hver er munurinn á fjármálamörkuðum og fjármálastofnunum?","o":["Á fjármálamörkuðum útvega sparifjáreigendur lánsfé beint; fjármálastofnanir (t.d. bankar) hafa milligöngu um það óbeint","Fjármálamarkaðir eru í eigu ríkisins en fjármálastofnanir einkaaðila","Fjármálastofnanir versla aðeins með hlutabréf","Enginn munur","Fjármálamarkaðir taka við innlánum"],"a":0,"e":"Markaðir: hlutabréf og skuldabréf (verðbréf). Stofnanir: bankar og fjárfestingarsjóðir."},
-    {"id":"s03","type":"mc","topic":"spa","source":"new","src":"Ný spurning","q":"Hvað gildir almennt um hlutabréf samanborið við skuldabréf?","o":["Hlutabréf eru eignarhlutur og eru jafnan bæði arðbærari og áhættusamari","Hlutabréf eru skuld fyrirtækisins við eigandann og öruggari","Hlutabréf bera fasta vexti","Skuldabréf veita eignarhlut í fyrirtæki","Hlutabréf hafa gjalddaga"],"a":0,"e":"Skuldabréf kveða á um skuld með lánstíma og vöxtum; áhættan er að útgefandi standi ekki í skilum."},
-    {"id":"s04","type":"mc","topic":"spa","source":"new","src":"Ný spurning","q":"Hvert er sambandið milli ávöxtunarkröfu og verðs skuldabréfs?","o":["Neikvætt: þegar krafan hækkar lækkar verðið","Jákvætt: þegar krafan hækkar hækkar verðið","Ekkert samband","Krafan er alltaf jöfn vöxtunum","Verðið er alltaf 100"],"a":0,"e":"<div class=\"f\">Ávöxtunarkrafa ≈ Vextir / Verð × 100</div>Lægra verð fyrir sömu vaxtagreiðslur þýðir hærri ávöxtun."},
-    {"id":"s05","type":"mc","topic":"spa","source":"new","src":"Ný spurning","q":"Hvað einkennir áhættufælinn einstakling?","o":["Hann tekur ekki sanngjörnu veðmáli þar sem væntigildi útkomunnar er 0","Hann tekur jafnvel ósanngjörnu veðmáli","Hann fjárfestir eingöngu í hlutabréfum","Hann sparar aldrei","Hann vill hámarka áhættu"],"a":0,"e":"Áhættusækinn tekur sanngjörnu veðmáli og jafnvel ósanngjörnu."},
-    {"id":"s06","type":"mc","topic":"spa","source":"new","src":"Ný spurning","q":"Hvaða áhættu er EKKI hægt að dreifa með því að kaupa hlutabréf í mörgum óskyldum fyrirtækjum?","o":["Heildaráhættu (e. aggregate risk), sem snertir allt hagkerfið","Sértækri áhættu (e. idiosyncratic risk)","Áhættu bundinni við eitt fyrirtæki","Áhættu bundinni við eina atvinnugrein","Allri áhættu má dreifa"],"a":0,"e":"Tíu egg í fimm körfur dreifir sértækri áhættu, en ekki áfalli sem lendir á öllum körfunum í einu."},
-    {"id":"s07","type":"mc","topic":"spa","source":"new","src":"Ný spurning","q":"Stjórnvöld lækka skatta á fjárfestingu fyrirtækja. Hvað gerist á lánsfjármarkaði?","o":["Eftirspurn eftir lánsfé hliðrast til hægri, vextir hækka og lánsfé í umferð eykst","Framboð lánsfjár hliðrast til hægri og vextir lækka","Eftirspurn hliðrast til vinstri og vextir lækka","Framboð hliðrast til vinstri og vextir hækka","Engin áhrif"],"a":0,"e":"Hærri vextir auka líka sparnað (hreyfing eftir framboðsferlinum). Berðu saman við lægri skatta á sparnað, sem hliðra framboðinu."},
-    {"id":"s08","type":"mc","topic":"spa","source":"new","src":"Ný spurning","q":"Hvað eru ruðningsáhrif (e. crowding out) á lánsfjármarkaði?","o":["Lántökur ríkisins til að fjármagna halla hækka vexti og ryðja burt fjárfestingu einkaaðila","Einkaaðilar ryðja ríkinu af lánsfjármarkaði","Erlendir fjárfestar ryðja innlendum burt","Seðlabankinn ryður bönkunum burt","Skattahækkanir auka fjárfestingu"],"a":0,"e":"Ríkishalli = minni opinber sparnaður → framboð lánsfjár ← → r ↑ → I ↓."},
-    {"id":"s09","type":"mc","topic":"spa","source":"new","src":"Ný spurning","q":"Lokað hagkerfi: S = 200 + 40r og I = 800 − 60r (r í %). Fjárfestingarhvati eykur fjárfestingu um 50 við hvert vaxtastig (I = 850 − 60r) og opinber sparnaður er óbreyttur. Hve mikið eykst fjárfesting í jafnvægi?","o":["Um 20 ma.kr.","Um 50 ma.kr.","Um 30 ma.kr.","Um 0","Um 440 ma.kr."],"a":0,"e":"<div class=\"f\">Fyrir: 200 + 40r = 800 − 60r ⇒ r = 6, I = 440<br>Eftir: 200 + 40r = 850 − 60r ⇒ r = 6,5, I = 460</div>Vextir hækka og draga úr hluta aukningarinnar, svo I eykst minna en 50. (Sýnidæmi 3, dæmi 4.)"},
-    {"id":"s10","type":"mc","topic":"spa","source":"new","src":"Ný spurning","q":"Lokað hagkerfi: Einkasparnaður = 300 + 50r, opinber sparnaður T − G = 100, I = 1.000 − 50r (r í %). Hverjir eru raunvextir og fjárfesting í jafnvægi?","o":["r = 6%, I = 700 ma.kr.","r = 7%, I = 650 ma.kr.","r = 5%, I = 750 ma.kr.","r = 6%, I = 600 ma.kr.","r = 8%, I = 600 ma.kr."],"a":0,"e":"<div class=\"f\">300 + 50r + 100 = 1.000 − 50r<br>100r = 600 ⇒ r = 6<br>I = 1.000 − 300 = 700 = S</div>(Skilaverkefni 3, dæmi 3a.)"},
-    {"id":"s11","type":"mc","topic":"spa","source":"new","src":"Ný spurning","q":"Hvaða vextir ráða framboði og eftirspurn á lánsfjármarkaði?","o":["Raunvextir","Nafnvextir","Stýrivextir","Innlánsvextir","Dráttarvextir"],"a":0,"e":"<div class=\"f\">r = (1 + i)/(1 + π) − 1 ≈ i − π</div>"},
-    {"id":"s12","type":"mc","topic":"spa","source":"new","src":"Ný spurning","q":"Hvenær ræðst fyrirtæki í fjárfestingu samkvæmt núvirðishugtakinu?","o":["Þegar núvirði væntra tekna er meira en núvirði kostnaðar","Þegar tekjur eru meiri en kostnaður í krónum, óháð tímasetningu","Þegar vextir eru hærri en vænt ávöxtun","Alltaf þegar vextir lækka","Þegar framtíðarvirði kostnaðar er hærra en tekna"],"a":0,"e":"<div class=\"f\">PV = X / (1 + r)^N</div>Hærri vextir lækka núvirði framtíðartekna og draga úr fjárfestingu: eftirspurnin eftir lánsfé hallar niður."},
-    {"id":"s13","type":"mc","topic":"spa","source":"new","src":"Ný spurning","q":"Hvert er helsta hlutverk fjárfestingarsjóða fyrir litla sparifjáreigendur?","o":["Að gera þeim kleift að dreifa áhættu með því að kaupa hlut í verðbréfasafni","Að tryggja þeim fasta vexti","Að veita þeim lán","Að geyma seðla","Að verja þá gegn heildaráhættu"],"a":0,"e":"Sjóðirnir selja almenningi bréf og kaupa fyrir andvirðið hlutabréf og skuldabréf."},
-    {"id":"s14","type":"mc","topic":"spa","source":"new","src":"Ný spurning","q":"Lokað hagkerfi: VLF 2.000 ma.kr., skattar 600, einkasparnaður 200 og opinber sparnaður 100. Hver er einkaneysla?","o":["1.200 ma.kr.","1.400 ma.kr.","1.700 ma.kr.","1.100 ma.kr.","1.500 ma.kr."],"a":0,"e":"<div class=\"f\">Einkasparnaður = Y − T − C ⇒ C = 2.000 − 600 − 200 = 1.200<br>G = T − opinber sparnaður = 600 − 100 = 500<br>S = I = 300</div>(Sýnidæmi 2, dæmi 2.)"},
-    {"id":"d01","type":"mc","topic":"vid","source":"new","src":"Ný spurning","q":"Vinnustundir á einingu (hvort land hefur 120 vinnustundir):<table class=\"dt\"><tr><th></th><th>Saltfiskur (klst./tonn)</th><th>Vín (klst./tunnu)</th></tr><tr><td>Ísland</td><td>3</td><td>6</td></tr><tr><td>Portúgal</td><td>2,5</td><td>2</td></tr></table>Hvaða land hefur hlutfallslega yfirburði í saltfiski?","o":["Ísland, því fórnarkostnaður tonns af saltfiski er 0,5 tunna á Íslandi en 1,25 tunnur í Portúgal","Portúgal, því það þarf færri klukkustundir í saltfisk","Portúgal, því það hefur algera yfirburði í báðum vörum","Ísland, því það þarf fleiri klukkustundir í vín","Hvorugt"],"a":0,"e":"<div class=\"f\">Fórnark. saltfisks = (klst./tonn) / (klst./tunnu)<br>Ísland: 3/6 = 0,5 tunna; Portúgal: 2,5/2 = 1,25 tunnur</div>Gildran: í töflu með <b>vinnustundum á einingu</b> snúast hlutföllin við miðað við töflu með <b>framleiðslu á tímabili</b>. Portúgal hefur algera yfirburði í báðum."},
-    {"id":"d02","type":"mc","topic":"vid","source":"new","src":"Ný spurning","q":"Fórnarkostnaður eins tonns af saltfiski er 0,5 tunna af víni á Íslandi en 1,25 tunnur í Portúgal. Á hvaða verðbili, mælt í tunnum af víni fyrir tonn af saltfiski, geta bæði lönd hagnast á viðskiptum?","o":["Milli 0,5 og 1,25 tunna","Milli 0 og 0,5 tunna","Yfir 1,25 tunnum","Milli 0,8 og 2 tunna","Aðeins við nákvæmlega 1 tunnu"],"a":0,"e":"Ísland selur saltfisk ef það fær meira en fórnarkostnaðinn (0,5); Portúgal kaupir ef það borgar minna en sinn fórnarkostnað (1,25). Samningsverðið 20 tunnur fyrir 20 tonn = 1 er innan bilsins."},
-    {"id":"d03","type":"mc","topic":"vid","source":"new","src":"Ný spurning","q":"Nautgripabóndinn framleiðir 1 kg af kjöti á kostnað 2 kg af kartöflum; kartöflubóndinn á kostnað 4 kg. Hvert er mögulegt verð á 1 kg af kjöti í viðskiptum þeirra?","o":["Milli 2 og 4 kg af kartöflum","Undir 2 kg af kartöflum","Yfir 4 kg af kartöflum","Milli ¼ og ½ kg af kartöflum","Nákvæmlega 6 kg af kartöflum"],"a":0,"e":"Í dæminu í MT17 er samið um 3 kg af kartöflum fyrir 1 kg af kjöti; báðir neyta utan síns framleiðslujaðars."},
-    {"id":"d04","type":"mc","topic":"vid","source":"new","src":"Ný spurning","q":"Hvað þýða algjörir yfirburðir?","o":["Að framleiðandi þarf minna af aðföngum (t.d. tíma) til að framleiða tiltekið magn","Að framleiðandi hefur lægri fórnarkostnað","Að framleiðandi á að sérhæfa sig í vörunni","Að framleiðandi græðir alltaf á viðskiptum","Að framleiðandi getur framleitt bæði vörurnar"],"a":0,"e":"Algjörir yfirburðir snúast um framleiðni; hlutfallslegir um fórnarkostnað. Það eru hlutfallslegu yfirburðirnir sem ráða sérhæfingu."},
-    {"id":"d05","type":"mc","topic":"vid","source":"new","src":"Ný spurning","q":"Land sem hefur ekki stundað viðskipti opnar fyrir þau. Heimsmarkaðsverð er HÆRRA en innlent jafnvægisverð. Hvernig breytist ábatinn (svæði A–D á mynd af útflutningslandi)?","o":["Neytendaábati −B, framleiðendaábati +B+D, heildarábati +D","Neytendaábati +B+D, framleiðendaábati −B, heildarábati +D","Neytendaábati −B, framleiðendaábati +B, heildarábati óbreyttur","Neytendaábati +B, framleiðendaábati +D, heildarábati +B+D","Engin breyting"],"a":0,"e":"Landið flytur út. Verð innanlands hækkar upp í heimsmarkaðsverð: neytendur tapa B, framleiðendur græða B + D. Heildin eykst um D."},
-    {"id":"d06","type":"mc","topic":"vid","source":"new","src":"Ný spurning","q":"Heimsmarkaðsverð er LÆGRA en innlent jafnvægisverð og opnað er fyrir viðskipti. Hvað gerist?","o":["Landið flytur inn, neytendaábati eykst og framleiðendaábati minnkar, heildarábati eykst","Landið flytur út, neytendaábati minnkar","Landið flytur inn, neytendaábati minnkar","Ekkert, verð innanlands breytist ekki","Landið flytur inn og heildarábati minnkar"],"a":0,"e":"Innflutningsland: neytendur +B+D, framleiðendur −B, heild +D. Ef innlent verð er yfir heimsmarkaðsverði hefur landið ekki hlutfallsyfirburði í vörunni."},
-    {"id":"d07","type":"mc","topic":"vid","source":"new","src":"Ný spurning","q":"Tollur er lagður á innflutta vöru (svæði A–G á mynd í MT17). Hvert er allratapið?","o":["D + F","E","C","C + D + E + F","G + C"],"a":0,"e":"Neytendur tapa C+D+E+F, framleiðendur græða C, ríkið fær E í tolltekjur. Eftir stendur tap upp á D + F."},
-    {"id":"d08","type":"mc","topic":"vid","source":"new","src":"Ný spurning","q":"Hvað greinir innflutningskvóta frá tolli samkvæmt MT17?","o":["Kvóti er ónæmur fyrir breytingum á heimsmarkaðsverði; ef heimsverð lækkar veitir hann meiri vernd án nýrrar ákvörðunar","Kvóti lækkar verð innanlands en tollur hækkar það","Kvóti veldur ekki allratapi","Tollur eykur neytendaábata","Enginn munur á neinn hátt"],"a":0,"e":"Ef ríkið selur kvótann fullu verði eru tekjurnar jafnar tolltekjum og áhrifin þau sömu. Kvóti getur líka leitt til meira allrataps vegna lobbýisma."},
-    {"id":"d09","type":"mc","topic":"vid","source":"new","src":"Ný spurning","q":"Hvert af eftirfarandi er EKKI eitt af helstu rökum fyrir viðskiptatakmörkunum sem talin eru upp í MT17?","o":["Tollar auka heildarábata samfélagsins","Verndun innlendra starfa","Þjóðaröryggi","Ungur iðnaður (e. infant industry)","Samningsstaða (protection as a bargaining chip)"],"a":0,"e":"Tollar draga úr heildarábata (allratap). Fimmtu rökin eru ójöfn samkeppnisstaða."},
-    {"id":"d10","type":"mc","topic":"vid","source":"new","src":"Ný spurning","q":"Bandaríkin (rík af fjármagni) og Kína (rík af vinnuafli) hefja viðskipti; Kína sérhæfir sig í vinnuaflsfrekum símum, BNA í fjármagnsfrekum flugvélum. Hver græða mest samkvæmt MT17?","o":["Vinnuafl í Kína og fjármagnseigendur í BNA; ójöfnuður minnkar í Kína en eykst í BNA","Vinnuafl í BNA og fjármagnseigendur í Kína","Allir græða jafnt","Enginn græðir","Fjármagnseigendur í báðum löndum"],"a":0,"e":"Störfin sem tapast í BNA (X) og verða til (Y) eru ekki hjá sama fólki, og X > Y. Þess vegna eru alþjóðaviðskipti pólitískt umdeild þótt heildin græði."},
-    {"id":"d11","type":"mc","topic":"vid","source":"new","src":"Ný spurning","q":"Hvaða þrjár greinar stóðu undir um 66% af útflutningi Íslands árið 2025?","o":["Ferðaþjónusta (32%), sjávarafurðir (18%) og ál (16%)","Sjávarafurðir (40%), ál (20%) og hugbúnaður (6%)","Ál (32%), ferðaþjónusta (18%) og landbúnaður (16%)","Lyfjaframleiðsla, ferðaþjónusta og sjávarafurðir","Orka, sjávarafurðir og ferðaþjónusta"],"a":0,"e":"Útflutningsgreinarnar endurspegla hlutfallslega yfirburði Íslands."},
-    {"id":"d12","type":"mc","topic":"vid","source":"new","src":"Ný spurning","q":"Hvað lagði Adam Smith einkum áherslu á í umfjöllun sinni um ávinning af millilandaviðskiptum, til aðgreiningar frá Ricardo?","o":["Stærð markaðarins og stærðarhagkvæmni","Hlutfallslega yfirburði","Tolla sem vernd fyrir ungan iðnað","Gullfót","Fastgengi"],"a":0,"e":"Ricardo setti fyrstur fram regluna um hlutfallsyfirburði. Smith: viðskipti stækka markaðinn, sem skilar fjölbreyttari, betri og ódýrari varningi."},
-    {"id":"d13","type":"mc","topic":"vid","source":"new","src":"Ný spurning","q":"Hvað gerist við neyslumöguleika tveggja aðila sem sérhæfa sig eftir hlutfallslegum yfirburðum og eiga viðskipti?","o":["Báðir geta neytt utan síns framleiðslujaðars","Aðeins sá með algera yfirburði græðir","Neysla beggja minnkar","Neysla helst á framleiðslujaðrinum","Aðeins sá sem flytur út græðir"],"a":0,"e":"Í dæminu fer kartöflubóndinn úr (4 kjöt, 16 kart.) í (5, 17) og nautgripabóndinn úr (12, 24) í (13, 27)."},
-    {"id":"g01","type":"mc","topic":"gru","source":"new","src":"Ný spurning","q":"Þú velur eitt ár í fullt nám við HÍ í stað starfs sem gefur 6.000.000 kr. Skrásetningargjald er 75.000 kr., bækur 60.000 kr. og þú eyðir 900.000 kr. í mat sem þú hefðir borðað hvort sem er. Hver er fórnarkostnaður námsársins?","o":["6.135.000 kr.","7.035.000 kr.","1.035.000 kr.","6.000.000 kr.","135.000 kr."],"a":0,"e":"<div class=\"f\">6.000.000 + 75.000 + 60.000 = 6.135.000</div>Maturinn er ekki hluti fórnarkostnaðar því hann hefði verið keyptur hvort sem er."},
-    {"id":"g02","type":"mc","topic":"gru","source":"new","src":"Ný spurning","q":"Hagkerfi framleiðir í punkti innan framleiðslumöguleikajaðarsins. Hvað þýðir það?","o":["Framleiðsluþættir eru ekki fullnýttir; hagkerfið er óhagkvæmt","Hagkerfið getur ekki náð þeim punkti","Hagkerfið er hagkvæmt","Tækniframfarir hafa orðið","Fórnarkostnaður er neikvæður"],"a":0,"e":"Punktar á jaðrinum eru hagkvæmir, punktar utan hans óframkvæmanlegir (nema með hagvexti/tækniframförum)."},
-    {"id":"g03","type":"mc","topic":"gru","source":"new","src":"Ný spurning","q":"Hvers vegna er framleiðslumöguleikajaðarinn í dæminu um fisk og minjagripi boginn (en ekki bein lína)?","o":["Fólk er misgott í að framleiða vörurnar tvær, svo fórnarkostnaðurinn vex eftir því sem meira er framleitt af annarri","Vegna verðbólgu","Vegna þess að fiskur er dýrari","Vegna utanríkisviðskipta","Vegna þess að hagkerfið er óhagkvæmt"],"a":0,"e":"Ef allir væru jafngóðir í báðu væri fórnarkostnaðurinn fastur og jaðarinn bein lína."},
-    {"id":"g04","type":"mc","topic":"gru","source":"new","src":"Ný spurning","q":"„Meiri halli á rekstri hins opinbera leiðir til hærri vaxta.“ Hvers konar fullyrðing er þetta?","o":["Staðreyndafullyrðing (útskýrandi greining)","Stefnufullyrðing (leiðbeinandi greining)","Gildishlaðin skoðun","Hvorugt","Bæði í senn"],"a":0,"e":"Hana má prófa með gögnum. „Ríkið ætti að...“ væri stefnugreining."},
-    {"id":"g05","type":"mc","topic":"gru","source":"new","src":"Ný spurning","q":"Hvað þýðir að hagfræðingar „hugsi á jaðrinum“?","o":["Ákvörðun er tekin þegar jaðarábati viðbótarskrefs er meiri en jaðarkostnaður þess","Að hugsa aðeins um meðaltöl","Að hunsa litlar breytingar","Að hámarka heildarkostnað","Að taka aðeins stórar ákvarðanir"],"a":0,"e":"Breyting á jaðrinum er lítil breyting á núverandi áætlun. Fólk bregst við hvötum, þ.e. breytingum á jaðarábata og jaðarkostnaði."},
-    {"id":"g06","type":"mc","topic":"gru","source":"new","src":"Ný spurning","q":"Hvað er markaðsbrestur samkvæmt MT1?","o":["Þegar markaðir ráðstafa gæðum á óhagkvæman hátt, t.d. vegna ytri áhrifa eða markaðsvalds","Þegar hlutabréfamarkaður hrynur","Þegar fyrirtæki fer í gjaldþrot","Þegar verð hækkar","Þegar ríkið setur lög"],"a":0,"e":"Þá getur hið opinbera þurft að aðstoða markaði."},
-    {"id":"g07","type":"mc","topic":"gru","source":"new","src":"Ný spurning","q":"Hvað segir „fallandi jaðarframleiðni“ um lærdóm (dæmið í MT2)?","o":["Hver viðbótarklukkustund af lærdómi skilar minni viðbót við einkunnina en sú á undan","Fleiri klukkustundir lækka einkunnina","Hver klukkustund skilar jafn miklu","Lærdómur hefur engin áhrif","Fyrsta klukkustundin skilar minnstu"],"a":0,"e":"Í líkaninu velur nemandinn lærdóm þar sem MRS = MRT, þ.e. á hæstu mögulegu jafngildiskúrfu."}
-  ],
-  gens,
-  examFormats: [
+  "examFormats": [
     {
       "id": "mix",
-      "name": "Blandað próf",
-      "desc": "Sama vægi og gömlu prófin: peningar 4, vinnumarkaður 3, opið hagkerfi 3, hagvöxtur 3 og fleira. Ný samsetning í hvert sinn.",
+      "name": "Fullt lokapróf",
+      "desc": "Sama lengd og vægi og alvöru prófið: um 20 spurningar úr seinni hlutanum og 30 úr þeim fyrri. Ný samsetning í hvert sinn.",
       "style": "inspera",
-      "minutes": 60,
+      "minutes": 180,
       "pick": {
         "by": "quota",
         "quota": {
-          "pen": 4,
-          "vin": 3,
-          "opi": 3,
-          "rei": 2,
-          "vox": 3,
-          "ojo": 2,
+          "key": 4,
+          "asd": 4,
+          "hag": 4,
+          "phi": 4,
+          "frb": 1,
+          "kre": 1,
+          "evr": 1,
+          "umh": 1,
+          "pen": 6,
+          "vin": 4,
+          "opi": 4,
+          "rei": 4,
+          "vox": 4,
+          "ojo": 3,
           "spa": 2,
-          "vid": 1
+          "vid": 3
         }
       }
     },
     {
-      "id": "h25",
-      "name": "Hlutapróf 2025",
-      "desc": "Raunverulega prófið frá því í fyrra, án þriggja spurninga sem vantar myndir í.",
+      "id": "second",
+      "name": "Seinni hlutinn",
+      "desc": "Aðeins nýja efnið: Keynes og IS-LM 4, AS-AD 4, hagstjórn 4, Phillips og Taylor 4, og eitt hvert úr MT31–34.",
       "style": "inspera",
-      "minutesPerItem": 3,
+      "minutes": 72,
       "pick": {
-        "by": "fixed",
-        "ids": [
-          "H25-1",
-          "H25-2",
-          "H25-3",
-          "H25-6",
-          "H25-7",
-          "H25-8",
-          "H25-9",
-          "H25-10",
-          "H25-12",
-          "H25-13",
-          "H25-14",
-          "H25-15",
-          "H25-16",
-          "H25-17",
-          "H25-18",
-          "H25-19",
-          "H25-20"
-        ]
+        "by": "quota",
+        "quota": {
+          "key": 4,
+          "asd": 4,
+          "hag": 4,
+          "phi": 4,
+          "frb": 1,
+          "kre": 1,
+          "evr": 1,
+          "umh": 1
+        }
       }
     },
     {
       "id": "gen",
       "name": "Reikningapróf",
-      "desc": "Aðeins reikningar með nýjum tölum: VLF, verðbólga, raunvextir, núvirði, Solow, Gini, NX.",
+      "desc": "Aðeins reikningar með nýjum tölum: Keynes-krossinn, margfaldarar, Okun, Taylor, VLF, raunvextir, Solow, Gini.",
       "style": "inspera",
       "minutes": 45,
       "pick": {
         "by": "gens",
         "n": 15
       }
+    },
+    {
+      "id": "l25",
+      "name": "Lokapróf 2025",
+      "desc": "Raunverulega prófið í réttri röð, án spurninga sem vantar myndir í eða eru utan efnis.",
+      "style": "inspera",
+      "minutes": 148,
+      "pick": {
+        "by": "fixed",
+        "ids": [
+          "L25-1",
+          "L25-2",
+          "L25-3",
+          "L25-4",
+          "L25-5",
+          "L25-8",
+          "L25-9",
+          "L25-10",
+          "L25-11",
+          "L25-12",
+          "L25-14",
+          "L25-15",
+          "L25-16",
+          "L25-17",
+          "L25-18",
+          "L25-19",
+          "L25-20",
+          "L25-21",
+          "L25-22",
+          "L25-23",
+          "L25-24",
+          "L25-27",
+          "L25-28",
+          "L25-29",
+          "L25-30",
+          "L25-31",
+          "L25-32",
+          "L25-34",
+          "L25-35",
+          "L25-36",
+          "L25-37",
+          "L25-38",
+          "L25-39",
+          "L25-40",
+          "L25-41",
+          "L25-42",
+          "L25-43",
+          "L25-44",
+          "L25-45",
+          "L25-49",
+          "L25-50"
+        ]
+      }
+    },
+    {
+      "id": "l24",
+      "name": "Lokapróf 2024",
+      "desc": "Sama. Margar spurningar komu aftur 2025, svo þetta segir mikið um hvað kemur aftur.",
+      "style": "inspera",
+      "minutes": 133,
+      "pick": {
+        "by": "fixed",
+        "ids": [
+          "L24-1",
+          "L24-2",
+          "L24-3",
+          "L24-4",
+          "L24-5",
+          "L24-6",
+          "L24-7",
+          "L24-10",
+          "L24-11",
+          "L24-14",
+          "L24-19",
+          "L24-20",
+          "L24-21",
+          "L24-23",
+          "L24-24",
+          "L24-26",
+          "L24-27",
+          "L24-29",
+          "L24-30",
+          "L24-31",
+          "L24-34",
+          "L24-35",
+          "L24-36",
+          "L24-37",
+          "L24-38",
+          "L24-39",
+          "L24-40",
+          "L24-41",
+          "L24-42",
+          "L24-43",
+          "L24-44",
+          "L24-45",
+          "L24-46",
+          "L24-47",
+          "L24-48",
+          "L24-49",
+          "L24-50"
+        ]
+      }
     }
   ],
-  sheet: {
-    "head": "\n<div class=\"stack\" style=\"gap:6px\"><span class=\"eyebrow\">Upprifjun · lesa kl. 7 og aftur kl. 12:30</span><h1>Blaðið</h1><p class=\"muted\" style=\"max-width:62ch\">Allt sem gömlu prófin hafa spurt um, þjappað saman. Það sem er feitletrað hefur komið oftar en einu sinni.</p></div>\n\n",
+  "sheet": {
+    "head": "\n<div class=\"stack\" style=\"gap:6px\"><span class=\"eyebrow\">Upprifjun fyrir lokaprófið</span><h1>Blaðið</h1><p class=\"muted\" style=\"max-width:62ch\">Allt sem gömlu prófin hafa spurt um, þjappað saman. Nýja efnið (kaflar 11–16) er fremst í forritinu en aftast hér, svo númerin frá hlutaprófinu haldast. Það sem er feitletrað hefur komið oftar en einu sinni.</p></div>\n\n",
     "sections": [
       {
         "id": "hag103g-01",
         "n": "01",
         "title": "Fyrirkomulag",
-        "html": "<section><h2><span class=\"n\">01</span>Fyrirkomulag</h2>\n<ul><li>20 krossaspurningar í Inspera, 5% hver, <b>ekki dregið niður fyrir rangt svar</b>: svaraðu öllu.</li>\n<li>Reiknivél leyfð, engin önnur hjálpargögn og <b>ekkert formúlublað</b>.</li>\n<li>Efni: MT 1, 2, 15, 16, 17, 20, 21, 22, 23, 24, 25. <b>MT34 er ekki með.</b></li>\n<li>Formúlur fyrir Solow, Gini og núvirði eru gefnar í dæmunum. Jöfnurnar þrjár hér að neðan þarftu að kunna.</li></ul></section>"
+        "html": "<section><h2><span class=\"n\">01</span>Fyrirkomulag</h2>\n<ul><li><b>Mánudagur 7. desember, kl. 13:30–16:30, HT103.</b></li>\n<li>Ef sniðið verður eins og 2024–25: 50 krossaspurningar í Inspera, 3 klst., um 3,6 mín. á spurningu, <b>ekki dregið frá fyrir rangt svar</b>: svaraðu öllu.</li>\n<li>Reiknivél leyfð. Formúlur fyrir Solow, Gini og Taylor-reglu hafa verið gefnar í dæmunum; margfaldarann, Okun og jöfnurnar þrjár þarftu að kunna.</li>\n<li>Efni: allt námskeiðið. Á lokaprófunum 2024–25 voru um 30 spurningar úr fyrri hlutanum og um 20 úr þeim seinni (MT26–34).</li>\n<li><b>Spurningar eru endurnýttar</b>: L24 #34 = L25 #33, L24 #49 = L25 #46, L24 #50 = L25 #48, og bankaspurningin kom aftur í Hlutaprófi 2026.</li></ul></section>"
       },
       {
         "id": "hag103g-02",
@@ -404,129 +343,391 @@ export default {
       {
         "id": "hag103g-11",
         "n": "11",
+        "title": "Keynesíski krossinn og margfaldarinn",
+        "html": "<section><h2><span class=\"n\">11</span>Keynesíski krossinn og margfaldarinn</h2>\n<div class=\"cols\">\n<div><div class=\"f\">E = C + I + G + NX, C = a + MPC·Y<br>Jafnvægi: E = Y<br>Y = A / (1 − MPC), A = a + I + G + NX<br>k = 1 / (1 − MPC) · opið: k = 1 / MPW<br>MPW = MPS + t + MPM</div>\n<p class=\"hint\"><b>L24 #42: MPC 0,2 ⇒ k = 1,25, ekki 5.</b> L25 #44: MPC 0,6 ⇒ k = 2,5, ekki 1,67.</p></div>\n<div><div class=\"f\">Skattalækkun: ΔAD = k · MPC · ΔT<br>Til að ná Y*: ΔG = (Y* − Y) / k<br>Bil = (Y − Y*) / Y*<br>Nettó margfaldari = (k·ΔG − ruðningur) / ΔG</div>\n<p class=\"hint\">Útgjöld &gt; framleiðsla við fulla atvinnu ⇒ <b>verðbólguþrýstingur</b>; útgjöld &lt; ⇒ <b>verðhjöðnunarþrýstingur</b>. Keynes: beita ríkisfjármálum til skamms tíma (komið bæði árin).</p></div>\n</div>\n<p class=\"hint\">Sýnidæmi 4: C = 300 + 0,6Y, A = 840 ⇒ Y = 2.100, spenna 5% ⇒ ΔG = −100/2,5 = −40. Skilaverkefni 4: MPW 0,4, k 2,5, ΔG 40, ruðningur 20 ⇒ AD +80, nettó margfaldari 2,0.</p></section>"
+      },
+      {
+        "id": "hag103g-12",
+        "n": "12",
+        "title": "IS-LM",
+        "html": "<section><h2><span class=\"n\">12</span>IS-LM</h2>\n<p class=\"hint\">IS = vörumarkaður (r ↑ ⇒ I, C ↓ ⇒ Y ↓). LM = peningamarkaður (Y ↑ ⇒ peningaeftirspurn ↑ ⇒ r ↑). <b>Allt sem er útgjöld hliðrar IS, allt sem er peningamagn hliðrar LM.</b></p>\n<div class=\"scroll\"><table class=\"tt\"><thead><tr><th>Atburður</th><th>Kúrfa</th><th>r</th><th>Y</th></tr></thead><tbody>\n<tr><td><b>G ↑</b>, T ↓, X ↑, bjartsýni</td><td>IS →</td><td>↑</td><td>↑</td></tr>\n<tr><td>G ↓, <b>X ↓</b>, svartsýni</td><td>IS ←</td><td>↓</td><td>↓</td></tr>\n<tr><td><b>M ↑</b></td><td>LM →</td><td>↓</td><td>↑</td></tr>\n<tr><td><b>M ↓</b></td><td>LM ←</td><td>↑</td><td>↓</td></tr>\n<tr><td>G ↑ og SÍ heldur vöxtum föstum</td><td>IS → og LM →</td><td>óbr.</td><td>↑↑</td></tr>\n<tr><td>G ↓ og SÍ heldur Y föstu</td><td>IS ← og LM →</td><td>↓</td><td>óbr.</td></tr>\n<tr><td>Útflutningur hrynur og M ↑ (2020)</td><td>IS ← og LM →</td><td>↓</td><td>?</td></tr>\n<tr><td>G ↑ og M ↓</td><td>IS → og LM ←</td><td>↑</td><td>?</td></tr>\n</tbody></table></div></section>"
+      },
+      {
+        "id": "hag103g-13",
+        "n": "13",
+        "title": "AS-AD",
+        "html": "<section><h2><span class=\"n\">13</span>AS-AD</h2>\n<div class=\"cols\">\n<div><h3>Hvers vegna hallar …</h3><ul>\n<li><b>AD niður: auðsáhrif, vaxtaáhrif, gengisáhrif.</b> Vaxtaáhrifin vega mest; auðsáhrifin minnst á Íslandi (verðtrygging).</li>\n<li><b>SRAS upp: tregbreytanleg laun, tregbreytanleg verð, misskilningur.</b> Gildrur: „tregbreytanlegir vextir“, „auðsáhrifin“.</li>\n<li>LRAS lóðrétt: verðlag hefur <b>engin</b> áhrif á raunstærðir til langs tíma.</li>\n<li class=\"mono\">Q = NRQ + a(APL − EPL)</li>\n</ul></div>\n<div><h3>Hvað hliðrar hverju</h3><div class=\"scroll\"><table class=\"tt\"><tbody>\n<tr><td>C, I, G, NX (skattar, væntingar, ferðamenn, vextir)</td><td>AD</td></tr>\n<tr><td>Vinnuafl, fjármagn, auðlindir, tækni</td><td>SRAS og LRAS</td></tr>\n<tr><td><b>Vænt verðlag / verðbólguvæntingar</b></td><td>aðeins SRAS</td></tr>\n<tr><td>Olíu- og orkuverð (tímabundið)</td><td>aðeins SRAS</td></tr>\n<tr><td>Verðlag</td><td>hreyfing eftir</td></tr>\n</tbody></table></div></div>\n</div>\n<div class=\"scroll\"><table class=\"tt\"><thead><tr><th>Skellur</th><th>Skammur tími</th><th>Langur tími, enginn grípur inn í</th></tr></thead><tbody>\n<tr><td><b>AD ← varanlegt</b> (eldgos hræðir ferðamenn)</td><td>Y ↓, P ↓</td><td>SRAS → · Y = Y*, P lægra</td></tr>\n<tr><td><b>AD → varanlegt</b> (G ↑ fyrir kosningar, bjartsýni)</td><td>Y ↑, P ↑</td><td>SRAS ← · Y = Y*, P hærra</td></tr>\n<tr><td><b>SRAS ← tímabundið</b> (OPEC, rússneskt gas)</td><td>Y ↓, P ↑: kreppuverðbólga</td><td>SRAS aftur → · sami punktur og áður</td></tr>\n<tr><td>SRAS ← og SÍ <b>lækkar</b> vexti</td><td>AD → , P hækkar enn</td><td>Y = Y*, P hærra</td></tr>\n<tr><td>AD → og SÍ <b>hækkar</b> vexti</td><td>AD aftur ←</td><td>sami punktur og áður</td></tr>\n</tbody></table></div>\n<p class=\"hint\">Vextir hafa áhrif á AD, aldrei á AS. Aðlögunin til langs tíma kemur alltaf frá SRAS (væntingar og laun), ekki frá AD. Okun: <span class=\"mono\">u = u_pot − c·(Y − Y*)/Y*</span>.</p></section>"
+      },
+      {
+        "id": "hag103g-14",
+        "n": "14",
+        "title": "Peningastefna og ríkisfjármál",
+        "html": "<section><h2><span class=\"n\">14</span>Peningastefna og ríkisfjármál</h2>\n<div class=\"cols\"><div><ul>\n<li>SÍ stýrir vöxtum og peningamagnið aðlagast. Vextir ráðast á peningamarkaði til skamms tíma, á lánsfjármarkaði til langs tíma.</li>\n<li>Vaxtalækkun: r ↓ ⇒ I, C ↑ og krónan veikist ⇒ NX ↑ ⇒ AD →. Áhrifin koma fram á 6–18 mánuðum.</li>\n<li><b>Margfeldisáhrif ýkja, ruðningsáhrif draga úr.</b> Ruðningur: G ↑ ⇒ Y ↑ ⇒ peningaeftirspurn ↑ ⇒ r ↑ ⇒ I ↓. Minnstur í slaka.</li>\n<li>Skattalækkun hefur minni áhrif en jafn há útgjöld (fyrsta umferð MPC·ΔT). Varanleg &gt; tímabundin. Fjárfesting &gt; millifærslur.</li>\n</ul></div><div><ul>\n<li><b>Sjálfvirkir sveiflujafnarar</b>: skatttekjur lækka og bætur hækka í kreppu, án ákvörðunar. Hallalaus fjárlög á hverju ári magna sveifluna.</li>\n<li>Við framboðsskell getur peningastefnan varið annaðhvort framleiðslu eða verðlag, ekki hvort tveggja.</li>\n<li>COVID 2020: vextir 3% → 0,75%, bindiskylda 1% → 0%. Svo spenna, verðbólga 10,2% (feb. 2023) og vextir 9,25% (ág. 2023).</li>\n<li>Okt. 2026: vextir óbreyttir í 8% þótt verðbólga væri 5,9%, því hækkunin kom aðallega úr eldsneytisverði (tímabundinn framboðsskellur).</li>\n</ul></div></div></section>"
+      },
+      {
+        "id": "hag103g-15",
+        "n": "15",
+        "title": "Phillips-kúrfan og Taylor-reglan",
+        "html": "<section><h2><span class=\"n\">15</span>Phillips-kúrfan og Taylor-reglan</h2>\n<div class=\"cols\"><div>\n<div class=\"f\">u = u_pot − a(π − πᴱ)<br>π &gt; πᴱ ⇒ u &lt; u_pot</div>\n<ul>\n<li>Phillips 1958 (Bretland). Friedman og Phelps: <b>LRPC lóðrétt</b> við náttúrulegt atvinnuleysi.</li>\n<li><b>SRPC hliðrast vegna verðbólguvæntinga og framboðsskella</b> (komið bæði árin). AD-breytingar eru hreyfing eftir SRPC.</li>\n<li><b>Óvænt mikil verðbólga: fyrst upp og til vinstri eftir SRPC, svo hliðrast SRPC upp og til hægri</b>; aftur á u_pot með hærri verðbólgu. Spegilmynd ef verðbólga er minni en vænst.</li>\n</ul></div><div><ul>\n<li><b>Taylor: hækka vexti um meira en eitt prósentustig fyrir hvert prósentustig verðbólgu umfram markmið.</b></li>\n<li class=\"mono\">MT30: r = p + 0,5y + 0,5(p − 2) + 2</li>\n<li>QMM (SÍ): λ = 0,6, β = 1,5, ∅ = 0,5, markmið 2,5%.</li>\n<li>Fórnarhlutfall = VLF-tap (%) / lækkun verðbólgu, oft 3–5. Volcker: 15% → 3%, atvinnuleysi nær 11%.</li>\n<li>Trúverðugur og sjálfstæður seðlabanki ⇒ væntingar lækka strax ⇒ ódýrari hjöðnun. Tyrkland: 85,5% (okt. 2022).</li>\n</ul></div></div></section>"
+      },
+      {
+        "id": "hag103g-16",
+        "n": "16",
+        "title": "Framboðsstefna, kreppur, evran og ytri áhrif",
+        "html": "<section><h2><span class=\"n\">16</span>Framboðsstefna, kreppur, evran og ytri áhrif</h2>\n<div class=\"cols\"><div><ul>\n<li>Framboðsstefna hliðrar LRAS til hægri. Markaðsaðgerðir: skattar, einkavæðing, afnám reglna. Beinar: menntun, innviðir, rannsóknir.</li>\n<li>Laffer: 0% og 100% skattur gefa engar tekjur. Ísland 1989–2002 (50% → 18%) sannar ekki kúrfuna: margt annað breyttist.</li>\n<li><b>Fyrsta markaðsbólan: túlípanar í Hollandi</b> (1637). Svo 1929, Lehman 2008 og íslensku bankarnir 2008.</li>\n<li><b>Ytri áhrif</b> = áhrif á þriðja aðila sem ekki er tekið tillit til. Neikvæð ⇒ skattur eða mengunarleyfi (ETS 2005). Sameign ⇒ ofnýting (aflamark 1983). Loftslagsleikurinn: Nash (10, 10), ekki Pareto-skilvirkt.</li>\n</ul></div><div><ul>\n<li><b>Mundell: sveigjanleg laun, hreyfanlegt vinnuafl, samhverf áföll.</b> Hjálpar: fjármagnsflæði, innbyrðis viðskipti, sameiginleg ríkisfjármál og tryggingar. <b>Ekki „jafn stór lönd“.</b></li>\n<li>Galli myntbandalags: engin eigin peningastefna né gengi. Aðlögun með innri gengisfellingu (P ↓), hægt og með atvinnuleysi.</li>\n<li>Maastricht: verðbólga ≤ 2,7%, langtímavextir ≤ 5,1%, halli ≤ 3%, skuldir ≤ 60%, 2 ár í ERM II. Ísland uppfyllir halla og skuldir.</li>\n<li>29. ágúst 2026: ráðgefandi atkvæðagreiðsla um að hefja aftur viðræður, ekki um aðild eða evru.</li>\n</ul></div></div></section>"
+      },
+      {
+        "id": "hag103g-17",
+        "n": "17",
         "title": "Gildrurnar",
-        "html": "<section><h2><span class=\"n\">11</span>Gildrurnar</h2>\n<ul>\n<li>Fjórar af 20 spurningum í fyrra spurðu hvað á <b>EKKI</b> við. Lestu spurninguna tvisvar.</li>\n<li>Reiknaðu áður en þú lítur á valkostina; rangir valkostir eru algengu villurnar.</li>\n<li>Í keðjuspurningum: hvaða ferill hliðrast fyrst og í hvaða átt? Það útilokar oftast þrjá valkosti.</li>\n<li>Glitnir og Íslandsbanki eru sami bankinn. Kaupþing var sameinað Búnaðarbankanum.</li>\n<li>Ef spurning tekur meira en 4 mínútur: merktu hana og haltu áfram.</li>\n</ul></section>"
+        "html": "<section><h2><span class=\"n\">17</span>Gildrurnar</h2>\n<ul>\n<li>Lestu hvort spurt er um <b>EKKI</b>. Þær voru margar á öllum prófunum.</li>\n<li>Reiknaðu áður en þú lítur á valkostina; rangir valkostir eru algengu villurnar (1/MPC, gleyma margfaldaranum, gleyma að setja í annað veldi).</li>\n<li>Í AS-AD og Phillips: hvaða kúrfa hreyfist <b>fyrst</b>? Röðin „hreyfing eftir, svo hliðrun“ greinir á milli valkosta.</li>\n<li>„Tímabundinn“ skellur ⇒ sami punktur til langs tíma. „Varanlegur“ ⇒ sama Y en nýtt verðlag.</li>\n<li>50 spurningar á 180 mínútum: farðu eina umferð og merktu það sem tekur meira en 4 mínútur.</li>\n</ul></section>"
       }
     ]
   },
-  plan: {
-    "kind": "day",
-    "date": "2026-10-23",
-    "start": "07:00",
-    "end": "14:20",
-    "eyebrow": "Föstudagur 23. október",
-    "title": "Morguninn fram að prófi",
-    "intro": "Blokkir skiptast í tvennt með stuttu hléi á milli. Tvö próf á tíma ramma morguninn inn: það fyrra segir hvar þú ert veikastur, það seinna sýnir hvort það hefur lagast.",
-    "steps": [
+  "plan": {
+    "eyebrow": "17. nóvember – 7. desember",
+    "title": "Áætlun fram að lokaprófi",
+    "intro": "Raðað í kringum hin prófin (HAG101G 25.11, HAG108G 1.12, HAG107G 4.12) og kvöldin í Laugó. Lengri blokkir eru klofnar með hléi. Tvö full próf á tíma: það fyrra sýnir hvar þú stendur, það seinna hvort það hefur lagast.",
+    "days": [
       {
-        "m": 15,
-        "h": "Upphitun: Blaðið, kaflar 1–3",
-        "p": "Lestu jöfnurnar þrjár og skrifaðu þær svo á autt blað, ásamt útleiðslunni S − I = NX, án þess að kíkja.",
-        "go": "sheet"
+        "date": "2026-11-17",
+        "label": "Þri 17. nóv.",
+        "title": "Greining á seinni hlutanum",
+        "items": [
+          {
+            "m": 72,
+            "h": "Próf: Seinni hlutinn á tíma",
+            "p": "20 spurningar án glósa. Niðurstaðan segir hvar þú byrjar.",
+            "go": {
+              "v": "exam",
+              "start": "second"
+            }
+          },
+          {
+            "m": 15,
+            "h": "Hlé",
+            "brk": true
+          },
+          {
+            "m": 30,
+            "h": "Yfirferð villna",
+            "p": "Lestu útskýringuna við hverja villu og skrifaðu eina línu: hvað hugsaðir þú vitlaust?",
+            "go": {
+              "v": "wrong"
+            }
+          }
+        ]
       },
       {
-        "m": 60,
-        "h": "Próf 1: blandað próf á tíma",
-        "p": "20 spurningar, 60 mínútur, engar glósur. Þetta er greiningin: niðurstaðan segir hvert restin af morgninum fer.",
-        "go": "exam"
+        "date": "2026-11-19",
+        "label": "Fim 19. nóv.",
+        "title": "Keynes, IS-LM og AS-AD",
+        "note": "Eftir síðasta fyrirlesturinn. Ef nýtt efni kemur þar, skrifaðu það á blað.",
+        "items": [
+          {
+            "m": 20,
+            "h": "Blaðið, kaflar 11–13",
+            "p": "Skrifaðu svo töfluna „Hvað hliðrar hverju“ og skellatöfluna eftir minni.",
+            "go": {
+              "v": "sheet"
+            }
+          },
+          {
+            "m": 30,
+            "h": "Æfing: Keynes og IS-LM",
+            "go": {
+              "v": "practice",
+              "topics": [
+                "key"
+              ]
+            }
+          },
+          {
+            "m": 10,
+            "h": "Hlé",
+            "brk": true
+          },
+          {
+            "m": 30,
+            "h": "Æfing: AS-AD",
+            "go": {
+              "v": "practice",
+              "topics": [
+                "asd"
+              ]
+            }
+          }
+        ]
       },
       {
-        "m": 15,
-        "h": "Hlé",
-        "p": "Stattu upp, fáðu þér vatn, farðu út í smá stund.",
-        "brk": true
+        "date": "2026-11-21",
+        "label": "Lau 21. nóv.",
+        "title": "Hagstjórn, Phillips og Taylor",
+        "items": [
+          {
+            "m": 15,
+            "h": "Blaðið, kaflar 14–15",
+            "go": {
+              "v": "sheet"
+            }
+          },
+          {
+            "m": 35,
+            "h": "Æfing: peningastefna og ríkisfjármál",
+            "go": {
+              "v": "practice",
+              "topics": [
+                "hag"
+              ]
+            }
+          },
+          {
+            "m": 15,
+            "h": "Hlé",
+            "brk": true
+          },
+          {
+            "m": 35,
+            "h": "Æfing: Phillips-kúrfan og Taylor",
+            "go": {
+              "v": "practice",
+              "topics": [
+                "phi"
+              ]
+            }
+          },
+          {
+            "m": 10,
+            "h": "Hlé",
+            "brk": true
+          },
+          {
+            "m": 45,
+            "h": "Reikningapróf á tíma",
+            "p": "15 reikningsdæmi: margfaldarar, Okun, Taylor og fyrri hlutinn.",
+            "go": {
+              "v": "exam"
+            }
+          }
+        ]
       },
       {
-        "m": 25,
-        "h": "Yfirferð á villum úr prófi 1",
-        "p": "Lestu útskýringuna við hverja villu og skrifaðu eina línu á blað: hvað hugsaðir þú vitlaust?",
-        "go": "wrong"
+        "date": "2026-11-22",
+        "label": "Sun 22. nóv.",
+        "title": "Restin af nýja efninu",
+        "items": [
+          {
+            "m": 15,
+            "h": "Blaðið, kafli 16",
+            "go": {
+              "v": "sheet"
+            }
+          },
+          {
+            "m": 30,
+            "h": "Æfing: framboðsstefna, kreppur, evran og ytri áhrif",
+            "go": {
+              "v": "practice",
+              "topics": [
+                "frb",
+                "kre",
+                "evr",
+                "umh"
+              ]
+            }
+          },
+          {
+            "m": 10,
+            "h": "Hlé",
+            "brk": true
+          },
+          {
+            "m": 25,
+            "h": "Villubankinn",
+            "go": {
+              "v": "wrong"
+            }
+          }
+        ]
       },
       {
-        "m": 10,
-        "h": "Hlé",
-        "p": "",
-        "brk": true
+        "date": "2026-11-26",
+        "label": "Fim 26. nóv.",
+        "title": "Fullt lokapróf 1",
+        "note": "Daginn eftir HAG101G. Ef þú ert búinn á því, færðu þetta á föstudag fyrir kvöldið.",
+        "items": [
+          {
+            "m": 180,
+            "h": "Fullt lokapróf á tíma",
+            "p": "50 spurningar, 3 klst. Taktu 5 mín. hlé eftir 25 spurningar eins og þú ætlar að gera í prófinu.",
+            "go": {
+              "v": "exam"
+            }
+          }
+        ]
       },
       {
-        "m": 25,
-        "h": "Æfing í tveimur veikustu flokkunum",
-        "p": "Yfirlitið sýnir hvaða flokkar eru veikastir eftir próf 1. Ýttu á „Æfa veikustu flokkana“.",
-        "go": "weak"
+        "date": "2026-11-28",
+        "label": "Lau 28. nóv.",
+        "title": "Yfirferð og veikustu flokkarnir",
+        "note": "Stutt, því HAG108G er 1. des.",
+        "items": [
+          {
+            "m": 30,
+            "h": "Villurnar úr lokaprófi 1",
+            "go": {
+              "v": "wrong"
+            }
+          },
+          {
+            "m": 10,
+            "h": "Hlé",
+            "brk": true
+          },
+          {
+            "m": 30,
+            "h": "Æfa tvo veikustu flokkana",
+            "go": {
+              "v": "weak"
+            }
+          }
+        ]
       },
       {
-        "m": 10,
-        "h": "Hlé",
-        "p": "",
-        "brk": true
+        "date": "2026-12-02",
+        "label": "Mið 2. des.",
+        "title": "Stutt viðhald",
+        "note": "Síðdegis, fyrir Laugó.",
+        "items": [
+          {
+            "m": 30,
+            "h": "Villubankinn",
+            "go": {
+              "v": "wrong"
+            }
+          }
+        ]
       },
       {
-        "m": 50,
-        "h": "Gömlu prófspurningarnar",
-        "p": "Æfing → „Gömul próf“, allir flokkar. Spurningar eru endurnýttar milli ára, svo markmiðið er að svara þeim hiklaust.",
-        "go": "old"
+        "date": "2026-12-05",
+        "label": "Lau 5. des.",
+        "title": "Fullt lokapróf 2",
+        "items": [
+          {
+            "m": 180,
+            "h": "Lokapróf 2025 eða nýtt fullt lokapróf á tíma",
+            "p": "Gamla prófið sýnir hvað kemur aftur; nýtt blandað próf er óþekkt. Veldu það sem þú hefur ekki tekið.",
+            "go": {
+              "v": "exam"
+            }
+          },
+          {
+            "m": 20,
+            "h": "Hlé og matur",
+            "brk": true
+          },
+          {
+            "m": 40,
+            "h": "Yfirferð villna",
+            "go": {
+              "v": "wrong"
+            }
+          }
+        ]
       },
       {
-        "m": 20,
-        "h": "Hlé og matur",
-        "p": "Borðaðu eitthvað almennilegt.",
-        "brk": true
+        "date": "2026-12-06",
+        "label": "Sun 6. des.",
+        "title": "Tæma villubankann",
+        "items": [
+          {
+            "m": 40,
+            "h": "Villubankinn þar til hann er tómur eða næstum því",
+            "go": {
+              "v": "wrong"
+            }
+          },
+          {
+            "m": 15,
+            "h": "Hlé",
+            "brk": true
+          },
+          {
+            "m": 40,
+            "h": "Blaðið allt",
+            "p": "Keðjurnar, skellatöfluna, Phillips-röðina og Mundell-listann utanbókar. Ekkert nýtt efni eftir þetta.",
+            "go": {
+              "v": "sheet"
+            }
+          }
+        ]
       },
       {
-        "m": 60,
-        "h": "Próf 2: nýtt blandað próf á tíma",
-        "p": "Ný samsetning. Markmið: betri niðurstaða en í prófi 1 og innan við 50 mínútur.",
-        "go": "exam"
-      },
-      {
-        "m": 15,
-        "h": "Hlé",
-        "p": "",
-        "brk": true
-      },
-      {
-        "m": 30,
-        "h": "Villubankinn tæmdur + reikningar",
-        "p": "Fyrst villubankinn þar til hann er tómur eða næstum því, svo „Reikningar“ í æfingu.",
-        "go": "wrong"
-      },
-      {
-        "m": 20,
-        "h": "Lokayfirferð: Blaðið allt",
-        "p": "Keðjurnar fimm utanbókar, ártölin og gildrulistinn. Ekkert nýtt efni eftir þetta.",
-        "go": "sheet"
+        "date": "2026-12-07",
+        "label": "Mán 7. des.",
+        "title": "Prófdagur",
+        "items": [
+          {
+            "m": 30,
+            "h": "Morgunn: Blaðið, kaflar 01, 13, 15 og 17",
+            "p": "Létt upprifjun, engin ný próf.",
+            "go": {
+              "v": "sheet"
+            }
+          },
+          {
+            "m": 15,
+            "h": "Upphitun: 10 auðveldar spurningar",
+            "p": "Til að koma heilanum í gang, ekki til að læra.",
+            "go": {
+              "v": "practice"
+            }
+          },
+          {
+            "m": 0,
+            "h": "Mæta í HT103 kl. 13:15",
+            "p": "Reiknivél, skilríki, hlaðin tölva. Prófið hefst 13:30."
+          }
+        ]
       }
     ]
   },
-  examInfo: {
-    "title": "Hlutaprófið",
-    "note": "Vægið byggir á Hlutaprófi 2025 og Lokaprófum 2024–25 (84 spurningar innan efnis). MT34 er ekki til prófs samkvæmt pósti Hauks, svo Nash-loftslagsleikurinn og ytri áhrif eru ekki hér.",
+  "examInfo": {
+    "title": "Lokaprófið",
+    "note": "Vægið byggir á Lokaprófum 2024–25, Hlutaprófum 2025–26 og efni haustsins 2026. Glærur MT26–27 og MT32 vantaði, svo þeir flokkar byggja á gömlu prófunum, Skilaverkefni 4 og Sýnidæmi 4.",
     "facts": [
       {
-        "value": "20",
+        "value": "50",
         "label": "krossaspurningar, 5 valkostir"
       },
       {
-        "value": "60 mín",
-        "label": "um 3 mín. á spurningu"
+        "value": "3 klst.",
+        "label": "um 3,6 mín. á spurningu"
       },
       {
         "value": "0",
         "label": "dregið frá fyrir rangt svar"
       },
       {
-        "value": "3",
-        "label": "jöfnur utanbókar, engin formúlublöð"
+        "value": "~20",
+        "label": "spurningar úr seinni hlutanum"
       }
     ]
   },
-  passScore: 1,
-  sourceLabels: {
+  "passScore": 1,
+  "sourceLabels": {
     "gen": "Reikningar"
   },
-  genLabel: "Reikningur",
-  legacy: {
+  "genLabel": "Reikningur",
+  "newSrc": {
+    "prefix": "Ný · byggt á ",
+    "fallback": "Ný spurning"
+  },
+  "legacy": {
     "key": "hag103g-hlutaprof-v1",
     "file": "HAG103G prófæfing.html"
   }
 };
+
+/** @type {import('../schema.js').Course} */
+export default adapt(meta, L);

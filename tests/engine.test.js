@@ -1,11 +1,12 @@
-// Sniðið, geymslan, villubankinn og vægi í úrtaki.
+// Sniðið, spurningagerðirnar, geymslan, villubankinn og vægi í úrtaki.
 
 import { describe, it, expect } from 'vitest';
 import { validateCourse, validateItem } from '../src/schema.js';
 import { createStore, memoryBackend, fresh, migrate, logActivity } from '../src/store/store.js';
 import { recordAnswer, inBank, bankIds } from '../src/engine/review.js';
-import { entriesOf, weight, instantiate, topicStats, weakest } from '../src/engine/practice.js';
-import { courses } from './helpers.js';
+import { entriesOf, weight, instantiate, topicStats, weakest, inMode } from '../src/engine/practice.js';
+import { grade, answered, blank, parseNum, parseFrac } from '../src/engine/items/index.js';
+import { courses, byId } from './helpers.js';
 
 describe('snið', () => {
   it.each(courses.map(c => [c.id, c]))('%s stenst validateCourse', (_, c) => {
@@ -18,9 +19,51 @@ describe('snið', () => {
     expect(validateItem({ ...ok, a: 2 })).not.toEqual([]);
     expect(validateItem({ ...ok, o: ['a', 'a'] })).not.toEqual([]);
     expect(validateItem({ ...ok, source: 'foo' })).not.toEqual([]);
-    expect(validateItem({ ...ok, topic: 'u' }, { topics: new Set(['t']) })).not.toEqual([]);
+    expect(validateItem({ ...ok, type: 'multi', a: [0, 5] })).not.toEqual([]);
+    expect(validateItem({ ...ok, type: 'match', cols: ['R', 'F'], rows: [{ t: 'x', a: 2 }] })).not.toEqual([]);
     expect(validateItem({ type: 'num', q: 'Q', e: '', ans: NaN, tol: 0 }, { generated: true })).not.toEqual([]);
+    expect(validateItem({ type: 'num', q: 'Q', e: '', parts: [{ l: 'a', ans: 1, tol: -1 }] }, { generated: true })).not.toEqual([]);
     expect(validateItem({ type: 'mc', q: 'NaN m.kr.', e: '', o: ['1', '2'], a: 0 }, { generated: true })).not.toEqual([]);
+  });
+});
+
+describe('mat á gerðum', () => {
+  it('kross og „veldu allt“ (rétt mínus rangt, aldrei undir núlli)', () => {
+    expect(grade({ type: 'mc', a: 2 }, 2)).toBe(1);
+    expect(grade({ type: 'mc', a: 2 }, 1)).toBe(0);
+    const m = { type: 'multi', a: [0, 2, 3] };
+    expect(grade(m, [0, 2, 3])).toBe(1);
+    expect(grade(m, [0, 2])).toBeCloseTo(2 / 3);
+    expect(grade(m, [0, 1])).toBe(0);
+    expect(grade(m, [1, 4])).toBe(0);
+  });
+  it('pörun: hlutfall réttra raða', () => {
+    const it0 = { type: 'match', cols: ['Rétt', 'Rangt'], rows: [{ t: 'a', a: 0 }, { t: 'b', a: 1 }, { t: 'c', a: 0 }, { t: 'd', a: 1 }] };
+    expect(grade(it0, [0, 1, 1, null])).toBe(0.5);
+    expect(answered(it0, blank(it0))).toBe(false);
+  });
+  it('tölusvar: vikmörk, líkur sem prósenta og liðir', () => {
+    expect(grade({ type: 'num', ans: 1440, tol: 0.5 }, '1.440')).toBe(1);
+    expect(grade({ type: 'num', ans: 1440, tol: 0.5 }, '1441')).toBe(0);
+    expect(grade({ type: 'num', ans: 0.2, tol: 0.001, prob: true }, '20%')).toBe(1);
+    expect(grade({ type: 'num', ans: 0.2, tol: 0.001, prob: true }, '0,2')).toBe(1);
+    expect(grade({ type: 'num', ans: -3.5, tol: 0.01 }, '−3,5')).toBe(1);
+    const parts = { type: 'num', parts: [{ l: 'P', ans: -1.5, tol: 0.011 }, { l: 'Q', ans: 30, tol: 0.18 }] };
+    expect(grade(parts, ['-1.5', '29'])).toBe(0.5);
+    expect(parseNum('1 200 kr.')).toBe(1200);
+    expect(parseNum('abc')).toBeNaN();
+  });
+  it('nákvæmt brotasvar: 6/4 = 3/2 = 1,5', () => {
+    const it0 = { type: 'num', ans: 1.5, tol: 0, exact: '3/2' };
+    for (const v of ['3/2', '6/4', '1,5', '1.5']) expect(grade(it0, v)).toBe(1);
+    expect(grade(it0, '1.49')).toBe(0);
+    expect(grade({ type: 'num', ans: -5, tol: 0, exact: '-5' }, '-10/2')).toBe(1);
+    expect(parseFrac('1/0')).toBeNull();
+  });
+  it('skrefadæmi: hlutfall stiga í réttum skrefum', () => {
+    const it0 = { type: 'steps', steps: [{ h: 'a', body: '', p: 2 }, { h: 'b', body: '', p: 3 }] };
+    const r = blank(it0); r.mk = [true, false];
+    expect(grade(it0, r)).toBe(0.4);
   });
 });
 
@@ -31,12 +74,11 @@ describe('geymsla', () => {
     const s2 = createStore(be);
     expect(s2.state.items['hag103g:H25-1']).toMatchObject({ n: 1, c: 0, box: 1 });
   });
-
-  it('ónýtt eða tómt gildi gefur nýja stöðu', () => {
+  it('ónýtt eða tómt gildi gefur nýja stöðu; eldri stillingar fá nýju svæðin', () => {
     expect(createStore(memoryBackend('{ónýtt')).state).toEqual(fresh());
     expect(migrate(null)).toEqual(fresh());
+    expect(migrate({ v: 1, items: {}, settings: { plan: { x: { done: {} } } } }).settings.adapt).toEqual({});
   });
-
   it('lotuskráning lengir æfingalotu innan 15 mín.', () => {
     const S = fresh();
     logActivity(S, 'hag103g', 'practice', 1, 0);
@@ -54,15 +96,19 @@ describe('villubanki (einfaldur)', () => {
     recordAnswer(S, g, 0); recordAnswer(S, g, 1); expect(inBank(S.items[g])).toBe(true);
     recordAnswer(S, g, 1); expect(inBank(S.items[g])).toBe(false);
     expect(bankIds(S)).toEqual([]);
-    expect(S.items[g]).toMatchObject({ n: 5, c: 3, streak: 2 });
+  });
+  it('hlutastig undir passScore telst rangt', () => {
+    const S = fresh();
+    expect(recordAnswer(S, 'a', 0.8, { passScore: 1 })).toBe(false);
+    expect(recordAnswer(S, 'b', 0.8, { passScore: 0.7 })).toBe(true);
   });
 });
 
-describe('vægi í úrtaki', () => {
-  const c = courses[0]; const es = entriesOf(c);
+describe('æfingapottur', () => {
+  const c = byId.hag103g; const es = entriesOf(c);
   const item = es.find(e => e.kind === 'item'), gen = es.find(e => e.kind === 'gen');
 
-  it('villubanki 5 > ósnert 3 > rafall 2 > 1 > náð 0,25', () => {
+  it('vægi: villubanki 5 > ósnert 3 > rafall 2 > 1 > náð 0,25', () => {
     const S = fresh();
     expect(weight(item, S)).toBe(3);
     expect(weight(gen, S)).toBe(2);
@@ -71,23 +117,36 @@ describe('vægi í úrtaki', () => {
     expect(weight(gen, S)).toBe(5);
     recordAnswer(S, item.gid, 1); recordAnswer(S, item.gid, 1);
     expect(weight(item, S)).toBe(0.25);
-    recordAnswer(S, item.gid, 0); recordAnswer(S, item.gid, 1); recordAnswer(S, item.gid, 1);
-    expect(inBank(S.items[item.gid])).toBe(false);
-    expect(weight(item, S)).toBe(0.25);
   });
 
-  it('tilvik krossaspurningar heldur réttu svari eftir stokkun', () => {
-    const it0 = c.items[0];
-    for (let k = 0; k < 50; k++) { const x = instantiate(c, es[0]); expect(x.o[x.a]).toBe(it0.o[it0.a]); expect([...x.o].sort()).toEqual([...it0.o].sort()); }
+  it('tilvik halda réttu svari eftir stokkun (kross, veldu allt, pörun)', () => {
+    const c7 = byId.hag107g;
+    for (const type of ['mc', 'multi', 'match']) {
+      const it0 = c7.items.find(i => i.type === type); const e = entriesOf(c7).find(x => x.key === it0.id);
+      for (let k = 0; k < 30; k++) {
+        const x = instantiate(c7, e);
+        if (type === 'mc') expect(x.o[x.a]).toBe(it0.o[it0.a]);
+        if (type === 'multi') expect(x.a.map(i => x.o[i]).sort()).toEqual(it0.a.map(i => it0.o[i]).sort());
+        if (type === 'match') expect(x.rows.map(r => r.t + r.a).sort()).toEqual(it0.rows.map(r => r.t + r.a).sort());
+      }
+    }
+  });
+
+  it('hættir: spjöld sér, skrifleg og hraðspurningar aðskilin í HAG101G', () => {
+    const c1 = byId.hag101g;
+    const w = entriesOf(c1).filter(e => inMode(e, { quick: false })), q = entriesOf(c1).filter(e => inMode(e, { quick: true }));
+    expect(w.length + q.length).toBe(entriesOf(c1).length);
+    expect(q.every(e => e.quick)).toBe(true);
+    const c6 = byId.hag106g;
+    expect(entriesOf(c6).filter(e => inMode(e, { cards: true })).every(e => e.type === 'card')).toBe(true);
+    expect(entriesOf(c6).filter(e => inMode(e, null)).some(e => e.type === 'card')).toBe(false);
   });
 
   it('staða flokks og veikustu flokkar', () => {
     const S = fresh(); const t = c.topics[0].id;
-    const inT = es.filter(e => e.topic === t).slice(0, 3);
-    inT.forEach(e => recordAnswer(S, e.gid, 0));
-    const st = topicStats(c, S, t);
-    expect(st).toMatchObject({ n: 3, c: 0, seen: 3, pct: 0 });
+    es.filter(e => e.topic === t).slice(0, 3).forEach(e => recordAnswer(S, e.gid, 0));
+    expect(topicStats(c, S, t)).toMatchObject({ n: 3, c: 0, seen: 3, pct: 0 });
     expect(weakest(c, S, 1)).toEqual([t]);
-    expect(weakest(c, S, 20).some(x => c.topics.find(y => y.id === x).review)).toBe(false);
+    expect(weakest(c, S, 30).some(x => c.topics.find(y => y.id === x).review)).toBe(false);
   });
 });

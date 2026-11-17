@@ -3,47 +3,89 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { extract } from '../scripts/extract-legacy.js';
+import { extract, stylesheets } from '../scripts/extract-legacy.js';
 import { renderToHtml } from '../scripts/lib/load-legacy.js';
-import { courses, legacy, inventoryCounts, squash, ROOT } from './helpers.js';
+import { entriesOf } from '../src/engine/practice.js';
+import { courses, legacy, inventoryCounts, squash, tally, ROOT } from './helpers.js';
 
 const counts = inventoryCounts();
+const SOURCE_OF = { old: 'old', new: 'new', blad: 'sheet', db: 'sheet', hv: 'sheet', gl: 'slides', mid: 'old', ny: 'new' };
 
 describe.each(courses.map(c => [c.id, c]))('%s', (id, c) => {
-  const L = legacy(id);
+  const V = legacy(id).vars;
 
-  it('fjöldi atriða, rafala og kafla = úttektin', () => {
+  it('fjöldi atriða, rafala, færslna og kafla = úttektin', () => {
     const k = counts[id];
-    expect(c.items.filter(i => i.type === 'mc').length).toBe(k.mc);
-    expect(c.items.filter(i => i.source === 'old').length).toBe(k.old);
-    expect(c.items.filter(i => i.source === 'new').length).toBe(k.new);
-    expect(c.items.length).toBe(k.old + k.new);
+    expect(c.items.length).toBe(k.items);
+    expect(tally(c.items.map(i => i.type))).toEqual(k.byType);
+    expect(tally(c.items.filter(i => !i.quick).map(i => i.source))).toEqual(k.bySource);
     expect(c.gens.length).toBe(k.gens);
+    expect(entriesOf(c).filter(e => e.type !== 'card').length).toBe(k.entries);
     expect(c.sheet.sections.length).toBe(k.sheetSections);
   });
 
   it('hvert atriði er orðrétt eins og á gömlu síðunni', () => {
-    const old = L.vars.STATIC;
-    expect(c.items.map(i => i.id)).toEqual(old.map(q => q.id));
-    c.items.forEach((it, i) => {
-      const q = old[i];
-      expect(it).toEqual({ id: q.id, type: 'mc', topic: q.t, source: q.kind, src: q.src, q: q.q, o: q.o, a: q.a, e: q.e });
-    });
+    const by = Object.fromEntries(c.items.map(i => [i.id, i]));
+    if (c.engine === 'mcq') {
+      expect(c.items.map(i => i.id)).toEqual(V.STATIC.map(q => q.id));
+      for (const q of V.STATIC) {
+        const it = by[q.id];
+        expect([it.topic, it.source, it.src, it.q, it.e]).toEqual([q.t, q.kind, q.src, q.q, q.e]);
+        const ty = q.ty || 'mc';
+        expect(it.type).toBe(ty);
+        if (ty === 'mc' || ty === 'multi') expect([it.o, it.a]).toEqual([q.o, q.a]);
+        if (ty === 'match') expect([it.rows, it.cols, !!it.ord]).toEqual([q.rows, q.cols, !!q.ord]);
+        if (ty === 'num') expect(it.parts.map(p => [p.l, p.ans])).toEqual(q.p.map(p => [p.l, p.a]));
+        if (V.maxPts) expect(it.pts).toBe(V.maxPts({ ...q, ty }));
+      }
+    }
+    if (c.engine === 'lecture') {
+      expect(c.items.map(i => i.id)).toEqual(V.BANK.map(q => q.id));
+      for (const q of V.BANK) {
+        const it = by[q.id];
+        expect([it.q, it.src, it.level, it.source]).toEqual([q.q, q.src, q.lvl, SOURCE_OF[q.from]]);
+        if (q.kind === 'mc') expect([it.o, it.a, it.e]).toEqual([q.o, q.a, q.e]);
+        if (q.kind === 'num') expect([it.ans, it.tol, it.unit, !!it.prob, it.e]).toEqual([q.ans, q.tol, q.unit, !!q.prob, q.e]);
+        if (q.kind === 'step') expect(it.steps).toEqual(q.steps.map(s => ({ h: s.h, body: s.e, p: s.p })));
+        if (q.kind === 'card') expect([it.e, it.keys]).toEqual([q.back, q.keys]);
+      }
+    }
+    if (c.engine === 'written') {
+      for (const p of V.STATIC) {
+        const it = by[p.id];
+        expect([it.topic, it.source, it.src, it.q, it.examWeight]).toEqual([p.t, SOURCE_OF[p.kind], p.src, p.q, p.exam]);
+        expect(it.steps).toEqual(p.steps.map(s => ({ h: s.titill, body: s.lausn, p: s.stig })));
+      }
+      for (const p of V.QUICK) {
+        const it = by[p.id];
+        expect([it.quick, it.q, it.src, it.topic]).toEqual([true, p.q, p.src, p.t]);
+        if (p.o) expect([it.type, it.o[it.a]]).toEqual(['mc', p.o[p.a]]);
+        else expect([it.type, it.exact]).toEqual(['num', p.a]);
+      }
+    }
   });
 
   it('rafalarnir eru þeir sömu', () => {
-    expect(c.gens.map(g => [g.id, g.name, g.topic])).toEqual(L.vars.GENS.map(g => [g.id, g.name, g.t]));
+    const legacyGens = [...V.GENS, ...(V.GENS2 || [])];
+    const ids = c.engine === 'written' ? [...legacyGens.map(g => g.id), ...V.QGENS.map(g => 'q:' + g.id)] : legacyGens.map(g => g.id);
+    expect(c.gens.map(g => g.id)).toEqual(ids);
   });
 
   it('Blaðið sett saman = það sem gamla síðan teiknaði', () => {
     const html = `<div class="sheet">${c.sheet.head}${c.sheet.sections.map(s => s.html).join('')}${c.sheet.foot || ''}</div>`;
-    expect(squash(html)).toBe(squash(renderToHtml(L, 'renderSheet')));
+    expect(squash(html)).toBe(squash(renderToHtml(legacy(id), 'renderSheet')));
   });
 
-  it('skrárnar í src/courses eru óbreyttar frá útdrættinum', () => {
+  it('skrárnar í src/courses eru óbreyttar frá útdrættinum', async () => {
     const fresh = extract(id);
-    const { gens, ...data } = c;
-    expect(JSON.parse(JSON.stringify(fresh.course))).toEqual(JSON.parse(JSON.stringify(data)));
-    expect(readFileSync(join(ROOT, 'src', 'courses', `${id}.gens.js`), 'utf8')).toBe(fresh.gensModule);
+    const mod = await import(`../src/courses/${id}.js`);
+    expect(JSON.parse(JSON.stringify(fresh.course))).toEqual(JSON.parse(JSON.stringify(mod.meta)));
+    expect(readFileSync(join(ROOT, 'src', 'courses', 'legacy', `${id}.js`), 'utf8')).toBe(fresh.legacyModule);
   });
+});
+
+it('stílarnir eru óbreyttir frá útdrættinum', () => {
+  const css = stylesheets();
+  expect(readFileSync(join(ROOT, 'src', 'ui', 'base.css'), 'utf8')).toBe(css.base);
+  expect(readFileSync(join(ROOT, 'src', 'ui', 'legacy.css'), 'utf8')).toBe(css.legacy);
 });

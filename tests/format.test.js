@@ -1,8 +1,8 @@
-// Sameiginlega talnasniðið gefur sama streng og F gömlu síðnanna.
+// Sameiginlega talnasniðið gefur sama streng og F gömlu síðnanna (HAG101G hefur ekkert F).
 
 import { describe, it, expect } from 'vitest';
 import { makeF } from '../src/ui/format.js';
-import { courses, legacy } from './helpers.js';
+import { legacy } from './helpers.js';
 
 function samples() {
   const xs = [0, -0, 0.5, -0.5, 0.004, -0.004, 0.005, -0.005, 0.0049999, 1e-9, -1e-9, 999.995, -999.995, 1234567.891, -1234567.891, 1e15, 0.1 + 0.2];
@@ -14,17 +14,16 @@ function samples() {
   return xs;
 }
 
-describe.each(courses.map(c => [c.id]))('F í %s', id => {
+describe.each(['hag103g', 'hag106g', 'hag107g', 'hag108g'])('F í %s', id => {
   const old = legacy(id).vars.F;
-  const F = makeF({ pctDigits: 1 });
+  const F = makeF({ pctDigits: id === 'hag106g' ? 2 : 1 });
   const xs = samples();
+  const methods = Object.keys(old).filter(k => typeof old[k] === 'function');
 
-  it('int, num og pct (sjálfgefið)', () => {
-    for (const x of xs) {
-      expect(F.int(x)).toBe(old.int(x));
-      expect(F.num(x)).toBe(old.num(x));
-      expect(F.pct(x)).toBe(old.pct(x));
-    }
+  it('hefur öll föll gömlu útgáfunnar', () => { for (const m of methods) expect(typeof F[m]).toBe('function'); });
+
+  it('sama úttak með sjálfgefnum aukastöfum', () => {
+    for (const x of xs) for (const m of methods) expect(F[m](x)).toBe(old[m](x));
   });
 
   it('dec og pct með 0–4 aukastöfum', () => {

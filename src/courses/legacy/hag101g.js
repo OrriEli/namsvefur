@@ -1,0 +1,1564 @@
+// Búið til af scripts/extract-legacy.js úr legacy/HAG101G lokapróf.html. Ekki breyta í höndunum.
+// Gagnablokk gömlu síðunnar, orðrétt.
+/* eslint-disable */
+const SHEET_HTML = "<div class=\"stack\" style=\"gap:6px\"><span class=\"eyebrow\">Ekkert formúlublað á prófinu</span><h1>Blaðið</h1><p class=\"muted\" style=\"max-width:62ch\">Allar reglur og aðgerðir til lokaprófsins 25. nóvember, ásamt því sem þarf að kunna utanbókar. Unnu dæmin eru falin undir „Unnið dæmi“. Hugtökin eru þau sem námskeiðið notar: <i>hvelft</i> þýðir concave (∩), <i>kúpt</i> convex (∪), <i>aðoka fylki</i> adjoint og <i>raðtala</i> rank.</p></div>\n\n<nav class=\"toc\" aria-label=\"Efnisyfirlit\">\n<button data-toc=\"s0\">Yfirlit</button><button data-toc=\"s1\">Fylki og vigrar</button><button data-toc=\"s2\">I, 0 og bylting</button><button data-toc=\"s3\">Andhverfur: reglur</button><button data-toc=\"s4\">Markov</button><button data-toc=\"s5\">Raðtala</button><button data-toc=\"s6\">Ákveður</button><button data-toc=\"s7\">Aðoka fylki</button><button data-toc=\"s8\">Cramer</button><button data-toc=\"s9\">Grunnafleiður</button><button data-toc=\"s10\">Diffrunarreglur</button><button data-toc=\"s11\">Ein breyta</button><button data-toc=\"s12\">Hlutafleiður</button><button data-toc=\"s13\">Mismunur</button><button data-toc=\"s14\">Heildarafleiður</button><button data-toc=\"s15\">Fólgin föll</button><button data-toc=\"s16\">Taylor</button><button data-toc=\"s17\">Einsleitni</button><button data-toc=\"s18\">Hvelft, kúpt, útmörk</button><button data-toc=\"s19\">Hámörkun og umslag</button><button data-toc=\"s20\">Gildrur</button><button data-toc=\"s21\">Frágangur</button>\n</nav>\n\n<section id=\"s0\"><h2><span class=\"n\">00</span>Yfirlit og fyrirkomulag</h2>\n<ul><li><b>Mið. 25. nóv. kl. 13:30–16:30</b> (3 klst.) í <b>Á301</b>. Svarað á skannblöð.</li>\n<li>Engin hjálpargögn og engin reiknivél. „Ekki er gefið fyrir svör án útreikninga eða rökstuðnings.“</li>\n<li>Allt námskeiðið er til prófs. Gömlu lokaprófin hafa 6–7 dæmi.</li></ul>\n<div class=\"scroll\"><table class=\"tt\"><thead><tr><th>Svið</th><th>Kaflar</th><th>Nótur</th><th>Dæmablað</th><th>2023</th><th>2025</th></tr></thead><tbody>\n<tr><td>Fylki, ákveður, andhverfa</td><td>4, 5.1–5.4</td><td>8–12</td><td>18–28</td><td>15</td><td>20</td></tr>\n<tr><td>Jöfnukerfi og Cramer</td><td>5.5</td><td>12</td><td>29</td><td>15</td><td>15</td></tr>\n<tr><td>Diffrun og föll af einni breytu</td><td>7.1–7.3, 9.1–9.4</td><td>13, 20</td><td>8–16, 43</td><td>15</td><td>5</td></tr>\n<tr><td>Heildarmismunur og heildarafleiður</td><td>8.1–8.4</td><td>15, 16</td><td>34, 35</td><td>–</td><td>15</td></tr>\n<tr><td>Fólgin föll (og einsleitni)</td><td>8.5, 12.6–12.7</td><td>16, 17, 19, 20</td><td>36–40</td><td>15</td><td>10</td></tr>\n<tr><td>Taylor-nálgun</td><td>9.5</td><td>18</td><td>41–42</td><td>10</td><td>15</td></tr>\n<tr><td>Hámörkun, Hessian, umslagssetning</td><td>11.1–11.4, 13.5</td><td>14, 20, 21</td><td>30–33, 44–46</td><td>30</td><td>20</td></tr></tbody></table></div>\n<p class=\"hint\">Dálkarnir 2023 og 2025 sýna vægi (%) á lokaprófunum. Algebra og tegrar (dæmablað 1–7 og 17) komu ekki fyrir á þeim; þau eru ekki í forritinu.</p></section>\n<section id=\"s1\"><h2><span class=\"n\">01</span>Fylki og vigrar <span class=\"kafli\">4.1–4.3</span><button class=\"btn small go\" data-sgo=\"fyl\">Æfa</button></h2>\n<p>\\(m\\times n\\) fylki hefur \\(m\\) raðir og \\(n\\) dálka; stakið í röð \\(i\\), dálki \\(j\\) er \\(a_{ij}\\). Ferningsfylki: \\(m = n\\). Dálkvigur \\(x\\) er \\(n\\times 1\\), raðvigur \\(x'\\) er \\(1\\times n\\).</p>\n<div class=\"kv\"><b>Jöfn fylki</b><span>sömu víddir og öll samsvarandi stök jöfn</span><b>Samlagning</b><span>sömu víddir; stak fyrir stak: \\(A \\pm B = [a_{ij} \\pm b_{ij}]\\)</span><b>Fasti</b><span>\\(kA = [k\\,a_{ij}]\\), víddir skipta ekki máli</span></div>\n\\[\\underset{(m\\times n)}{A}\\;\\underset{(n\\times p)}{B} = \\underset{(m\\times p)}{C}, \\qquad c_{ij} = \\sum_{k=1}^{n} a_{ik}\\,b_{kj}\\]\n<p>Skilyrði: fjöldi <b>dálka í A</b> = fjöldi <b>raða í B</b>. Útkoman tekur ytri víddirnar. Röð \\(i\\) í \\(A\\) sinnum dálkur \\(j\\) í \\(B\\) gefur \\(c_{ij}\\). Í \\(AB\\) er \\(B\\) <b>formargfaldað</b> með \\(A\\) og \\(A\\) <b>bakmargfaldað</b> með \\(B\\).</p>\n<p>„\\(A/B\\)“ er ekki til sem aðgerð (dæmi 19f). Í staðinn er margfaldað með andhverfu: \\(AB^{-1}\\).</p>\n<details class=\"ex\"><summary>Unnið dæmi: AB ≠ BA</summary>\n\\[A = \\begin{bmatrix}1&2\\\\3&4\\end{bmatrix},\\quad B = \\begin{bmatrix}0&1\\\\2&3\\end{bmatrix}\\]\n\\[AB = \\begin{bmatrix} 1\\cdot0+2\\cdot2 & 1\\cdot1+2\\cdot3 \\\\ 3\\cdot0+4\\cdot2 & 3\\cdot1+4\\cdot3 \\end{bmatrix} = \\begin{bmatrix} 4 & 7 \\\\ 8 & 15 \\end{bmatrix}, \\qquad BA = \\begin{bmatrix} 3 & 4 \\\\ 11 & 16 \\end{bmatrix}\\]\n</details>\n<h3>Vigrar</h3>\n<ul><li>\\(x'x\\) er \\((1\\times n)(n\\times 1) = 1\\times 1\\): tala, summa ferninga.</li>\n<li>\\(xx'\\) er \\((n\\times 1)(1\\times n) = n\\times n\\) fylki.</li>\n<li>Innra margfeldi: \\(u\\cdot v = u'v = \\sum_{i} u_iv_i\\).</li>\n<li><b>Hornréttir</b>: \\(u'v = 0\\). <b>Samsíða</b>: \\(u = kv\\).</li>\n<li>Myndrænt: \\(u + v\\) fæst með því að setja odd \\(v\\) á odd \\(u\\); \\(u - v = u + (-1)v\\); \\(2v\\) er tvöfalt lengri í sömu átt.</li>\n<li><b>Línulega háðir</b>: til eru \\(k_1, \\dots, k_n\\), ekki öll 0, þannig að \\(k_1v_1 + \\dots + k_nv_n = 0\\).</li></ul></section>\n\n<section id=\"s2\"><h2><span class=\"n\">02</span>Reiknireglur, I, 0 og bylting <span class=\"kafli\">4.4–4.6</span><button class=\"btn small go\" data-sgo=\"fyl\">Æfa</button></h2>\n<div class=\"scroll\"><table class=\"tt\"><thead><tr><th>Regla</th><th>Gildir?</th></tr></thead><tbody>\n<tr><td>\\(A + B = B + A\\)</td><td>Já</td></tr>\n<tr><td>\\((A + B) + C = A + (B + C)\\)</td><td>Já</td></tr>\n<tr><td>\\(AB = BA\\)</td><td><b>Nei</b>, almennt ekki</td></tr>\n<tr><td>\\((AB)C = A(BC)\\)</td><td>Já (tengiregla)</td></tr>\n<tr><td>\\(A(B + C) = AB + AC\\)</td><td>Já (dreifiregla)</td></tr>\n<tr><td>\\((B + C)A = BA + CA\\)</td><td>Já, en röðin skiptir máli</td></tr>\n<tr><td>\\(AB = 0 \\Rightarrow A = 0\\) eða \\(B = 0\\)</td><td><b>Nei</b></td></tr></tbody></table></div>\n<p><b>Einingafylki</b> \\(I_n\\): 1 á hornalínu, 0 annars staðar. \\(IA = AI = A\\), \\(I^2 = I\\), \\(I^{-1} = I\\). Víddin ræðst af hliðinni: ef \\(A\\) er \\(m\\times n\\) þarf \\(I\\) í \\(IA\\) að vera \\(m\\times m\\) en í \\(AI\\) að vera \\(n\\times n\\).</p>\n<p><b>Núllfylki</b> þarf ekki að vera ferningsfylki: \\(A + 0 = A\\), \\(A0 = 0\\). Víddir fylgja venjulegri margföldun (dæmi 23d: \\((5\\times 2)(2\\times 3) = 5\\times 3\\) núllfylki).</p>\n<p><b>Bylting</b> \\(A'\\): raðir verða dálkar, \\(m\\times n\\) verður \\(n\\times m\\). Samhverft ef \\(A' = A\\) (t.d. Hessian-fylki).</p>\n\\[(A')' = A \\qquad (A+B)' = A' + B' \\qquad (AB)' = B'A' \\qquad (ABC)' = C'B'A'\\]</section>\n\n<section id=\"s3\"><h2><span class=\"n\">03</span>Andhverfur: reglur og sannanir <span class=\"kafli\">4.6</span><button class=\"btn small go\" data-sgo=\"and\">Æfa</button></h2>\n<p>\\(A^{-1}\\) er aðeins til fyrir ferningsfylki og uppfyllir \\(A^{-1}A = AA^{-1} = I\\). Andhverfanlegt (non-singular) ⇔ \\(|A| \\ne 0\\). Ef andhverfa er til er hún einstök.</p>\n\\[(A^{-1})^{-1} = A \\qquad (AB)^{-1} = B^{-1}A^{-1} \\qquad (A')^{-1} = (A^{-1})'\\]\n<p class=\"notice\">Nótur 9 segja \\((A + B)^{-1} = B^{-1} + A^{-1}\\). Það er <b>rangt</b>; slík regla er ekki til. Rétta reglan („í öfugri röð“) er \\((AB)^{-1} = B^{-1}A^{-1}\\).</p>\n<details class=\"ex\"><summary>Sannanirnar úr dæmi 25</summary>\n<p>(a) Margfalda \\(AB\\) með \\(B^{-1}A^{-1}\\) og sýna að útkoman sé \\(I\\):</p>\n\\[(AB)(B^{-1}A^{-1}) = A(BB^{-1})A^{-1} = AIA^{-1} = AA^{-1} = I\\]\n<p>(b) Bylta \\(AA^{-1} = I\\) og nota \\((AB)' = B'A'\\) og \\(I' = I\\):</p>\n\\[(AA^{-1})' = I' \\;\\Rightarrow\\; (A^{-1})'A' = I \\;\\Rightarrow\\; (A^{-1})' = (A')^{-1}\\]\n</details>\n<div class=\"kv\"><b>Jöfnukerfi</b><span>\\(Ax = d \\Rightarrow x^* = A^{-1}d\\). \\(A^{-1}\\) fer <b>fyrir framan</b> \\(d\\), ekki \\(dA^{-1}\\).</span><b>\\(AX = B\\)</b><span>\\(X = A^{-1}B\\) (formargfalda)</span><b>\\(XA = B\\)</b><span>\\(X = BA^{-1}\\) (bakmargfalda)</span><b>\\(AB = kI\\)</b><span>\\(B = kA^{-1}\\) (dæmi 28)</span></div></section>\n\n<section id=\"s4\"><h2><span class=\"n\">04</span>Markov-keðjur <span class=\"kafli\">4.7</span><button class=\"btn small go\" data-sgo=\"fyl\">Æfa</button></h2>\n<p><b>Raðvigur</b> dreifingarinnar sinnum færslufylkið \\(M\\). \\(p_{ij}\\) eru líkurnar á að fara úr \\(i\\) í \\(j\\), svo hver <b>röð</b> í \\(M\\) summast í 1.</p>\n\\[x_{t+1}' = x_t' M, \\qquad x_{t+n}' = x_t' M^n\\]\n<details class=\"ex\"><summary>Unnið dæmi</summary>\n\\[x_0' = \\begin{bmatrix}0{,}6 & 0{,}4\\end{bmatrix},\\qquad M = \\begin{bmatrix}0{,}9 & 0{,}1\\\\ 0{,}2 & 0{,}8\\end{bmatrix}\\]\n\\[\\begin{aligned}\nx_1' &= \\begin{bmatrix} 0{,}6\\cdot0{,}9 + 0{,}4\\cdot0{,}2 & \\; 0{,}6\\cdot0{,}1 + 0{,}4\\cdot0{,}8 \\end{bmatrix} \\\\\n&= \\begin{bmatrix} 0{,}54 + 0{,}08 & \\; 0{,}06 + 0{,}32 \\end{bmatrix} = \\begin{bmatrix} 0{,}62 & 0{,}38 \\end{bmatrix}\n\\end{aligned}\\]\n<p>Prófun: \\(0{,}62 + 0{,}38 = 1\\). Ef upphafsdreifingin er gefin sem dálkvigur (eins og í skilaverkefni 1) þarf að bylta henni fyrst.</p>\n</details></section>\n\n<section id=\"s5\"><h2><span class=\"n\">05</span>Línulegt óhæði, raðtala og þrepafylki <span class=\"kafli\">5.1</span><button class=\"btn small go\" data-sgo=\"akv\">Æfa</button></h2>\n<p>Skilyrði fyrir andhverfu: (1) ferningsfylki (nauðsynlegt, ekki nægjanlegt); (2) raðir línulega óháðar (nægjanlegt). Fyrir \\(n\\times n\\) fylki eru öll þessi jafngild:</p>\n\\[\\text{raðir óháðar} \\iff r(A) = n \\iff |A| \\ne 0 \\iff A^{-1} \\text{ til} \\iff Ax = d \\text{ hefur einstaka lausn}\\]\n<p>Raðtala \\(r(A)\\) er hámarksfjöldi óháðra raða (= dálka); \\(r(A) \\le \\min(m, n)\\). Leyfðar aðgerðir að þrepafylki, sem breyta ekki raðtölunni: (1) víxla röðum, (2) margfalda röð með \\(k \\ne 0\\), (3) leggja margfeldi einnar raðar við aðra. <b>Raðtala = fjöldi raða − fjöldi núllraða.</b></p>\n<details class=\"ex\"><summary>Unnið dæmi</summary>\n\\[\\begin{bmatrix} 1 & 2 & 3 \\\\ 2 & 4 & 6 \\\\ 1 & 0 & 1 \\end{bmatrix}\n\\xrightarrow[R_3 - R_1]{R_2 - 2R_1}\n\\begin{bmatrix} 1 & 2 & 3 \\\\ 0 & 0 & 0 \\\\ 0 & -2 & -2 \\end{bmatrix}\n\\xrightarrow[-\\frac12 R_2]{R_2 \\leftrightarrow R_3}\n\\begin{bmatrix} 1 & 2 & 3 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 0 \\end{bmatrix}\\]\n<p>Ein núllröð, svo \\(r(A) = 3 - 1 = 2 \\lt 3\\). Röð 2 = 2 · röð 1, fylkið er sérstætt og \\(|A| = 0\\). Skrifaðu aðgerðina við hverja ör; það gefur stig.</p>\n</details></section>\n\n<section id=\"s6\"><h2><span class=\"n\">06</span>Ákveður <span class=\"kafli\">5.2–5.3</span><button class=\"btn small go\" data-sgo=\"akv\">Æfa</button></h2>\n<p>Aðeins til fyrir ferningsfylki. \\(|A| = 0\\) ⇔ sérstætt.</p>\n\\[\\begin{vmatrix}a_{11}&a_{12}\\\\a_{21}&a_{22}\\end{vmatrix} = a_{11}a_{22} - a_{12}a_{21}\\]\n\\[|A_{3\\times3}| = a_{11}a_{22}a_{33} - a_{11}a_{23}a_{32} + a_{12}a_{23}a_{31} - a_{12}a_{21}a_{33} + a_{13}a_{21}a_{32} - a_{13}a_{22}a_{31}\\]\n<p><b>Hlutákveða</b> \\(|M_{ij}|\\): strika út röð \\(i\\) og dálk \\(j\\). <b>Fylgiþáttur</b> \\(|C_{ij}| = (-1)^{i+j}|M_{ij}|\\), formerkin í skákborðsmynstri:</p>\n\\[\\begin{bmatrix} + & - & + & - \\\\ - & + & - & + \\\\ + & - & + & - \\\\ - & + & - & + \\end{bmatrix} \\qquad |A| = \\sum_{j} a_{ij}|C_{ij}| \\;(\\text{röð } i) = \\sum_{i} a_{ij}|C_{ij}| \\;(\\text{dálkur } j)\\]\n<p>Liðaðu eftir röð eða dálki með <b>flestum núllum</b>. Í 26b hefur dálkur 3 þrjú núll, svo aðeins einn liður lifir og 4×4 verður 3×3.</p>\n<details class=\"ex\"><summary>Unnið dæmi: liðun eftir röð 1</summary>\n\\[\\begin{aligned}\n\\begin{vmatrix} 2 & 1 & 0 \\\\ 1 & 3 & 1 \\\\ 0 & 1 & 2 \\end{vmatrix}\n&= 2\\begin{vmatrix} 3 & 1 \\\\ 1 & 2 \\end{vmatrix} - 1\\begin{vmatrix} 1 & 1 \\\\ 0 & 2 \\end{vmatrix} + 0\\begin{vmatrix} 1 & 3 \\\\ 0 & 1 \\end{vmatrix} \\\\\n&= 2(6 - 1) - 1(2 - 0) + 0 \\\\\n&= 10 - 2 = 8\n\\end{aligned}\\]\n</details>\n<div class=\"scroll\"><table class=\"tt\"><thead><tr><th>#</th><th>Aðgerð</th><th>Áhrif á \\(|A|\\)</th></tr></thead><tbody>\n<tr><td>1</td><td>Bylta</td><td>engin: \\(|A'| = |A|\\)</td></tr>\n<tr><td>2</td><td>Víxla tveimur röðum (dálkum)</td><td>formerki snýst: \\(-|A|\\)</td></tr>\n<tr><td>3</td><td>Margfalda <b>eina</b> röð með \\(k\\)</td><td>\\(k|A|\\) (leyfir að þátta út úr röð)</td></tr>\n<tr><td>4</td><td>Leggja \\(k\\cdot\\)röð við aðra röð</td><td>engin</td></tr>\n<tr><td>5</td><td>Röð er línulegt fall af öðrum (t.d. tvær eins, núllröð)</td><td>\\(|A| = 0\\)</td></tr>\n<tr><td>6</td><td>Liðun með framandi fylgiþáttum, \\(\\sum_j a_{ij}|C_{i'j}|\\)</td><td>0</td></tr>\n<tr><td></td><td>Allt \\(n\\times n\\) fylkið sinnum \\(k\\)</td><td>\\(|kA| = k^n|A|\\)</td></tr></tbody></table></div>\n\\[|AB| = |A||B| \\qquad |A^{-1}| = \\frac{1}{|A|} \\qquad |\\text{þríhyrningsfylki}| = \\text{margfeldi hornalínu}\\]\n<p>Lokapróf 2025 spurði hvað gerist ef röð 2 er margfölduð með \\(k\\): eiginleiki 3, svarið er \\(k|A|\\).</p></section>\n\n<section id=\"s7\"><h2><span class=\"n\">07</span>Andhverfa með aðoka fylki <span class=\"kafli\">5.4</span><button class=\"btn small go\" data-sgo=\"and\">Æfa</button></h2>\n\\[A^{-1} = \\frac{1}{|A|}\\operatorname{adj}A, \\qquad \\operatorname{adj}A = C' \\qquad\\qquad \\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}^{-1} = \\frac{1}{ad-bc}\\begin{bmatrix}d&-b\\\\-c&a\\end{bmatrix}\\]\n<ol><li>Reikna \\(|A|\\). Ef 0: engin andhverfa, stoppa og segja það.</li><li>Öll \\(n^2\\) \\(|C_{ij}|\\) með formerki, raða í \\(C\\). Skrifaðu þá fyrst sem lista \\(|C_{11}| = \\dots\\)</li><li><b>Bylta</b>: \\(\\operatorname{adj}A = C'\\).</li><li>Deila með \\(|A|\\) og þátta út: \\(A^{-1} = \\frac13[\\dots]\\).</li></ol>\n<details class=\"ex\"><summary>Unnið dæmi 3×3</summary>\n\\[A = \\begin{bmatrix} 1 & 2 & 0 \\\\ 0 & 1 & 1 \\\\ 1 & 0 & 1 \\end{bmatrix}, \\qquad |A| = 1(1\\cdot1 - 1\\cdot0) - 2(0\\cdot1 - 1\\cdot1) + 0 = 1 + 2 = 3\\]\n\\[\\begin{aligned}\n|C_{11}| &= +(1\\cdot1 - 1\\cdot0) = 1 & |C_{12}| &= -(0\\cdot1 - 1\\cdot1) = 1 & |C_{13}| &= +(0\\cdot0 - 1\\cdot1) = -1 \\\\\n|C_{21}| &= -(2\\cdot1 - 0\\cdot0) = -2 & |C_{22}| &= +(1\\cdot1 - 0\\cdot1) = 1 & |C_{23}| &= -(1\\cdot0 - 2\\cdot1) = 2 \\\\\n|C_{31}| &= +(2\\cdot1 - 0\\cdot1) = 2 & |C_{32}| &= -(1\\cdot1 - 0\\cdot0) = -1 & |C_{33}| &= +(1\\cdot1 - 2\\cdot0) = 1\n\\end{aligned}\\]\n\\[C = \\begin{bmatrix} 1 & 1 & -1 \\\\ -2 & 1 & 2 \\\\ 2 & -1 & 1 \\end{bmatrix}, \\quad\n\\operatorname{adj} A = C' = \\begin{bmatrix} 1 & -2 & 2 \\\\ 1 & 1 & -1 \\\\ -1 & 2 & 1 \\end{bmatrix}, \\quad\nA^{-1} = \\frac{1}{3}\\begin{bmatrix} 1 & -2 & 2 \\\\ 1 & 1 & -1 \\\\ -1 & 2 & 1 \\end{bmatrix}\\]\n<p>Prófun: röð 1 í \\(A\\) sinnum dálkur 1 í adj: \\(1\\cdot1 + 2\\cdot1 + 0\\cdot(-1) = 3 = |A|\\); röð 1 sinnum dálkur 2: \\(1\\cdot(-2) + 2\\cdot1 + 0\\cdot2 = 0\\). Rétt. Ef beðið er um að <i>sannreyna</i> gefna andhverfu (lokapróf 2025) þarf að reikna \\(AA^{-1}\\) í heild.</p>\n</details></section>\n\n<section id=\"s8\"><h2><span class=\"n\">08</span>Jöfnukerfi og regla Cramers <span class=\"kafli\">5.5</span><button class=\"btn small go\" data-sgo=\"jof\">Æfa</button></h2>\n<p>Uppsetning \\(Ax = d\\): ein röð á hverja jöfnu, einn dálkur á hverja breytu í sömu röð alls staðar, hægri hliðar í \\(d\\). Breyta sem vantar fær stuðulinn <b>0</b>.</p>\n\\[x^* = A^{-1}d \\qquad\\qquad x_j^* = \\frac{|A_j|}{|A|}\\]\n<p>\\(A_j\\) er \\(A\\) með <b>dálki</b> \\(j\\) skipt út fyrir \\(d\\). Virkar aðeins ef \\(|A| \\ne 0\\); ef \\(|A| = 0\\) er annaðhvort engin lausn eða óendanlega margar. Cramer er fljótlegastur þegar aðeins er beðið um <b>eina</b> breytu.</p>\n<details class=\"ex\"><summary>Unnið dæmi: báðar leiðir</summary>\n\\[\\begin{cases} 2x + y = 5 \\\\ x + 3y = 10 \\end{cases}\n\\;\\Longrightarrow\\;\n\\underbrace{\\begin{bmatrix} 2 & 1 \\\\ 1 & 3 \\end{bmatrix}}_{A}\n\\underbrace{\\begin{bmatrix} x \\\\ y \\end{bmatrix}}_{x}\n= \\underbrace{\\begin{bmatrix} 5 \\\\ 10 \\end{bmatrix}}_{d}\\]\n\\[x^* = A^{-1}d = \\frac{1}{5}\\begin{bmatrix} 3 & -1 \\\\ -1 & 2 \\end{bmatrix}\\begin{bmatrix} 5 \\\\ 10 \\end{bmatrix} = \\frac{1}{5}\\begin{bmatrix} 15 - 10 \\\\ -5 + 20 \\end{bmatrix} = \\begin{bmatrix} 1 \\\\ 3 \\end{bmatrix}\\]\n\\[\\begin{aligned}\n|A| &= 2\\cdot3 - 1\\cdot1 = 5 \\\\\n|A_1| &= \\begin{vmatrix} 5 & 1 \\\\ 10 & 3 \\end{vmatrix} = 15 - 10 = 5 &&\\Rightarrow\\; x^* = 5/5 = 1 \\\\\n|A_2| &= \\begin{vmatrix} 2 & 5 \\\\ 1 & 10 \\end{vmatrix} = 20 - 5 = 15 &&\\Rightarrow\\; y^* = 15/5 = 3\n\\end{aligned}\\]\n<p>Prófun: \\(2\\cdot1 + 3 = 5\\) og \\(1 + 3\\cdot3 = 10\\). Tekur hálfa mínútu og grípur flestar formerkjavillur.</p>\n</details></section>\n\n<section id=\"s9\"><h2><span class=\"n\">09</span>Grunnafleiður og lograreglur <span class=\"kafli\">rifjun</span><button class=\"btn small go\" data-sq=\"dif\">Hraðæfing</button></h2>\n<div class=\"scroll\"><table class=\"tt\"><thead><tr><th>\\(f(x)\\)</th><th>\\(f'(x)\\)</th><th>\\(f(x)\\)</th><th>\\(f'(x)\\)</th></tr></thead><tbody>\n<tr><td>\\(c\\)</td><td>\\(0\\)</td><td>\\(e^{x}\\)</td><td>\\(e^{x}\\)</td></tr>\n<tr><td>\\(x^n\\)</td><td>\\(nx^{n-1}\\)</td><td>\\(e^{g(x)}\\)</td><td>\\(g'(x)e^{g(x)}\\)</td></tr>\n<tr><td>\\(c\\,g(x)\\)</td><td>\\(c\\,g'(x)\\)</td><td>\\(a^{x}\\)</td><td>\\(a^{x}\\ln a\\)</td></tr>\n<tr><td>\\(\\sqrt{x}\\)</td><td>\\(\\frac{1}{2\\sqrt{x}}\\)</td><td>\\(\\ln x\\)</td><td>\\(\\frac{1}{x}\\)</td></tr>\n<tr><td>\\(\\frac{1}{x}\\)</td><td>\\(-\\frac{1}{x^2}\\)</td><td>\\(\\ln g(x)\\)</td><td>\\(\\frac{g'(x)}{g(x)}\\)</td></tr></tbody></table></div>\n<p>Einfaldaðu með lograreglum <b>áður</b> en þú diffrar (dæmi 31b, 33a):</p>\n\\[\\ln(xy) = \\ln x + \\ln y \\qquad \\ln\\frac{x}{y} = \\ln x - \\ln y \\qquad \\ln x^b = b\\ln x \\qquad e^{\\ln x} = x\\]\n<p>Dæmi: \\(a\\ln(x_1x_2^b) = a\\ln x_1 + ab\\ln x_2\\), svo \\(f_1 = \\frac{a}{x_1}\\) og \\(f_2 = \\frac{ab}{x_2}\\). Vaxandi ef \\(f' \\gt 0\\), minnkandi ef \\(f' \\lt 0\\).</p></section>\n\n<section id=\"s10\"><h2><span class=\"n\">10</span>Diffrunarreglur <span class=\"kafli\">7.2–7.3</span><button class=\"btn small go\" data-sgo=\"dif\">Æfa</button></h2>\n<div class=\"kv\"><span>Summa</span><span>\\((f \\pm g \\pm h)' = f' \\pm g' \\pm h'\\)</span><span>Margfeldi</span><span>\\((fg)' = f'g + fg'\\), \\((fgh)' = f'gh + fg'h + fgh'\\)</span><span>Deiling</span><span>\\(\\left(\\frac{f}{g}\\right)' = \\frac{f'g - fg'}{g^2}\\)</span><span>Keðja</span><span>\\(\\frac{dz}{dx} = \\frac{dz}{dy}\\cdot\\frac{dy}{dx} = f'(g(x))\\,g'(x)\\)</span><span>Andhverfa</span><span>\\(\\frac{dx}{dy} = \\frac{1}{dy/dx}\\), ef \\(f\\) er stranglega vaxandi/minnkandi</span></div>\n<p>Deilingarreglan: „neðri sinnum afleiða efri, mínus efri sinnum afleiða neðri, yfir neðri í öðru“. Keðjureglan: „ytra fallið diffrað (innra óbreytt) sinnum afleiða innra fallsins“. Á prófi: skrifaðu \\(y\\) = innra fallið, \\(\\frac{dz}{dy}\\) og \\(\\frac{dy}{dx}\\) sérstaklega áður en þú margfaldar.</p>\n<details class=\"ex\"><summary>Unnin dæmi</summary>\n\\[\\frac{d}{dx}\\left[\\frac{x^2}{x+1}\\right] = \\frac{2x(x+1) - x^2\\cdot1}{(x+1)^2} = \\frac{x^2 + 2x}{(x+1)^2}\\]\n\\[\\frac{d}{dx}(x^2 + 1)^5 = 5(x^2+1)^4\\cdot 2x = 10x(x^2+1)^4\\]\n<p>\\(y = x^3 + x \\Rightarrow \\frac{dy}{dx} = 3x^2 + 1 \\gt 0\\) (stranglega vaxandi, svo andhverfa er til) \\(\\Rightarrow \\frac{dx}{dy} = \\frac{1}{3x^2 + 1}\\).</p>\n</details>\n<p>Hagfræði: \\(\\frac{d(AC)}{dQ} = \\frac{1}{Q}(MC - AC)\\), svo \\(MC = AC\\) í lágmarki meðalkostnaðar.</p></section>\n\n<section id=\"s11\"><h2><span class=\"n\">11</span>Föll af einni breytu og útmörk <span class=\"kafli\">9.1–9.4 · 11.1</span><button class=\"btn small go\" data-sgo=\"ein\">Æfa</button></h2>\n<p>Gátlistinn sem lokapróf 2023 (dæmi 3) fylgdi:</p>\n<ol><li><b>Formengi.</b> \\(\\ln(g)\\) krefst \\(g \\gt 0\\); nefnari \\(\\ne 0\\); \\(\\sqrt{g}\\) krefst \\(g \\ge 0\\).</li>\n<li><b>Vaxandi/minnkandi:</b> formerki \\(f'\\). Þáttaðu \\(f'\\) og skoðaðu formerki hvers þáttar.</li>\n<li><b>Krítískir punktar:</b> \\(f'(x) = 0\\) (FGS, nauðsynlegt). Geta verið hámörk, lágmörk eða beygjuskil.</li>\n<li><b>Flokkun (AGS, nægjanlegt):</b> \\(f''(x^*) \\lt 0\\) hámark, \\(f''(x^*) \\gt 0\\) lágmark. Ef \\(f''(x^*) = 0\\): skoða formerkjaskipti \\(f'\\).</li>\n<li><b>Hvelft/kúpt:</b> formerki \\(f''\\); beygjuskil þar sem \\(f''\\) skiptir um formerki.</li>\n<li><b>Riss:</b> skurðpunktar (\\(f(0)\\), \\(f(x) = 0\\)), krítískir punktar, aðfellur og hegðun í endum.</li></ol>\n\\[dz = f'(x)\\,dx = 0 \\;\\Rightarrow\\; f'(x) = 0 \\qquad d^2z = f''(x)\\,dx^2 \\begin{cases}\\lt 0 & \\text{hámark}\\\\ \\gt 0 & \\text{lágmark}\\end{cases}\\]\n<p><b>Staðbundið vs. algilt.</b> Algilt hámark: \\(f(x^*) \\ge f(x)\\) fyrir öll \\(x\\) í formenginu. Ef fallið er stranglega hvelft (kúpt) á öllu formenginu er krítískur punktur algilt hámark (lágmark). Þriðja stigs margliður hafa aldrei algild útmörk. Á lokuðu bili \\([a, b]\\) geta útmörk líka verið á jaðrinum.</p>\n<details class=\"ex\"><summary>Unnið dæmi: \\(f(x) = \\ln(1/x)\\) (lokapróf 2023)</summary>\n\\[f(x) = -\\ln x,\\quad D = (0, \\infty),\\quad f'(x) = -\\frac1x \\lt 0,\\quad f''(x) = \\frac{1}{x^2} \\gt 0\\]\n<p>Minnkandi og stranglega kúpt; engir krítískir punktar; skurðpunktur \\((1, 0)\\); enginn skurður við y-ás.</p>\n</details></section>\n<section id=\"s12\"><h2><span class=\"n\">12</span>Hlutafleiður, stigull og Hessian-fylki <span class=\"kafli\">7.4</span><button class=\"btn small go\" data-sgo=\"hlu\">Æfa</button></h2>\n<p>Diffraðu eins og <b>allar aðrar breytur séu fastar</b>; allar reglur úr 09–10 gilda. \\(f_{ij}\\) með \\(i \\ne j\\) er krossafleiða. <b>Setning Young</b>: \\(f_{ij} = f_{ji}\\). Notaðu það sem prófun: ef \\(f_{xy} \\ne f_{yx}\\) er villa einhvers staðar.</p>\n<details class=\"ex\"><summary>Unnið dæmi: \\(f = x^2y + 3xy^3\\)</summary>\n\\[\\begin{aligned}\nf_x &= 2xy + 3y^3 & f_y &= x^2 + 9xy^2 \\\\\nf_{xx} &= 2y & f_{yy} &= 18xy \\\\\nf_{xy} &= \\tfrac{\\partial}{\\partial y}(2xy + 3y^3) = 2x + 9y^2 & f_{yx} &= \\tfrac{\\partial}{\\partial x}(x^2 + 9xy^2) = 2x + 9y^2 \\;\\checkmark\n\\end{aligned}\\]\n</details>\n\\[\\nabla f = (f_1, \\dots, f_n) \\qquad H = \\begin{bmatrix}f_{11}&f_{12}&f_{13}\\\\f_{21}&f_{22}&f_{23}\\\\f_{31}&f_{32}&f_{33}\\end{bmatrix} = H'\\]\n<p>Röð \\(i\\) = diffrað fyrst m.t.t. \\(x_i\\); dálkur \\(j\\) = svo m.t.t. \\(x_j\\).</p></section>\n\n<section id=\"s13\"><h2><span class=\"n\">13</span>Mismunur og heildarmismunur <span class=\"kafli\">8.1–8.3</span><button class=\"btn small go\" data-sgo=\"mis\">Æfa</button></h2>\n\\[\\Delta y = f'(x)\\Delta x + \\delta\\Delta x \\;(\\delta \\to 0) \\qquad dy = f'(x)\\,dx \\qquad dy = \\sum_{i=1}^n f_i\\,dx_i\\]\n<p>\\(f'(x)dx\\) er sá hluti breytingarinnar sem hallinn í upphafspunktinum skýrir; nálgunin versnar eftir því sem \\(dx\\) stækkar. Heildarmismunur: (1) allar fyrstu hlutafleiður, (2) hver sinnum sinn mismun, (3) leggja saman.</p>\n<details class=\"ex\"><summary>Unnið dæmi: \\(z = x^2y + 3xy^3\\) í \\((1, 2)\\), \\(dx = 0{,}1\\), \\(dy = -0{,}1\\)</summary>\n\\[dz = (2xy + 3y^3)\\,dx + (x^2 + 9xy^2)\\,dy\\]\n\\[\\begin{aligned}\nf_x &= 2\\cdot1\\cdot2 + 3\\cdot2^3 = 4 + 24 = 28 \\\\\nf_y &= 1^2 + 9\\cdot1\\cdot2^2 = 1 + 36 = 37 \\\\\ndz &= 28(0{,}1) + 37(-0{,}1) = 2{,}8 - 3{,}7 = -0{,}9\n\\end{aligned}\\]\n</details>\n<div class=\"kv\"><span>\\(dk = 0\\)</span><span>\\(d(ku^n) = knu^{n-1}du\\)</span><span>\\(d(u \\pm v \\pm w) = du \\pm dv \\pm dw\\)</span><span>\\(d(uv) = v\\,du + u\\,dv\\)</span><span>\\(d\\!\\left(\\frac{u}{v}\\right) = \\frac{1}{v^2}(v\\,du - u\\,dv)\\)</span><span>\\(d(uvw) = vw\\,du + uw\\,dv + uv\\,dw\\)</span></div>\n<p>Sömu reglur og fyrir afleiður, með \\(du\\) í stað \\(u'\\).</p>\n<p><b>Breytur sem eru föll</b> (dæmi 34b, sjá líka kafla 14): ef \\(y = f(x, \\ln x, x + e^x)\\):</p>\n\\[dy = \\Big[f_1 + \\frac{f_2}{x} + f_3(1 + e^x)\\Big]dx\\]\n<p>Halli hæðarlínu: \\(dz = 0 \\Rightarrow \\frac{dy}{dx} = -\\frac{f_x}{f_y}\\). Vaxtarbókhald: \\(\\frac{dY}{Y} = \\alpha\\frac{dK}{K} + \\beta\\frac{dL}{L}\\) fyrir \\(Y = AK^\\alpha L^\\beta\\).</p>\n<p>Teygni (C&amp;W 8.1, ekki í nótunum): \\(\\varepsilon = \\frac{dQ}{dP}\\cdot\\frac{P}{Q}\\). \\(|\\varepsilon| \\gt 1\\) teygin, \\(\\lt 1\\) óteygin; \\(kP^{-n}\\) hefur fasta teygni \\(-n\\).</p></section>\n\n<section id=\"s14\"><h2><span class=\"n\">14</span>Heildarafleiður <span class=\"kafli\">8.4</span><button class=\"btn small go\" data-sgo=\"mis\">Æfa</button></h2>\n<p>Ef \\(y = f(x, w)\\) og \\(x = g(w)\\) hefur \\(w\\) <b>bein</b> áhrif á \\(y\\) og <b>óbein</b> í gegnum \\(x\\). Aðferð: taka heildarmismun og deila með \\(dw\\).</p>\n\\[\\frac{dy}{dw} = \\frac{\\partial y}{\\partial x}\\frac{dx}{dw} + \\frac{\\partial y}{\\partial w}\\]\n<div class=\"kv\"><b>Tvær miðlunarbreytur</b><span>\\(y = f(x_1, x_2, w)\\), \\(x_1 = g(w)\\), \\(x_2 = h(w)\\): \\(\\frac{dy}{dw} = f_1\\frac{dx_1}{dw} + f_2\\frac{dx_2}{dw} + f_w\\)</span><b>Hlut-heildarafleiða</b><span>\\(x_1 = g(u, v)\\), \\(x_2 = h(u, v)\\): \\(\\frac{\\S y}{\\S u} = f_1\\frac{\\partial x_1}{\\partial u} + f_2\\frac{\\partial x_2}{\\partial u} + f_u\\)</span></div>\n<p>Teiknaðu flæðirit með einni ör fyrir hvern farveg: hver ör er einn liður í summunni. Lokasvarið á að vera fall af \\(w\\) einu: stingdu \\(x = g(w)\\) inn og einfaldaðu. Staðfestu með beinni innsetningu ef tími gefst.</p>\n<details class=\"ex\"><summary>Unnið dæmi: lokapróf 2025, dæmi 4d</summary>\n\\[U = \\frac{2xy}{x+y},\\quad x = 3y^2:\\qquad \\frac{dU}{dy} = \\frac{2y^2}{(x+y)^2}\\cdot 6y + \\frac{2x^2}{(x+y)^2} = \\frac{6y(3y+2)}{(3y+1)^2}\\]\n</details></section>\n<section id=\"s15\"><h2><span class=\"n\">15</span>Fólgin (dulin) föll <span class=\"kafli\">8.5</span><button class=\"btn small go\" data-sgo=\"dul\">Æfa</button></h2>\n<p>Gefið samband \\(F(y, x_1, \\dots, x_m) = 0\\). <b>Setningin um fólgin föll:</b> ef (A) hlutafleiðurnar \\(F_y, F_1, \\dots, F_m\\) eru samfelldar og (B) \\(F_y \\ne 0\\) í punkti sem uppfyllir \\(F = 0\\), þá er til fólgið fall \\(y = f(x_1, \\dots, x_m)\\) í grennd við punktinn, samfellt og með samfelldar hlutafleiður.</p>\n\\[\\frac{\\partial y}{\\partial x_i} = -\\frac{F_i}{F_y} \\qquad\\qquad \\frac{dy}{dx} = -\\frac{F_x}{F_y}\\]\n<ol><li>Skrifaðu sambandið sem \\(F(\\dots) = 0\\) (allt öðrum megin).</li><li>Athugaðu að punkturinn uppfylli \\(F = 0\\).</li><li>Reiknaðu hlutafleiðurnar og taktu fram að þær séu samfelldar.</li><li>Sýndu að hlutafleiðan m.t.t. <b>háðu</b> breytunnar sé \\(\\ne 0\\) í punktinum.</li><li>Formúlan, með mínusmerkinu.</li></ol>\n<p>Skilyrðin eru <b>nægjanleg, ekki nauðsynleg</b>. Ef beðið er um \\(x = f(y)\\) þarf \\(F_x \\ne 0\\) og \\(\\frac{dx}{dy} = -\\frac{F_y}{F_x}\\). Hagfræði: jafnnytjaferill (\\(U(x, y) = u_0\\)) og jafnmagnsferill (\\(Q(K, L) = Q_0\\)); halli \\(= -\\frac{U_x}{U_y}\\).</p>\n<details class=\"ex\"><summary>Unnið dæmi: \\(x^2 + xy + y^2 = 7\\) í \\((1, 2)\\)</summary>\n\\[F_x = 2x + y = 4,\\quad F_y = x + 2y = 5 \\ne 0,\\qquad \\frac{dy}{dx} = -\\frac45\\]\n</details>\n<p class=\"notice\">Lokapróf 2025, dæmi 5: punkturinn \\(\\left(\\tfrac14, -\\tfrac14\\right)\\) uppfyllir ekki \\(3x^2 + 2xy + 4y^2 = 0\\) (gildið er \\(\\tfrac{5}{16}\\)). Ef slíkt gerist: taktu það fram og leystu fyrir hæðarlínuna gegnum punktinn.</p></section>\n<section id=\"s16\"><h2><span class=\"n\">16</span>Taylor- og Maclaurin-nálgun <span class=\"kafli\">9.5</span><button class=\"btn small go\" data-sgo=\"tay\">Æfa</button></h2>\n\\[\\phi(x) \\approx \\phi(x_0) + \\frac{\\phi'(x_0)}{1!}(x - x_0) + \\frac{\\phi''(x_0)}{2!}(x - x_0)^2 + \\dots + \\frac{\\phi^{(n)}(x_0)}{n!}(x - x_0)^n\\]\n\\[R_n = \\frac{\\phi^{(n+1)}(p)}{(n+1)!}(x - x_0)^{n+1}, \\quad p \\text{ milli } x \\text{ og } x_0\\]\n<ul><li>Maclaurin: \\(x_0 = 0\\). 1. gráða er <b>línuleg nálgun</b> = snertill í \\(x_0\\).</li>\n<li>\\(R_n\\) stækkar þegar \\(n\\) er lægra og þegar \\(x\\) er fjær \\(x_0\\).</li>\n<li>Margliða af stigi \\(n\\): \\(n\\)-ta gráðu nálgun er <b>nákvæm</b> og \\(R_n = 0\\) (því \\(\\phi^{(n+1)} = 0\\)).</li>\n<li>„Einfaldið“: margfaldaðu út \\((x - x_0)^k\\) og safnaðu saman veldum af \\(x\\).</li></ul>\n<div class=\"kv\"><span>\\(e^x\\) um 0</span><span>\\(1 + x + \\frac{x^2}{2}\\)</span><span>\\(\\ln x\\) um 1</span><span>\\((x-1) - \\frac{(x-1)^2}{2}\\)</span><span>\\(\\sqrt{x}\\) um 1</span><span>\\(1 + \\frac{x-1}{2} - \\frac{(x-1)^2}{8}\\)</span></div>\n<details class=\"ex\"><summary>Unnið dæmi: lokapróf 2025, dæmi 6</summary>\n\\[f = 4x^3 - 3x^2 + 2x + 5,\\; x_0 = 2:\\quad f(2) = 29,\\; f'(2) = 38,\\; f''(2) = 42\\]\n\\[P_1 = 38x - 47, \\qquad P_2 = 29 + 38(x-2) + 21(x-2)^2 = 21x^2 - 46x + 37, \\qquad R_3 = 0\\]\n</details></section>\n<section id=\"s17\"><h2><span class=\"n\">17</span>Einsleit og þenjanleg föll <span class=\"kafli\">12.6–12.7</span><button class=\"btn small go\" data-sgo=\"eins\">Æfa</button></h2>\n\\[f(jx_1, \\dots, jx_n) = j^r f(x_1, \\dots, x_n) \\qquad\\qquad rf = x_1f_1 + x_2f_2 + \\dots + x_nf_n \\;\\text{(Euler)}\\]\n<ul><li>Aðferð: settu \\(jx_i\\) inn fyrir allar breytur og reyndu að þátta \\(j^r\\) út.</li>\n<li>Margliða er einsleit ef og aðeins ef allir liðir hafa sömu heildargráðu. Fasti eða stakur lægri liður (\\(-y\\) í lokaprófi 2025) brýtur einsleitni.</li>\n<li>Framleiðslufall: \\(r \\gt 1\\) stærðarhagkvæmni, \\(r = 1\\) föst (línulega einsleitt), \\(r \\lt 1\\) stærðaróhagkvæmni. Cobb-Douglas \\(AK^\\alpha L^\\beta\\): \\(r = \\alpha + \\beta\\).</li>\n<li>Línulega einsleitt fall þarf ekki að vera línulegt (t.d. \\(x^\\beta y^{1-\\beta}\\)).</li>\n<li><b>Þenjanlegt</b> (homothetic): ef \\(f(x^0) = f(x^1)\\) þá \\(f(jx^0) = f(jx^1)\\). Öll einsleit föll eru þenjanleg, ekki öfugt; t.d. \\(\\ln(Ax^\\gamma y^{1-\\gamma}) = \\ln j + f\\) er þenjanlegt en ekki einsleitt (dæmi 39).</li></ul></section>\n<section id=\"s18\"><h2><span class=\"n\">18</span>Hvelft, kúpt og útmörk margra breyta <span class=\"kafli\">11.1–11.4</span><button class=\"btn small go\" data-sgo=\"hes\">Æfa</button></h2>\n<p><b>Ein breyta:</b> hvelft ⇔ \\(f'' \\le 0\\) (stranglega ef \\(\\lt 0\\)); kúpt ⇔ \\(f'' \\ge 0\\) (stranglega ef \\(\\gt 0\\)). Línulegt fall er bæði hvelft og kúpt, en hvorugt stranglega.</p>\n<details class=\"ex\"><summary>Dæmi 30 (a, b, c > 0)</summary>\n<div class=\"scroll\"><table class=\"tt\"><thead><tr><th>\\(f(x)\\)</th><th>\\(f''(x)\\)</th><th>Niðurstaða</th></tr></thead><tbody>\n<tr><td>\\(ax\\)</td><td>\\(0\\)</td><td>bæði hvelft og kúpt</td></tr>\n<tr><td>\\(a\\sqrt{x} + b\\)</td><td>\\(-\\frac{a}{4}x^{-3/2} \\lt 0\\)</td><td>stranglega hvelft</td></tr>\n<tr><td>\\(\\ln(ax + b)\\)</td><td>\\(-\\frac{a^2}{(ax+b)^2} \\lt 0\\)</td><td>stranglega hvelft</td></tr>\n<tr><td>\\(ae^{bx+c}\\)</td><td>\\(ab^2e^{bx+c} \\gt 0\\)</td><td>stranglega kúpt</td></tr></tbody></table></div>\n</details>\n\\[|H_1| = f_{11},\\qquad |H_2| = \\begin{vmatrix}f_{11}&f_{12}\\\\f_{21}&f_{22}\\end{vmatrix} = f_{11}f_{22} - f_{12}^2,\\qquad |H_3| = |H|\\]\n<div class=\"scroll\"><table class=\"tt\"><thead><tr><th></th><th>\\(|H_1|\\)</th><th>\\(|H_2|\\)</th><th>\\(|H_3|\\)</th><th>Ályktun</th></tr></thead><tbody>\n<tr><td>Hvelft</td><td>\\(\\le 0\\)</td><td>\\(\\ge 0\\)</td><td>\\(\\le 0\\)</td><td>FGS gefa hámark</td></tr>\n<tr><td>Kúpt</td><td>\\(\\ge 0\\)</td><td>\\(\\ge 0\\)</td><td>\\(\\ge 0\\)</td><td>FGS gefa lágmark</td></tr>\n<tr><td>Hámark í \\(x^*\\)</td><td>\\(\\lt 0\\)</td><td>\\(\\gt 0\\)</td><td>\\(\\lt 0\\)</td><td>formerkin skiptast</td></tr>\n<tr><td>Lágmark í \\(x^*\\)</td><td>\\(\\gt 0\\)</td><td>\\(\\gt 0\\)</td><td>\\(\\gt 0\\)</td><td>öll jákvæð</td></tr></tbody></table></div>\n<p>Tvær breytur: ef \\(|H_2| \\gt 0\\) ræður formerki \\(f_{11}\\) (neikvætt: stranglega hvelft/hámark; jákvætt: stranglega kúpt/lágmark). Ef \\(|H_2| \\lt 0\\): <b>hvorki</b> hvelft né kúpt, og stöðupunktur er <b>söðulpunktur</b>. Dæmi: \\(f = x^2y + 1\\) gefur \\(|H_2| = 2y\\cdot 0 - (2x)^2 = -4x^2 \\lt 0\\).</p>\n<details class=\"ex\"><summary>Unnið dæmi: \\(x^ay^b\\), \\(a + b \\lt 1\\)</summary>\n\\[\\begin{aligned}\nf_{xx} &= a(a-1)x^{a-2}y^b, \\quad f_{yy} = b(b-1)x^a y^{b-2}, \\quad f_{xy} = ab\\,x^{a-1}y^{b-1} \\\\[4pt]\n|H_1| &= a(a-1)x^{a-2}y^b \\lt 0 \\quad (\\text{því } 0 \\lt a \\lt 1) \\\\[4pt]\n|H_2| &= ab(a-1)(b-1)\\,x^{2a-2}y^{2b-2} - a^2b^2\\,x^{2a-2}y^{2b-2} \\\\\n&= ab\\,x^{2a-2}y^{2b-2}\\big[(1-a)(1-b) - ab\\big] \\\\\n&= ab\\,x^{2a-2}y^{2b-2}\\,(1 - a - b) \\gt 0\n\\end{aligned}\\]\n<p>Stranglega hvelft. Lykilskrefið er að þátta sameiginlega veldið út áður en formerkið er metið. Með stuðli \\(A\\): \\(|H_2| = A^2ab(1-a-b)x^{2a-2}y^{2b-2}\\), svo \\(a + b = 1\\) gefur hvelft (ekki stranglega) og \\(a + b \\gt 1\\) hvorugt.</p>\n</details>\n<p><b>Útmörk tveggja breyta</b> (nótur 20): FGS \\(f_x = f_y = 0\\). AGS með öðrum heildarmismun:</p>\n\\[d^2z = f_{xx}\\,dx^2 + 2f_{xy}\\,dx\\,dy + f_{yy}\\,dy^2 \\quad\\begin{cases}\\lt 0 \\iff f_{xx} \\lt 0,\\; f_{yy} \\lt 0,\\; f_{xx}f_{yy} \\gt f_{xy}^2 & \\text{hámark}\\\\ \\gt 0 \\iff f_{xx} \\gt 0,\\; f_{yy} \\gt 0,\\; f_{xx}f_{yy} \\gt f_{xy}^2 & \\text{lágmark}\\end{cases}\\]\n<p><b>n breytur</b> (nótur 21): hámark ef \\(|H_i| \\lt 0\\) fyrir oddatölu \\(i\\) og \\(\\gt 0\\) fyrir slétta; lágmark ef \\(|H_i| \\gt 0\\) fyrir öll \\(i\\). Ef \\(H\\) er fast og formerkin gilda alls staðar er útmarkið algilt.</p>\n<p><b>Samsetningar</b> (dæmi 32): summa hvelfdra er hvelf; \\(p \\gt 0\\) sinnum heldur eiginleikanum; \\(-\\)(kúpt) er hvelft. Því er \\(\\pi = pY - C\\) hvelft.</p>\n<p class=\"hint\">Tæknileg athugasemd: prófið með leiðandi höfuðhlutákveðum er öruggt fyrir <b>strangar</b> niðurstöður. Fyrir \\(\\le\\), \\(\\ge\\) þarf strangt til tekið að skoða allar höfuðhlutákveður. Notaðu útgáfuna úr tímanum á prófinu, en vittu að munurinn er til.</p></section>\n\n<section id=\"s19\"><h2><span class=\"n\">19</span>Hámörkun og umslagssetningin <span class=\"kafli\">11.4 · 13.5</span><button class=\"btn small go\" data-sgo=\"ham\">Æfa</button></h2>\n<p><b>Uppskrift að hámörkunardæmi</b> (lokapróf 2023, dæmi 4 og 2025, dæmi 7):</p>\n<ol><li>Ritaðu vandann formlega: \\(\\max_{K,L}\\; \\pi = pQ(K, L) - rK - wL\\).</li>\n<li>FGS: \\(\\pi_K = 0\\), \\(\\pi_L = 0\\); leystu sem fall af ytri breytum.</li>\n<li>AGS: Hessian og leiðandi höfuðhlutákveður (\\(-, +, -\\) hámark; \\(+, +, +\\) lágmark).</li>\n<li>Samanburðarstöðugreining: diffraðu \\(K^*(p)\\) og túlkaðu formerkið hagfræðilega.</li>\n<li>Virðisfall og umslagssetning.</li></ol>\n\\[V(\\phi) = f\\big(x^*(\\phi), y^*(\\phi), \\phi\\big), \\qquad \\frac{dV}{d\\phi} = \\underbrace{f_x\\frac{\\partial x^*}{\\partial\\phi} + f_y\\frac{\\partial y^*}{\\partial\\phi}}_{= 0 \\text{ því } f_x = f_y = 0} + f_\\phi = \\frac{\\partial f}{\\partial\\phi}\\Big|_{x^*, y^*}\\]\n<p><b>Virðisfallið</b> gefur hámarksgildi markmiðsfallsins sem fall af ytri breytu. Umslagssetningin: áhrif ytri breytu á hámarkið fást með því að diffra markmiðsfallið <b>beint</b> m.t.t. hennar og meta í hámarkinu. Fyrir hagnað: \\(\\frac{dV}{dp} = Q(K^*, L^*)\\), \\(\\frac{dV}{dw} = -L^*\\).</p>\n<details class=\"ex\"><summary>Unnið dæmi: lokapróf 2023, dæmi 4</summary>\n\\[\\pi = p(-K^2 - L^2 + 4L + 2K) - 2K - 4L, \\qquad K^* = 1 - \\frac1p, \\quad L^* = 2 - \\frac2p\\]\n\\[|H_1| = -2p \\lt 0, \\quad |H_2| = 4p^2 \\gt 0, \\qquad \\frac{dV}{dp} = Q^* = 5 - \\frac{5}{p^2} = 4{,}95 \\text{ í } p = 10\\]\n</details></section>\n<section id=\"s20\"><h2><span class=\"n\">20</span>Gildrur<button class=\"btn small go\" data-sq=\"all\">Hraðæfing</button></h2>\n<div class=\"trap\">\n<b>✗</b><span>Formengi: gleyma að \\(\\ln(g)\\) krefst \\(g \\gt 0\\) eða að nefnari má ekki vera 0.</span>\n<b>✗</b><span>Kalla krítískan punkt hámark án AGS. \\(f'' = 0\\) segir ekkert eitt og sér.</span>\n<b>✗</b><span>Heildarafleiða: gleyma beinu áhrifunum \\(\\partial y/\\partial w\\), eða skila svari sem fall af bæði \\(x\\) og \\(w\\).</span>\n<b>✗</b><span>Fólgin föll: gleyma mínusmerkinu í \\(-F_x/F_y\\), eða athuga ekki að punkturinn uppfylli \\(F = 0\\).</span>\n<b>✗</b><span>Taylor: gleyma að deila með \\(n!\\), eða skilja eftir \\((x - x_0)^2\\) þegar beðið er um að einfalda.</span>\n<b>✗</b><span>Einsleitni: segja „gráða 2“ þegar einn liður hefur aðra gráðu. Þá er fallið ekki einsleitt.</span>\n<b>✗</b><span>Umslagssetning: diffra \\(f\\) en gleyma að meta í \\((x^*, y^*)\\), eða bæta óbeinu áhrifunum við.</span>\n<b>✗</b><span>Margfalda án þess að athuga víddir. Skrifaðu \\((m\\times n)(n\\times p)\\) fyrst.</span>\n<b>✗</b><span>\\(AB = BA\\). Almennt ekki; reiknaðu bæði ef spurt er.</span>\n<b>✗</b><span>\\((AB)' = A'B'\\) eða \\((AB)^{-1} = A^{-1}B^{-1}\\). Röðin snýst: \\(B'A'\\) og \\(B^{-1}A^{-1}\\).</span>\n<b>✗</b><span>\\((A + B)^{-1} = A^{-1} + B^{-1}\\) (stendur í nótum 9). Engin slík regla til.</span>\n<b>✗</b><span>\\(dA^{-1}\\) í stað \\(A^{-1}d\\).</span>\n<b>✗</b><span>Ákveða fylkis sem er ekki ferningsfylki. Er ekki til; segðu það.</span>\n<b>✗</b><span>Gleyma \\((-1)^{i+j}\\). Skrifaðu skákborðsmynstrið til hliðar.</span>\n<b>✗</b><span>Gleyma að bylta fylgiþáttafylkinu. Adj er \\(C'\\), ekki \\(C\\).</span>\n<b>✗</b><span>\\(|2A| = 2|A|\\). Rétt er \\(2^n|A|\\).</span>\n<b>✗</b><span>Í Cramer: skipta út <b>röð</b> í stað dálks, eða gleyma að deila með \\(|A|\\).</span>\n<b>✗</b><span>\\(-(x - 3) = -x - 3\\). Svigar utan um neikvæðar tölur: \\(3\\cdot(-2)\\).</span>\n<b>✗</b><span>Víxlaður teljari í deilingarreglu: \\(fg' - f'g\\). Rétt: \\(f'g - fg'\\).</span>\n<b>✗</b><span>Gleyma innri afleiðu: \\((g^n)' = ng^{n-1}\\cdot g'\\), og \\((e^{3x})' \\ne e^{3x}\\).</span>\n<b>✗</b><span>Diffra breytu sem á að vera föst. Einfaldaðu \\(\\ln\\) og \\(e^{\\ln z} = z\\) fyrst.</span>\n<b>✗</b><span>Hvelft og kúpt víxlað. Hvelft = ∩ = \\(f'' \\le 0\\); kúpt = ∪ = \\(f'' \\ge 0\\).</span>\n<b>✗</b><span>Meta formerki \\(|H_2|\\) áður en sameiginlega veldið er þáttað út. Þáttaðu fyrst; þá sést formerkið á svigunum.</span>\n<b>✗</b><span>Segja „lágmark“ þegar \\(|H_2| \\lt 0\\). Það er söðulpunktur, hvað sem \\(|H_1|\\) segir.</span>\n</div></section>\n\n<section id=\"s21\"><h2><span class=\"n\">21</span>Frágangur og vinnubrögð</h2>\n<ol><li>Lestu allt prófið fyrst. Byrjaðu á fylkjadæmunum ef þau eru vélræn; þau gefa örugg stig.</li>\n<li>Skrifaðu regluna eða formúluna áður en þú stingur inn tölum. Það gefur hlutastig þótt reikningurinn klikki.</li>\n<li>Skrifaðu víddir undir hvert fylki: \\(\\underset{2\\times 3}{A}\\,\\underset{3\\times 2}{B}\\).</li>\n<li>Merktu hverja raðaðgerð (\\(R_2 - 2R_1\\)) og eftir hvaða röð eða dálki þú liðar.</li>\n<li>Prófaðu þegar það er ódýrt: eitt stak í \\(AA^{-1}\\), lausn inn í jöfnu, \\(f_{xy} = f_{yx}\\), Markov-summa = 1. Taktu fram að prófunin gangi upp.</li>\n<li>Svaraðu spurningunni í orðum: „\\(|A| = 8 \\ne 0\\) svo fylkið er andhverfanlegt“, „fallið er hvelft því …“.</li>\n<li>Haltu brotum sem brotum (\\(\\frac13\\), ekki 0,333) og þáttaðu út úr fylkjum: \\(A^{-1} = \\frac13[\\dots]\\).</li>\n<li>Tími: 180 mín. á 100 stig, um 1,8 mín. á stig. Dæmi sem gildir 15% á að taka um 25 mínútur, 30% um 50.</li></ol>\n<h3>Æfingaröð</h3>\n<div class=\"stack\" style=\"gap:8px\">\n<div class=\"row\"><button class=\"btn small\" data-sgo=\"ein,mis,dul,tay,eins,ham\" data-kind=\"blad\">Dæmablað 12–16, 35–46</button><span class=\"hint\">Nýja efnið fyrst.</span></div>\n<div class=\"row\"><button class=\"btn small\" data-exam=\"L23\">Lokapróf 2023 á tíma</button><span class=\"hint\">3 klst., á pappír.</span></div>\n<div class=\"row\"><button class=\"btn small\" data-exam=\"L25\">Lokapróf 2025 á tíma</button><span class=\"hint\">3 klst., á pappír.</span></div>\n<div class=\"row\"><button class=\"btn small\" data-sgo=\"akv,and,jof\" data-kind=\"blad\">Dæmi 26–29</button><span class=\"hint\">Fylkjahlutinn er 30–35% af prófinu.</span></div>\n</div></section>\n\n";
+// ===== lib.js =====
+// ---------- reiknikjarni: brot, fylki, TeX ----------
+const gcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a || 1; };
+class Q {
+  constructor(n, d = 1){ if (n instanceof Q) { this.n = n.n; this.d = n.d; return; } if (!Number.isInteger(n) || !Number.isInteger(d) || d === 0) throw new Error('Q: ' + n + '/' + d); if (d < 0) { n = -n; d = -d; } const g = gcd(n, d); this.n = n / g; this.d = d / g; if (Object.is(this.n, -0)) this.n = 0; }
+  static of(x){ return x instanceof Q ? x : new Q(x); }
+  add(o){ o = Q.of(o); return new Q(this.n * o.d + o.n * this.d, this.d * o.d); }
+  sub(o){ o = Q.of(o); return new Q(this.n * o.d - o.n * this.d, this.d * o.d); }
+  mul(o){ o = Q.of(o); return new Q(this.n * o.n, this.d * o.d); }
+  div(o){ o = Q.of(o); if (o.n === 0) throw new Error('deiling með núlli'); return new Q(this.n * o.d, this.d * o.n); }
+  neg(){ return new Q(-this.n, this.d); }
+  get z(){ return this.n === 0; }
+  get int(){ return this.d === 1; }
+  get v(){ return this.n / this.d; }
+  eq(o){ o = Q.of(o); return this.n === o.n && this.d === o.d; }
+  sgn(){ return Math.sign(this.n); }
+  str(){ return this.d === 1 ? String(this.n) : this.n + '/' + this.d; }
+}
+const q = (n, d) => new Q(n, d);
+// TeX fyrir tölu/brot
+function tx(x){ x = Q.of(x); if (x.d === 1) return String(x.n); return (x.n < 0 ? '-' : '') + '\\frac{' + Math.abs(x.n) + '}{' + x.d + '}'; }
+function txp(x){ x = Q.of(x); return x.n < 0 ? '(' + tx(x) + ')' : tx(x); }      // svigar ef neikvætt
+function dec(x){ x = Q.of(x); let d = x.d, k = 0; while (d % 10 === 0) { d /= 10; k++; } while (d % 2 === 0) { d /= 2; k++; } while (d % 5 === 0) { d /= 5; k++; } if (d !== 1 || k > 4) return tx(x); const s = (x.v).toFixed(k); return s.replace('.', '{,}'); }
+// stuðull fyrir framan breytu: 1→'', -1→'-'
+function coef(c, v, first){ c = Q.of(c); if (c.z) return ''; const a = c.n < 0 ? new Q(-c.n, c.d) : c; const s = (a.eq(1) && v) ? '' : tx(a); return (c.n < 0 ? (first ? '-' : ' - ') : (first ? '' : ' + ')) + s + v; }
+function poly(terms){ // [[c,'x^2'],[c,'x'],[c,'']]
+  let out = '', first = true; for (const [c, v] of terms) { if (Q.of(c).z) continue; out += coef(c, v, first); first = false; } return out || '0';
+}
+// fylki
+const M = rows => rows.map(r => r.map(Q.of));
+const dims = A => [A.length, A[0].length];
+function mmul(A, B){ const [m, n] = dims(A), [p, r] = dims(B); if (n !== p) return null; return Array.from({length:m}, (_, i) => Array.from({length:r}, (_, j) => { let s = new Q(0); for (let k = 0; k < n; k++) s = s.add(A[i][k].mul(B[k][j])); return s; })); }
+const tr = A => A[0].map((_, j) => A.map(r => r[j]));
+const madd = (A, B) => A.map((r, i) => r.map((x, j) => x.add(B[i][j])));
+const msc = (k, A) => A.map(r => r.map(x => x.mul(k)));
+const meq = (A, B) => A.length === B.length && A.every((r, i) => r.length === B[i].length && r.every((x, j) => x.eq(B[i][j])));
+const eye = n => Array.from({length:n}, (_, i) => Array.from({length:n}, (_, j) => new Q(i === j ? 1 : 0)));
+const minorM = (A, i, j) => A.filter((_, r) => r !== i).map(r => r.filter((_, c) => c !== j));
+function det(A){ const n = A.length; if (n === 1) return A[0][0]; if (n === 2) return A[0][0].mul(A[1][1]).sub(A[0][1].mul(A[1][0])); let s = new Q(0); for (let j = 0; j < n; j++) { if (A[0][j].z) continue; const t = A[0][j].mul(det(minorM(A, 0, j))); s = (j % 2) ? s.sub(t) : s.add(t); } return s; }
+const cof = (A, i, j) => { const m = det(minorM(A, i, j)); return (i + j) % 2 ? m.neg() : m; };
+const cofM = A => A.map((r, i) => r.map((_, j) => cof(A, i, j)));
+function inv(A){ const d = det(A); if (d.z) return null; return msc(new Q(1).div(d), tr(cofM(A))); }
+function rank(A){ const R = A.map(r => r.slice()); const m = R.length, n = R[0].length; let rk = 0; for (let c = 0; c < n && rk < m; c++) { let p = R.findIndex((r, i) => i >= rk && !r[c].z); if (p < 0) continue; [R[rk], R[p]] = [R[p], R[rk]]; for (let i = 0; i < m; i++) if (i !== rk && !R[i][c].z) { const f = R[i][c].div(R[rk][c]); R[i] = R[i].map((x, k) => x.sub(f.mul(R[rk][k]))); } rk++; } return rk; }
+// TeX fyrir fylki
+const tm = (A, env = 'bmatrix') => '\\begin{' + env + '}' + A.map(r => r.map(x => typeof x === 'string' ? x : tx(x)).join(' & ')).join(' \\\\ ') + '\\end{' + env + '}';
+const tv = A => tm(A, 'vmatrix');
+const dimTxt = A => A.length + '\\times ' + A[0].length;
+// slembiföll
+const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const nz = (a, b) => { let x; do x = ri(a, b); while (x === 0); return x; };
+const shuf = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const randM = (m, n, lo, hi) => M(Array.from({length:m}, () => Array.from({length:n}, () => ri(lo, hi))));
+// hjálp fyrir texta
+const D = s => '\\[' + s + '\\]';                 // sýnd jafna
+const AL = lines => D('\\begin{aligned}' + lines.join(' \\\\ ') + '\\end{aligned}');
+const idx = ['', 'x_1', 'x_2', 'x_3'];
+
+// ===== poly.js =====
+// ---------- margliður ----------
+// ein breyta: fylki stuðla, p[k] = stuðull við x^k
+const P = a => a.map(Q.of);
+const ptrim = p => { p = p.slice(); while (p.length > 1 && p[p.length - 1].z) p.pop(); return p; };
+const padd = (a, b) => ptrim(Array.from({length: Math.max(a.length, b.length)}, (_, k) => (a[k] || new Q(0)).add(b[k] || new Q(0))));
+const psub = (a, b) => padd(a, b.map(x => x.neg()));
+const pmul = (a, b) => { const r = Array.from({length: a.length + b.length - 1}, () => new Q(0)); a.forEach((x, i) => b.forEach((y, j) => { r[i + j] = r[i + j].add(x.mul(y)); })); return ptrim(r); };
+const pder = p => p.length < 2 ? [new Q(0)] : ptrim(p.slice(1).map((c, k) => c.mul(k + 1)));
+const pev = (p, x) => p.reduceRight((s, c) => s.mul(x).add(c), new Q(0));
+const pevf = (p, x) => p.reduceRight((s, c) => s * x + c.v, 0);
+const ppow = (p, n) => { let r = P([1]); for (let i = 0; i < n; i++) r = pmul(r, p); return r; };
+const xpow = (v, k) => k === 0 ? '' : k === 1 ? v : v + '^{' + k + '}';
+function ptx(p, v = 'x'){ const terms = []; for (let k = p.length - 1; k >= 0; k--) terms.push([p[k], xpow(v, k)]); return poly(terms); }
+const pdeg = p => ptrim(p).length - 1;
+// tvær (eða þrjár) breytur: listi af einliðum {c, e:[i,j,(k)]}
+const mono = (c, ...e) => ({c: Q.of(c), e});
+function mtx(ms, vars){ const terms = ms.map(m => [m.c, m.e.map((k, i) => xpow(vars[i], k)).join('')]); return poly(terms); }
+function mder(ms, i){ return ms.filter(m => m.e[i] > 0).map(m => ({c: m.c.mul(m.e[i]), e: m.e.map((k, t) => t === i ? k - 1 : k)})); }
+function mclean(ms){ const map = new Map(); for (const m of ms) { const k = m.e.join(','); map.set(k, (map.get(k) || new Q(0)).add(m.c)); } return [...map].filter(([, c]) => !c.z).map(([k, c]) => ({c, e: k.split(',').map(Number)})); }
+const mev = (ms, pt) => ms.reduce((s, m) => s.add(m.e.reduce((t, k, i) => t.mul(powQ(Q.of(pt[i]), k)), m.c)), new Q(0));
+const powQ = (x, k) => { let r = new Q(1); for (let i = 0; i < k; i++) r = r.mul(x); return r; };
+const mevf = (ms, pt) => ms.reduce((s, m) => s + m.c.v * m.e.reduce((t, k, i) => t * pt[i] ** k, 1), 0);
+// innsetning fyrir sýnd skref: 3x^2y í (2,-1) → 3\cdot 2^{2}\cdot(-1)
+function msub(ms, pt){ if (!ms.length) return '0'; return ms.map((m, t) => { const parts = []; const a = m.c; const neg = a.n < 0; const abs = neg ? a.neg() : a; const vs = m.e.map((k, i) => k === 0 ? null : (k === 1 ? txp(pt[i]) : txp(pt[i]) + '^{' + k + '}')).filter(Boolean); if (!abs.eq(1) || !vs.length) parts.push(tx(abs)); parts.push(...vs); return (t === 0 ? (neg ? '-' : '') : (neg ? ' - ' : ' + ')) + parts.join('\\cdot '); }).join(''); }
+// innsetning í margliðu, sýnd: 3\cdot(-2)^{2} - 4\cdot(-2) + 1
+function ptxAt(p, x0){ const out = []; for (let k = p.length - 1; k >= 0; k--) { const c = p[k]; if (c.z) continue; const neg = c.n < 0, a = neg ? c.neg() : c; const xs = k === 0 ? '' : (k === 1 ? txp(x0) : txp(x0) + '^{' + k + '}'); const body = k === 0 ? tx(a) : (a.eq(1) ? xs : tx(a) + '\\cdot ' + xs); out.push((out.length ? (neg ? ' - ' : ' + ') : (neg ? '-' : '')) + body); } return out.join('') || '0'; }
+
+// ===== builders.js =====
+// ---------- lausnasmiðir: skila skrefum {titill, lausn, stig} ----------
+const sgnTxt = (i, j) => (i + j) % 2 ? '-' : '+';
+// 2x2 ákveða í einni línu
+function det2Line(B){ const [[a, b], [c, d]] = B; return tv(B) + ' = ' + txp(a) + '\\cdot ' + txp(d) + ' - ' + txp(b) + '\\cdot ' + txp(c) + ' = ' + tx(det(B)); }
+// besta lína (röð eða dálkur) til Laplace-liðunar
+function bestLine(A){ const n = A.length; let best = {kind:'r', k:0, z:-1}; for (let k = 0; k < n; k++) { const zr = A[k].filter(x => x.z).length, zc = A.map(r => r[k]).filter(x => x.z).length; if (zr > best.z) best = {kind:'r', k, z:zr}; if (zc > best.z) best = {kind:'c', k, z:zc}; } return best; }
+function laplace(A, line){
+  const n = A.length; line = line || bestLine(A);
+  const cells = Array.from({length:n}, (_, t) => line.kind === 'r' ? [line.k, t] : [t, line.k]);
+  const name = line.kind === 'r' ? `röð ${line.k + 1}` : `dálki ${line.k + 1}`;
+  const used = cells.filter(([i, j]) => !A[i][j].z);
+  const formula = cells.map(([i, j]) => `a_{${i+1}${j+1}}|C_{${i+1}${j+1}}|`).join(' + ');
+  const terms = used.map(([i, j], t) => { const s = sgnTxt(i, j); return (t === 0 && s === '+' ? '' : ' ' + s + ' ') + txp(A[i][j]) + '\\cdot |M_{' + (i+1) + (j+1) + '}|'; }).join('');
+  const minors = used.map(([i, j]) => { const m = minorM(A, i, j); return { i, j, m, v: det(m) }; });
+  const minorLines = minors.map(o => `|M_{${o.i+1}${o.j+1}}| &= ` + (o.m.length === 2 ? det2Line(o.m) : tv(o.m) + ' = ' + tx(o.v)));
+  const sum = used.map(([i, j], t) => { const s = sgnTxt(i, j); return (t === 0 && s === '+' ? '' : ' ' + s + ' ') + txp(A[i][j]) + '\\cdot ' + txp(minors[t].v); }).join('');
+  const val = det(A);
+  return { name, line, used, minors, val, formula, terms, minorLines, sum };
+}
+function bDet(A, label = 'A'){
+  const L = laplace(A); const n = A.length;
+  const steps = [
+    {titill:`Velja ${L.name} til liðunar`, stig:1, lausn:`<p>Liðum eftir ${L.name} því þar eru flest núll${L.line.z ? ` (${L.line.z} talsins)` : ''}. Formerkin fylgja \\((-1)^{i+j}\\):</p>` + AL([`|${label}| &= ${L.formula}`, `&= ${L.terms || '0'}`])},
+    {titill:'Reikna hlutákveðurnar', stig: n === 4 ? 3 : 2, lausn: n === 4 ? bDet(L.minors[0].m, 'M_{' + (L.minors[0].i+1) + (L.minors[0].j+1) + '}').steps.map(s => s.lausn).join('') + (L.minors.length > 1 ? AL(L.minorLines.slice(1)) : '') : AL(L.minorLines)},
+    {titill:'Leggja saman', stig:1, lausn: AL([`|${label}| &= ${L.sum || '0'}`, `&= ${tx(L.val)}`])}
+  ];
+  return { steps, val: L.val };
+}
+// 2x2 andhverfa
+function bInv2(A, label = 'A'){
+  const d = det(A); const [[a, b], [c, e]] = A; const adj = M([[e, b.neg()], [c.neg(), a]]); const Ai = inv(A);
+  return { inv: Ai, det: d, steps: [
+    {titill:'Ákveðan', stig:1, lausn: D(`|${label}| = ` + det2Line(A)) + (d.z ? '<p>Ákveðan er 0 svo fylkið er sérstætt og á enga andhverfu.</p>' : `<p>\\(|${label}| \\ne 0\\) svo andhverfan er til.</p>`)},
+    ...(d.z ? [] : [
+    {titill:'Víxla hornalínu, skipta um formerki utan hennar', stig:1, lausn: D(`\\operatorname{adj}${label} = ` + tm(adj))},
+    {titill:'Deila með ákveðunni', stig:1, lausn: D(`${label}^{-1} = \\frac{1}{${tx(d)}}` + tm(adj) + ' = ' + tm(Ai))},
+    {titill:'Prófun', stig:1, lausn: D(`${label}${label}^{-1} = ` + tm(A) + tm(Ai) + ' = ' + tm(mmul(A, Ai)) + ' = I')}])
+  ]};
+}
+// 3x3 andhverfa með fylgiþáttum
+function cofLines(A){ const out = []; for (let i = 0; i < 3; i++) { const row = []; for (let j = 0; j < 3; j++) { const m = minorM(A, i, j); const c = cof(A, i, j); row.push(`|C_{${i+1}${j+1}}| = ${sgnTxt(i, j) === '-' ? '-' : '+'}${tv(m)} = ${tx(c)}`); } out.push(row.join(' &\\quad ')); } return out; }
+function bInv3(A, label = 'A'){
+  const dd = bDet(A, label); const d = dd.val; const C = cofM(A); const adj = tr(C); const Ai = d.z ? null : inv(A);
+  const steps = [
+    {titill:'Ákveðan', stig:2, lausn: dd.steps.map(s => s.lausn).join('') + (d.z ? '<p>\\(|A| = 0\\): fylkið er sérstætt og á enga andhverfu.</p>' : `<p>\\(|${label}| = ${tx(d)} \\ne 0\\), svo \\(${label}^{-1}\\) er til.</p>`)},
+  ];
+  if (!d.z) steps.push(
+    {titill:'Fylgiþáttafylkið C', stig:4, lausn:'<p>Hver fylgiþáttur er hlutákveðan með formerkinu \\((-1)^{i+j}\\):</p>' + D('\\begin{aligned}' + cofLines(A).join(' \\\\ ') + '\\end{aligned}') + D('C = ' + tm(C))},
+    {titill:'Aðoka fylkið: bylta C', stig:1, lausn: D(`\\operatorname{adj}${label} = C' = ` + tm(adj))},
+    {titill:'Deila með ákveðunni', stig:2, lausn: D(`${label}^{-1} = \\frac{1}{|${label}|}\\operatorname{adj}${label} = \\frac{1}{${tx(d)}}` + tm(adj) + ' = ' + tm(Ai))},
+    {titill:'Prófun', stig:1, lausn: D(`${label}${label}^{-1} = ` + tm(mmul(A, Ai)) + ' = I_3')});
+  return { inv: Ai, det: d, C, adj, steps };
+}
+// margföldun fylkja með öllum stökum
+function bMul(A, B, nA = 'A', nB = 'B'){
+  const [m, n] = dims(A), [p, r] = dims(B); const P = mmul(A, B);
+  const dimS = {titill:'Víddir', stig:1, lausn: D(`\\underset{${dimTxt(A)}}{${nA}}\\;\\underset{${dimTxt(B)}}{${nB}}`) + (P ? `<p>Innri víddirnar eru jafnar (${n} = ${p}) svo margfeldið er skilgreint og er \\(${m}\\times ${r}\\).</p>` : `<p>Dálkar \\(${nA}\\) eru ${n} en raðir \\(${nB}\\) eru ${p}. Innri víddirnar eru ekki jafnar svo \\(${nA}${nB}\\) er <b>ekki skilgreint</b>.</p>`)};
+  if (!P) return { P, steps:[dimS] };
+  const lines = []; for (let i = 0; i < m; i++) for (let j = 0; j < r; j++) lines.push(`c_{${i+1}${j+1}} &= ` + A[i].map((x, k) => txp(x) + '\\cdot ' + txp(B[k][j])).join(' + ') + ' = ' + tx(P[i][j]));
+  return { P, steps:[dimS,
+    {titill:'Röð sinnum dálkur', stig: Math.max(1, Math.min(3, Math.round(m * r / 3))), lausn: AL(lines)},
+    {titill:'Niðurstaða', stig:1, lausn: D(`${nA}${nB} = ` + tm(P))}]};
+}
+// regla Cramers (n = 2 eða 3)
+const repCol = (A, j, d) => A.map((r, i) => r.map((x, k) => k === j ? d[i] : x));
+function sysTex(A, d, vars){ return D('\\begin{aligned}' + A.map((r, i) => poly(r.map((c, k) => [c, vars[k]])) + ' &= ' + tx(d[i])).join(' \\\\ ') + '\\end{aligned}'); }
+function detCompact(B){ if (B.length === 2) return det2Line(B); const L = laplace(B); return tv(B) + ' = ' + (L.sum || '0') + ' = ' + tx(L.val); }
+function bCramer(A, d, vars, ask){
+  const n = A.length; const dA = det(A); const which = ask || vars.map((_, j) => j);
+  const x = vars.map((_, j) => det(repCol(A, j, d)).div(dA));
+  const detLines = which.map(j => { const B = repCol(A, j, d); if (n === 2) return D(`|A_${j+1}| = ` + det2Line(B)); const L = laplace(B); return D(`|A_${j+1}| = ` + tv(B)) + AL([`&= ${L.sum || '0'}`, `&= ${tx(L.val)}`]).replace('\\begin{aligned}&=', `\\begin{aligned}|A_${j+1}| &=`); });
+  const dLaplace = n === 2 ? D('|A| = ' + det2Line(A)) : (() => { const L = laplace(A); return D('|A| = ' + tv(A)) + `<p>Liðum eftir ${L.name}:</p>` + AL([...L.minorLines, `|A| &= ${L.sum || '0'} = ${tx(L.val)}`]); })();
+  const check = A[0].map((c, k) => txp(c) + '\\cdot ' + txp(x[k])).join(' + ') + ' = ' + tx(d[0]);
+  const xs = vars.map((v, k) => [v, x[k]]);
+  return { x, steps: [
+    {titill:'Fylkjaform \\(Ax = d\\)', stig:1, lausn: D(tm(A) + tm(vars.map(v => [v])) + ' = ' + tm(d.map(v => [v])))},
+    {titill:'Ákveða A', stig:2, lausn: dLaplace + `<p>\\(|A| = ${tx(dA)} \\ne 0\\) svo kerfið hefur ótvíræða lausn.</p>`},
+    {titill:'Skipta út dálkum fyrir d', stig: which.length === 1 ? 2 : 3, lausn: detLines.join('')},
+    {titill:'Lausnin', stig:1, lausn: AL(which.map(j => `${vars[j]}^* &= \\frac{|A_${j+1}|}{|A|} = \\frac{${tx(det(repCol(A, j, d)))}}{${tx(dA)}} = ${tx(x[j])}`))},
+    ...(which.length === n ? [{titill:'Prófun í fyrstu jöfnu', stig:1, lausn: D(check) + '<p>Gengur upp.</p>'}] : [])
+  ]};
+}
+// lausn með andhverfu sem er gefin
+function bSolveInv(A, Ai, d, vars){
+  const x = mmul(Ai, d.map(v => [Q.of(v)]));
+  const lines = Ai.map((r, i) => `${vars[i]}^* &= ` + r.map((c, k) => txp(c) + '\\cdot ' + txp(d[k])).join(' + ') + ' = ' + tx(x[i][0]));
+  return { x: x.map(r => r[0]), steps: [
+    {titill:'Sannreyna \\(AA^{-1} = I\\)', stig:2, lausn: D(tm(A) + tm(Ai) + ' = ' + tm(mmul(A, Ai)))},
+    {titill:'\\(x^* = A^{-1}d\\)', stig:3, lausn: D(`x^* = A^{-1}d = ` + tm(Ai) + tm(d.map(v => [v]))) + AL(lines)}
+  ]};
+}
+// raðtala með þrepafylki (sýnir línuaðgerðir)
+function bRank(A){
+  const R = A.map(r => r.slice()); const m = R.length, n = R[0].length; const ops = []; let rk = 0;
+  for (let c = 0; c < n && rk < m; c++) {
+    let p = R.findIndex((r, i) => i >= rk && Math.abs(r[c].v) === 1); if (p < 0) p = R.findIndex((r, i) => i >= rk && !r[c].z); if (p < 0) continue;
+    if (p !== rk) { [R[rk], R[p]] = [R[p], R[rk]]; ops.push([`R_${rk+1} \\leftrightarrow R_${p+1}`, R.map(r => r.slice())]); }
+    if (!R[rk][c].eq(1)) { const f = new Q(1).div(R[rk][c]); R[rk] = R[rk].map(x => x.mul(f)); ops.push([`R_${rk+1} \\to ${tx(f)}R_${rk+1}`, R.map(r => r.slice())]); }
+    const sub = []; for (let i = rk + 1; i < m; i++) if (!R[i][c].z) { const f = R[i][c]; R[i] = R[i].map((x, k) => x.sub(f.mul(R[rk][k]))); sub.push(`R_${i+1} \\to R_${i+1} ${f.n < 0 ? '+' : '-'} ${Q.of(f).n < 0 ? tx(f.neg()) : tx(f)}R_${rk+1}`.replace(/ 1R_/g, ' R_')); }
+    if (sub.length) ops.push([sub.join(',\\; '), R.map(r => r.slice())]);
+    rk++;
+  }
+  const zeroRows = R.filter(r => r.every(x => x.z)).length; const r = m - zeroRows;
+  return { rank: r, steps: [
+    {titill:'Línuaðgerðir að þrepafylki', stig:3, lausn: ops.map(([o, X]) => D(`\\xrightarrow{${o}}\\; ` + tm(X))).join('') || '<p>Fylkið er þegar á þrepaformi.</p>'},
+    {titill:'Telja raðir sem eru ekki núll', stig:1, lausn: `<p>${zeroRows ? `Ein núllröð kom fram${zeroRows > 1 ? ` (alls ${zeroRows})` : ''}` : 'Engin núllröð kom fram'}, svo raðtalan er \\(r(A) = ${r}\\).</p>` + (m === n ? `<p>${r === n ? `\\(r(A) = n = ${n}\\): raðirnar eru línulega óháðar og fylkið er andhverfanlegt.` : `\\(r(A) = ${r} \\lt ${n}\\): raðirnar eru línulega háðar, fylkið er sérstætt og \\(|A| = 0\\).`}</p>` : '')}
+  ]};
+}
+const sumStig = steps => steps.reduce((s, x) => s + x.stig, 0);
+// endurnúmerar stig svo heild verði `tot` (heiltölur)
+function rescale(steps, tot){ const s = sumStig(steps); let acc = 0, prev = 0; return steps.map(st => { acc += st.stig; const cur = Math.round(acc / s * tot); const out = {...st, stig: cur - prev}; prev = cur; return out; }); }
+
+// ===== gens.js =====
+// ---------- rafalar: hver skilar {q, steps, chk, quick} ----------
+const T = String.raw;
+const pre = (p, steps) => steps.map(s => ({...s, titill: p + ' ' + s.titill}));
+const qd = (s) => D(s);
+const VARS3 = ['x', 'y', 'z'];
+const decList = [q(1,10), q(-1,10), q(1,5), q(1,20), q(-1,5)];
+const expTx = e => { e = Q.of(e); return e.d === 1 ? String(e.n) : e.n + '/' + e.d; };
+const fracPool = [q(1,4), q(1,3), q(1,2), q(2,3), q(3,4)];
+const decp = x => Q.of(x).n < 0 ? '(' + dec(x) + ')' : dec(x);
+const decList2 = [q(1,10), q(-1,10), q(1,5), q(-1,5)];
+
+const GENS = [
+// ===== Fylkjaaðgerðir =====
+{id:'g-mul', t:'fyl', name:'Margföldun fylkja og víddir', f(){
+  const m = ri(2, 3), n = ri(2, 3); let p = n; const r = ri(1, 3); if (Math.random() < 0.3) p = n === 2 ? 3 : 2;
+  const A = randM(m, n, -3, 4), B = randM(p, r, -3, 4);
+  const ab = bMul(A, B), ba = bMul(B, A, 'B', 'A');
+  const quick = ab.P ? (() => { const i = ri(0, m - 1), j = ri(0, r - 1); return {q:`Gefin eru ${qd(T`A = ${tm(A)},\qquad B = ${tm(B)}`)} Hvert er stakið \\(c_{${i+1}${j+1}}\\) í \\(C = AB\\)?`, a: ab.P[i][j].str()}; })()
+    : {q:`Gefin eru ${qd(T`A = ${tm(A)},\qquad B = ${tm(B)}`)} Hvað hefur \\(BA\\) margar raðir? (Svaraðu 0 ef \\(BA\\) er ekki skilgreint.)`, a: ba.P ? String(ba.P.length) : '0'};
+  return { q:`Gefin eru fylkin ${qd(T`A = ${tm(A)},\qquad B = ${tm(B)}`)}<ol type="a"><li>Kannið hvort \\(AB\\) sé skilgreint og reiknið það ef svo er.</li><li>Sama fyrir \\(BA\\). Er \\(AB = BA\\)?</li></ol>`,
+    steps:[...pre('a)', ab.steps), ...pre('b)', ba.steps)], chk:{mul:[[A, B, ab.P], [B, A, ba.P]]}, quick };
+}},
+{id:'g-trans', t:'fyl', name:'Bylting: (AB)′ = B′A′', f(){
+  const A = randM(2, 3, -2, 3), B = randM(3, 2, -2, 3); const AB = mmul(A, B), BtAt = mmul(tr(B), tr(A));
+  return { q:`Gefin eru fylkin ${qd(T`A = ${tm(A)},\qquad B = ${tm(B)}`)}<ol type="a"><li>Finnið \\(A'\\) og \\(B'\\) og takið fram víddir þeirra.</li><li>Reiknið \\(AB\\) og \\((AB)'\\).</li><li>Reiknið \\(B'A'\\) og sýnið að \\((AB)' = B'A'\\).</li><li>Er \\(A'B'\\) skilgreint? Hver er víddin?</li></ol>`,
+    steps:[
+      {titill:"a) Bylta: raðir verða dálkar", stig:2, lausn: D(T`\underset{3\times 2}{A'} = ${tm(tr(A))},\qquad \underset{2\times 3}{B'} = ${tm(tr(B))}`)},
+      ...pre('b)', bMul(A, B).steps.slice(1)),
+      {titill:"b) Bylta margfeldið", stig:1, lausn: D(T`(AB)' = ${tm(tr(AB))}`)},
+      {titill:"c) Margfalda í öfugri röð", stig:2, lausn: AL(tr(B).map((r, i) => tr(A)[0].map((_, j) => `c_{${i+1}${j+1}} &= ` + r.map((x, k) => txp(x) + '\\cdot ' + txp(tr(A)[k][j])).join(' + ') + ' = ' + tx(BtAt[i][j])).join(' \\\\ '))) + D(T`B'A' = ${tm(BtAt)} = (AB)'`)},
+      {titill:"d) Víddir A′B′", stig:1, lausn: D(T`\underset{3\times 2}{A'}\;\underset{2\times 3}{B'} = \underset{3\times 3}{A'B'}`) + '<p>Innri víddirnar (2 og 2) passa, svo \\(A\'B\'\\) er skilgreint og er \\(3\\times 3\\). Það er hins vegar ekki jafnt \\((AB)\'\\), sem er \\(2\\times 2\\).</p>'}],
+    chk:{eq:[[tr(AB), BtAt]]}, quick:{q:`${qd(T`A = ${tm(A)},\qquad B = ${tm(B)}`)} Hvert er stakið í röð 1, dálki 2 í \\((AB)'\\)?`, a: tr(AB)[0][1].str()} };
+}},
+{id:'g-vec', t:'fyl', name:'Vigrar: innra margfeldi og hornréttir', f(){
+  const u = [nz(-3, 4), ri(-3, 4), nz(-2, 3)]; let v;
+  if (Math.random() < 0.5) { const w = [ri(-2, 2), nz(-2, 2), ri(-2, 2)]; v = [u[1]*w[2]-u[2]*w[1], u[2]*w[0]-u[0]*w[2], u[0]*w[1]-u[1]*w[0]]; if (v.every(x => x === 0)) v = [u[1], -u[0], 0]; }
+  else v = [ri(-3, 4), nz(-3, 4), ri(-3, 4)];
+  const dot = u.reduce((s, x, i) => s + x * v[i], 0); const U = M(u.map(x => [x])), V = M(v.map(x => [x]));
+  const outer = mmul(U, tr(V)); const comb = u.map((x, i) => 2 * x - 3 * v[i]);
+  return { q:`Gefnir eru dálkvigrarnir ${qd(T`u = ${tm(U)},\qquad v = ${tm(V)}`)}<ol type="a"><li>Reiknið \\(u'v\\).</li><li>Eru \\(u\\) og \\(v\\) hornréttir?</li><li>Reiknið \\(uv'\\) og takið fram víddina.</li><li>Reiknið \\(2u - 3v\\).</li></ol>`,
+    steps:[
+      {titill:"a) Innra margfeldi", stig:2, lausn: D(T`u'v = ${u.map((x, i) => txp(x) + '\\cdot ' + txp(v[i])).join(' + ')} = ${dot}`) + "<p>\\(u'v\\) er \\(1\\times 1\\), í raun tala.</p>"},
+      {titill:"b) Hornréttir?", stig:1, lausn: dot === 0 ? "<p>\\(u'v = 0\\) svo vigrarnir eru <b>hornréttir</b>.</p>" : `<p>\\(u'v = ${dot} \\ne 0\\) svo vigrarnir eru <b>ekki</b> hornréttir.</p>`},
+      {titill:"c) Ytra margfeldi", stig:2, lausn: D(T`\underset{3\times 1}{u}\;\underset{1\times 3}{v'} = ${tm(outer)}`) + '<p>Stak \\((i,j)\\) er \\(u_iv_j\\). Útkoman er \\(3\\times 3\\).</p>'},
+      {titill:"d) Línuleg samsetning", stig:1, lausn: D(T`2u - 3v = ${tm(u.map(x => [2*x]))} - ${tm(v.map(x => [3*x]))} = ${tm(comb.map(x => [x]))}`)}],
+    chk:{dot:[u, v, dot]}, quick:{q:`${qd(T`u' = ${tm([u])},\qquad v' = ${tm([v])}`)} Reiknið \\(u'v\\).`, a: String(dot)} };
+}},
+{id:'g-markov', t:'fyl', name:'Markov-keðja, tvö tímabil', f(){
+  const ctx = pick([['Í vinnu', 'Atvinnulaus', 'einstaklingar'], ['Strætó', 'Bíll', 'nemendur'], ['Leigja', 'Eiga', 'heimili'], ['Viðskiptavinir banka A', 'Viðskiptavinir banka B', 'viðskiptavinir']]);
+  const p = ri(6, 9), r = ri(1, 5); const Mk = M([[q(p, 10), q(10 - p, 10)], [q(r, 10), q(10 - r, 10)]]);
+  const a = ri(2, 8) * 100; const x0 = M([[a, 1000 - a]]); const x1 = mmul(x0, Mk), x2 = mmul(x1, Mk);
+  const decM = A => '\\begin{bmatrix}' + A.map(rw => rw.map(dec).join(' & ')).join(' \\\\ ') + '\\end{bmatrix}';
+  const line = (x, k) => `${dec(x[0][0])}\\cdot ${dec(Mk[0][k])} + ${dec(x[0][1])}\\cdot ${dec(Mk[1][k])} = ${dec(mmul(x, Mk)[0][k])}`;
+  return { q:`Hópi 1000 ${ctx[2]} er skipt í tvö ástönd: <b>${ctx[0]}</b> (A) og <b>${ctx[1]}</b> (B). Upphafsdreifingin og færslufylkið eru ${qd(T`x_0' = ${decM(x0)},\qquad M = ${decM(Mk)}`)}þar sem \\(P_{AB}\\) eru líkurnar á að fara úr A í B á einu tímabili.<ol type="a"><li>Finnið dreifinguna eftir eitt tímabil, \\(x_1'\\).</li><li>Finnið dreifinguna eftir tvö tímabil, \\(x_2'\\).</li><li>Hvað er óbreytt milli tímabila og hvers vegna?</li></ol>`,
+    steps:[
+      {titill:"a) \\(x_1' = x_0'M\\)", stig:3, lausn: AL([`A_1 &= ${line(x0, 0)}`, `B_1 &= ${line(x0, 1)}`]) + D(T`x_1' = ${decM(x1)}`)},
+      {titill:"b) \\(x_2' = x_1'M = x_0'M^2\\)", stig:3, lausn: AL([`A_2 &= ${line(x1, 0)}`, `B_2 &= ${line(x1, 1)}`]) + D(T`x_2' = ${decM(x2)}`)},
+      {titill:"c) Heildarfjöldinn helst", stig:1, lausn:'<p>Summan er alltaf 1000 því hver röð í \\(M\\) summast í 1: hver einstaklingur fer eitthvert.</p>'}],
+    chk:{markov:[x0, Mk, x1, x2]}, quick:{q:`${qd(T`x_0' = ${decM(x0)},\qquad M = ${decM(Mk)}`)} Hversu margir eru í ástandi A eftir eitt tímabil?`, a: x1[0][0].str()} };
+}},
+// ===== Ákveður =====
+{id:'g-det3', t:'akv', name:'Ákveða 3×3 með Laplace-liðun', f(){
+  let A; do { A = randM(3, 3, -3, 4); const z = ri(1, 2); for (let k = 0; k < z; k++) A[ri(0, 2)][ri(0, 2)] = new Q(0); } while (Math.abs(det(A).v) > 60);
+  const b = bDet(A);
+  return { q:`Finnið ákveðu fylkisins með Laplace-liðun og veljið röð eða dálk sem sparar handtök. ${qd('A = ' + tm(A))}Er fylkið andhverfanlegt?`,
+    steps:[...b.steps, {titill:'Túlkun', stig:1, lausn: b.val.z ? '<p>\\(|A| = 0\\): fylkið er sérstætt og á enga andhverfu.</p>' : `<p>\\(|A| = ${tx(b.val)} \\ne 0\\): fylkið er andhverfanlegt.</p>`}],
+    chk:{det:[A, b.val]}, quick:{q:`Reiknið ákveðuna ${qd(tv(A))}`, a: b.val.str()} };
+}},
+{id:'g-detprop', t:'akv', name:'Eiginleikar ákveða', f(){
+  const n = pick([2, 3]); const k = nz(-4, 5), m = nz(-3, 4), s = pick([2, 3, -2]); const c = pick([3, 4, -2, 5]);
+  const all = [
+    [`\\(|${s}A|\\)`, q(s ** n * k), T`|${s}A| = (${s})^{${n}}|A| = ${s ** n}\cdot ${txp(k)} = ${s ** n * k}`, `Hver röð af ${n} margfaldast með ${s} (eiginleiki 3).`],
+    ["\\(|A'|\\)", q(k), T`|A'| = |A| = ${k}`, 'Bylting breytir ekki ákveðu (eiginleiki 1).'],
+    ['\\(|A^{-1}|\\)', q(1, k), T`|A^{-1}| = \frac{1}{|A|} = ${tx(q(1, k))}`, 'Því \\(|A||A^{-1}| = |AA^{-1}| = |I| = 1\\).'],
+    ['\\(|AB|\\)', q(k * m), T`|AB| = |A||B| = ${txp(k)}\cdot ${txp(m)} = ${k * m}`, 'Ákveða margfeldis er margfeldi ákveða.'],
+    ['\\(|A^2|\\)', q(k * k), T`|A^2| = |A|^2 = ${k * k}`, '\\(|AA| = |A||A|\\).'],
+    ['ákveða fylkisins sem fæst þegar raðir 1 og 2 í \\(A\\) víxlast', q(-k), T`|\tilde A| = -|A| = ${-k}`, 'Víxl tveggja raða skiptir um formerki (eiginleiki 2).'],
+    [`ákveða fylkisins sem fæst þegar röð 2 í \\(A\\) er margfölduð með ${c}`, q(c * k), T`|\tilde A| = ${c}\cdot ${txp(k)} = ${c * k}`, 'Ein röð margfölduð með fasta (eiginleiki 3).'],
+    [`ákveða fylkisins sem fæst þegar ${c} sinnum röð 1 er lögð við röð 2`, q(k), T`|\tilde A| = |A| = ${k}`, 'Að leggja margfeldi einnar raðar við aðra breytir engu (eiginleiki 4).']];
+  const parts = shuf(all).slice(0, 5); const L = 'abcde';
+  return { q:`\\(A\\) og \\(B\\) eru \\(${n}\\times ${n}\\) fylki með \\(|A| = ${k}\\) og \\(|B| = ${m}\\). Finnið:<ol type="a">${parts.map(p => `<li>${p[0]}</li>`).join('')}</ol>`,
+    steps: parts.map((p, i) => ({titill:`${L[i]}) ${p[0].replace(/^ákveða fylkisins sem fæst þegar /, '')}`, stig:1, lausn: D(p[2]) + `<p>${p[3]}</p>`})),
+    chk:{vals: parts.map(p => p[1])}, quick: (() => { const p = pick(all); return {q:`\\(A\\) er \\(${n}\\times ${n}\\) með \\(|A| = ${k}\\) og \\(|B| = ${m}\\). Hver er ${p[0]}?`, a: p[1].str()}; })() };
+}},
+{id:'g-rank', t:'akv', name:'Raðtala með þrepafylki', f(){
+  const l = [ri(-2, 2), ri(-2, 2), ri(-2, 2)]; const L = M([[1, 0, 0], [l[0], 1, 0], [l[1], l[2], 1]]);
+  const u33 = Math.random() < 0.5 ? 0 : nz(-3, 3); const U = M([[1, ri(-2, 3), ri(-2, 3)], [0, 1, ri(-2, 3)], [0, 0, u33]]);
+  const A = mmul(L, U); const b = bRank(A); const d = det(A);
+  return { q:`Gefið er fylkið ${qd('A = ' + tm(A))}<ol type="a"><li>Finnið raðtölu fylkisins með því að koma því á þrepaform.</li><li>Eru raðirnar línulega óháðar? Er fylkið andhverfanlegt?</li><li>Staðfestið niðurstöðuna með ákveðunni.</li></ol>`,
+    steps:[...pre('a)', b.steps), {titill:'c) Staðfesta með ákveðu', stig:2, lausn: D('|A| = ' + detCompact(A)) + `<p>${d.z ? 'Ákveðan er 0, í samræmi við raðtölu lægri en 3.' : 'Ákveðan er ekki 0, í samræmi við fulla raðtölu.'}</p>`}],
+    chk:{rank:[A, b.rank]}, quick:{q:`Hver er raðtala fylkisins ${qd(tm(A))}`, a: String(b.rank)} };
+}},
+// ===== Andhverfa =====
+{id:'g-inv2', t:'and', name:'Andhverfa 2×2', f(){
+  let A; do A = randM(2, 2, -4, 5); while (![1, -1, 2, -2].includes(det(A).v));
+  const b = bInv2(A); const i = ri(0, 1), j = ri(0, 1);
+  return { q:`Finnið andhverfu fylkisins og sannreynið svarið. ${qd('A = ' + tm(A))}`, steps: b.steps, chk:{inv:[A, b.inv]},
+    quick:{q:`Hvert er stakið í röð ${i+1}, dálki ${j+1} í \\(A^{-1}\\)? ${qd('A = ' + tm(A))}`, a: b.inv[i][j].str()} };
+}},
+{id:'g-inv3', t:'and', name:'Andhverfa 3×3 með aðoka fylki', f(){
+  let A; do { A = randM(3, 3, -2, 3); A[ri(0, 2)][ri(0, 2)] = new Q(0); } while (![1, -1, 2, -2].includes(det(A).v) || cofM(A).flat().some(c => Math.abs(c.v) > 12));
+  const b = bInv3(A); const i = ri(0, 2), j = ri(0, 2);
+  return { q:`Gefið er fylkið ${qd('A = ' + tm(A))}<ol type="a"><li>Sýnið að \\(A\\) sé andhverfanlegt.</li><li>Finnið fylgiþáttafylkið og aðoka fylkið \\(\\operatorname{adj}A\\).</li><li>Finnið \\(A^{-1}\\) og einfaldið eins og auðið er.</li></ol>`,
+    steps: b.steps, chk:{inv:[A, b.inv]}, quick:{q:`Hver er fylgiþátturinn \\(|C_{${i+1}${j+1}}|\\) í fylkinu ${qd(tm(A))}`, a: b.C[i][j].str()} };
+}},
+{id:'g-AXB', t:'and', name:'Fylkjajafna AX = B', f(){
+  let A; do A = randM(2, 2, -3, 4); while (![1, -1].includes(det(A).v)); const X = randM(2, 2, -3, 4); const k = pick([1, 2]); const B = msc(k, mmul(A, X));
+  const b = bInv2(A); const rhs = k === 1 ? 'B' : `${k}B`;
+  return { q:`Gefin eru ${qd(T`A = ${tm(A)},\qquad B = ${tm(mmul(A, X))}`)}Finnið fylkið \\(X\\) þannig að \\(AX = ${rhs}\\).`,
+    steps:[{titill:'Einangra X', stig:1, lausn: D(T`AX = ${rhs} \;\Rightarrow\; A^{-1}AX = A^{-1}${rhs} \;\Rightarrow\; X = ${k === 1 ? '' : k}A^{-1}B`) + '<p>Formargfalda með \\(A^{-1}\\). Röðin skiptir máli: \\(BA^{-1}\\) væri rangt.</p>'},
+      ...b.steps.slice(0, 3), {titill:'Reikna X', stig:2, lausn: D(T`X = ${k === 1 ? '' : k}${tm(b.inv)}${tm(mmul(A, X))} = ${tm(msc(k, X))}`)}],
+    chk:{eq:[[mmul(A, msc(k, X)), B]], inv:[A, b.inv]}, quick:null };
+}},
+// ===== Jöfnukerfi =====
+{id:'g-cr2', t:'jof', name:'Regla Cramers, 2 jöfnur', f(){
+  let A, x; do { A = randM(2, 2, -4, 6); x = [nz(-5, 6), ri(-4, 6)]; } while (det(A).z || Math.abs(det(A).v) > 20);
+  const d = mmul(A, M(x.map(v => [v]))).map(r => r[0]); const b = bCramer(A, d, ['x_1', 'x_2']);
+  return { q:`Leysið jöfnukerfið með reglu Cramers. ${sysTex(A, d, ['x_1', 'x_2'])}`, steps: b.steps, chk:{sys:[A, d, b.x]},
+    quick:{q:`Finnið \\(x_1\\) með reglu Cramers: ${sysTex(A, d, ['x_1', 'x_2'])}`, a: b.x[0].str()} };
+}},
+{id:'g-cr3', t:'jof', name:'Regla Cramers, 3 jöfnur', f(){
+  let A, x; do { A = randM(3, 3, -2, 4); for (let k = 0; k < 2; k++) A[ri(0, 2)][ri(0, 2)] = new Q(0); x = [ri(-3, 5), nz(-3, 5), ri(-3, 5)]; } while (det(A).z || Math.abs(det(A).v) > 40);
+  const d = mmul(A, M(x.map(v => [v]))).map(r => r[0]); const one = Math.random() < 0.5 ? [ri(0, 2)] : null; const b = bCramer(A, d, VARS3, one);
+  return { q: one ? `Notið reglu Cramers til að finna \\(${VARS3[one[0]]}\\) í kerfinu ${sysTex(A, d, VARS3)}` : `Leysið jöfnukerfið með reglu Cramers. ${sysTex(A, d, VARS3)}`,
+    steps: b.steps, chk:{sys:[A, d, b.x]}, quick:null };
+}},
+{id:'g-solveinv', t:'jof', name:'Lausn með gefinni andhverfu', f(){
+  let A, Ai; do { const L = M([[1, 0, 0], [ri(-2, 2), 1, 0], [ri(-2, 2), ri(-2, 2), 1]]), U = M([[1, ri(-2, 2), ri(-2, 2)], [0, 1, ri(-2, 2)], [0, 0, 1]]); A = mmul(L, U); if (Math.random() < 0.5) A = A.map(r => r.map(x => x.neg())); Ai = inv(A); } while (A.flat().some(x => Math.abs(x.v) > 6) || Ai.flat().some(x => Math.abs(x.v) > 9));
+  const x = [ri(-3, 5), ri(-3, 5), nz(-3, 5)]; const d = mmul(A, M(x.map(v => [v]))).map(r => r[0]);
+  const s = bSolveInv(A, Ai, d, VARS3); const c = bCramer(A, d, VARS3, [1]);
+  return { q:`Gefið er jöfnukerfið ${sysTex(A, d, VARS3)}og andhverfa stuðlafylkisins ${qd(T`A^{-1} = ${tm(Ai)}`)}<ol type="a"><li>Setjið kerfið upp á forminu \\(Ax = d\\).</li><li>Sannreynið að \\(AA^{-1} = I\\).</li><li>Finnið lausnarvigurinn \\(x^*\\).</li><li>Leysið fyrir \\(y\\) með reglu Cramers.</li></ol>`,
+    steps:[...pre('a)', c.steps.slice(0, 1)), ...pre('b)', s.steps.slice(0, 1)), ...pre('c)', s.steps.slice(1)), ...pre('d)', c.steps.slice(1))],
+    chk:{inv:[A, Ai], sys:[A, d, s.x]}, quick:null };
+}},
+// ===== Diffrunarreglur =====
+{id:'g-prod', t:'dif', name:'Margfeldisreglan', f(){
+  const u = P([nz(-4, 4), nz(-3, 3), ...(Math.random() < 0.5 ? [nz(-2, 2)] : [])]); const v = P([ri(-3, 3), nz(-3, 3), ...(Math.random() < 0.4 ? [nz(-2, 2)] : [])]);
+  const du = pder(u), dv = pder(v); const fp = padd(pmul(du, v), pmul(u, dv)); const x0 = ri(-2, 2);
+  return { q:`Diffrið fallið með margfeldisreglunni og reiknið \\(f'(${x0})\\). ${qd(T`f(x) = (${ptx(u)})(${ptx(v)})`)}`,
+    steps:[
+      {titill:'Skilgreina u og v', stig:1, lausn: AL([`u &= ${ptx(u)}, & u' &= ${ptx(du)}`, `v &= ${ptx(v)}, & v' &= ${ptx(dv)}`])},
+      {titill:"Margfeldisreglan \\(f' = u'v + uv'\\)", stig:2, lausn: D(T`f'(x) = (${ptx(du)})(${ptx(v)}) + (${ptx(u)})(${ptx(dv)})`)},
+      {titill:'Margfalda út og einfalda', stig:1, lausn: D(T`f'(x) = ${ptx(fp)}`)},
+      {titill:`Gildi í x = ${x0}`, stig:1, lausn: D(T`f'(${x0}) = ${ptxAt(fp, x0)} = ${tx(pev(fp, x0))}`)}],
+    chk:{d1:[x => pevf(u, x) * pevf(v, x), x => pevf(fp, x)]}, quick:{q:`Reiknið \\(f'(${x0})\\) þegar ${qd(T`f(x) = (${ptx(u)})(${ptx(v)})`)}`, a: pev(fp, x0).str()} };
+}},
+{id:'g-quot', t:'dif', name:'Deilingarreglan', f(){
+  const u = P([ri(-4, 4), nz(-3, 3)]); const v = Math.random() < 0.5 ? P([nz(-4, 4), nz(-3, 3)]) : P([ri(1, 5), 0, 1]);
+  const du = pder(u), dv = pder(v); const num = psub(pmul(du, v), pmul(u, dv)); let x0, tries = 0; do x0 = ri(-2, 3); while ((pev(v, x0).z || Math.abs(pev(v, x0).v) > 6) && ++tries < 50); if (pev(v, x0).z || Math.abs(pev(v, x0).v) > 6) return GENBY['g-quot'].f();
+  const val = pev(num, x0).div(pev(v, x0).mul(pev(v, x0)));
+  return { q:`Diffrið fallið með deilingarreglunni og reiknið \\(f'(${x0})\\). ${qd(T`f(x) = \frac{${ptx(u)}}{${ptx(v)}}`)}`,
+    steps:[
+      {titill:'Skilgreina u og v', stig:1, lausn: AL([`u &= ${ptx(u)}, & u' &= ${ptx(du)}`, `v &= ${ptx(v)}, & v' &= ${ptx(dv)}`])},
+      {titill:"Deilingarreglan \\(f' = \\frac{u'v - uv'}{v^2}\\)", stig:2, lausn: D(T`f'(x) = \frac{(${ptx(du)})(${ptx(v)}) - (${ptx(u)})(${ptx(dv)})}{(${ptx(v)})^2}`)},
+      {titill:'Einfalda teljarann', stig:1, lausn: D(T`f'(x) = \frac{${ptx(num)}}{(${ptx(v)})^2}`)},
+      {titill:`Gildi í x = ${x0}`, stig:1, lausn: AL([T`f'(${x0}) &= \frac{${tx(pev(num, x0))}}{(${tx(pev(v, x0))})^2}`, `&= ${tx(val)}`])}],
+    chk:{d1:[x => pevf(u, x) / pevf(v, x), x => pevf(num, x) / pevf(v, x) ** 2], val:[val, (() => { const h = 1e-6; return (pevf(u, x0 + h) / pevf(v, x0 + h) - pevf(u, x0 - h) / pevf(v, x0 - h)) / (2 * h); })()]},
+    quick:{q:`Reiknið \\(f'(${x0})\\) þegar ${qd(T`f(x) = \frac{${ptx(u)}}{${ptx(v)}}`)}`, a: val.str()} };
+}},
+{id:'g-chain', t:'dif', name:'Keðjureglan', f(){
+  const kind = ri(0, 3); let fTx, steps, val, fn, dn, x0;
+  if (kind === 0) { const a = nz(-3, 3), n = ri(3, 5); x0 = ri(-1, 2); const b = pick([1, -1, 2]) - a * x0; const g = P([b, a]);
+    fTx = T`f(x) = (${ptx(g)})^{${n}}`; val = q(n * a).mul(powQ(q(a * x0 + b), n - 1)); fn = x => (a * x + b) ** n; dn = x => n * a * (a * x + b) ** (n - 1);
+    steps = [{titill:'Innra og ytra fall', stig:1, lausn: AL([T`y &= ${ptx(g)}, & \frac{dy}{dx} &= ${a}`, T`f &= y^{${n}}, & \frac{df}{dy} &= ${n}y^{${n - 1}}`])},
+      {titill:'Keðjureglan', stig:2, lausn: D(T`f'(x) = ${n}(${ptx(g)})^{${n - 1}}\cdot ${txp(a)} = ${n * a}(${ptx(g)})^{${n - 1}}`)},
+      {titill:`Gildi í x = ${x0}`, stig:1, lausn: D(T`f'(${x0}) = ${n * a}\cdot (${a * x0 + b})^{${n - 1}} = ${tx(val)}`)}]; }
+  else if (kind === 1) { const a = nz(-3, 3), b = nz(-4, 4); const g = P([0, b, a]); x0 = 0;
+    fTx = T`f(x) = e^{${ptx(g)}}`; val = q(b); fn = x => Math.exp(a * x * x + b * x); dn = x => (2 * a * x + b) * Math.exp(a * x * x + b * x);
+    steps = [{titill:'Innra fall', stig:1, lausn: D(T`y = ${ptx(g)}, \qquad \frac{dy}{dx} = ${ptx(pder(g))}`)},
+      {titill:"Keðjureglan: \\((e^y)' = e^y\\cdot y'\\)", stig:2, lausn: D(T`f'(x) = (${ptx(pder(g))})\,e^{${ptx(g)}}`)},
+      {titill:'Gildi í x = 0', stig:1, lausn: D(T`f'(0) = (${b})\cdot e^{0} = ${b}`)}]; }
+  else if (kind === 2) { const a = ri(1, 3), c = ri(1, 5); const g = P([c, 0, a]); x0 = nz(-2, 2);
+    fTx = T`f(x) = \ln(${ptx(g)})`; val = q(2 * a * x0, a * x0 * x0 + c); fn = x => Math.log(a * x * x + c); dn = x => 2 * a * x / (a * x * x + c);
+    steps = [{titill:'Innra fall', stig:1, lausn: D(T`y = ${ptx(g)}, \qquad \frac{dy}{dx} = ${ptx(pder(g))}`)},
+      {titill:"Keðjureglan: \\((\\ln y)' = \\frac{y'}{y}\\)", stig:2, lausn: D(T`f'(x) = \frac{${ptx(pder(g))}}{${ptx(g)}}`)},
+      {titill:`Gildi í x = ${x0}`, stig:1, lausn: D(T`f'(${x0}) = \frac{${2 * a * x0}}{${a * x0 * x0 + c}} = ${tx(val)}`)}]; }
+  else { const a = ri(1, 4), s = pick([1, 2, 3, 4]); x0 = ri(0, 3); const b = s * s - a * x0; const g = P([b, a]);
+    fTx = T`f(x) = \sqrt{${ptx(g)}}`; val = q(a, 2 * s); fn = x => Math.sqrt(a * x + b); dn = x => a / (2 * Math.sqrt(a * x + b));
+    steps = [{titill:'Rita sem veldi', stig:1, lausn: D(T`f(x) = (${ptx(g)})^{1/2}`)},
+      {titill:'Keðjureglan', stig:2, lausn: D(T`f'(x) = \tfrac12(${ptx(g)})^{-1/2}\cdot ${a} = \frac{${a}}{2\sqrt{${ptx(g)}}}`)},
+      {titill:`Gildi í x = ${x0}`, stig:1, lausn: D(T`f'(${x0}) = \frac{${a}}{2\sqrt{${s * s}}} = \frac{${a}}{${2 * s}} = ${tx(val)}`)}]; }
+  return { q:`Notið keðjuregluna til að diffra fallið og reiknið \\(f'(${x0})\\). ${qd(fTx)}`, steps, chk:{d1:[fn, dn], val:[val, dn(x0)]}, quick:{q:`Reiknið \\(f'(${x0})\\) þegar ${qd(fTx)}`, a: val.str()} };
+}},
+{id:'g-invfn', t:'dif', name:'Afleiða andhverfs falls', f(){
+  const a = ri(1, 2), b = ri(1, 5), c = ri(-3, 4), x0 = ri(-2, 2); const f = P([c, b, 0, a]); const dy = pder(f); const y0 = pev(f, x0), d0 = pev(dy, x0);
+  return { q:`Gefið er fallið ${qd(T`y = f(x) = ${ptx(f)}`)}<ol type="a"><li>Sýnið að andhverfa fallið \\(x = f^{-1}(y)\\) sé til.</li><li>Finnið \\(\\frac{dx}{dy}\\) sem fall af \\(x\\).</li><li>Reiknið \\(\\frac{dx}{dy}\\) í punktinum \\(y = ${tx(y0)}\\).</li></ol>`,
+    steps:[
+      {titill:'a) Stranglega vaxandi', stig:2, lausn: D(T`\frac{dy}{dx} = ${ptx(dy)} \gt 0 \text{ fyrir öll } x`) + `<p>Því \\(x^2 \\ge 0\\) og ${b} > 0. Fallið er stranglega vaxandi og á því andhverft fall.</p>`},
+      {titill:'b) Andhverfureglan', stig:2, lausn: D(T`\frac{dx}{dy} = \frac{1}{dy/dx} = \frac{1}{${ptx(dy)}}`)},
+      {titill:'c) Finna x og stinga inn', stig:2, lausn: `<p>\\(y = ${tx(y0)}\\) fæst þegar \\(x = ${x0}\\):</p>` + AL([T`f(${x0}) &= ${tx(y0)}`, T`\frac{dx}{dy}\Big|_{y=${tx(y0)}} &= \frac{1}{${tx(d0)}}${d0.eq(1) ? '' : ' = ' + tx(new Q(1).div(d0))}`])}],
+    chk:{val:[new Q(1).div(d0), 1 / ((pevf(f, x0 + 1e-6) - pevf(f, x0 - 1e-6)) / 2e-6)]}, quick:{q:`\\(y = ${ptx(f)}\\). Reiknið \\(\\frac{dx}{dy}\\) þegar \\(x = ${x0}\\).`, a: new Q(1).div(d0).str()} };
+}},
+// ===== Hlutafleiður =====
+{id:'g-partial', t:'hlu', name:'Hlutafleiður og setning Young', f(){
+  const ms = mclean([mono(nz(-3, 4), ri(1, 3), ri(1, 2)), mono(nz(-4, 4), ri(2, 3), 0), mono(nz(-4, 4), 0, ri(1, 3)), mono(nz(-3, 3), 1, 1)]);
+  const fx = mder(ms, 0), fy = mder(ms, 1), fxx = mder(fx, 0), fyy = mder(fy, 1), fxy = mder(fx, 1), fyx = mder(fy, 0); const pt = [nz(-2, 2), nz(-2, 2)];
+  const V = ['x', 'y'];
+  return { q:`Gefið er fallið ${qd(T`f(x,y) = ${mtx(ms, V)}`)}<ol type="a"><li>Finnið fyrstu hlutafleiðurnar \\(f_x\\) og \\(f_y\\).</li><li>Finnið allar aðrar hlutafleiður og sýnið að \\(f_{xy} = f_{yx}\\).</li><li>Reiknið \\(f_x\\) og \\(f_y\\) í punktinum \\((${pt[0]}, ${pt[1]})\\).</li></ol>`,
+    steps:[
+      {titill:'a) Fyrstu hlutafleiður', stig:2, lausn: '<p>Haldið hinni breytunni fastri:</p>' + AL([T`f_x &= ${mtx(fx, V)}`, T`f_y &= ${mtx(fy, V)}`])},
+      {titill:'b) Aðrar hlutafleiður', stig:3, lausn: AL([T`f_{xx} &= ${mtx(fxx, V)}`, T`f_{yy} &= ${mtx(fyy, V)}`, T`f_{xy} &= ${mtx(fxy, V)}`, T`f_{yx} &= ${mtx(fyx, V)}`]) + '<p>Krossafleiðurnar eru jafnar (setning Young).</p>'},
+      {titill:'c) Innsetning', stig:2, lausn: AL([T`f_x(${pt[0]},${pt[1]}) &= ${msub(fx, pt)} = ${tx(mev(fx, pt))}`, T`f_y(${pt[0]},${pt[1]}) &= ${msub(fy, pt)} = ${tx(mev(fy, pt))}`])}],
+    chk:{part:[ms, fx, fy, fxy]}, quick:{q:`\\(f(x,y) = ${mtx(ms, V)}\\). Reiknið \\(f_{xy}(${pt[0]}, ${pt[1]})\\).`, a: mev(fxy, pt).str()} };
+}},
+// ===== Hessian =====
+{id:'g-hess2', t:'hes', name:'Flokkun stöðupunkts, 2 breytur', f(){
+  let A, B, C; do { A = nz(-3, 3); B = ri(-3, 3); C = nz(-3, 3); } while (4 * A * C - B * B === 0);
+  const p = [ri(-3, 3), ri(-3, 3)]; const Dc = -(2 * A * p[0] + B * p[1]), Ec = -(B * p[0] + 2 * C * p[1]);
+  const ms = mclean([mono(A, 2, 0), mono(B, 1, 1), mono(C, 0, 2), mono(Dc, 1, 0), mono(Ec, 0, 1)]); const V = ['x', 'y'];
+  const H = M([[2 * A, B], [B, 2 * C]]); const h1 = 2 * A, h2 = 4 * A * C - B * B; const cls = h2 < 0 ? 'sod' : h1 < 0 ? 'max' : 'min';
+  const clsTxt = {max:'staðbundið <b>hámark</b>', min:'staðbundið <b>lágmark</b>', sod:'<b>söðulpunktur</b> (hvorki hámark né lágmark)'}[cls];
+  const dd = det(M([[2 * A, B], [B, 2 * C]]));
+  const sol = D(T`\begin{aligned} ${poly([[2 * A, 'x'], [B, 'y'], [Dc, '']])} &= 0 \\ ${poly([[B, 'x'], [2 * C, 'y'], [Ec, '']])} &= 0 \end{aligned}`);
+  return { q:`Gefið er fallið ${qd(T`f(x,y) = ${mtx(ms, V)}`)}<ol type="a"><li>Finnið stöðupunkt fallsins út frá fyrstu gráðu skilyrðum.</li><li>Setjið upp Hessian-fylkið og reiknið leiðandi höfuðhlutákveður.</li><li>Ákvarðið hvort stöðupunkturinn sé hámark, lágmark eða söðulpunktur.</li></ol>`,
+    steps:[
+      {titill:'a) Fyrstu gráðu skilyrði', stig:2, lausn: AL([T`f_x &= ${mtx(mder(ms, 0), V)} = 0`, T`f_y &= ${mtx(mder(ms, 1), V)} = 0`])},
+      {titill:'a) Leysa jöfnuhneppið', stig:2, lausn: sol + `<p>Með reglu Cramers (\\(|A| = ${tx(dd)}\\)):</p>` + AL([T`x^* &= \frac{${tv(M([[-Dc, B], [-Ec, 2 * C]]))}}{${tx(dd)}} = \frac{${tx(det(M([[-Dc, B], [-Ec, 2 * C]])))}}{${tx(dd)}} = ${p[0]}`, T`y^* &= \frac{${tv(M([[2 * A, -Dc], [B, -Ec]]))}}{${tx(dd)}} = \frac{${tx(det(M([[2 * A, -Dc], [B, -Ec]])))}}{${tx(dd)}} = ${p[1]}`])},
+      {titill:'b) Hessian-fylkið', stig:1, lausn: D(T`H = \begin{bmatrix} f_{xx} & f_{xy} \\ f_{yx} & f_{yy}\end{bmatrix} = ${tm(H)}`) + '<p>Fylkið er fast, óháð punktinum.</p>'},
+      {titill:'b) Leiðandi höfuðhlutákveður', stig:2, lausn: AL([T`|H_1| &= ${h1}`, T`|H_2| &= ${det2Line(H)}`])},
+      {titill:'c) Flokkun', stig:2, lausn: `<p>${cls === 'sod' ? `\\(|H_2| = ${h2} \\lt 0\\): hvorki mynstrið fyrir hámark né lágmark gengur upp.` : cls === 'max' ? `\\(|H_1| = ${h1} \\lt 0\\) og \\(|H_2| = ${h2} \\gt 0\\): formerkin skiptast (−, +).` : `\\(|H_1| = ${h1} \\gt 0\\) og \\(|H_2| = ${h2} \\gt 0\\): allar jákvæðar.`} Punkturinn \\((${p[0]}, ${p[1]})\\) er ${clsTxt}.</p>`}],
+    chk:{hess:[ms, p, cls, [h1, h2]]},
+    quick: Math.random() < 0.5 ? {q:`Hessian-fylkið í stöðupunkti er ${qd(tm(H))}Hvers konar punktur er þetta?`, o:['Hámark', 'Lágmark', 'Söðulpunktur', 'Ekki hægt að segja', 'Beygjuskil'], a: {max:0, min:1, sod:2}[cls]} : {q:`Reiknið \\(|H_2|\\) fyrir \\(f(x,y) = ${mtx(ms, V)}\\).`, a: String(h2)} };
+}},
+{id:'g-hess3', t:'hes', name:'Flokkun stöðupunkts, 3 breytur', f(){
+  const want = pick(['min', 'min', 'max', 'max', 'any']); let a, b, c, d, e, g, H, tries = 0; const clsOf = H => { const h = [H[0][0].v, det(M([[H[0][0], H[0][1]], [H[1][0], H[1][1]]])).v, det(H).v]; return (h[0] < 0 && h[1] > 0 && h[2] < 0) ? 'max' : (h[0] > 0 && h[1] > 0 && h[2] > 0) ? 'min' : 'sod'; };
+  do { const sg = want === 'min' ? 1 : want === 'max' ? -1 : 0; a = sg ? sg * ri(1, 3) : nz(-3, 3); b = sg ? sg * ri(1, 3) : nz(-3, 3); c = sg ? sg * ri(1, 3) : nz(-3, 3); d = ri(-2, 2); e = ri(-2, 2); g = ri(-2, 2); H = M([[2 * a, d, e], [d, 2 * b, g], [e, g, 2 * c]]); tries++; } while ((det(H).z || det(M([[2 * a, d], [d, 2 * b]])).z || (want !== 'any' && clsOf(H) !== want)) && tries < 200);
+  const p = [ri(-2, 2), ri(-2, 2), ri(-2, 2)]; const lin = H.map(r => r.reduce((s, x, k) => s.add(x.mul(p[k])), new Q(0)).neg());
+  const ms = mclean([mono(a, 2, 0, 0), mono(b, 0, 2, 0), mono(c, 0, 0, 2), mono(d, 1, 1, 0), mono(e, 1, 0, 1), mono(g, 0, 1, 1), mono(lin[0], 1, 0, 0), mono(lin[1], 0, 1, 0), mono(lin[2], 0, 0, 1)]);
+  const h = [H[0][0], det(M([[2 * a, d], [d, 2 * b]])), det(H)].map(x => x.v);
+  const cls = (h[0] < 0 && h[1] > 0 && h[2] < 0) ? 'max' : (h[0] > 0 && h[1] > 0 && h[2] > 0) ? 'min' : 'sod';
+  const grads = [0, 1, 2].map(i => mder(ms, i));
+  return { q:`Gefið er fallið ${qd(T`f(x,y,z) = ${mtx(ms, VARS3)}`)}<ol type="a"><li>Sýnið að \\((${p.join(', ')})\\) uppfylli fyrstu gráðu skilyrðin.</li><li>Setjið upp Hessian-fylkið og reiknið allar leiðandi höfuðhlutákveður.</li><li>Er punkturinn hámark, lágmark eða hvorugt?</li></ol>`,
+    steps:[
+      {titill:'a) Fyrstu gráðu skilyrði', stig:3, lausn: AL(grads.map((gr, i) => T`f_${VARS3[i]} &= ${mtx(gr, VARS3)}`)) + '<p>Stinga punktinum inn:</p>' + AL(grads.map((gr, i) => T`f_${VARS3[i]}(${p.join(',')}) &= ${msub(gr, p)} = ${tx(mev(gr, p))}`))},
+      {titill:'b) Hessian-fylkið', stig:2, lausn: D(T`H = ${tm(H)}`)},
+      {titill:'b) Höfuðhlutákveður', stig:3, lausn: AL([T`|H_1| &= ${h[0]}`, T`|H_2| &= ${det2Line(M([[2 * a, d], [d, 2 * b]]))}`, T`|H_3| &= ${laplace(H).sum} = ${h[2]}`])},
+      {titill:'c) Flokkun', stig:2, lausn: `<p>Formerkin eru (${h.map(x => x > 0 ? '+' : '−').join(', ')}). ${cls === 'max' ? 'Þau skiptast (−, +, −) svo punkturinn er <b>hámark</b>.' : cls === 'min' ? 'Öll jákvæð svo punkturinn er <b>lágmark</b>.' : 'Hvorki (−, +, −) né (+, +, +), og \\(|H_3| \\ne 0\\), svo punkturinn er <b>söðulpunktur</b>, hvorki hámark né lágmark.'}</p>`}],
+    chk:{hess:[ms, p, cls, h]}, quick:{q:`Leiðandi höfuðhlutákveður Hessian-fylkis í stöðupunkti eru \\(|H_1| = ${h[0]}\\), \\(|H_2| = ${h[1]}\\), \\(|H_3| = ${h[2]}\\). Hvers konar punktur er þetta?`, o:['Hámark', 'Lágmark', 'Söðulpunktur', 'Ekki hægt að segja', 'Fallið er línulegt'], a:{max:0, min:1, sod:2}[cls]} };
+}},
+{id:'g-cd', t:'hes', name:'Hvelft eða kúpt: Cobb-Douglas', f(){
+  let a, b, A, tries = 0; const dens = (A, a, b) => { const fxx = q(A).mul(a).mul(a.sub(1)), fyy = q(A).mul(b).mul(b.sub(1)), fxy = q(A).mul(a).mul(b); return Math.max(fxx.mul(fyy).d, fxy.mul(fxy).d, q(A * A).mul(a).mul(b).mul(q(1).sub(a.add(b))).d); };
+  do { a = pick(fracPool); b = pick(fracPool); A = pick([1, 2, 3, 4, 6, 12]); } while (dens(A, a, b) > 36 && ++tries < 500); const s = a.add(b);
+  const am1 = a.sub(1), bm1 = b.sub(1); const fxx = q(A).mul(a).mul(am1), fyy = q(A).mul(b).mul(bm1), fxy = q(A).mul(a).mul(b); const k = q(A * A).mul(a).mul(b).mul(new Q(1).sub(s));
+  const cls = s.v < 1 ? 'shv' : s.v === 1 ? 'hv' : 'hvorugt';
+  const pw = (v, e) => { e = Q.of(e); return e.z ? '' : e.eq(1) ? v : `${v}^{${expTx(e)}}`; };
+  const term = (c, ex, ey) => `${tx(c)}${pw('x', ex)}${pw('y', ey)}`;
+  return { q:`Gefið er fallið ${qd(T`f(x,y) = ${A === 1 ? '' : A}x^{${expTx(a)}}y^{${expTx(b)}}, \qquad x \gt 0,\; y \gt 0`)}Setjið upp Hessian-fylkið og kannið hvort fallið sé hvelft, kúpt eða hvorugt.`,
+    steps:[
+      {titill:'Fyrstu hlutafleiður', stig:1, lausn: AL([T`f_x &= ${term(q(A).mul(a), am1, b)}`, T`f_y &= ${term(q(A).mul(b), a, bm1)}`])},
+      {titill:'Aðrar hlutafleiður og H', stig:2, lausn: AL([T`f_{xx} &= ${term(fxx, a.sub(2), b)}`, T`f_{yy} &= ${term(fyy, a, b.sub(2))}`, T`f_{xy} &= f_{yx} = ${term(fxy, am1, bm1)}`]) + D(T`H = \begin{bmatrix} f_{xx} & f_{xy} \\ f_{yx} & f_{yy}\end{bmatrix}`)},
+      {titill:'|H₁|', stig:1, lausn: D(T`|H_1| = f_{xx} = ${term(fxx, a.sub(2), b)} \lt 0`) + `<p>Því \\(${expTx(a)} - 1 \\lt 0\\) og \\(x, y \\gt 0\\).</p>`},
+      {titill:'|H₂|', stig:2, lausn: AL([T`|H_2| &= f_{xx}f_{yy} - f_{xy}^2`, T`&= \left[${tx(fxx.mul(fyy))} - ${txp(fxy.mul(fxy))}\right] x^{${expTx(a.mul(2).sub(2))}}y^{${expTx(b.mul(2).sub(2))}}`, T`&= ${tx(k)}\,x^{${expTx(a.mul(2).sub(2))}}y^{${expTx(b.mul(2).sub(2))}}`]) + `<p>Almennt er \\(|H_2| = A^2ab(1-a-b)x^{2a-2}y^{2b-2}\\), og hér er \\(a + b = ${tx(s)}\\).</p>`},
+      {titill:'Niðurstaða', stig:1, lausn: `<p>${cls === 'shv' ? '\\(|H_1| \\lt 0\\) og \\(|H_2| \\gt 0\\) svo fallið er <b>stranglega hvelft</b>.' : cls === 'hv' ? '\\(|H_1| \\lt 0\\) og \\(|H_2| = 0\\) svo fallið er <b>hvelft</b> en ekki stranglega (föst stærðarhagkvæmni).' : '\\(|H_2| \\lt 0\\) svo fallið er <b>hvorki hvelft né kúpt</b>.'}</p>`}],
+    chk:{cd:[A, a.v, b.v, cls, k.v]}, quick:{q:`Er \\(f(x,y) = x^{${expTx(a)}}y^{${expTx(b)}}\\) hvelft, kúpt eða hvorugt á \\(x, y \\gt 0\\)?`, o:['Stranglega hvelft', 'Hvelft en ekki stranglega', 'Hvorki hvelft né kúpt', 'Stranglega kúpt', 'Kúpt en ekki stranglega'], a:{shv:0, hv:1, hvorugt:2}[cls]} };
+}},
+// ===== Mismunur =====
+{id:'g-dy', t:'mis', name:'Mismunur dy og skekkja', f(){
+  const f = P([ri(-3, 3), ri(-4, 4), nz(-3, 3), ...(Math.random() < 0.5 ? [nz(-2, 2)] : [])]); const df = pder(f); const x0 = ri(-2, 3); const dx = pick(decList2);
+  const dy = pev(df, x0).mul(dx); const Dy = pev(f, Q.of(x0).add(dx)).sub(pev(f, x0));
+  return { q:`Gefið er \\(y = ${ptx(f)}\\).<ol type="a"><li>Finnið mismuninn \\(dy\\).</li><li>Reiknið \\(dy\\) þegar \\(x = ${x0}\\) og \\(dx = ${dec(dx)}\\).</li><li>Berið saman við raunbreytinguna \\(\\Delta y\\) og finnið skekkjuliðinn.</li></ol>`,
+    steps:[
+      {titill:'a) dy = f′(x)dx', stig:2, lausn: D(T`dy = (${ptx(df)})\,dx`)},
+      {titill:'b) Innsetning', stig:2, lausn: AL([T`f'(${x0}) &= ${tx(pev(df, x0))}`, T`dy &= ${txp(pev(df, x0))}\cdot ${decp(dx)} = ${dec(dy)}`])},
+      {titill:'c) Δy og skekkja', stig:2, lausn: AL([T`\Delta y &= f(${dec(Q.of(x0).add(dx))}) - f(${x0})`, T`&= ${dec(pev(f, Q.of(x0).add(dx)))} - ${decp(pev(f, x0))} = ${dec(Dy)}`, T`\Delta y - dy &= ${dec(Dy.sub(dy))}`]) + '<p>Skekkjan er lítil miðað við \\(dy\\) því \\(dx\\) er lítið; hún stefnir á núll hraðar en \\(dx\\).</p>'}],
+    chk:{val:[dy, (pevf(f, x0 + 1e-6) - pevf(f, x0 - 1e-6)) / 2e-6 * dx.v]}, quick:{q:`\\(y = ${ptx(f)}\\). Reiknið \\(dy\\) þegar \\(x = ${x0}\\) og \\(dx = ${dec(dx)}\\).`, a: dy.str()} };
+}},
+{id:'g-totd', t:'mis', name:'Heildarmismunur í punkti', f(){
+  const ms = mclean([mono(nz(-3, 3), ri(1, 2), ri(1, 2)), mono(nz(-3, 4), ri(1, 3), 0), mono(nz(-4, 3), 0, ri(1, 2))]); const V = ['x', 'y']; const pt = [nz(-2, 3), nz(-2, 3)]; const dx = pick(decList2), dy = pick(decList2);
+  const fx = mder(ms, 0), fy = mder(ms, 1); const vx = mev(fx, pt), vy = mev(fy, pt); const dz = vx.mul(dx).add(vy.mul(dy));
+  return { q:`Gefið er \\(z = f(x,y) = ${mtx(ms, V)}\\).<ol type="a"><li>Finnið heildarmismuninn \\(dz\\).</li><li>Reiknið \\(dz\\) í punktinum \\((${pt.join(', ')})\\) þegar \\(dx = ${dec(dx)}\\) og \\(dy = ${dec(dy)}\\).</li></ol>`,
+    steps:[
+      {titill:'a) Hlutafleiður', stig:2, lausn: AL([T`f_x &= ${mtx(fx, V)}`, T`f_y &= ${mtx(fy, V)}`])},
+      {titill:'a) dz = f_x dx + f_y dy', stig:1, lausn: D(T`dz = (${mtx(fx, V)})\,dx + (${mtx(fy, V)})\,dy`)},
+      {titill:'b) Gildi hlutafleiðnanna', stig:2, lausn: AL([T`f_x(${pt.join(',')}) &= ${msub(fx, pt)} = ${tx(vx)}`, T`f_y(${pt.join(',')}) &= ${msub(fy, pt)} = ${tx(vy)}`])},
+      {titill:'b) Innsetning', stig:1, lausn: D(T`dz = ${txp(vx)}\cdot ${decp(dx)} + ${txp(vy)}\cdot ${decp(dy)} = ${dec(dz)}`)}],
+    chk:{part:[ms, fx, fy, null], val:[dz, vx.v * dx.v + vy.v * dy.v]}, quick:{q:`\\(z = ${mtx(ms, V)}\\). Reiknið \\(dz\\) í \\((${pt.join(', ')})\\) þegar \\(dx = ${dec(dx)}\\), \\(dy = ${dec(dy)}\\).`, a: dz.str()} };
+}},
+{id:'g-drule', t:'mis', name:'Reglur um mismun: d(uv) og d(u/v)', f(){
+  const isQ = Math.random() < 0.5; const a = nz(-3, 3), b = nz(-3, 3), c = ri(1, 3), e = nz(-2, 2);
+  const u = mclean([mono(1, 2, 0), mono(a, 0, 1)]), v = mclean([mono(c, 1, 0), mono(e, 0, 1)]); const V = ['x', 'y'];
+  let pt, tries = 0; do pt = [ri(1, 3), nz(-2, 3)]; while ((mev(v, pt).z || mev(u, pt).z || Math.abs(mev(v, pt).v) > 5) && ++tries < 100); if (tries >= 100) return GENBY['g-drule'].f();
+  const du = [mder(u, 0), mder(u, 1)], dv = [mder(v, 0), mder(v, 1)]; const U0 = mev(u, pt), V0 = mev(v, pt);
+  const gx = isQ ? U0.mul(0).add(mev(du[0], pt).mul(V0).sub(U0.mul(mev(dv[0], pt))).div(V0.mul(V0))) : mev(du[0], pt).mul(V0).add(U0.mul(mev(dv[0], pt)));
+  const gy = isQ ? mev(du[1], pt).mul(V0).sub(U0.mul(mev(dv[1], pt))).div(V0.mul(V0)) : mev(du[1], pt).mul(V0).add(U0.mul(mev(dv[1], pt)));
+  const zTx = isQ ? T`z = \frac{${mtx(u, V)}}{${mtx(v, V)}}` : T`z = (${mtx(u, V)})(${mtx(v, V)})`;
+  const fn = (x, y) => { const uu = x * x + a * y, vv = c * x + e * y; return isQ ? uu / vv : uu * vv; };
+  return { q:`Notið reglur um mismun til að finna \\(dz\\) og reiknið stuðlana við \\(dx\\) og \\(dy\\) í punktinum \\((${pt.join(', ')})\\). ${qd(zTx)}`,
+    steps:[
+      {titill:'Mismunir u og v', stig:2, lausn: AL([T`u &= ${mtx(u, V)}, & du &= ${mtx(du[0], V)}\,dx ${mtx(du[1], V).startsWith('-') ? '' : '+'} ${mtx(du[1], V)}\,dy`, T`v &= ${mtx(v, V)}, & dv &= ${mtx(dv[0], V)}\,dx ${mtx(dv[1], V).startsWith('-') ? '' : '+'} ${mtx(dv[1], V)}\,dy`])},
+      {titill: isQ ? 'Regla 5: d(u/v) = (v du − u dv)/v²' : 'Regla 4: d(uv) = v du + u dv', stig:2, lausn: D(isQ ? T`dz = \frac{1}{v^2}\left[(${mtx(v, V)})\,du - (${mtx(u, V)})\,dv\right]` : T`dz = (${mtx(v, V)})\,du + (${mtx(u, V)})\,dv`)},
+      {titill:'Innsetning í punktinum', stig:2, lausn: AL([T`u &= ${tx(U0)},\quad v = ${tx(V0)}`, T`du &= ${tx(mev(du[0], pt))}\,dx ${mev(du[1], pt).n < 0 ? '' : '+'} ${tx(mev(du[1], pt))}\,dy`, T`dv &= ${tx(mev(dv[0], pt))}\,dx ${mev(dv[1], pt).n < 0 ? '' : '+'} ${tx(mev(dv[1], pt))}\,dy`])},
+      {titill:'Safna saman', stig:2, lausn: D(T`dz = ${tx(gx)}\,dx ${gy.n < 0 ? '' : '+'} ${tx(gy)}\,dy`)}],
+    chk:{grad:[fn, pt, [gx.v, gy.v]]}, quick:null };
+}},
+{id:'g-elast', t:'mis', name:'Punktteygni með mismun', f(){
+  const lin = Math.random() < 0.65;
+  if (lin) { const E = pick([q(1,2), q(1,3), q(2,3), q(1), q(3,2), q(2), q(3), q(1,4), q(3,4)]); const b = ri(1, 5), P0 = E.n * ri(1, 4) * (E.n === 1 ? ri(2, 5) : 1); const a = b * P0 + b * P0 * E.d / E.n; const Q0 = a - b * P0; const e = q(-b * P0, Q0);
+    const kind = Math.abs(e.v) > 1 ? 'teygin' : Math.abs(e.v) < 1 ? 'óteygin' : 'einingarteygin';
+    return { q:`Eftirspurnin er \\(Q = ${a} - ${b === 1 ? '' : b}P\\). Notið mismun til að finna punktteygni eftirspurnar þegar \\(P = ${P0}\\). Er eftirspurnin teygin eða óteygin í þeim punkti?`,
+      steps:[{titill:'Mismunur', stig:1, lausn: D(T`dQ = -${b}\,dP \quad\Rightarrow\quad \frac{dQ}{dP} = -${b}`)},
+        {titill:'Teygni sem hlutfall hlutfallsbreytinga', stig:2, lausn: D(T`\varepsilon = \frac{dQ/Q}{dP/P} = \frac{dQ}{dP}\cdot\frac{P}{Q}`) + D(T`Q(${P0}) = ${a} - ${b}\cdot ${P0} = ${Q0}`)},
+        {titill:'Innsetning og túlkun', stig:2, lausn: D(T`\varepsilon = -${b}\cdot\frac{${P0}}{${Q0}} = ${tx(e)}`) + `<p>\\(|\\varepsilon| ${Math.abs(e.v) > 1 ? '\\gt' : Math.abs(e.v) < 1 ? '\\lt' : '='} 1\\): eftirspurnin er <b>${kind}</b>. 1% verðhækkun minnkar magn um u.þ.b. \\(${tx(e.neg())}\\)%.</p>`}],
+      chk:{val:[e, -b * P0 / Q0]}, quick:{q:`\\(Q = ${a} - ${b === 1 ? '' : b}P\\). Hver er punktteygnin þegar \\(P = ${P0}\\)?`, a: e.str()} }; }
+  const k = ri(2, 9) * 10, n = pick([q(1, 2), q(2), q(3, 2), q(1), q(3)]);
+  return { q:`Eftirspurnin er \\(Q = ${k}P^{-${expTx(n)}}\\). Notið mismun til að sýna að teygnin sé föst og finnið hana.`,
+    steps:[{titill:'Mismunur', stig:2, lausn: D(T`dQ = -${expTx(n)}\cdot ${k}P^{-${expTx(n.add(1))}}\,dP`)},
+      {titill:'Teygni', stig:2, lausn: AL([T`\varepsilon &= \frac{dQ}{dP}\cdot\frac{P}{Q} = -${expTx(n)}\cdot ${k}P^{-${expTx(n.add(1))}}\cdot\frac{P}{${k}P^{-${expTx(n)}}}`, T`&= ${tx(n.neg())}`])},
+      {titill:'Túlkun', stig:1, lausn:`<p>Teygnin er \\(${tx(n.neg())}\\) í öllum punktum: fall á forminu \\(kP^{-n}\\) hefur fasta teygni \\(-n\\).</p>`}],
+    chk:{val:[n.neg(), -n.v]}, quick:{q:`Hver er verðteygni eftirspurnar \\(Q = ${k}P^{-${expTx(n)}}\\)?`, a: n.neg().str()} };
+}},
+];
+const GENBY = Object.fromEntries(GENS.map(g => [g.id, g]));
+
+// ===== gens_final.js =====
+// ---------- rafalar fyrir lokaprófsefnið ----------
+const nder = (f, x, h = 1e-5) => (f(x + h) - f(x - h)) / (2 * h);
+const nder2 = (f, x, h = 1e-3) => (f(x + h) - 2 * f(x) + f(x - h)) / (h * h);
+const sgnW = v => v > 0 ? 'jákvætt' : 'neikvætt';
+const ivl = (a, b) => `${a === -Infinity ? '(-\\infty' : '(' + tx(a)}, ${b === Infinity ? '\\infty)' : tx(b) + ')'}`;
+// (x - x0)^k sem texti
+const sh = (x0, k = 1) => { const b = x0 === 0 ? 'x' : `(x ${x0 > 0 ? '-' : '+'} ${Math.abs(x0)})`; return k === 1 ? b : (x0 === 0 ? `x^{${k}}` : `${b}^{${k}}`); };
+const tayTxt = (cs, x0) => { let out = '', first = true; cs.forEach((c, k) => { c = Q.of(c); if (c.z) return; if (k === 0) { out = tx(c); first = false; return; } out += shTerm(c, x0, k, first); first = false; }); return out || '0'; };
+const shTerm = (c, x0, k, first) => { c = Q.of(c); if (c.z) return ''; const neg = c.n < 0, a = neg ? c.neg() : c; const body = (a.eq(1) ? '' : tx(a)) + sh(x0, k); return (first ? (neg ? '-' : '') : (neg ? ' - ' : ' + ')) + body; };
+
+GENS.push(
+// ===== Föll af einni breytu =====
+{id:'g-cubic', t:'ein', name:'Greining þriðja stigs falls', f(){
+  let r1, r2; do { r1 = ri(-3, 2); r2 = ri(r1 + 1, 4); } while ((r1 + r2) % 2);
+  const m = pick([1, -1]), dd = ri(-4, 6);
+  const f = P([dd, 3 * m * r1 * r2, -3 * m * (r1 + r2) / 2, m]); const df = pder(f), d2 = pder(df);
+  const infl = (r1 + r2) / 2; const v1 = pev(f, r1), v2 = pev(f, r2); const s1 = pev(d2, r1).v, s2 = pev(d2, r2).v;
+  const kind = s => s < 0 ? 'staðbundið <b>hámark</b>' : 'staðbundið <b>lágmark</b>';
+  const inc = m > 0 ? `\\(${ivl(-Infinity, r1)}\\) og \\(${ivl(r2, Infinity)}\\)` : `\\(${ivl(r1, r2)}\\)`;
+  const dec_ = m > 0 ? `\\(${ivl(r1, r2)}\\)` : `\\(${ivl(-Infinity, r1)}\\) og \\(${ivl(r2, Infinity)}\\)`;
+  const cv = m > 0 ? [`\\(x \\lt ${tx(infl)}\\)`, `\\(x \\gt ${tx(infl)}\\)`] : [`\\(x \\gt ${tx(infl)}\\)`, `\\(x \\lt ${tx(infl)}\\)`];
+  return { q:`Gefið er fallið ${qd(T`f(x) = ${ptx(f)}`)}<ol type="a"><li>Hvert er formengi fallsins?</li><li>Finnið krítíska punkta og flokkið þá með annarri afleiðu.</li><li>Á hvaða bilum er fallið vaxandi og minnkandi?</li><li>Hvar er fallið hvelft og hvar kúpt? Hvar eru beygjuskil?</li><li>Eru útmörkin algild?</li></ol>`,
+    steps:[
+      {titill:'a) Formengi', stig:1, lausn:'<p>Margliða er skilgreind fyrir allar rauntölur: \\(D = \\mathbb{R}\\).</p>'},
+      {titill:'b) FGS: f′(x) = 0', stig:2, lausn: AL([T`f'(x) &= ${ptx(df)}`, T`&= ${tx(3 * m)}(x ${r1 < 0 ? '+' : '-'} ${Math.abs(r1)})(x ${r2 < 0 ? '+' : '-'} ${Math.abs(r2)}) = 0`]).replace(/\(x - 0\)/g, 'x').replace(/\(x \+ 0\)/g, 'x').replace('= 1(', '= (').replace('= -1(', '= -(').replace('= 3(', '= 3(') + `<p>Krítískir punktar: \\(x = ${r1}\\) og \\(x = ${r2}\\).</p>`},
+      {titill:'b) Flokkun með f″', stig:2, lausn: AL([T`f''(x) &= ${ptx(d2)}`, T`f''(${r1}) &= ${tx(pev(d2, r1))}`, T`f''(${r2}) &= ${tx(pev(d2, r2))}`]) + `<p>\\(x = ${r1}\\) er ${kind(s1)} með \\(f(${r1}) = ${tx(v1)}\\); \\(x = ${r2}\\) er ${kind(s2)} með \\(f(${r2}) = ${tx(v2)}\\).</p>`},
+      {titill:'c) Vaxandi og minnkandi', stig:2, lausn:`<p>\\(f'\\) er ${m > 0 ? 'jákvæð utan' : 'neikvæð utan'} rótanna og ${m > 0 ? 'neikvæð' : 'jákvæð'} á milli þeirra. Vaxandi á ${inc}, minnkandi á ${dec_}.</p>`},
+      {titill:'d) Hvelft og kúpt', stig:2, lausn: D(T`f''(x) = ${ptx(d2)} = 0 \;\Rightarrow\; x = ${tx(infl)}`) + `<p>Hvelft (\\(f'' \\lt 0\\)) fyrir ${cv[0]}, kúpt (\\(f'' \\gt 0\\)) fyrir ${cv[1]}. Beygjuskil í \\(x = ${tx(infl)}\\).</p>`},
+      {titill:'e) Algild útmörk?', stig:1, lausn:`<p>Nei. Þriðja stigs margliða stefnir á \\(\\pm\\infty\\) í endum formengisins, svo útmörkin eru aðeins staðbundin.</p>`}],
+    chk:{d1:[x => pevf(f, x), x => pevf(df, x)], close:[[nder(x => pevf(f, x), r1), 0], [nder(x => pevf(f, x), r2), 0], [Math.sign(nder2(x => pevf(f, x), r1)), Math.sign(s1)]]},
+    quick: Math.random() < 0.5 ? {q:`Hvert er fallgildið í staðbundnu ${s1 < 0 ? 'hámarki' : 'lágmarki'} fallsins \\(f(x) = ${ptx(f)}\\)? (Krítískir punktar eru \\(x = ${r1}\\) og \\(x = ${r2}\\).)`, a: v1.str()} : {q:`Hvar eru beygjuskil fallsins \\(f(x) = ${ptx(f)}\\)? Svaraðu með \\(x\\)-gildinu.`, a: q(r1 + r2, 2).str()} };
+}},
+// ===== Heildarafleiður =====
+{id:'g-totder', t:'mis', name:'Heildarafleiða: bein og óbein áhrif', f(){
+  const ms = mclean([mono(nz(-3, 3), ri(1, 2), 1), mono(nz(-3, 4), 1, 0), mono(nz(-2, 3), 0, ri(1, 2))]); const V = ['x', 'w'];
+  const g = Math.random() < 0.5 ? P([ri(-2, 3), nz(-2, 3)]) : P([ri(-1, 2), 0, nz(-2, 2)]); const dg = pder(g);
+  const w0 = g.length > 2 ? pick([-1, 1]) : nz(-2, 2); const x0 = pev(g, w0);
+  const fx = mder(ms, 0), fw = mder(ms, 1); const vfx = mev(fx, [x0, w0]), vfw = mev(fw, [x0, w0]), vdg = pev(dg, w0);
+  const tot = vfx.mul(vdg).add(vfw); if (Math.abs(tot.v) > 120 || Math.abs(vfx.v) > 60) return GENBY['g-totder'].f(); const comp = w => mevf(ms, [pevf(g, w), w]);
+  return { q:`Gefið er \\(y = f(x, w) = ${mtx(ms, V)}\\) þar sem \\(x = g(w) = ${ptx(g, 'w')}\\).<ol type="a"><li>Teiknið flæðirit sem sýnir bein og óbein áhrif \\(w\\) á \\(y\\).</li><li>Finnið heildarafleiðuna \\(\\frac{dy}{dw}\\).</li><li>Reiknið hana þegar \\(w = ${w0}\\).</li></ol>`,
+    steps:[
+      {titill:'a) Flæðirit', stig:1, lausn:'<div class="flow"><span>w</span><span class="arr">→</span><span>y</span><span class="lbl">bein áhrif: \\(f_w\\)</span></div><div class="flow"><span>w</span><span class="arr">→</span><span>x</span><span class="arr">→</span><span>y</span><span class="lbl">óbein áhrif: \\(f_x\\cdot\\frac{dx}{dw}\\)</span></div>'},
+      {titill:'b) Heildarmismunur og deilt með dw', stig:2, lausn: D(T`dy = f_x\,dx + f_w\,dw \;\Rightarrow\; \frac{dy}{dw} = f_x\frac{dx}{dw} + f_w`)},
+      {titill:'b) Hlutafleiður og g′(w)', stig:2, lausn: AL([T`f_x &= ${mtx(fx, V)}`, T`f_w &= ${mtx(fw, V)}`, T`\frac{dx}{dw} &= ${ptx(dg, 'w')}`]) + D(T`\frac{dy}{dw} = (${mtx(fx, V)})(${ptx(dg, 'w')}) + ${mtx(fw, V).startsWith('-') ? '(' + mtx(fw, V) + ')' : mtx(fw, V)}`)},
+      {titill:`c) Innsetning í w = ${w0}`, stig:2, lausn: AL([T`x &= g(${w0}) = ${tx(x0)}`, T`f_x &= ${msub(fx, [x0, w0])} = ${tx(vfx)}`, T`f_w &= ${msub(fw, [x0, w0])} = ${tx(vfw)}`, T`\frac{dx}{dw} &= ${tx(vdg)}`, T`\frac{dy}{dw} &= ${txp(vfx)}\cdot ${txp(vdg)} + ${txp(vfw)} = ${tx(tot)}`])}],
+    chk:{close:[[tot.v, nder(comp, w0)]]}, quick:{q:`\\(y = ${mtx(ms, V)}\\) og \\(x = ${ptx(g, 'w')}\\). Reiknið \\(\\frac{dy}{dw}\\) þegar \\(w = ${w0}\\).`, a: tot.str()} };
+}},
+// ===== Fólgin föll =====
+{id:'g-implicit', t:'dul', name:'Fólgið fall í punkti', f(){
+  let a, b, c, d, e, x0, y0, k, Fx, Fy, tries = 0; const wantX = Math.random() < 0.3;
+  do { a = ri(-2, 3); b = ri(-3, 3); c = nz(-2, 3); d = ri(-3, 3); e = ri(-3, 3); x0 = nz(-2, 2); y0 = nz(-2, 2);
+    k = -(a * x0 * x0 + b * x0 * y0 + c * y0 * y0 + d * x0 + e * y0); Fx = 2 * a * x0 + b * y0 + d; Fy = b * x0 + 2 * c * y0 + e; tries++;
+  } while ((Fy === 0 || Fx === 0 || Math.abs(Fx) > 12 || Math.abs(Fy) > 12) && tries < 400);
+  const ms = mclean([mono(a, 2, 0), mono(b, 1, 1), mono(c, 0, 2), mono(d, 1, 0), mono(e, 0, 1), mono(k, 0, 0)]); const V = ['x', 'y'];
+  const fx = mder(ms, 0), fy = mder(ms, 1); const ans = wantX ? q(-Fy, Fx) : q(-Fx, Fy);
+  const F = (X, Y) => mevf(ms, [X, Y]);
+  // óháð tölulegt mat: leysa F = 0 með Newton nálægt punktinum
+  const solveY = X => { let Y = y0; for (let i = 0; i < 40; i++) { const g = F(X, Y), gp = (F(X, Y + 1e-7) - F(X, Y - 1e-7)) / 2e-7; Y -= g / gp; } return Y; };
+  const solveX = Y => { let X = x0; for (let i = 0; i < 40; i++) { const g = F(X, Y), gp = (F(X + 1e-7, Y) - F(X - 1e-7, Y)) / 2e-7; X -= g / gp; } return X; };
+  const num = wantX ? (solveX(y0 + 1e-4) - solveX(y0 - 1e-4)) / 2e-4 : (solveY(x0 + 1e-4) - solveY(x0 - 1e-4)) / 2e-4;
+  const dep = wantX ? 'x' : 'y', ind = wantX ? 'y' : 'x', Fd = wantX ? Fx : Fy, Fi = wantX ? Fy : Fx;
+  return { q:`Gefið er sambandið ${qd(T`F(x, y) = ${mtx(ms, V)} = 0`)}<ol type="a"><li>Sýnið að punkturinn \\((${x0}, ${y0})\\) uppfylli sambandið.</li><li>Notið setninguna um fólgin föll til að kanna tilvist fólgins falls \\(${dep} = f(${ind})\\) í punktinum.</li><li>Reiknið \\(\\frac{d${dep}}{d${ind}}\\) í punktinum.</li></ol>`,
+    steps:[
+      {titill:'a) Innsetning', stig:1, lausn: D(T`F(${x0}, ${y0}) = ${msub(ms, [x0, y0])} = 0`)},
+      {titill:'b) Hlutafleiður', stig:2, lausn: AL([T`F_x &= ${mtx(fx, V)}`, T`F_y &= ${mtx(fy, V)}`]) + '<p>Báðar eru margliður og því samfelldar.</p>'},
+      {titill:`b) F_${dep} ≠ 0 í punktinum`, stig:2, lausn: D(T`F_${dep}(${x0}, ${y0}) = ${msub(wantX ? fx : fy, [x0, y0])} = ${Fd} \ne 0`) + `<p>Skilyrði setningarinnar eru uppfyllt: til er fólgið fall \\(${dep} = f(${ind})\\) í grennd við punktinn, samfellt og diffranlegt.</p>`},
+      {titill:'c) Afleiða fólgna fallsins', stig:2, lausn: AL([T`F_${ind}(${x0}, ${y0}) &= ${msub(wantX ? fy : fx, [x0, y0])} = ${Fi}`, T`\frac{d${dep}}{d${ind}} &= -\frac{F_${ind}}{F_${dep}} = -\frac{${Fi}}{${Fd}} = ${tx(ans)}`])}],
+    chk:{close:[[ans.v, num], [mev(ms, [x0, y0]).v, 0]]}, quick:{q:`\\(F(x,y) = ${mtx(ms, V)} = 0\\) í punktinum \\((${x0}, ${y0})\\). Reiknið \\(\\frac{d${dep}}{d${ind}}\\).`, a: ans.str()} };
+}},
+// ===== Taylor =====
+{id:'g-taylor', t:'tay', name:'Taylor-nálgun margliðu', f(){
+  const f = P([ri(-4, 6), ri(-4, 4), nz(-3, 3), nz(-2, 3)]); const x0 = nz(-2, 2);
+  const d1 = pder(f), d2 = pder(d1), d3 = pder(d2); const f0 = pev(f, x0), f1 = pev(d1, x0), f2 = pev(d2, x0), f3 = pev(d3, x0);
+  const base = P([-x0, 1]); const P1 = padd(P([f0]), pmul(P([f1]), base)); const P2 = padd(P1, pmul(P([f2.div(2)]), ppow(base, 2)));
+  const p1txt = tayTxt([f0, f1], x0); const p2txt = tayTxt([f0, f1, f2.div(2)], x0);
+  return { q:`Gefið er fallið ${qd(T`f(x) = ${ptx(f)}`)}<ol type="a"><li>Framkvæmið 1. gráðu Taylor-nálgun um \\(x_0 = ${x0}\\) og einfaldið.</li><li>Framkvæmið 2. gráðu Taylor-nálgun um \\(x_0 = ${x0}\\) og einfaldið.</li><li>Hvað verður um afgangsliðinn við 3. gráðu nálgun?</li></ol>`,
+    steps:[
+      {titill:'Afleiður í x₀', stig:3, lausn: AL([T`f(${x0}) &= ${ptxAt(f, x0)} = ${tx(f0)}`, T`f'(x) &= ${ptx(d1)}, & f'(${x0}) &= ${tx(f1)}`, T`f''(x) &= ${ptx(d2)}, & f''(${x0}) &= ${tx(f2)}`, T`f'''(x) &= ${ptx(d3)}`])},
+      {titill:'a) 1. gráða (snertill)', stig:2, lausn: AL([T`P_1(x) &= f(x_0) + f'(x_0)(x - x_0)`, T`&= ${p1txt}`, T`&= ${ptx(P1)}`])},
+      {titill:'b) 2. gráða', stig:3, lausn: AL([T`P_2(x) &= P_1(x) + \frac{f''(x_0)}{2!}(x - x_0)^2`, T`&= ${p2txt}`, T`&= ${ptx(P2)}`])},
+      {titill:'c) Afgangsliðurinn', stig:2, lausn: D(T`R_3 = \frac{f^{(4)}(p)}{4!}(x - x_0)^4 = 0`) + '<p>Fallið er þriðja stigs margliða, svo \\(f^{(4)} = 0\\). Þriðju gráðu Taylor-nálgunin er <b>nákvæm</b>: hún er fallið sjálft, umritað um \\(x_0\\).</p>'}],
+    chk:{close:[[pevf(P1, x0), pevf(f, x0)], [nder(x => pevf(P1, x), x0), nder(x => pevf(f, x), x0)], [nder2(x => pevf(P2, x), x0), nder2(x => pevf(f, x), x0)], [nder(x => pevf(P2, x), x0), pevf(d1, x0)]]},
+    quick: Math.random() < 0.5 ? {q:`Hver er fastaliðurinn í 1. gráðu Taylor-nálgun \\(f(x) = ${ptx(f)}\\) um \\(x_0 = ${x0}\\), eftir einföldun?`, a: P1[0].str()} : {q:`Hver er stuðullinn við \\(x^2\\) í 2. gráðu Taylor-nálgun \\(f(x) = ${ptx(f)}\\) um \\(x_0 = ${x0}\\)?`, a: f2.div(2).str()} };
+}},
+{id:'g-taylor2', t:'tay', name:'Taylor-nálgun: e, ln og rót', f(){
+  const kind = ri(0, 3); let fTx, x0, vals, P2, fnum, nm, approx;
+  if (kind === 0) { const k = pick([2, 3, -1, -2, q(1, 2)]); const K = Q.of(k); x0 = 0; fTx = `e^{${tx(K) === '1' ? '' : tx(K)}x}`; vals = [q(1), K, K.mul(K)]; fnum = x => Math.exp(K.v * x); nm = 'e'; }
+  else if (kind === 1) { x0 = 1; fTx = '\\ln x'; vals = [q(0), q(1), q(-1)]; fnum = Math.log; nm = 'ln'; }
+  else if (kind === 2) { const s = pick([1, 2]); x0 = s * s; fTx = '\\sqrt{x}'; vals = [q(s), q(1, 2 * s), q(-1, 4 * s * s * s)]; fnum = Math.sqrt; nm = 'sqrt'; }
+  else { x0 = pick([1, 2]); fTx = '\\frac{1}{x}'; vals = [q(1, x0), q(-1, x0 * x0), q(2, x0 * x0 * x0)]; fnum = x => 1 / x; nm = 'inv'; }
+  const base = P([-x0, 1]); const P1 = padd(P([vals[0]]), pmul(P([vals[1]]), base)); P2 = padd(P1, pmul(P([vals[2].div(2)]), ppow(base, 2)));
+  const dlines = {
+    e: [T`f(x) &= ${fTx}, & f(0) &= 1`, T`f'(x) &= ${tx(vals[1])}${fTx}, & f'(0) &= ${tx(vals[1])}`, T`f''(x) &= ${tx(vals[2])}${fTx}, & f''(0) &= ${tx(vals[2])}`],
+    ln: [T`f(x) &= \ln x, & f(1) &= 0`, T`f'(x) &= \frac{1}{x}, & f'(1) &= 1`, T`f''(x) &= -\frac{1}{x^2}, & f''(1) &= -1`],
+    sqrt: [T`f(x) &= x^{1/2}, & f(${x0}) &= ${tx(vals[0])}`, T`f'(x) &= \tfrac12x^{-1/2}, & f'(${x0}) &= ${tx(vals[1])}`, T`f''(x) &= -\tfrac14x^{-3/2}, & f''(${x0}) &= ${tx(vals[2])}`],
+    inv: [T`f(x) &= x^{-1}, & f(${x0}) &= ${tx(vals[0])}`, T`f'(x) &= -x^{-2}, & f'(${x0}) &= ${tx(vals[1])}`, T`f''(x) &= 2x^{-3}, & f''(${x0}) &= ${tx(vals[2])}`]}[nm];
+  const p2txt = tayTxt([vals[0], vals[1], vals[2].div(2)], x0);
+  const h = q(1, 10); const xa = Q.of(x0).add(h); const pa = pev(P2, xa);
+  return { q:`Framkvæmið 2. gráðu Taylor-nálgun á \\(f(x) = ${fTx}\\) um \\(x_0 = ${x0}\\) og einfaldið.${nm === 'e' || nm === 'ln' ? ` Notið hana til að nálga \\(f(${dec(xa)})\\).` : ''}`,
+    steps:[
+      {titill:'Afleiður í x₀', stig:3, lausn: AL(dlines)},
+      {titill:'Taylor-formúlan', stig:2, lausn: AL([T`P_2(x) &= f(x_0) + f'(x_0)(x - x_0) + \frac{f''(x_0)}{2!}(x - x_0)^2`, T`&= ${p2txt}`, T`&= ${ptx(P2)}`])},
+      ...(nm === 'e' || nm === 'ln' ? [{titill:'Nálgun', stig:2, lausn: AL([T`f(${dec(xa)}) &\approx ${tx(vals[0])} + ${txp(vals[1])}\cdot ${dec(h)} + ${txp(vals[2].div(2))}\cdot ${dec(h.mul(h))}`, T`&= ${dec(pa)}`]) + '<p>Nálgunin er góð nálægt \\(x_0\\); afgangsliðurinn stækkar eftir því sem fjær dregur og ef lægri gráða er notuð.</p>'}] : [{titill:'Túlkun', stig:1, lausn:'<p>\\(P_2\\) hefur sama gildi, halla og sveigju og \\(f\\) í \\(x_0\\). Afgangsliðurinn \\(R_2 = \\frac{f\'\'\'(p)}{3!}(x - x_0)^3\\) stækkar eftir því sem fjær dregur frá \\(x_0\\).</p>'}])],
+    chk:{close:[[pev(P2, x0).v, fnum(x0)], [nder(x => pevf(P2, x), x0), nder(fnum, x0)], [nder2(x => pevf(P2, x), x0), nder2(fnum, x0, 1e-3)], [pa.v, fnum(xa.v), 5e-3]]},
+    quick:{q:`2. gráðu Taylor-nálgun \\(f(x) = ${fTx}\\) um \\(x_0 = ${x0}\\). Hver er stuðullinn við \\(${x0 === 0 ? 'x^2' : `(x - ${x0})^2`}\\)?`, a: vals[2].div(2).str()} };
+}},
+// ===== Einsleit föll =====
+{id:'g-homog', t:'eins', name:'Einsleitni og setning Eulers', f(){
+  const V = ['x', 'y']; const r = pick([2, 3]); const homo = Math.random() < 0.65;
+  const exps = shuf(Array.from({length: r + 1}, (_, i) => [r - i, i])).slice(0, 3);
+  let ms = exps.map(([i, k]) => mono(nz(-3, 4), i, k));
+  let bad = null; if (!homo) { const t = ri(0, 1); bad = t ? mono(nz(-3, 3), 1, 0) : mono(nz(1, 5), 0, 0); ms = [...ms, bad]; }
+  ms = mclean(ms); const fx = mder(ms, 0), fy = mder(ms, 1);
+  const subst = ms.map((m, t) => { const c = m.c; const neg = c.n < 0; const a = neg ? c.neg() : c; const parts = (a.eq(1) && m.e.some(e => e) ? '' : tx(a)) + m.e.map((e, i) => e === 0 ? '' : e === 1 ? `(j${V[i]})` : `(j${V[i]})^{${e}}`).join(''); return (t === 0 ? (neg ? '-' : '') : (neg ? ' - ' : ' + ')) + parts; }).join('');
+  const eul = padd2(ms, fx, fy);
+  function padd2(ms, fx, fy){ return mclean([...fx.map(m => ({c: m.c, e: [m.e[0] + 1, m.e[1]]})), ...fy.map(m => ({c: m.c, e: [m.e[0], m.e[1] + 1]}))]); }
+  const pt = [1.3, 0.7], jj = 1.7; const ratio = mevf(ms, pt.map(v => v * jj)) / mevf(ms, pt);
+  return { q:`Kannið hvort fallið ${qd(T`f(x, y) = ${mtx(ms, V)}`)}sé einsleitt og þá af hvaða gráðu. ${homo ? 'Staðfestið setningu Eulers.' : 'Rökstyðjið svarið.'}`,
+    steps:[
+      {titill:'Margfalda allar breytur með j', stig:2, lausn: D(T`f(jx, jy) = ${subst}`)},
+      {titill:'Þátta j út', stig:2, lausn: homo ? D(T`f(jx, jy) = j^{${r}}\left(${mtx(ms, V)}\right) = j^{${r}}f(x, y)`) + `<p>Fallið er <b>einsleitt af gráðu ${r}</b>: allir liðir eru af sömu heildargráðu ${r}.</p>`
+        : `<p>Liðirnir eru ekki allir af sömu gráðu (liðurinn \\(${mtx([bad], V)}\\) er af gráðu ${bad.e[0] + bad.e[1]}, hinir af gráðu ${r}). Ekki er hægt að þátta út sameiginlegt \\(j^r\\), svo fallið er <b>ekki einsleitt</b>.</p>`},
+      ...(homo ? [{titill:'Setning Eulers: x f_x + y f_y = r f', stig:2, lausn: AL([T`f_x &= ${mtx(fx, V)}`, T`f_y &= ${mtx(fy, V)}`, T`xf_x + yf_y &= ${mtx(eul, V)}`, T`&= ${r}\left(${mtx(ms, V)}\right) = ${r}f`])}] : [])],
+    chk:{close: homo ? [[ratio, jj ** r]] : [[Math.abs(ratio - jj ** r) > 1e-6 ? 1 : 0, 1]]},
+    quick: homo ? {q:`Fallið \\(f(x,y) = ${mtx(ms, V)}\\) er einsleitt. Af hvaða gráðu?`, a: String(r)} : {q:`Er \\(f(x,y) = ${mtx(ms, V)}\\) einsleitt?`, o:['Nei', `Já, af gráðu ${r}`, `Já, af gráðu ${r - 1}`, 'Já, af gráðu 1', 'Já, af gráðu 0'], a:0} };
+}},
+{id:'g-cdhomog', t:'eins', name:'Cobb-Douglas: einsleitni og stærðarhagkvæmni', f(){
+  const pool = [q(1, 4), q(1, 3), q(1, 2), q(2, 3), q(3, 4), q(1, 5), q(2, 5), q(3, 5)]; const a = pick(pool), b = pick(pool); const s = a.add(b); const A = pick([2, 3, 4, 5, 10]);
+  const kind = s.v < 1 ? ['minnkandi stærðarhagkvæmni', 'stærðaróhagkvæmni'] : s.v > 1 ? ['vaxandi stærðarhagkvæmni', 'stærðarhagkvæmni'] : ['fasta stærðarhagkvæmni', 'línulega einsleitt'];
+  const ex = e => expTx(e); const pw = (v, e) => e.z ? '' : e.eq(1) ? v : `${v}^{${ex(e)}}`;
+  return { q:`Framleiðslufall er \\(Q = ${A}K^{${ex(a)}}L^{${ex(b)}}\\).<ol type="a"><li>Er fallið einsleitt? Af hvaða gráðu? Túlkið.</li><li>Sýnið að \\(KQ_K + LQ_L = rQ\\) (setning Eulers).</li></ol>`,
+    steps:[
+      {titill:'a) Einsleitni', stig:3, lausn: AL([T`Q(jK, jL) &= ${A}(jK)^{${ex(a)}}(jL)^{${ex(b)}}`, T`&= j^{${ex(a)} + ${ex(b)}}\cdot ${A}K^{${ex(a)}}L^{${ex(b)}} = j^{${ex(s)}}Q`]) + `<p>Einsleitt af gráðu \\(r = ${tx(s)}\\). ${s.v === 1 ? 'Það er línulega einsleitt: <b>föst stærðarhagkvæmni</b>' : s.v < 1 ? 'Þar sem \\(r \\lt 1\\) er <b>stærðaróhagkvæmni</b>' : 'Þar sem \\(r \\gt 1\\) er <b>stærðarhagkvæmni</b>'}: tvöföldun beggja aðfanga ${s.v === 1 ? 'tvöfaldar' : s.v < 1 ? 'eykur framleiðslu um minna en tvöfalt' : 'meira en tvöfaldar'} framleiðsluna.</p>`},
+      {titill:'b) Euler', stig:3, lausn: AL([T`Q_K &= ${tx(a.mul(A))}K^{${ex(a.sub(1))}}L^{${ex(b)}}, & KQ_K &= ${tx(a)}Q`, T`Q_L &= ${tx(b.mul(A))}K^{${ex(a)}}L^{${ex(b.sub(1))}}, & LQ_L &= ${tx(b)}Q`, T`KQ_K + LQ_L &= \left(${tx(a)} + ${tx(b)}\right)Q = ${tx(s)}\,Q`])}],
+    chk:{close:[[A * (2.6) ** a.v * (1.4) ** b.v * 1.5 ** s.v, A * (2.6 * 1.5) ** a.v * (1.4 * 1.5) ** b.v]]},
+    quick:{q:`\\(Q = ${A}K^{${ex(a)}}L^{${ex(b)}}\\). Af hvaða gráðu er fallið einsleitt?`, a: s.str()} };
+}},
+// ===== Hámörkun og umslagssetning =====
+{id:'g-profit', t:'ham', name:'Hagnaðarhámörkun og umslagssetning', f(){
+  let al, be, r, w, p0, Ks, Ls; do { al = pick([2, 4, 6]); be = pick([2, 4, 6]); r = ri(1, 4); w = ri(1, 4); p0 = pick([2, 4, 5, 10]); Ks = q(al * p0 - r, 2 * p0); Ls = q(be * p0 - w, 2 * p0); } while (Ks.v <= 0 || Ls.v <= 0);
+  const Qs = Ks.mul(Ks).neg().sub(Ls.mul(Ls)).add(Ks.mul(al)).add(Ls.mul(be));
+  const Qf = (K, L) => -K * K - L * L + al * K + be * L; const Kp = p => (al * p - r) / (2 * p), Lp = p => (be * p - w) / (2 * p); const Vp = p => p * Qf(Kp(p), Lp(p)) - r * Kp(p) - w * Lp(p);
+  return { q:`Fyrirtæki framleiðir \\(Q = -K^2 - L^2 + ${al}K + ${be}L\\) og selur á verðinu \\(p \\gt 0\\). Fjármagn kostar \\(r = ${r}\\) og vinnuafl \\(w = ${w}\\).<ol type="a"><li>Ritið hámörkunarvandamál fyrirtækisins formlega.</li><li>Finnið \\(K^*\\) og \\(L^*\\) sem föll af \\(p\\).</li><li>Kannið annarrar gráðu skilyrði.</li><li>Hvaða áhrif hefur hærra verð á \\(K^*\\) og \\(L^*\\)? Túlkið.</li><li>Notið umslagssetninguna til að finna áhrif \\(p\\) á virðisfallið. Eru þau jákvæð ef \\(p = ${p0}\\)?</li></ol>`,
+    steps:[
+      {titill:'a) Hámörkunarvandamálið', stig:2, lausn: D(T`\max_{K,L}\; \pi(K, L; p) = p\left(-K^2 - L^2 + ${al}K + ${be}L\right) - ${r}K - ${w}L`)},
+      {titill:'b) FGS', stig:4, lausn: AL([T`\pi_K &= p(-2K + ${al}) - ${r} = 0 &&\Rightarrow\; K^* = \frac{${al}p - ${r}}{2p} = ${tx(q(al, 2))} - \frac{${r}}{2p}`, T`\pi_L &= p(-2L + ${be}) - ${w} = 0 &&\Rightarrow\; L^* = \frac{${be}p - ${w}}{2p} = ${tx(q(be, 2))} - \frac{${w}}{2p}`])},
+      {titill:'c) AGS', stig:3, lausn: D(T`H = \begin{bmatrix}-2p & 0\\ 0 & -2p\end{bmatrix},\qquad |H_1| = -2p \lt 0,\quad |H_2| = 4p^2 \gt 0`) + '<p>Formerkin skiptast: hagnaðarfallið er stranglega hvelft og \\((K^*, L^*)\\) er hámark.</p>'},
+      {titill:'d) Samanburðarstöðugreining', stig:3, lausn: AL([T`\frac{\partial K^*}{\partial p} &= \frac{${r}}{2p^2} \gt 0`, T`\frac{\partial L^*}{\partial p} &= \frac{${w}}{2p^2} \gt 0`]) + '<p>Hærra verð hækkar virði jaðarframleiðni hvors aðfangs (\\(p\\cdot Q_K\\), \\(p\\cdot Q_L\\)) miðað við fastan kostnað, svo fyrirtækið notar meira af báðum.</p>'},
+      {titill:'e) Virðisfall og umslagssetning', stig:3, lausn:'<p>Virðisfallið er hámarkshagnaðurinn sem fall af verði: \\(V(p) = \\pi(K^*(p), L^*(p); p)\\). Þar sem \\(\\pi_K = \\pi_L = 0\\) í hámarkinu hverfa óbeinu áhrifin:</p>' + D(T`\frac{dV}{dp} = \frac{\partial \pi}{\partial p}\Big|_{K^*, L^*} = Q(K^*, L^*)`)},
+      {titill:`e) Í p = ${p0}`, stig:3, lausn: AL([T`K^* &= ${tx(Ks)}, \qquad L^* = ${tx(Ls)}`, T`\frac{dV}{dp} &= -${txp(Ks)}^2 - ${txp(Ls)}^2 + ${al}\cdot ${txp(Ks)} + ${be}\cdot ${txp(Ls)}`, T`&= ${tx(Qs)} ${Qs.v > 0 ? '\\gt' : '\\lt'} 0`]) + `<p>Áhrifin eru <b>${Qs.v > 0 ? 'jákvæð' : 'neikvæð'}</b>: hærra verð eykur hámarkshagnaðinn um u.þ.b. framleitt magn.</p>`}],
+    chk:{close:[[nder(Vp, p0), Qs.v], [p0 * (-2 * Ks.v + al) - r, 0], [p0 * (-2 * Ls.v + be) - w, 0]]},
+    quick: Math.random() < 0.5 ? {q:`\\(\\pi = p(-K^2 - L^2 + ${al}K + ${be}L) - ${r}K - ${w}L\\). Hvert er \\(K^*\\) þegar \\(p = ${p0}\\)?`, a: Ks.str()} : {q:`Sama fyrirtæki: hvert er \\(\\frac{dV}{dp}\\) (umslagssetningin) þegar \\(p = ${p0}\\)?`, a: Qs.str()} };
+}},
+{id:'g-envelope', t:'ham', name:'Virðisfall og umslagssetning, ein breyta', f(){
+  if (Math.random() < 0.6) {
+    const b = pick([1, 2, 3]), c = nz(-3, 5), a0 = pick([2, 4, 6, 3]); const xs = q(a0, 2 * b); const Va = q(a0 * a0, 4 * b).add(c); const dV = q(a0, 2 * b);
+    return { q:`Gefið er \\(f(x; a) = ax - ${b === 1 ? '' : b}x^2 ${c < 0 ? '-' : '+'} ${Math.abs(c)}\\), þar sem \\(x\\) er stýribreyta og \\(a \\gt 0\\) ytri breyta.<ol type="a"><li>Finnið krítískan punkt og sýnið að hann sé hámark.</li><li>Reiknið virðisfallið \\(V(a)\\).</li><li>Finnið \\(\\frac{dV}{da}\\) bæði með virðisfallinu og umslagssetningunni, og reiknið í \\(a = ${a0}\\).</li></ol>`,
+      steps:[
+        {titill:'a) FGS og AGS', stig:3, lausn: AL([T`f_x &= a - ${2 * b}x = 0 \;\Rightarrow\; x^*(a) = \frac{a}{${2 * b}}`, T`f_{xx} &= -${2 * b} \lt 0 \;\Rightarrow\; \text{hámark}`])},
+        {titill:'b) Virðisfall', stig:2, lausn: AL([T`V(a) &= a\cdot\frac{a}{${2 * b}} - ${b === 1 ? '' : b}\left(\frac{a}{${2 * b}}\right)^2 ${c < 0 ? '-' : '+'} ${Math.abs(c)}`, T`&= \frac{a^2}{${4 * b}} ${c < 0 ? '-' : '+'} ${Math.abs(c)}`])},
+        {titill:'c) Tvær leiðir', stig:3, lausn: AL([T`\text{Virðisfall:}\quad \frac{dV}{da} &= \frac{a}{${2 * b}}`, T`\text{Umslagssetning:}\quad \frac{dV}{da} &= \frac{\partial f}{\partial a}\Big|_{x^*} = x^* = \frac{a}{${2 * b}}`, T`\frac{dV}{da}\Big|_{a=${a0}} &= ${tx(dV)}`]) + '<p>Sama niðurstaða: í hámarkinu má hunsa óbein áhrif \\(a\\) í gegnum \\(x^*\\) því \\(f_x = 0\\) þar.</p>'}],
+      chk:{close:[[nder(a => a * a / (4 * b) + c, a0), dV.v], [a0 * xs.v - b * xs.v * xs.v + c, Va.v]]}, quick:{q:`\\(f(x; a) = ax - ${b === 1 ? '' : b}x^2\\). Hvert er \\(\\frac{dV}{da}\\) í \\(a = ${a0}\\)?`, a: dV.str()} };
+  }
+  const a0 = pick([q(1, 2), q(1), q(2), q(1, 4)]); const xs = new Q(1).div(a0.mul(a0).mul(4)); const dV = xs.neg();
+  return { q:`Gefið er \\(f(x; a) = \\sqrt{x} - ax\\), \\(a \\gt 0\\) (dæmablað 46).<ol type="a"><li>Finnið krítískan punkt og eðli hans.</li><li>Reiknið virðisfallið.</li><li>Sýnið að virðisfallið og umslagssetningin gefi sömu \\(\\frac{dV}{da}\\), og reiknið í \\(a = ${tx(a0)}\\).</li></ol>`,
+    steps:[
+      {titill:'a) FGS og AGS', stig:3, lausn: AL([T`f_x &= \frac{1}{2\sqrt{x}} - a = 0 \;\Rightarrow\; x^* = \frac{1}{4a^2}`, T`f_{xx} &= -\tfrac14x^{-3/2} \lt 0 \;\Rightarrow\; \text{hámark}`])},
+      {titill:'b) Virðisfall', stig:2, lausn: D(T`V(a) = \sqrt{\frac{1}{4a^2}} - a\cdot\frac{1}{4a^2} = \frac{1}{2a} - \frac{1}{4a} = \frac{1}{4a}`)},
+      {titill:'c) Tvær leiðir', stig:3, lausn: AL([T`\frac{dV}{da} &= -\frac{1}{4a^2}`, T`\frac{\partial f}{\partial a}\Big|_{x^*} &= -x^* = -\frac{1}{4a^2}`, T`\frac{dV}{da}\Big|_{a=${tx(a0)}} &= ${tx(dV)}`])}],
+    chk:{close:[[nder(a => 1 / (4 * a), a0.v), dV.v]]}, quick:{q:`\\(f(x;a) = \\sqrt{x} - ax\\). Hvert er \\(x^*\\) þegar \\(a = ${tx(a0)}\\)?`, a: xs.str()} };
+}}
+);
+GENS.slice(-9).forEach(g => { GENBY[g.id] = g; });
+
+// ===== data_sheet.js =====
+// ---------- föst dæmi: dæmablað 18–34, lokapróf 2023/2025, skilaverkefni 1 ----------
+// vigramynd (SVG) fyrir dæmi 22 og S1
+function vecSvg(vs){
+  const xs = vs.flatMap(o => [0, o.v[0]]), ys = vs.flatMap(o => [0, o.v[1]]);
+  const x0 = Math.min(...xs) - 1, x1 = Math.max(...xs) + 1, y0 = Math.min(...ys) - 1, y1 = Math.max(...ys) + 1;
+  const W = 300, s = W / (x1 - x0), H = Math.round((y1 - y0) * s); const X = x => ((x - x0) * s).toFixed(1), Y = y => ((y1 - y) * s).toFixed(1);
+  let g = ''; for (let x = Math.ceil(x0); x <= x1; x++) g += `<line x1="${X(x)}" y1="0" x2="${X(x)}" y2="${H}" class="vg"/>`; for (let y = Math.ceil(y0); y <= y1; y++) g += `<line x1="0" y1="${Y(y)}" x2="${W}" y2="${Y(y)}" class="vg"/>`;
+  g += `<line x1="${X(x0)}" y1="${Y(0)}" x2="${X(x1)}" y2="${Y(0)}" class="va"/><line x1="${X(0)}" y1="${Y(y0)}" x2="${X(0)}" y2="${Y(y1)}" class="va"/>`;
+  const arrows = vs.map((o, i) => { const [a, b] = o.v; const L = Math.hypot(a, b) || 1; const ux = a / L, uy = b / L; const hx = a - ux * 0.45, hy = b - uy * 0.45; const px = -uy * 0.22, py = ux * 0.22;
+    return `<g class="vc${i % 5}"><line x1="${X(0)}" y1="${Y(0)}" x2="${X(hx)}" y2="${Y(hy)}" stroke-width="2.2"/><polygon points="${X(a)},${Y(b)} ${X(hx + px)},${Y(hy + py)} ${X(hx - px)},${Y(hy - py)}"/><text x="${X(a) * 1 + (a >= 0 ? 6 : -6)}" y="${Y(b) * 1 + (b >= 0 ? -6 : 14)}" text-anchor="${a >= 0 ? 'start' : 'end'}">${o.label}</text></g>`; }).join('');
+  return `<div class="svgwrap"><svg viewBox="-30 -20 ${W + 60} ${H + 40}" width="${W + 60}" role="img" aria-label="Vigrar teiknaðir í hnitakerfi">${g}${arrows}</svg></div>`;
+}
+const vM = rows => M(rows); // stytting
+const SHEET_PROBS = [
+// ---------------- Dæmablað ----------------
+{id:'D18', t:'fyl', src:'Dæmablað, dæmi 18', q:`Gefin eru fylki ${D(T`A = \begin{bmatrix}4&-1\\6&9\end{bmatrix},\quad B = \begin{bmatrix}0&3\\3&-2\end{bmatrix},\quad C = \begin{bmatrix}8&3\\6&1\end{bmatrix}`)}Reiknið eftirfarandi og veltið fyrir ykkur hvaða skilyrði þurfa að vera uppfyllt til þess að útreikningurinn sé mögulegur:<ol type="a"><li>\\(A + B\\)</li><li>\\(C - A\\)</li><li>\\(3A\\)</li></ol>`,
+ steps:[
+  {titill:'a) Leggja saman stak fyrir stak', stig:1, lausn: D(T`A + B = \begin{bmatrix}4+0 & -1+3\\ 6+3 & 9+(-2)\end{bmatrix} = \begin{bmatrix}4&2\\9&7\end{bmatrix}`)},
+  {titill:'b) Draga frá stak fyrir stak', stig:1, lausn: D(T`C - A = \begin{bmatrix}8-4 & 3-(-1)\\ 6-6 & 1-9\end{bmatrix} = \begin{bmatrix}4&4\\0&-8\end{bmatrix}`)},
+  {titill:'c) Margfalda hvert stak með 3', stig:1, lausn: D(T`3A = \begin{bmatrix}3\cdot 4 & 3\cdot(-1)\\ 3\cdot 6 & 3\cdot 9\end{bmatrix} = \begin{bmatrix}12&-3\\18&27\end{bmatrix}`)},
+  {titill:'Skilyrði', stig:1, lausn:'<p>Samlagning og frádráttur krefjast þess að fylkin hafi <b>sömu víddir</b> (hér öll \\(2\\times 2\\)). Margföldun með fasta er alltaf möguleg, óháð víddum.</p>'}]},
+{id:'D19', t:'fyl', src:'Dæmablað, dæmi 19', q:`Gefin eru fylki ${D(T`A = \begin{bmatrix}2&8\\3&0\\5&1\end{bmatrix},\quad B = \begin{bmatrix}2&0\\3&8\end{bmatrix},\quad C = \begin{bmatrix}7&2\\6&3\end{bmatrix}`)}Kannið hvort mögulegt sé að framkvæma eftirfarandi útreikninga og framkvæmið þá ef svo er.<ol type="a"><li>\\(AB\\)</li><li>\\(BA\\) (er \\(AB = BA\\)?)</li><li>\\(BC\\)</li><li>\\(CB\\) (er \\(BC = CB\\)?)</li><li>\\(ABC\\)</li><li>\\(A/B\\)</li></ol>`,
+ steps:(() => { const A = vM([[2,8],[3,0],[5,1]]), B = vM([[2,0],[3,8]]), C = vM([[7,2],[6,3]]); const AB = mmul(A, B);
+  return [...pre('a)', bMul(A, B).steps).map(s => ({...s, stig: s.stig})),
+   {titill:'b) BA', stig:1, lausn: D(T`\underset{2\times 2}{B}\;\underset{3\times 2}{A}`) + '<p>Dálkar \\(B\\) eru 2 en raðir \\(A\\) eru 3, svo \\(BA\\) er <b>ekki skilgreint</b>. Þar með getur \\(AB = BA\\) ekki staðist.</p>'},
+   {titill:'c) BC', stig:2, lausn: AL([T`c_{11} &= 2\cdot 7 + 0\cdot 6 = 14`, T`c_{12} &= 2\cdot 2 + 0\cdot 3 = 4`, T`c_{21} &= 3\cdot 7 + 8\cdot 6 = 69`, T`c_{22} &= 3\cdot 2 + 8\cdot 3 = 30`]) + D(T`BC = \begin{bmatrix}14&4\\69&30\end{bmatrix}`)},
+   {titill:'d) CB og samanburður', stig:2, lausn: AL([T`c_{11} &= 7\cdot 2 + 2\cdot 3 = 20`, T`c_{12} &= 7\cdot 0 + 2\cdot 8 = 16`, T`c_{21} &= 6\cdot 2 + 3\cdot 3 = 21`, T`c_{22} &= 6\cdot 0 + 3\cdot 8 = 24`]) + D(T`CB = \begin{bmatrix}20&16\\21&24\end{bmatrix} \ne BC`) + '<p>Fylkjamargföldun er almennt ekki víxlin.</p>'},
+   {titill:'e) ABC = (AB)C', stig:2, lausn: '<p>Víddir: \\((3\\times 2)(2\\times 2)(2\\times 2) = 3\\times 2\\). Nota \\(AB\\) úr lið a:</p>' + AL([T`r_1 &= [28\cdot 7 + 64\cdot 6,\; 28\cdot 2 + 64\cdot 3] = [580,\; 248]`, T`r_2 &= [6\cdot 7 + 0\cdot 6,\; 6\cdot 2 + 0\cdot 3] = [42,\; 12]`, T`r_3 &= [13\cdot 7 + 8\cdot 6,\; 13\cdot 2 + 8\cdot 3] = [139,\; 50]`]) + D(T`ABC = ${tm(mmul(AB, C))}`)},
+   {titill:'f) A/B', stig:1, lausn:'<p>Deiling fylkja er <b>ekki skilgreind</b>. Það næsta sem kemst er að bakmargfalda með andhverfu, \\(AB^{-1}\\), sem er til því \\(|B| = 16 \\ne 0\\):</p>' + D(T`AB^{-1} = ${tm(A)}\cdot\frac{1}{16}\begin{bmatrix}8&0\\-3&2\end{bmatrix} = ${tm(mmul(A, inv(B)))}`)}]; })()},
+{id:'D20', t:'fyl', src:'Dæmablað, dæmi 20', q:`Reiknið eftirfarandi: <ol type="a"><li>${D(T`\begin{bmatrix}3&2&0\\4&2&-7\end{bmatrix}\begin{bmatrix}x\\y\\z\end{bmatrix}`)}</li><li>${D(T`\begin{bmatrix}a&b&c\end{bmatrix}\begin{bmatrix}7&0\\0&2\\1&2\end{bmatrix}`)}</li><li>${D(T`\begin{bmatrix}0&2&0\\3&0&4\\2&3&0\end{bmatrix}\begin{bmatrix}8&0\\0&1\\3&5\end{bmatrix}`)}</li></ol>`,
+ steps:[
+  {titill:'a) (2×3)(3×1) = 2×1', stig:1, lausn: D(T`\begin{bmatrix}3x + 2y + 0z\\ 4x + 2y - 7z\end{bmatrix} = \begin{bmatrix}3x + 2y\\ 4x + 2y - 7z\end{bmatrix}`) + '<p>Þetta er vinstri hlið jöfnukerfis á fylkjaformi.</p>'},
+  {titill:'b) (1×3)(3×2) = 1×2', stig:1, lausn: D(T`\begin{bmatrix}7a + 0b + 1c & 0a + 2b + 2c\end{bmatrix} = \begin{bmatrix}7a + c & 2b + 2c\end{bmatrix}`)},
+  ...pre('c)', bMul(vM([[0,2,0],[3,0,4],[2,3,0]]), vM([[8,0],[0,1],[3,5]])).steps)]},
+{id:'D21', t:'fyl', src:'Dæmablað, dæmi 21', q:`Höfum vigrana ${D(T`u' = \begin{bmatrix}5&2&3\end{bmatrix},\quad v' = \begin{bmatrix}3&1&9\end{bmatrix},\quad x' = \begin{bmatrix}x_1&x_2&x_3\end{bmatrix}`)}Kannið hvort mögulegt sé að framkvæma eftirfarandi útreikninga og framkvæmið þá ef svo er:<ol type="a"><li>\\(uv'\\)</li><li>\\(v'u\\)</li><li>\\(xx'\\)</li><li>\\(x'x\\)</li></ol>`,
+ steps:[
+  {titill:'a) Ytra margfeldi (3×1)(1×3) = 3×3', stig:2, lausn: D(T`uv' = \begin{bmatrix}5\\2\\3\end{bmatrix}\begin{bmatrix}3&1&9\end{bmatrix} = \begin{bmatrix}15&5&45\\6&2&18\\9&3&27\end{bmatrix}`)},
+  {titill:'b) Innra margfeldi (1×3)(3×1) = 1×1', stig:1, lausn: D(T`v'u = 3\cdot 5 + 1\cdot 2 + 9\cdot 3 = 15 + 2 + 27 = 44`)},
+  {titill:'c) xx′ (3×3)', stig:1, lausn: D(T`xx' = \begin{bmatrix}x_1^2 & x_1x_2 & x_1x_3\\ x_2x_1 & x_2^2 & x_2x_3\\ x_3x_1 & x_3x_2 & x_3^2\end{bmatrix}`) + '<p>Samhverft fylki.</p>'},
+  {titill:'d) x′x (1×1)', stig:1, lausn: D(T`x'x = x_1^2 + x_2^2 + x_3^2 = \sum_{i=1}^{3} x_i^2`) + '<p>Summa ferninga, alltaf \\(\\ge 0\\).</p>'}]},
+{id:'D22', t:'fyl', src:'Dæmablað, dæmi 22', q:`Gefnir eru vigrarnir ${D(T`u = \begin{bmatrix}5\\1\end{bmatrix} \quad\text{og}\quad v = \begin{bmatrix}0\\3\end{bmatrix}`)}Reiknið og sýnið myndrænt eftirfarandi sambönd:<ol type="a"><li>\\(2v\\)</li><li>\\(u - v\\)</li><li>\\(v - u\\)</li><li>\\(2u + 3v\\)</li></ol>`,
+ steps:[
+  {titill:'a)–d) Reikningar', stig:3, lausn: AL([T`2v &= \begin{bmatrix}0\\6\end{bmatrix}`, T`u - v &= \begin{bmatrix}5-0\\1-3\end{bmatrix} = \begin{bmatrix}5\\-2\end{bmatrix}`, T`v - u &= -(u - v) = \begin{bmatrix}-5\\2\end{bmatrix}`, T`2u + 3v &= \begin{bmatrix}10\\2\end{bmatrix} + \begin{bmatrix}0\\9\end{bmatrix} = \begin{bmatrix}10\\11\end{bmatrix}`])},
+  {titill:'Myndrænt', stig:1, lausn: vecSvg([{v:[5,1], label:'u'}, {v:[0,3], label:'v'}, {v:[5,-2], label:'u−v'}, {v:[-5,2], label:'v−u'}, {v:[10,11], label:'2u+3v'}]) + '<p>\\(2v\\) liggur á sömu línu og \\(v\\), tvöfalt lengri. \\(u - v\\) og \\(v - u\\) eru jafnlangar en snúa öfugt. \\(2u + 3v\\) fæst með því að setja \\(3v\\) í enda \\(2u\\).</p>'}]},
+{id:'D23', t:'fyl', src:'Dæmablað, dæmi 23', q:`Gefin eru fylkin ${D(T`A = \begin{bmatrix}-1&5&7\\0&-2&4\end{bmatrix}\quad\text{og}\quad x = \begin{bmatrix}x_1\\x_2\end{bmatrix}`)}Finnið og takið fram stærð einingafylkisins:<ol type="a"><li>\\(AI\\)</li><li>\\(x'I\\)</li><li>\\(x'IA\\)</li><li>Formargfaldið \\(A\\) með \\(5\\times 2\\) núllfylki. Hver er stærðin á fylkinu sem kemur út?</li><li>Formargfaldið \\(x\\) með \\(1\\times 5\\) núllfylki. Hver er stærðin á fylkinu sem kemur út?</li></ol>`,
+ steps:[
+  {titill:'a) AI', stig:1, lausn: D(T`\underset{2\times 3}{A}\;\underset{3\times 3}{I_3} = A`) + '<p>Einingafylkið verður að vera \\(3\\times 3\\) til að passa við dálka \\(A\\).</p>'},
+  {titill:"b) x′I", stig:1, lausn: D(T`\underset{1\times 2}{x'}\;\underset{2\times 2}{I_2} = x' = \begin{bmatrix}x_1&x_2\end{bmatrix}`)},
+  {titill:"c) x′IA", stig:2, lausn: D(T`\underset{1\times 2}{x'}\;\underset{2\times 2}{I_2}\;\underset{2\times 3}{A} = x'A`) + D(T`x'A = \begin{bmatrix}-x_1 & 5x_1 - 2x_2 & 7x_1 + 4x_2\end{bmatrix}`)},
+  {titill:'d) 0·A', stig:1, lausn: D(T`\underset{5\times 2}{0}\;\underset{2\times 3}{A} = \underset{5\times 3}{0}`) + '<p>Útkoman er \\(5\\times 3\\) núllfylki.</p>'},
+  {titill:'e) Gildra: víddirnar passa ekki', stig:1, lausn: D(T`\underset{1\times 5}{0}\;\underset{2\times 1}{x}`) + '<p>Innri víddirnar eru 5 og 2, svo formargföldunin er <b>ekki skilgreind</b>. Bakmargföldun gengi: \\(\\underset{2\\times 1}{x}\\,\\underset{1\\times 5}{0} = \\underset{2\\times 5}{0}\\).</p>'}]},
+{id:'D24', t:'fyl', src:'Dæmablað, dæmi 24', q:`Gefin eru fylkin ${D(T`A = \begin{bmatrix}4&1\\9&0\end{bmatrix}\quad\text{og}\quad B = \begin{bmatrix}2&0\\7&1\end{bmatrix}`)}<ol type="a"><li>Finnið \\(A'\\) og \\(B'\\).</li><li>Nýtið dæmið til að sýna að \\((A')' = A\\).</li><li>Nýtið dæmið til að sýna að \\((A + B)' = A' + B'\\).</li><li>Nýtið dæmið til að sýna að \\((AB)' = B'A'\\).</li></ol>`,
+ steps:[
+  {titill:'a) Bylta', stig:1, lausn: D(T`A' = \begin{bmatrix}4&9\\1&0\end{bmatrix},\qquad B' = \begin{bmatrix}2&7\\0&1\end{bmatrix}`)},
+  {titill:"b) (A′)′", stig:1, lausn: D(T`(A')' = \begin{bmatrix}4&9\\1&0\end{bmatrix}' = \begin{bmatrix}4&1\\9&0\end{bmatrix} = A`)},
+  {titill:"c) (A+B)′", stig:2, lausn: AL([T`A + B &= \begin{bmatrix}6&1\\16&1\end{bmatrix} \;\Rightarrow\; (A+B)' = \begin{bmatrix}6&16\\1&1\end{bmatrix}`, T`A' + B' &= \begin{bmatrix}4+2&9+7\\1+0&0+1\end{bmatrix} = \begin{bmatrix}6&16\\1&1\end{bmatrix}`])},
+  {titill:"d) (AB)′ og B′A′", stig:2, lausn: AL([T`AB &= \begin{bmatrix}4\cdot 2 + 1\cdot 7 & 4\cdot 0 + 1\cdot 1\\ 9\cdot 2 + 0\cdot 7 & 9\cdot 0 + 0\cdot 1\end{bmatrix} = \begin{bmatrix}15&1\\18&0\end{bmatrix}`, T`(AB)' &= \begin{bmatrix}15&18\\1&0\end{bmatrix}`, T`B'A' &= \begin{bmatrix}2\cdot 4 + 7\cdot 1 & 2\cdot 9 + 7\cdot 0\\ 0\cdot 4 + 1\cdot 1 & 0\cdot 9 + 1\cdot 0\end{bmatrix} = \begin{bmatrix}15&18\\1&0\end{bmatrix}`]) + "<p>Jafnt. Athugið að röðin snýst við: \\(A'B'\\) gæfi annað.</p>"}]},
+{id:'D25', t:'and', src:'Dæmablað, dæmi 25', q:`\\(A\\) og \\(B\\) eru andhverfanleg \\(n\\times n\\) fylki. Sýnið fram á eftirfarandi:<ol type="a"><li>\\((AB)^{-1} = B^{-1}A^{-1}\\)</li><li>\\((A')^{-1} = (A^{-1})'\\)</li></ol>`,
+ steps:[
+  {titill:'a) Margfalda og nota tengiregluna', stig:3, lausn:'<p>Nóg er að sýna að \\(B^{-1}A^{-1}\\) margfaldað við \\(AB\\) gefi \\(I\\), því andhverfa er einstök:</p>' + AL([T`(AB)(B^{-1}A^{-1}) &= A(BB^{-1})A^{-1}`, T`&= AIA^{-1}`, T`&= AA^{-1} = I`]) + '<p>Eins fæst \\((B^{-1}A^{-1})(AB) = I\\). Því er \\((AB)^{-1} = B^{-1}A^{-1}\\).</p>'},
+  {titill:"b) Nota (XY)′ = Y′X′", stig:2, lausn: AL([T`A'(A^{-1})' &= (A^{-1}A)'`, T`&= I' = I`]) + "<p>Þar sem \\((A^{-1})'\\) margfaldað við \\(A'\\) gefur \\(I\\) er það andhverfa \\(A'\\): \\((A')^{-1} = (A^{-1})'\\).</p>"}]},
+{id:'D26', t:'akv', src:'Dæmablað, dæmi 26', q:`Finnið ákveður eftirfarandi fylkja:<ol type="a"><li>${D(T`\begin{bmatrix}8&1&3\\4&0&1\\6&0&3\end{bmatrix}`)}</li><li>${D(T`\begin{bmatrix}1&2&0&9\\2&3&4&6\\1&6&0&-1\\0&-5&0&8\end{bmatrix}`)}</li></ol>`,
+ steps:[...pre('a)', bDet(vM([[8,1,3],[4,0,1],[6,0,3]])).steps), ...pre('b)', bDet(vM([[1,2,0,9],[2,3,4,6],[1,6,0,-1],[0,-5,0,8]])).steps)]},
+{id:'D27', t:'and', src:'Dæmablað, dæmi 27', q:`Reiknið andhverfur eftirfarandi fylkja:<ol type="a"><li>${D(T`\begin{bmatrix}5&2\\0&1\end{bmatrix}`)}</li><li>${D(T`\begin{bmatrix}4&-2&1\\7&3&3\\2&0&1\end{bmatrix}`)}</li></ol>`,
+ steps:[...pre('a)', bInv2(vM([[5,2],[0,1]])).steps), ...pre('b)', bInv3(vM([[4,-2,1],[7,3,3],[2,0,1]])).steps)]},
+{id:'D28', t:'and', src:'Dæmablað, dæmi 28', q:`Gefið er ${D(T`A = \begin{bmatrix}2&1\\5&3\end{bmatrix}`)}Finnið það fylki \\(B\\) þannig að \\(AB = 2I\\).`,
+ steps:[
+  {titill:'Einangra B', stig:1, lausn: AL([T`AB &= 2I`, T`A^{-1}AB &= A^{-1}\cdot 2I`, T`B &= 2A^{-1}`])},
+  {titill:'Andhverfa A', stig:2, lausn: AL([T`|A| &= 2\cdot 3 - 1\cdot 5 = 1`, T`A^{-1} &= \frac{1}{1}\begin{bmatrix}3&-1\\-5&2\end{bmatrix} = \begin{bmatrix}3&-1\\-5&2\end{bmatrix}`])},
+  {titill:'B og prófun', stig:1, lausn: D(T`B = 2A^{-1} = \begin{bmatrix}6&-2\\-10&4\end{bmatrix}`) + AL([T`AB &= \begin{bmatrix}2\cdot 6 + 1\cdot(-10) & 2\cdot(-2) + 1\cdot 4\\ 5\cdot 6 + 3\cdot(-10) & 5\cdot(-2) + 3\cdot 4\end{bmatrix}`, T`&= \begin{bmatrix}2&0\\0&2\end{bmatrix} = 2I`])}]},
+{id:'D29', t:'jof', src:'Dæmablað, dæmi 29', q:`Leysið eftirfarandi jöfnukerfi með fylkjareikningi:<ol type="a"><li>${D(T`\begin{aligned}3x_1 - 2x_2 &= 6\\ 2x_1 + x_2 &= 11\end{aligned}`)}</li><li>${D(T`\begin{aligned}7x_1 - x_2 - x_3 &= 0\\ 10x_1 - 2x_2 + x_3 &= 8\\ 6x_1 + 3x_2 - 2x_3 &= 7\end{aligned}`)}</li></ol>`,
+ steps:[
+  {titill:'a) Fylkjaform og andhverfa', stig:2, lausn: D(T`\begin{bmatrix}3&-2\\2&1\end{bmatrix}\begin{bmatrix}x_1\\x_2\end{bmatrix} = \begin{bmatrix}6\\11\end{bmatrix}`) + AL([T`|A| &= 3\cdot 1 - (-2)\cdot 2 = 7`, T`A^{-1} &= \frac{1}{7}\begin{bmatrix}1&2\\-2&3\end{bmatrix}`])},
+  {titill:'a) x = A⁻¹d', stig:2, lausn: AL([T`x^* &= \frac{1}{7}\begin{bmatrix}1\cdot 6 + 2\cdot 11\\ -2\cdot 6 + 3\cdot 11\end{bmatrix} = \frac{1}{7}\begin{bmatrix}28\\21\end{bmatrix} = \begin{bmatrix}4\\3\end{bmatrix}`]) + '<p>Prófun: \\(3\\cdot 4 - 2\\cdot 3 = 6\\) og \\(2\\cdot 4 + 3 = 11\\).</p>'},
+  ...pre('b)', bCramer(vM([[7,-1,-1],[10,-2,1],[6,3,-2]]), [0,8,7].map(Q.of), ['x_1','x_2','x_3']).steps)]},
+{id:'D30', t:'hes', src:'Dæmablað, dæmi 30', q:`Kannið hvort eftirfarandi föll séu hvelfd eða kúpt, þar sem \\(a\\), \\(b\\) og \\(c\\) eru jákvæðir fastar:<ol type="a"><li>\\(f(x) = ax\\)</li><li>\\(f(x) = a\\sqrt{x} + b\\)</li><li>\\(f(x) = \\ln(ax + b)\\)</li><li>\\(f(x) = ae^{bx+c}\\)</li></ol>`,
+ steps:[
+  {titill:'Regla', stig:1, lausn:"<p>Hvelft ef \\(f''(x) \\le 0\\) (stranglega ef \\(\\lt 0\\)); kúpt ef \\(f''(x) \\ge 0\\) (stranglega ef \\(\\gt 0\\)).</p>"},
+  {titill:'a) Línulegt', stig:1, lausn: D(T`f'(x) = a,\qquad f''(x) = 0`) + '<p>Bæði hvelft og kúpt, en hvorugt stranglega.</p>'},
+  {titill:'b) Rótarfall', stig:1, lausn: D(T`f'(x) = \tfrac{a}{2}x^{-1/2},\qquad f''(x) = -\tfrac{a}{4}x^{-3/2} \lt 0`) + '<p>Stranglega hvelft fyrir \\(x \\gt 0\\).</p>'},
+  {titill:'c) Lograr', stig:1, lausn: D(T`f'(x) = \frac{a}{ax+b},\qquad f''(x) = -\frac{a^2}{(ax+b)^2} \lt 0`) + '<p>Stranglega hvelft á formenginu \\(ax + b \\gt 0\\).</p>'},
+  {titill:'d) Veldisfall', stig:1, lausn: D(T`f'(x) = abe^{bx+c},\qquad f''(x) = ab^2e^{bx+c} \gt 0`) + '<p>Stranglega kúpt.</p>'}]},
+{id:'D31', t:'hlu', src:'Dæmablað, dæmi 31', q:`Finnið allar fyrstu hlutafleiður eftirfarandi falla:<ol type="a"><li>\\(f(x,y) = x^3y + x^2y^2\\)</li><li>\\(f(x_1,x_2) = a\\cdot\\ln(x_1x_2^b)\\)</li><li>${D(T`f(x,y,z) = \frac{ae^{bx+\ln(z)}x^b}{y^2}`)}</li></ol>`,
+ steps:[
+  {titill:'a) Halda hinni breytunni fastri', stig:2, lausn: AL([T`f_x &= 3x^2y + 2xy^2`, T`f_y &= x^3 + 2x^2y`])},
+  {titill:'b) Einfalda með lograreglum fyrst', stig:2, lausn: D(T`f = a\ln x_1 + ab\ln x_2`) + AL([T`f_1 &= \frac{a}{x_1}`, T`f_2 &= \frac{ab}{x_2}`])},
+  {titill:'c) Einfalda: e^{ln z} = z', stig:1, lausn: D(T`f = \frac{a\,z\,e^{bx}x^b}{y^2}`)},
+  {titill:'c) f_x með margfeldisreglu', stig:2, lausn: AL([T`f_x &= \frac{az}{y^2}\left(be^{bx}x^b + e^{bx}bx^{b-1}\right)`, T`&= \frac{abz\,e^{bx}x^{b-1}(x+1)}{y^2}`])},
+  {titill:'c) f_y og f_z', stig:2, lausn: AL([T`f_y &= -\frac{2az\,e^{bx}x^b}{y^3}`, T`f_z &= \frac{ae^{bx}x^b}{y^2}`])}]},
+{id:'D32', t:'hes', src:'Dæmablað, dæmi 32', q:`Hagnaðarfall er skilgreint sem heildartekjur að frádregnum heildarkostnaði. Heildartekjur eru verð \\(p\\) sinnum framleiðslufallið \\(Y(k,l)\\). Gefið er að framleiðslufallið er hvelft. Heildarkostnaður er kúpta fallið \\(C\\).<ol type="a"><li>Setjið fram jöfnu fyrir hagnaðarfallið.</li><li>Kannið hvort hagnaðarfallið sé hvelft eða kúpt.</li></ol>`,
+ steps:[
+  {titill:'a) Hagnaðarfallið', stig:1, lausn: D(T`\pi(k,l) = p\,Y(k,l) - C(k,l)`)},
+  {titill:'b) Hessian hagnaðarfallsins', stig:2, lausn: D(T`H_\pi = p\,H_Y - H_C`) + '<p>Diffrun er línuleg, svo aðrar hlutafleiður \\(\\pi\\) eru \\(p\\) sinnum þær fyrir \\(Y\\) mínus þær fyrir \\(C\\).</p>'},
+  {titill:'b) Niðurstaða', stig:2, lausn:'<p>\\(pY\\) er hvelft því \\(p \\gt 0\\) og jákvætt margfeldi hvelfds falls er hvelft. \\(-C\\) er hvelft því neikvæða kúpts falls er hvelft. Summa hvelfdra falla er hvelf.</p><p>Hagnaðarfallið er því <b>hvelft</b>, svo fyrstu gráðu skilyrðin gefa hámark.</p>'}]},
+{id:'D33', t:'hes', src:'Dæmablað, dæmi 33', q:`Setjið upp Hessian-fylki fyrir eftirfarandi föll. Kannið hvort föllin séu hvelfd eða kúpt. \\(a\\), \\(b\\) og \\(c\\) eru jákvæðir fastar, \\(0 \\lt b \\lt 1\\), \\(0 \\lt c \\lt 1\\) og \\(b + c \\lt 1\\). Breyturnar taka aðeins jákvæð gildi.<ol type="a"><li>\\(f(x_1,x_2) = a\\ln(x_1x_2^b)\\)</li><li>\\(f(x,z) = ax^bz^c\\)</li></ol>`,
+ steps:[
+  {titill:'a) Aðrar hlutafleiður', stig:2, lausn: D(T`f = a\ln x_1 + ab\ln x_2`) + AL([T`f_{11} &= -\frac{a}{x_1^2}, & f_{22} &= -\frac{ab}{x_2^2}, & f_{12} &= 0`]) + D(T`H = \begin{bmatrix}-\frac{a}{x_1^2} & 0\\ 0 & -\frac{ab}{x_2^2}\end{bmatrix}`)},
+  {titill:'a) Höfuðhlutákveður', stig:2, lausn: AL([T`|H_1| &= -\frac{a}{x_1^2} \lt 0`, T`|H_2| &= \frac{a^2b}{x_1^2x_2^2} \gt 0`]) + '<p>Stranglega hvelft.</p>'},
+  {titill:'b) Aðrar hlutafleiður', stig:2, lausn: AL([T`f_{xx} &= ab(b-1)x^{b-2}z^c`, T`f_{zz} &= ac(c-1)x^bz^{c-2}`, T`f_{xz} &= abc\,x^{b-1}z^{c-1}`])},
+  {titill:'b) |H₁|', stig:1, lausn: D(T`|H_1| = ab(b-1)x^{b-2}z^c \lt 0`) + '<p>Því \\(b - 1 \\lt 0\\).</p>'},
+  {titill:'b) |H₂| og b + c < 1', stig:3, lausn: AL([T`|H_2| &= f_{xx}f_{zz} - f_{xz}^2`, T`&= a^2bc(b-1)(c-1)x^{2b-2}z^{2c-2} - a^2b^2c^2x^{2b-2}z^{2c-2}`, T`&= a^2bc\,x^{2b-2}z^{2c-2}\left[(1-b)(1-c) - bc\right]`, T`&= a^2bc\,x^{2b-2}z^{2c-2}\,(1 - b - c) \gt 0`]) + '<p>Því \\(b + c \\lt 1\\). Fallið er <b>stranglega hvelft</b> (minnkandi stærðarhagkvæmni).</p>'}]},
+{id:'D34', t:'mis', src:'Dæmablað, dæmi 34', q:`Finnið heildarmismun eftirfarandi falla:<ol type="a"><li>${D(T`f(x,y,z) = \frac{ae^{bx+\ln(z)}x^bz}{y^2}`)}</li><li>\\(f(x) = f(x, \\ln(x), x + e^x)\\)</li></ol>`,
+ steps:[
+  {titill:'a) Einfalda', stig:1, lausn: D(T`f = \frac{a\,z^2e^{bx}x^b}{y^2}`)},
+  {titill:'a) Hlutafleiður', stig:3, lausn: AL([T`f_x &= \frac{abz^2e^{bx}x^{b-1}(x+1)}{y^2}`, T`f_y &= -\frac{2az^2e^{bx}x^b}{y^3}`, T`f_z &= \frac{2az\,e^{bx}x^b}{y^2}`])},
+  {titill:'a) Heildarmismunur', stig:1, lausn: D(T`df = f_x\,dx + f_y\,dy + f_z\,dz = f\cdot\left[\frac{b(x+1)}{x}\,dx - \frac{2}{y}\,dy + \frac{2}{z}\,dz\right]`)},
+  {titill:'b) Breyturnar eru allar föll af x', stig:2, lausn:'<p>Köllum rökin \\(f(x, w, v)\\) með \\(w = \\ln x\\) og \\(v = x + e^x\\). Þá er \\(dw = \\frac{1}{x}dx\\) og \\(dv = (1 + e^x)dx\\):</p>' + AL([T`df &= f_x\,dx + f_w\,dw + f_v\,dv`, T`&= \left[f_x + \frac{f_w}{x} + f_v(1 + e^x)\right]dx`])}]},
+// ---------------- Lokapróf 2023 ----------------
+{id:'L23-1', t:'fyl', src:'Lokapróf 2023, dæmi 1 (15%)', exam:15, q:`Gefið er fylkið ${D(T`A = \begin{bmatrix}-4&1&3\\5&-4&2\end{bmatrix}`)}<ol><li>Reiknið \\(A + A'\\) og \\(A + A\\) ef hægt er.</li><li>Reiknið \\((AIA)'\\) og \\((A(IA)')'\\) ef hægt er. Tilgreinið stærðina á einingafylkjunum.</li><li>Formargfaldið \\(A\\) með \\(5\\times 2\\) núllfylki. Hver er stærðin á fylkinu sem kemur út?</li><li>Segið til um hvaða skilyrði fylki þarf að uppfylla til að hægt sé að finna andhverfu þess. Finnið andhverfu \\(A\\) ef hægt er.</li></ol>`,
+ steps:[
+  {titill:"1. A + A′ og A + A", stig:3, lausn:"<p>\\(A\\) er \\(2\\times 3\\) en \\(A'\\) er \\(3\\times 2\\), svo \\(A + A'\\) er <b>ekki skilgreint</b>.</p>" + D(T`A + A = 2A = \begin{bmatrix}-8&2&6\\10&-8&4\end{bmatrix}`)},
+  {titill:"2. (AIA)′", stig:2, lausn: D(T`\underset{2\times 3}{A}\;\underset{3\times 3}{I}\;\underset{2\times 3}{A}`) + '<p>\\(AI = A\\) er \\(2\\times 3\\) og síðan \\((2\\times 3)(2\\times 3)\\): ekki skilgreint.</p>'},
+  {titill:"2. (A(IA)′)′", stig:4, lausn:"<p>Hér er \\(I = I_2\\) svo \\(IA = A\\) og \\((IA)' = A'\\). Þá er \\(AA'\\) \\((2\\times 3)(3\\times 2) = 2\\times 2\\):</p>" + AL([T`AA' &= \begin{bmatrix}16+1+9 & -20-4+6\\ -20-4+6 & 25+16+4\end{bmatrix} = \begin{bmatrix}26&-18\\-18&45\end{bmatrix}`, T`(AA')' &= AA' = \begin{bmatrix}26&-18\\-18&45\end{bmatrix}`]) + "<p>\\(AA'\\) er samhverft og breytist ekki við byltingu.</p>"},
+  {titill:'3. Núllfylki', stig:2, lausn: D(T`\underset{5\times 2}{0}\;\underset{2\times 3}{A} = \underset{5\times 3}{0}`)},
+  {titill:'4. Skilyrði fyrir andhverfu', stig:4, lausn:'<p>Fylkið þarf að vera <b>ferningsfylki</b> og raðir þess <b>línulega óháðar</b>, þ.e. \\(|A| \\ne 0\\). \\(A\\) er \\(2\\times 3\\) og á því enga andhverfu.</p>'}]},
+{id:'L23-2', t:'jof', src:'Lokapróf 2023, dæmi 2 (15%)', exam:15, q:`Höfum jöfnukerfi ${D(T`\begin{aligned}x_1 - x_2 - x_3 &= 0\\ x_1 - 6x_2 + x_3 &= 40\\ 2x_1 + 3x_2 &= 100\end{aligned}`)}<ol><li>Setjið jöfnukerfið upp á fylkjaforminu \\(Ax = d\\).</li><li>Gefin er andhverfa \\(A\\): ${D(T`A^{-1} = \begin{bmatrix}\frac{3}{20}&\frac{3}{20}&\frac{7}{20}\\ -\frac{1}{10}&-\frac{1}{10}&\frac{1}{10}\\ -\frac{3}{4}&\frac{1}{4}&\frac{1}{4}\end{bmatrix}`)}Notið andhverfuna til að finna lausn fyrir \\(x\\).</li><li>Nýtið reglu Cramers til að leysa jöfnukerfið fyrir \\(x_1\\).</li></ol>`,
+ steps:[
+  {titill:'1. Fylkjaform', stig:2, lausn: D(T`\begin{bmatrix}1&-1&-1\\1&-6&1\\2&3&0\end{bmatrix}\begin{bmatrix}x_1\\x_2\\x_3\end{bmatrix} = \begin{bmatrix}0\\40\\100\end{bmatrix}`)},
+  {titill:'2. x = A⁻¹d', stig:5, lausn: AL([T`x_1 &= \tfrac{3}{20}\cdot 0 + \tfrac{3}{20}\cdot 40 + \tfrac{7}{20}\cdot 100 = 6 + 35 = 41`, T`x_2 &= -\tfrac{1}{10}\cdot 0 - \tfrac{1}{10}\cdot 40 + \tfrac{1}{10}\cdot 100 = -4 + 10 = 6`, T`x_3 &= -\tfrac{3}{4}\cdot 0 + \tfrac{1}{4}\cdot 40 + \tfrac{1}{4}\cdot 100 = 10 + 25 = 35`])},
+  {titill:'3. |A|', stig:3, lausn:'<p>Liðum eftir dálki 3 (eitt núll):</p>' + AL([T`|A| &= -1\cdot\begin{vmatrix}1&-6\\2&3\end{vmatrix} - 1\cdot\begin{vmatrix}1&-1\\2&3\end{vmatrix} + 0`, T`&= -1\cdot 15 - 1\cdot 5 = -20`])},
+  {titill:'3. |A₁| og x₁', stig:5, lausn: AL([T`|A_1| &= \begin{vmatrix}0&-1&-1\\40&-6&1\\100&3&0\end{vmatrix}`, T`&= -1\cdot\begin{vmatrix}40&-6\\100&3\end{vmatrix} - 1\cdot\begin{vmatrix}0&-1\\100&3\end{vmatrix}`, T`&= -1\cdot(120 + 600) - 1\cdot(0 + 100) = -820`, T`x_1 &= \frac{|A_1|}{|A|} = \frac{-820}{-20} = 41`])}]},
+// ---------------- Lokapróf 2025 ----------------
+{id:'L25-1', t:'and', src:'Lokapróf 2025, dæmi 1 (20%)', exam:20, q:`Gefið er fylki \\(A\\) og vigur \\(B\\): ${D(T`A = \begin{bmatrix}2&1&3\\1&2&1\\1&1&1\end{bmatrix},\qquad B = \begin{bmatrix}2\\4\\3\end{bmatrix}`)}<ol type="a"><li>Reiknið fylkjamargfeldin \\(B'A\\) og \\(BA\\) ef hægt er. Hvaða skilyrði þurfa almennt að vera uppfyllt svo fylkjamargföldun tveggja fylkja gangi upp? (4%)</li><li>Kannið hvort raðir fylkis \\(A\\) séu línulega háðar. Hvað segir niðurstaðan um andhverfanleika fylkisins? (4%)</li><li>Hver verður ákveða fylkisins \\(A\\) ef röð 2 er margfölduð með einhverjum fasta \\(k\\)? (2%)</li><li>Finnið aðoka fylki \\(A\\), \\(\\operatorname{adj}A\\). (6%)</li><li>Finnið andhverft fylki \\(A\\), \\(A^{-1}\\), og einfaldið eins og auðið er. (4%)</li></ol>`,
+ steps:(() => { const A = vM([[2,1,3],[1,2,1],[1,1,1]]); const b = bInv3(A); return [
+  {titill:"a) B′A og BA", stig:4, lausn: D(T`B'A = \begin{bmatrix}2&4&3\end{bmatrix}${tm(A)} = \begin{bmatrix}4+4+3 & 2+8+3 & 6+4+3\end{bmatrix} = \begin{bmatrix}11&13&13\end{bmatrix}`) + '<p>\\(BA\\) er \\((3\\times 1)(3\\times 3)\\): ekki skilgreint. Almennt þarf fjöldi dálka fyrra fylkisins að vera jafn fjölda raða þess seinna.</p>'},
+  ...pre('b)', bRank(A).steps).map(s => ({...s, stig: 2})),
+  {titill:'c) Röð margfölduð með k', stig:2, lausn: D(T`|\tilde A| = k\,|A| = -k`) + '<p>Eiginleiki 3, og \\(|A| = -1\\) (sjá d).</p>'},
+  {titill:'d) Ákveða', stig:1, lausn: b.steps[0].lausn},
+  {titill:'d) Fylgiþættir og aðoka fylki', stig:5, lausn: b.steps[1].lausn + b.steps[2].lausn},
+  {titill:'e) A⁻¹', stig:4, lausn: b.steps[3].lausn + '<p>Þar sem \\(|A| = -1\\) er \\(A^{-1} = -\\operatorname{adj}A\\).</p>'}]; })()},
+{id:'L25-2', t:'jof', src:'Lokapróf 2025, dæmi 2 (15%)', exam:15, q:`Gefið er jöfnukerfi ${D(T`\begin{aligned}x - 2y - 2z &= 1\\ -2x + y &= 0\\ -2x + 2y + z &= 1\end{aligned}`)}<ol type="a"><li>Setjið jöfnukerfið upp á fylkjaformi \\(Ax = d\\) þar sem \\(x' = [x\\;\\; y\\;\\; z]\\). (2%)</li></ol>Gefin er andhverfa fylkis \\(A\\): ${D(T`A^{-1} = \begin{bmatrix}1&-2&2\\2&-3&4\\-2&2&-3\end{bmatrix}`)}<ol type="a" start="2"><li>Sannreynið að uppgefið fylki sé í reynd andhverfa fylkisins \\(A\\) með því að sýna að \\(AA^{-1} = I\\). (3%)</li><li>Notið andhverfa fylkið til að finna lausnavigurinn \\(x^*\\). (5%)</li><li>Nýtið reglu Cramers til að leysa jöfnukerfið fyrir \\(y\\). (5%)</li></ol>`,
+ steps:(() => { const A = vM([[1,-2,-2],[-2,1,0],[-2,2,1]]), Ai = vM([[1,-2,2],[2,-3,4],[-2,2,-3]]), d = [1,0,1].map(Q.of); const s = bSolveInv(A, Ai, d, VARS3), c = bCramer(A, d, VARS3, [1]);
+  return [{titill:'a) Fylkjaform', stig:2, lausn: D(T`${tm(A)}\begin{bmatrix}x\\y\\z\end{bmatrix} = \begin{bmatrix}1\\0\\1\end{bmatrix}`)}, {...s.steps[0], titill:'b) ' + s.steps[0].titill, stig:3}, {...s.steps[1], titill:'c) ' + s.steps[1].titill, stig:5}, ...pre('d)', c.steps.slice(1, 4)).map((x, i) => ({...x, stig:[2, 2, 1][i]}))]; })()},
+{id:'L25-3', t:'dif', src:'Lokapróf 2025, dæmi 3 (5%)', exam:5, q:`Nýtið keðjuregluna til að reikna fyrstu afleiðu eftirfarandi falls: ${D(T`f(x) = e^{4x^2 - 3x}`)}`,
+ steps:[{titill:'Innra fall', stig:2, lausn: D(T`y = 4x^2 - 3x,\qquad \frac{dy}{dx} = 8x - 3`)}, {titill:'Keðjureglan', stig:3, lausn: D(T`f'(x) = e^{y}\cdot\frac{dy}{dx} = (8x - 3)\,e^{4x^2 - 3x}`)}]},
+{id:'L25-4', t:'mis', src:'Lokapróf 2025, dæmi 4 a–c (11%)', exam:11, q:`Gefið er fallið ${D(T`U = \frac{2xy}{x+y}`)}<ol type="a"><li>Finnið heildarmismun fallsins \\(dU\\). Munið að einfalda m.t.t. \\(dx\\) og \\(dy\\). (6%)</li><li>Hver er heildarmismunurinn ef \\(x = 2\\), \\(y = 2\\), \\(dy = 0{,}2\\) og \\(dx = 0\\)? (3%)</li><li>Gefið er að \\(x = 3y^2\\). Teiknið einfalt flæðirit sem sýnir bein og óbein áhrif breytunnar \\(y\\) á \\(U\\). (2%)</li></ol><p class="hint">Liður d (heildarafleiða, kafli 8.4) er utan efnis miðannarprófsins og sleppt.</p>`,
+ steps:[
+  {titill:'a) U_x með deilingarreglu', stig:2, lausn: AL([T`U_x &= \frac{2y(x+y) - 2xy\cdot 1}{(x+y)^2}`, T`&= \frac{2y^2}{(x+y)^2}`])},
+  {titill:'a) U_y og dU', stig:4, lausn: D(T`U_y = \frac{2x(x+y) - 2xy}{(x+y)^2} = \frac{2x^2}{(x+y)^2}`) + D(T`dU = \frac{2y^2}{(x+y)^2}\,dx + \frac{2x^2}{(x+y)^2}\,dy`)},
+  {titill:'b) Innsetning', stig:3, lausn: D(T`dU = \frac{2\cdot 4}{16}\cdot 0 + \frac{2\cdot 4}{16}\cdot 0{,}2 = \frac{1}{2}\cdot 0{,}2 = 0{,}1`)},
+  {titill:'c) Flæðirit', stig:2, lausn:'<div class="flow"><span>y</span><span class="arr">→</span><span>U</span><span class="lbl">bein áhrif: \\(U_y\\)</span></div><div class="flow"><span>y</span><span class="arr">→</span><span>x</span><span class="arr">→</span><span>U</span><span class="lbl">óbein: \\(\\frac{dx}{dy} = 6y\\), svo \\(U_x\\)</span></div>'}]},
+{id:'L25-7', t:'hes', src:'Lokapróf 2025, dæmi 7 b–c (16%)', exam:16, q:`Gefið er fall ${D(T`f(x,y,z) = xz + x^2 - y + yz + y^2 + 3z^2`)}<ol type="a" start="2"><li>Finnið krítíska punkta fallsins skv. fyrstu gráðu skilyrðum. (8%)</li><li>Beitið annarrar gráðu skilyrðum í Hessian-fylki til að ákvarða hvort krítískir punktar séu hámörk eða lágmörk. (8%)</li></ol>`,
+ steps:[
+  {titill:'b) FGS', stig:3, lausn: AL([T`f_x &= 2x + z = 0`, T`f_y &= -1 + 2y + z = 0`, T`f_z &= x + y + 6z = 0`])},
+  {titill:'b) Leysa', stig:5, lausn:'<p>Úr fyrstu tveimur: \\(x = -\\tfrac{z}{2}\\) og \\(y = \\tfrac{1 - z}{2}\\). Inn í þá þriðju:</p>' + AL([T`-\tfrac{z}{2} + \tfrac{1-z}{2} + 6z &= 0`, T`\tfrac{1}{2} - z + 6z &= 0`, T`z^* &= -\tfrac{1}{10}`, T`x^* &= \tfrac{1}{20},\qquad y^* = \tfrac{1}{2}\left(1 + \tfrac{1}{10}\right) = \tfrac{11}{20}`])},
+  {titill:'c) Hessian-fylkið', stig:3, lausn: D(T`H = \begin{bmatrix}f_{xx}&f_{xy}&f_{xz}\\f_{yx}&f_{yy}&f_{yz}\\f_{zx}&f_{zy}&f_{zz}\end{bmatrix} = \begin{bmatrix}2&0&1\\0&2&1\\1&1&6\end{bmatrix}`)},
+  {titill:'c) Höfuðhlutákveður og flokkun', stig:5, lausn: AL([T`|H_1| &= 2 \gt 0`, T`|H_2| &= 2\cdot 2 - 0 = 4 \gt 0`, T`|H_3| &= 2\begin{vmatrix}2&1\\1&6\end{vmatrix} - 0 + 1\begin{vmatrix}0&2\\1&1\end{vmatrix} = 2\cdot 11 + 1\cdot(-2) = 20 \gt 0`]) + '<p>Allar jákvæðar: \\((\\tfrac{1}{20}, \\tfrac{11}{20}, -\\tfrac{1}{10})\\) er <b>lágmark</b>.</p>'}]},
+// ---------------- Skilaverkefni 1 ----------------
+{id:'S1-1', t:'fyl', src:'Skilaverkefni 1, dæmi 1', q:`Svarið með vigrareikningi og með því að teikna í hnitakerfi:<ol type="i"><li>Reiknið \\(v_1 - 2v_2\\) þar sem \\(v_1 = \\begin{bmatrix}4\\\\-1\\end{bmatrix}\\) og \\(v_2 = \\begin{bmatrix}-2\\\\3\\end{bmatrix}\\).</li><li>Sýnið að \\(v_1 = \\begin{bmatrix}2\\\\5\\end{bmatrix}\\) og \\(v_2 = \\begin{bmatrix}10\\\\-4\\end{bmatrix}\\) séu hornréttir.</li><li>Sýnið að \\(v_1 = \\begin{bmatrix}2\\\\3\\end{bmatrix}\\) og \\(v_2 = \\begin{bmatrix}-6\\\\-9\\end{bmatrix}\\) séu samsíða.</li></ol>`,
+ steps:[
+  {titill:'i) Línuleg samsetning', stig:2, lausn: D(T`v_1 - 2v_2 = \begin{bmatrix}4\\-1\end{bmatrix} - \begin{bmatrix}-4\\6\end{bmatrix} = \begin{bmatrix}8\\-7\end{bmatrix}`) + vecSvg([{v:[4,-1], label:'v₁'}, {v:[-4,6], label:'2v₂'}, {v:[8,-7], label:'v₁−2v₂'}])},
+  {titill:'ii) Innra margfeldi = 0', stig:2, lausn: D(T`v_1\cdot v_2 = 2\cdot 10 + 5\cdot(-4) = 20 - 20 = 0`) + '<p>Innra margfeldið er 0 svo vigrarnir eru hornréttir.</p>'},
+  {titill:'iii) Margfeldi af hvor öðrum', stig:2, lausn: D(T`v_2 = \begin{bmatrix}-6\\-9\end{bmatrix} = -3\begin{bmatrix}2\\3\end{bmatrix} = -3v_1`) + '<p>\\(v_2 = kv_1\\) með \\(k = -3\\), svo þeir eru samsíða (snúa öfugt).</p>'}]},
+{id:'S1-2', t:'fyl', src:'Skilaverkefni 1, dæmi 2', q:`Gefin eru fylkin ${D(T`A = \begin{bmatrix}3&-1&2\\1&4&3\end{bmatrix},\qquad B = \begin{bmatrix}1&2\\-1&3\\2&0\end{bmatrix}`)}<ol type="i"><li>Reiknið \\(AB\\).</li><li>Reiknið \\(A'\\) og \\(B'\\).</li><li>Sýnið að \\((AB)' = B'A'\\).</li></ol>`,
+ steps:[...pre('i)', bMul(vM([[3,-1,2],[1,4,3]]), vM([[1,2],[-1,3],[2,0]])).steps),
+  {titill:"ii) Bylta", stig:1, lausn: D(T`A' = \begin{bmatrix}3&1\\-1&4\\2&3\end{bmatrix},\qquad B' = \begin{bmatrix}1&-1&2\\2&3&0\end{bmatrix}`)},
+  {titill:"iii) B′A′", stig:2, lausn: AL([T`B'A' &= \begin{bmatrix}3+1+4 & 1-4+6\\ 6-3+0 & 2+12+0\end{bmatrix} = \begin{bmatrix}8&3\\3&14\end{bmatrix}`, T`(AB)' &= \begin{bmatrix}8&3\\3&14\end{bmatrix}' = \begin{bmatrix}8&3\\3&14\end{bmatrix}`]) + '<p>Jafnt (og hér vill svo til að \\(AB\\) er samhverft).</p>'}]},
+{id:'S1-3', t:'fyl', src:'Skilaverkefni 1, dæmi 3', q:`Hópi fólks er skipt í fernt eftir ferðamáta: einkabíl (B), strætó (S), hjól (H), ganga (G). Á tíma \\(t = 0\\) og með færslufylkinu \\(M\\) er ${D(T`x_0' = \begin{bmatrix}0{,}60 & 0{,}15 & 0{,}15 & 0{,}10\end{bmatrix},\quad M = \begin{bmatrix}0{,}75&0{,}10&0{,}05&0{,}10\\0{,}15&0{,}65&0{,}10&0{,}10\\0{,}10&0{,}10&0{,}70&0{,}10\\0{,}20&0{,}10&0{,}10&0{,}60\end{bmatrix}`)}Hver er dreifingin eftir eitt tímabil, \\(x_1'\\)?`,
+ steps:[
+  {titill:"Röð sinnum dálkur", stig:4, lausn: AL([T`B_1 &= 0{,}6\cdot 0{,}75 + 0{,}15\cdot 0{,}15 + 0{,}15\cdot 0{,}10 + 0{,}1\cdot 0{,}20 = 0{,}5075`, T`S_1 &= 0{,}6\cdot 0{,}10 + 0{,}15\cdot 0{,}65 + 0{,}15\cdot 0{,}10 + 0{,}1\cdot 0{,}10 = 0{,}1825`, T`H_1 &= 0{,}6\cdot 0{,}05 + 0{,}15\cdot 0{,}10 + 0{,}15\cdot 0{,}70 + 0{,}1\cdot 0{,}10 = 0{,}16`, T`G_1 &= 0{,}6\cdot 0{,}10 + 0{,}15\cdot 0{,}10 + 0{,}15\cdot 0{,}10 + 0{,}1\cdot 0{,}60 = 0{,}15`])},
+  {titill:'Niðurstaða og prófun', stig:1, lausn: D(T`x_1' = \begin{bmatrix}0{,}5075 & 0{,}1825 & 0{,}16 & 0{,}15\end{bmatrix}`) + '<p>Summan er 1, eins og vera ber.</p>'}]},
+{id:'S1-4', t:'jof', src:'Skilaverkefni 1, dæmi 4', q:`Gefið er jöfnukerfi ${D(T`\begin{aligned}2x + y - z &= 4\\ 3x - 2y + 2z &= 4\\ x + 2y + z &= 7\end{aligned}`)}<ol type="a"><li>Setjið kerfið upp á fylkjaforminu \\(Ax = d\\).</li><li>Finnið fjölda línulega óháðra raða með þrepafylkinu.</li><li>Leysið fyrir \\(z\\) með jöfnu Cramers.</li></ol>`,
+ steps:(() => { const A = vM([[2,1,-1],[3,-2,2],[1,2,1]]); const d = [4,4,7].map(Q.of); const c = bCramer(A, d, VARS3, [2]); return [c.steps[0], ...pre('b)', bRank(A).steps), ...pre('c)', c.steps.slice(1))]; })()},
+{id:'S1-5', t:'and', src:'Skilaverkefni 1, dæmi 5', q:`Gefið er jöfnukerfi ${D(T`\begin{aligned}-x - y - z &= 6\\ x + y + 2z &= 9\\ x + 2y + 3z &= 14\end{aligned}`)}<ol type="a"><li>Setjið kerfið upp á fylkjaforminu \\(Ax = d\\).</li><li>Notið ákveðu \\(A\\) til að kanna hvort það sé andhverfanlegt.</li><li>Finnið andhverfu \\(A\\) með Laplace-liðun.</li><li>Notið andhverfuna til að finna lausn jöfnukerfisins.</li></ol>`,
+ steps:(() => { const A = vM([[-1,-1,-1],[1,1,2],[1,2,3]]); const b = bInv3(A); const d = [6,9,14].map(Q.of); const x = mmul(b.inv, d.map(v => [v]));
+  return [{titill:'a) Fylkjaform', stig:1, lausn: D(T`${tm(A)}\begin{bmatrix}x\\y\\z\end{bmatrix} = \begin{bmatrix}6\\9\\14\end{bmatrix}`)}, ...pre('b)–c)', b.steps),
+   {titill:'d) x = A⁻¹d', stig:2, lausn: AL(b.inv.map((r, i) => `${VARS3[i]}^* &= ` + r.map((c2, k) => txp(c2) + '\\cdot ' + txp(d[k])).join(' + ') + ' = ' + tx(x[i][0])))}]; })()},
+];
+
+// ===== data_new.js =====
+// ---------- ný skrifleg dæmi í sama stíl (byggð á fyrirlestrarnótum) ----------
+const nt = (n, c) => `Fyrirlestrarnótur ${n} · C&W ${c}`;
+const NEW_PROBS = [
+// ===== fyl =====
+{id:'N-F1', t:'fyl', src:nt(8, '4.2'), q:`Gefin eru ${D(T`A = \begin{bmatrix}1&0&2\\-1&3&1\end{bmatrix},\qquad B = \begin{bmatrix}2&1\\0&-1\\1&4\end{bmatrix}`)}<ol type="a"><li>Reiknið \\(AB\\) og takið fram víddina.</li><li>Reiknið \\(BA\\) og takið fram víddina.</li><li>Hvað segir þetta um víxlreglu fylkjamargföldunar?</li></ol>`,
+ steps:[...pre('a)', bMul(M([[1,0,2],[-1,3,1]]), M([[2,1],[0,-1],[1,4]])).steps), ...pre('b)', bMul(M([[2,1],[0,-1],[1,4]]), M([[1,0,2],[-1,3,1]]), 'B', 'A').steps),
+  {titill:'c) Ályktun', stig:1, lausn:'<p>\\(AB\\) er \\(2\\times 2\\) en \\(BA\\) er \\(3\\times 3\\). Þau geta ekki verið jöfn: almennt gildir \\(AB \\ne BA\\).</p>'}]},
+{id:'N-F2', t:'fyl', src:nt(9, '4.3'), q:`Gefnir eru vigrarnir ${D(T`u = \begin{bmatrix}1\\2\\-2\end{bmatrix},\qquad v = \begin{bmatrix}2\\-1\\0\end{bmatrix},\qquad w = \begin{bmatrix}5\\0\\-2\end{bmatrix}`)}<ol type="a"><li>Reiknið \\(u'v\\). Eru \\(u\\) og \\(v\\) hornréttir?</li><li>Finnið \\(k\\) þannig að \\(z = [k\\;\\;1\\;\\;2]'\\) sé hornréttur á \\(u\\).</li><li>Eru \\(u\\), \\(v\\) og \\(w\\) línulega háðir? Rökstyðjið.</li></ol>`,
+ steps:[
+  {titill:'a) Innra margfeldi', stig:2, lausn: D(T`u'v = 1\cdot 2 + 2\cdot(-1) + (-2)\cdot 0 = 0`) + '<p>Innra margfeldið er 0 svo \\(u\\) og \\(v\\) eru hornréttir.</p>'},
+  {titill:'b) Setja innra margfeldi = 0', stig:2, lausn: AL([T`u'z &= 1\cdot k + 2\cdot 1 + (-2)\cdot 2 = k - 2 = 0`, T`k &= 2`])},
+  {titill:'c) Leita að línulegri samsetningu', stig:2, lausn: D(T`u + 2v = \begin{bmatrix}1+4\\2-2\\-2+0\end{bmatrix} = \begin{bmatrix}5\\0\\-2\end{bmatrix} = w`) + '<p>Þá er \\(1\\cdot u + 2\\cdot v - 1\\cdot w = 0\\) með stuðla sem eru ekki allir 0, svo vigrarnir eru <b>línulega háðir</b>. (Ákveða fylkisins \\([u\\;v\\;w]\\) er því 0.)</p>'}],
+ chk:{eq:[[M([[5],[0],[-2]]), madd(M([[1],[2],[-2]]), msc(2, M([[2],[-1],[0]])))]]}},
+{id:'N-F3', t:'fyl', src:nt(10, '4.7'), q:`Á vinnumarkaði eru 1000 manns: 900 í vinnu (A) og 100 atvinnulausir (B). Á hverju tímabili missa 10% vinnandi vinnuna og 60% atvinnulausra fá vinnu: ${D(T`x_0' = \begin{bmatrix}900&100\end{bmatrix},\qquad M = \begin{bmatrix}0{,}9&0{,}1\\0{,}6&0{,}4\end{bmatrix}`)}<ol type="a"><li>Finnið \\(x_1'\\) og \\(x_2'\\).</li><li>Reiknið \\(M^2\\) og staðfestið að \\(x_2' = x_0'M^2\\).</li><li>Hvert er atvinnuleysishlutfallið eftir tvö tímabil?</li></ol>`,
+ steps:[
+  {titill:"a) x₁′ = x₀′M", stig:2, lausn: AL([T`A_1 &= 900\cdot 0{,}9 + 100\cdot 0{,}6 = 810 + 60 = 870`, T`B_1 &= 900\cdot 0{,}1 + 100\cdot 0{,}4 = 90 + 40 = 130`])},
+  {titill:"a) x₂′ = x₁′M", stig:2, lausn: AL([T`A_2 &= 870\cdot 0{,}9 + 130\cdot 0{,}6 = 783 + 78 = 861`, T`B_2 &= 870\cdot 0{,}1 + 130\cdot 0{,}4 = 87 + 52 = 139`])},
+  {titill:'b) M² og staðfesting', stig:3, lausn: D(T`M^2 = \begin{bmatrix}0{,}81 + 0{,}06 & 0{,}09 + 0{,}04\\ 0{,}54 + 0{,}24 & 0{,}06 + 0{,}16\end{bmatrix} = \begin{bmatrix}0{,}87&0{,}13\\0{,}78&0{,}22\end{bmatrix}`) + AL([T`900\cdot 0{,}87 + 100\cdot 0{,}78 &= 783 + 78 = 861`, T`900\cdot 0{,}13 + 100\cdot 0{,}22 &= 117 + 22 = 139`])},
+  {titill:'c) Hlutfall', stig:1, lausn: D(T`\frac{139}{1000} = 13{,}9\%`)}],
+ chk:{markov:[M([[900, 100]]), M([[q(9,10), q(1,10)], [q(6,10), q(4,10)]]), M([[870, 130]]), M([[861, 139]])]}},
+{id:'N-F4', t:'fyl', src:nt(9, '4.4–4.5'), q:`\\(A\\) er \\(3\\times 2\\), \\(B\\) er \\(2\\times 4\\) og \\(C\\) er \\(4\\times 3\\).<ol type="a"><li>Hver eftirfarandi margfelda eru skilgreind og hverjar eru víddir þeirra? \\(AB\\), \\(BA\\), \\(BC\\), \\(CA\\), \\(ABC\\), \\(A'B\\), \\(CAB\\).</li><li>Í venjulegri algebru gildir að ef \\(ab = 0\\) þá er \\(a = 0\\) eða \\(b = 0\\). Sýnið með dæmi að þetta gildir ekki um fylki.</li></ol>`,
+ steps:[
+  {titill:'a) Innri víddir verða að passa', stig:4, lausn:'<table class="dt"><thead><tr><th>Margfeldi</th><th>Víddir</th><th>Niðurstaða</th></tr></thead><tbody><tr><td>\\(AB\\)</td><td>\\((3\\times 2)(2\\times 4)\\)</td><td>\\(3\\times 4\\)</td></tr><tr><td>\\(BA\\)</td><td>\\((2\\times 4)(3\\times 2)\\)</td><td>ekki skilgreint</td></tr><tr><td>\\(BC\\)</td><td>\\((2\\times 4)(4\\times 3)\\)</td><td>\\(2\\times 3\\)</td></tr><tr><td>\\(CA\\)</td><td>\\((4\\times 3)(3\\times 2)\\)</td><td>\\(4\\times 2\\)</td></tr><tr><td>\\(ABC\\)</td><td>\\((3\\times 4)(4\\times 3)\\)</td><td>\\(3\\times 3\\)</td></tr><tr><td>\\(A\'B\\)</td><td>\\((2\\times 3)(2\\times 4)\\)</td><td>ekki skilgreint</td></tr><tr><td>\\(CAB\\)</td><td>\\((4\\times 2)(2\\times 4)\\)</td><td>\\(4\\times 4\\)</td></tr></tbody></table>'},
+  {titill:'b) AB = 0 án þess að A eða B sé 0', stig:2, lausn: D(T`\begin{bmatrix}1&1\\1&1\end{bmatrix}\begin{bmatrix}1&-1\\-1&1\end{bmatrix} = \begin{bmatrix}1-1 & -1+1\\ 1-1 & -1+1\end{bmatrix} = \begin{bmatrix}0&0\\0&0\end{bmatrix}`) + '<p>Hvorugt fylkið er núllfylki, en margfeldið er það. Bæði eru sérstæð (\\(|A| = |B| = 0\\)).</p>'}],
+ chk:{eq:[[mmul(M([[1,1],[1,1]]), M([[1,-1],[-1,1]])), M([[0,0],[0,0]])]]}},
+{id:'N-F5', t:'fyl', src:nt(9, '4.6'), q:`Gefið er ${D(T`A = \begin{bmatrix}1&2\\0&3\\-1&1\end{bmatrix}`)}<ol type="a"><li>Reiknið \\(A'A\\).</li><li>Sýnið að \\(A'A\\) sé samhverft og útskýrið hvers vegna það gildir alltaf.</li></ol>`,
+ steps:[...pre('a)', bMul(tr(M([[1,2],[0,3],[-1,1]])), M([[1,2],[0,3],[-1,1]]), "A'", 'A').steps),
+  {titill:"b) Samhverfa", stig:2, lausn: D(T`(A'A)' = A'(A')' = A'A`) + '<p>Samkvæmt \\((XY)\' = Y\'X\'\\) og \\((A\')\' = A\\). Fylkið er jafnt byltu sinni, þ.e. samhverft. Hér sést það á því að \\(c_{12} = c_{21} = 1\\).</p>'}]},
+{id:'N-F6', t:'fyl', src:nt(8, '4.2'), q:`Finnið \\(a\\), \\(b\\), \\(c\\) og \\(d\\) þannig að ${D(T`\begin{bmatrix}a&2\\3&b\end{bmatrix} + 2\begin{bmatrix}1&c\\d&0\end{bmatrix} = \begin{bmatrix}5&8\\1&7\end{bmatrix}`)}`,
+ steps:[
+  {titill:'Margfalda með fasta og leggja saman', stig:1, lausn: D(T`\begin{bmatrix}a+2 & 2+2c\\ 3+2d & b\end{bmatrix} = \begin{bmatrix}5&8\\1&7\end{bmatrix}`)},
+  {titill:'Jafna samsvarandi stök', stig:2, lausn: AL([T`a + 2 &= 5 &&\Rightarrow\; a = 3`, T`2 + 2c &= 8 &&\Rightarrow\; c = 3`, T`3 + 2d &= 1 &&\Rightarrow\; d = -1`, T`b &= 7`]) + '<p>Tvö fylki eru jöfn ef og aðeins ef víddir og öll samsvarandi stök eru jöfn.</p>'}]},
+// ===== akv =====
+{id:'N-K1', t:'akv', src:nt(11, '5.2'), q:`Finnið ákveðu fylkisins með Laplace-liðun. Rökstyðjið val á röð eða dálki. ${D(T`A = \begin{bmatrix}3&0&0\\2&-1&4\\5&2&1\end{bmatrix}`)}`, steps: bDet(M([[3,0,0],[2,-1,4],[5,2,1]])).steps},
+{id:'N-K2', t:'akv', src:nt(11, '5.3'), q:`Gefið er efra þríhyrningsfylkið ${D(T`A = \begin{bmatrix}1&2&3\\0&4&5\\0&0&6\end{bmatrix}`)}<ol type="a"><li>Finnið \\(|A|\\).</li><li>Finnið \\(|A'|\\), \\(|2A|\\) og \\(|A^{-1}|\\) án þess að reikna fylkin.</li><li>Hver verður ákveðan ef röðum 1 og 3 er víxlað?</li></ol>`,
+ steps:[
+  {titill:'a) Liða eftir dálki 1', stig:2, lausn: AL([T`|A| &= 1\cdot\begin{vmatrix}4&5\\0&6\end{vmatrix} - 0 + 0 = 1\cdot(24 - 0) = 24`]) + '<p>Ákveða þríhyrningsfylkis er margfeldi hornalínustakanna: \\(1\\cdot 4\\cdot 6 = 24\\).</p>'},
+  {titill:'b) Eiginleikar', stig:3, lausn: AL([T`|A'| &= |A| = 24`, T`|2A| &= 2^3|A| = 8\cdot 24 = 192`, T`|A^{-1}| &= \frac{1}{|A|} = \frac{1}{24}`]) + '<p>Í \\(2A\\) margfaldast allar þrjár raðirnar með 2, svo þátturinn er \\(2^3\\), ekki 2.</p>'},
+  {titill:'c) Víxl raða', stig:1, lausn: D(T`|\tilde A| = -24`) + '<p>Víxl tveggja raða skiptir um formerki.</p>'}],
+ chk:{det:[M([[1,2,3],[0,4,5],[0,0,6]]), q(24)]}},
+{id:'N-K3', t:'akv', src:nt(11, '5.2–5.3'), q:`Gefið er ${D(T`A = \begin{bmatrix}1&2&0\\2&k&1\\0&1&1\end{bmatrix}`)}<ol type="a"><li>Finnið \\(|A|\\) sem fall af \\(k\\).</li><li>Fyrir hvaða \\(k\\) er \\(A\\) sérstætt?</li><li>Sýnið fyrir það \\(k\\) hvernig ein röð er línuleg samsetning hinna.</li></ol>`,
+ steps:[
+  {titill:'a) Liða eftir röð 1', stig:2, lausn: AL([T`|A| &= 1\cdot\begin{vmatrix}k&1\\1&1\end{vmatrix} - 2\cdot\begin{vmatrix}2&1\\0&1\end{vmatrix} + 0`, T`&= (k - 1) - 2\cdot 2 = k - 5`])},
+  {titill:'b) Sérstætt þegar |A| = 0', stig:1, lausn: D(T`k - 5 = 0 \;\Rightarrow\; k = 5`)},
+  {titill:'c) Línulegt samband', stig:2, lausn: D(T`R_2 - 2R_1 = [2-2,\; 5-4,\; 1-0] = [0,\;1,\;1] = R_3`) + '<p>Svo \\(R_2 = 2R_1 + R_3\\): raðirnar eru línulega háðar og ákveðan er 0 (eiginleiki 5).</p>'}],
+ chk:{det:[M([[1,2,0],[2,5,1],[0,1,1]]), q(0)]}},
+{id:'N-K4', t:'akv', src:nt(11, '5.2'), q:`Finnið ákveðu \\(4\\times 4\\) fylkisins. ${D(T`A = \begin{bmatrix}1&3&0&2\\0&2&0&0\\4&1&1&-1\\2&0&0&3\end{bmatrix}`)}`, steps: bDet(M([[1,3,0,2],[0,2,0,0],[4,1,1,-1],[2,0,0,3]])).steps},
+{id:'N-K5', t:'akv', src:nt(10, '5.1'), q:`Finnið raðtölu fylkisins. Er hægt að tala um andhverfu þess? ${D(T`A = \begin{bmatrix}1&2&-1&3\\2&4&1&0\\3&6&0&3\end{bmatrix}`)}`,
+ steps:[...bRank(M([[1,2,-1,3],[2,4,1,0],[3,6,0,3]])).steps, {titill:'Andhverfa?', stig:1, lausn:'<p>\\(A\\) er \\(3\\times 4\\), ekki ferningsfylki, svo það á enga andhverfu óháð raðtölunni. Raðtalan er í mesta lagi \\(\\min(3, 4) = 3\\) en er hér 2: \\(R_3 = R_1 + R_2\\).</p>'}],
+ chk:{rank:[M([[1,2,-1,3],[2,4,1,0],[3,6,0,3]]), 2]}},
+{id:'N-K6', t:'akv', src:nt(11, '5.3'), q:`Sýnið án þess að liða að ${D(T`\begin{vmatrix}1&2&3\\4&5&6\\7&8&9\end{vmatrix} = 0`)}og staðfestið síðan með Laplace-liðun.`,
+ steps:[
+  {titill:'Línuaðgerðir (eiginleiki 4)', stig:2, lausn: D(T`\begin{vmatrix}1&2&3\\4&5&6\\7&8&9\end{vmatrix} \overset{R_3 - R_2}{=} \begin{vmatrix}1&2&3\\4&5&6\\3&3&3\end{vmatrix} \overset{R_2 - R_1}{=} \begin{vmatrix}1&2&3\\3&3&3\\3&3&3\end{vmatrix}`) + '<p>Að draga eina röð frá annarri breytir ekki ákveðunni.</p>'},
+  {titill:'Tvær eins raðir (eiginleiki 5)', stig:1, lausn:'<p>Raðir 2 og 3 eru eins, svo ákveðan er 0.</p>'},
+  ...pre('Staðfesting:', bDet(M([[1,2,3],[4,5,6],[7,8,9]])).steps.slice(1))]},
+{id:'N-K7', t:'akv', src:nt(11, '5.3 (eiginleiki 6)'), q:`Gefið er ${D(T`A = \begin{bmatrix}2&1&0\\1&3&1\\0&1&2\end{bmatrix}`)}<ol type="a"><li>Reiknið \\(|A|\\) með liðun eftir röð 1.</li><li>Reiknið fylgiþætti raðar 2 og sýnið að \\(\\sum_j a_{1j}|C_{2j}| = 0\\).</li><li>Hvers vegna kemur 0?</li></ol>`,
+ steps:[
+  {titill:'a) |A|', stig:2, lausn: AL([T`|A| &= 2\begin{vmatrix}3&1\\1&2\end{vmatrix} - 1\begin{vmatrix}1&1\\0&2\end{vmatrix} + 0`, T`&= 2\cdot 5 - 1\cdot 2 = 8`])},
+  {titill:'b) Framandi fylgiþættir', stig:3, lausn: AL([T`|C_{21}| &= -\begin{vmatrix}1&0\\1&2\end{vmatrix} = -2`, T`|C_{22}| &= +\begin{vmatrix}2&0\\0&2\end{vmatrix} = 4`, T`|C_{23}| &= -\begin{vmatrix}2&1\\0&1\end{vmatrix} = -2`, T`\textstyle\sum_j a_{1j}|C_{2j}| &= 2\cdot(-2) + 1\cdot 4 + 0\cdot(-2) = 0`])},
+  {titill:'c) Ástæða', stig:1, lausn:'<p>Þetta jafngildir ákveðu fylkis þar sem röð 2 hefur verið skipt út fyrir röð 1. Það fylki hefur tvær eins raðir og ákveðan er 0 (eiginleiki 6). Þetta er ástæðan fyrir því að \\(A\\,\\operatorname{adj}A = |A|I\\).</p>'}],
+ chk:{det:[M([[2,1,0],[1,3,1],[0,1,2]]), q(8)]}},
+// ===== and =====
+{id:'N-A1', t:'and', src:nt(12, '5.4'), q:`Finnið andhverfu fylkisins með aðoka fylkinu. ${D(T`A = \begin{bmatrix}1&2&1\\0&1&0\\2&0&3\end{bmatrix}`)}`, steps: bInv3(M([[1,2,1],[0,1,0],[2,0,3]])).steps, chk:{inv:[M([[1,2,1],[0,1,0],[2,0,3]]), inv(M([[1,2,1],[0,1,0],[2,0,3]]))]}},
+{id:'N-A2', t:'and', src:nt(12, '5.4'), q:`Finnið andhverfu fylkisins og einfaldið eins og auðið er. ${D(T`A = \begin{bmatrix}1&0&1\\1&1&0\\0&1&1\end{bmatrix}`)}`, steps: bInv3(M([[1,0,1],[1,1,0],[0,1,1]])).steps, chk:{inv:[M([[1,0,1],[1,1,0],[0,1,1]]), inv(M([[1,0,1],[1,1,0],[0,1,1]]))]}},
+{id:'N-A3', t:'and', src:nt(9, '4.6'), q:`Nemandi segir að andhverfa ${D(T`A = \begin{bmatrix}3&1\\5&2\end{bmatrix}`)}sé annaðhvort ${D(T`P = \begin{bmatrix}2&-1\\-5&3\end{bmatrix}\quad\text{eða}\quad R = \begin{bmatrix}2&-5\\-1&3\end{bmatrix}`)}Hvort er rétt? Sýnið með margföldun.`,
+ steps:[
+  {titill:'Prófa P', stig:2, lausn: D(T`AP = \begin{bmatrix}6-5 & -3+3\\ 10-10 & -5+6\end{bmatrix} = \begin{bmatrix}1&0\\0&1\end{bmatrix}`)},
+  {titill:'Prófa R', stig:2, lausn: D(T`AR = \begin{bmatrix}6-1 & -15+3\\ 10-2 & -25+6\end{bmatrix} = \begin{bmatrix}5&-12\\8&-19\end{bmatrix} \ne I`)},
+  {titill:'Niðurstaða', stig:1, lausn:"<p>\\(P = A^{-1}\\). \\(R\\) er bylta rétta svarsins: algeng villa er að gleyma að bylta fylgiþáttafylkinu, eða bylta tvisvar.</p>"}],
+ chk:{inv:[M([[3,1],[5,2]]), M([[2,-1],[-5,3]])]}},
+{id:'N-A4', t:'and', src:nt(9, '4.6'), q:`Gefið er ${D(T`A = \begin{bmatrix}2&3\\1&2\end{bmatrix}`)}Sýnið með útreikningi að \\((A')^{-1} = (A^{-1})'\\).`,
+ steps:[
+  {titill:'A⁻¹ og (A⁻¹)′', stig:2, lausn: AL([T`|A| &= 4 - 3 = 1`, T`A^{-1} &= \begin{bmatrix}2&-3\\-1&2\end{bmatrix}, \qquad (A^{-1})' = \begin{bmatrix}2&-1\\-3&2\end{bmatrix}`])},
+  {titill:"(A′)⁻¹", stig:2, lausn: AL([T`A' &= \begin{bmatrix}2&1\\3&2\end{bmatrix}, \qquad |A'| = 4 - 3 = 1`, T`(A')^{-1} &= \begin{bmatrix}2&-1\\-3&2\end{bmatrix} = (A^{-1})'`])}],
+ chk:{inv:[tr(M([[2,3],[1,2]])), M([[2,-1],[-3,2]])]}},
+{id:'N-A5', t:'and', src:nt(9, '4.6'), q:`Gefin eru ${D(T`A = \begin{bmatrix}1&2\\0&1\end{bmatrix},\qquad B = \begin{bmatrix}1&0\\3&1\end{bmatrix}`)}<ol type="a"><li>Reiknið \\((AB)^{-1}\\).</li><li>Reiknið \\(B^{-1}A^{-1}\\) og \\(A^{-1}B^{-1}\\). Hvort er jafnt \\((AB)^{-1}\\)?</li></ol>`,
+ steps:[
+  {titill:'a) AB og andhverfa', stig:2, lausn: AL([T`AB &= \begin{bmatrix}1+6 & 2\\ 3 & 1\end{bmatrix} = \begin{bmatrix}7&2\\3&1\end{bmatrix}, \qquad |AB| = 7 - 6 = 1`, T`(AB)^{-1} &= \begin{bmatrix}1&-2\\-3&7\end{bmatrix}`])},
+  {titill:'b) Andhverfur hvors um sig', stig:1, lausn: D(T`A^{-1} = \begin{bmatrix}1&-2\\0&1\end{bmatrix},\qquad B^{-1} = \begin{bmatrix}1&0\\-3&1\end{bmatrix}`)},
+  {titill:'b) Margfeldin', stig:2, lausn: AL([T`B^{-1}A^{-1} &= \begin{bmatrix}1&-2\\-3&6+1\end{bmatrix} = \begin{bmatrix}1&-2\\-3&7\end{bmatrix} = (AB)^{-1}`, T`A^{-1}B^{-1} &= \begin{bmatrix}1+6 & -2\\ -3 & 1\end{bmatrix} = \begin{bmatrix}7&-2\\-3&1\end{bmatrix} \ne (AB)^{-1}`]) + '<p>Röðin snýst við: \\((AB)^{-1} = B^{-1}A^{-1}\\).</p>'}],
+ chk:{inv:[M([[7,2],[3,1]]), mmul(inv(M([[1,0],[3,1]])), inv(M([[1,2],[0,1]])))]}},
+{id:'N-A6', t:'and', src:nt(12, '5.4'), q:`Gefin eru ${D(T`A = \begin{bmatrix}2&1\\1&1\end{bmatrix},\qquad B = \begin{bmatrix}3&2\\1&1\end{bmatrix}`)}Finnið \\(X\\) þannig að \\(XA = B\\).`,
+ steps:[
+  {titill:'Einangra X: bakmargfalda', stig:2, lausn: D(T`XA = B \;\Rightarrow\; XAA^{-1} = BA^{-1} \;\Rightarrow\; X = BA^{-1}`) + '<p>Hér þarf að bakmargfalda. \\(A^{-1}B\\) væri rangt.</p>'},
+  {titill:'A⁻¹', stig:1, lausn: D(T`|A| = 2 - 1 = 1,\qquad A^{-1} = \begin{bmatrix}1&-1\\-1&2\end{bmatrix}`)},
+  {titill:'X og prófun', stig:2, lausn: D(T`X = \begin{bmatrix}3&2\\1&1\end{bmatrix}\begin{bmatrix}1&-1\\-1&2\end{bmatrix} = \begin{bmatrix}3-2 & -3+4\\ 1-1 & -1+2\end{bmatrix} = \begin{bmatrix}1&1\\0&1\end{bmatrix}`) + D(T`XA = \begin{bmatrix}1&1\\0&1\end{bmatrix}\begin{bmatrix}2&1\\1&1\end{bmatrix} = \begin{bmatrix}3&2\\1&1\end{bmatrix} = B`)}],
+ chk:{eq:[[mmul(M([[1,1],[0,1]]), M([[2,1],[1,1]])), M([[3,2],[1,1]])]]}},
+{id:'N-A7', t:'and', src:nt(12, '5.4'), q:`Gefið er ${D(T`A = \begin{bmatrix}a&1\\1&a\end{bmatrix}`)}<ol type="a"><li>Fyrir hvaða \\(a\\) er \\(A\\) andhverfanlegt?</li><li>Finnið \\(A^{-1}\\) almennt.</li><li>Reiknið \\(A^{-1}\\) fyrir \\(a = 2\\).</li></ol>`,
+ steps:[
+  {titill:'a) Ákveðan', stig:2, lausn: D(T`|A| = a^2 - 1 = (a-1)(a+1)`) + '<p>Andhverfanlegt ef og aðeins ef \\(a \\ne 1\\) og \\(a \\ne -1\\).</p>'},
+  {titill:'b) Almenn 2×2 regla', stig:2, lausn: D(T`A^{-1} = \frac{1}{a^2-1}\begin{bmatrix}a&-1\\-1&a\end{bmatrix}`)},
+  {titill:'c) a = 2', stig:1, lausn: D(T`A^{-1} = \frac{1}{3}\begin{bmatrix}2&-1\\-1&2\end{bmatrix} = \begin{bmatrix}\frac{2}{3}&-\frac{1}{3}\\-\frac{1}{3}&\frac{2}{3}\end{bmatrix}`)}],
+ chk:{inv:[M([[2,1],[1,2]]), M([[q(2,3), q(-1,3)], [q(-1,3), q(2,3)]])]}},
+{id:'N-A8', t:'and', src:nt(12, '5.4'), q:`Finnið andhverfur án langra útreikninga og rökstyðjið: ${D(T`D = \begin{bmatrix}2&0&0\\0&-1&0\\0&0&4\end{bmatrix},\qquad U = \begin{bmatrix}1&2\\0&3\end{bmatrix}`)}`,
+ steps:[
+  {titill:'Hornalínufylki', stig:2, lausn: D(T`D^{-1} = \begin{bmatrix}\frac{1}{2}&0&0\\0&-1&0\\0&0&\frac{1}{4}\end{bmatrix}`) + '<p>Hornalínufylki: snúa hverju hornalínustaki við. Prófun: \\(DD^{-1} = I\\).</p>'},
+  {titill:'2×2 reglan', stig:2, lausn: D(T`|U| = 3,\qquad U^{-1} = \frac{1}{3}\begin{bmatrix}3&-2\\0&1\end{bmatrix} = \begin{bmatrix}1&-\frac{2}{3}\\0&\frac{1}{3}\end{bmatrix}`)}],
+ chk:{inv:[M([[1,2],[0,3]]), M([[1, q(-2,3)], [0, q(1,3)]])]}},
+// ===== jof =====
+{id:'N-J1', t:'jof', src:nt(12, '5.5'), q:`Tveir markaðir með framboð og eftirspurn: ${D(T`\begin{aligned}Q_{d1} &= 10 - 2P_1 + P_2, & Q_{s1} &= 3 + P_1\\ Q_{d2} &= 12 + P_1 - P_2, & Q_{s2} &= 6 + P_2\end{aligned}`)}<ol type="a"><li>Setjið jafnvægisskilyrðin upp á fylkjaformi.</li><li>Finnið jafnvægisverðin með reglu Cramers.</li><li>Finnið jafnvægismagnið á hvorum markaði.</li></ol>`,
+ steps:[
+  {titill:'a) Jafnvægi: Q_d = Q_s', stig:2, lausn: AL([T`10 - 2P_1 + P_2 &= 3 + P_1 \;\Rightarrow\; 3P_1 - P_2 = 7`, T`12 + P_1 - P_2 &= 6 + P_2 \;\Rightarrow\; -P_1 + 2P_2 = 6`]) + D(T`\begin{bmatrix}3&-1\\-1&2\end{bmatrix}\begin{bmatrix}P_1\\P_2\end{bmatrix} = \begin{bmatrix}7\\6\end{bmatrix}`)},
+  ...pre('b)', bCramer(M([[3,-1],[-1,2]]), [7,6].map(Q.of), ['P_1','P_2']).steps.slice(1, 4)),
+  {titill:'c) Magn', stig:1, lausn: AL([T`Q_1 &= 3 + 4 = 7`, T`Q_2 &= 6 + 5 = 11`])}],
+ chk:{sys:[M([[3,-1],[-1,2]]), [7,6].map(Q.of), [4,5].map(Q.of)]}},
+{id:'N-J2', t:'jof', src:nt(12, '5.5') + ' · þjóðhagslíkan', q:`Einfalt þjóðhagslíkan: ${D(T`Y = C + I_0 + G_0,\qquad C = 50 + \tfrac{3}{4}Y,\qquad I_0 = 100,\quad G_0 = 150`)}<ol type="a"><li>Setjið líkanið upp á forminu \\(Ax = d\\) með \\(x = [Y\\;\\;C]'\\).</li><li>Finnið \\(Y^*\\) og \\(C^*\\) með reglu Cramers.</li></ol>`,
+ steps:[
+  {titill:'a) Innrænar breytur vinstra megin', stig:2, lausn: AL([T`Y - C &= 250`, T`-\tfrac{3}{4}Y + C &= 50`]) + D(T`\begin{bmatrix}1&-1\\-\frac{3}{4}&1\end{bmatrix}\begin{bmatrix}Y\\C\end{bmatrix} = \begin{bmatrix}250\\50\end{bmatrix}`)},
+  ...pre('b)', bCramer(M([[1,-1],[q(-3,4),1]]), [250,50].map(Q.of), ['Y','C']).steps.slice(1))],
+ chk:{sys:[M([[1,-1],[q(-3,4),1]]), [250,50].map(Q.of), [1200,950].map(Q.of)]}},
+{id:'N-J3', t:'jof', src:nt(12, '5.4'), q:`Leysið jöfnukerfið með því að finna fyrst andhverfu stuðlafylkisins. ${D(T`\begin{aligned}x_1 + 2x_2 + x_3 &= 0\\ x_2 &= -2\\ 2x_1 + 3x_3 &= 11\end{aligned}`)}`,
+ steps:(() => { const A = M([[1,2,1],[0,1,0],[2,0,3]]); const b = bInv3(A); const d = [0,-2,11].map(Q.of); const x = mmul(b.inv, d.map(v => [v]));
+  return [{titill:'Fylkjaform', stig:1, lausn: D(T`${tm(A)}\begin{bmatrix}x_1\\x_2\\x_3\end{bmatrix} = \begin{bmatrix}0\\-2\\11\end{bmatrix}`)}, ...b.steps.slice(0, 4),
+   {titill:'x = A⁻¹d', stig:2, lausn: AL(b.inv.map((r, i) => `x_${i+1}^* &= ` + r.map((c, k) => txp(c) + '\\cdot ' + txp(d[k])).join(' + ') + ' = ' + tx(x[i][0])))}]; })(),
+ chk:{sys:[M([[1,2,1],[0,1,0],[2,0,3]]), [0,-2,11].map(Q.of), [1,-2,3].map(Q.of)]}},
+{id:'N-J4', t:'jof', src:nt(10, '5.1'), q:`Hafa eftirfarandi kerfi ótvíræða lausn? Notið ákveðu og lýsið lausnamenginu.<ol type="a"><li>\\(x + 2y = 3\\) og \\(2x + 4y = 5\\)</li><li>\\(x + 2y = 3\\) og \\(2x + 4y = 6\\)</li></ol>`,
+ steps:[
+  {titill:'Ákveðan', stig:2, lausn: D(T`|A| = \begin{vmatrix}1&2\\2&4\end{vmatrix} = 4 - 4 = 0`) + '<p>Í báðum kerfum er \\(|A| = 0\\): raðirnar eru línulega háðar (\\(R_2 = 2R_1\\)), svo ekki er til ótvíræð lausn og hvorki \\(A^{-1}\\) né regla Cramers virkar.</p>'},
+  {titill:'a) Ósamrýmanlegt', stig:1, lausn:'<p>Tvöfalda fyrri jöfnu: \\(2x + 4y = 6 \\ne 5\\). Engin lausn (samsíða línur).</p>'},
+  {titill:'b) Óendanlega margar', stig:1, lausn:'<p>Seinni jafnan er tvöföld sú fyrri. Óendanlega margar lausnir: \\(x = 3 - 2y\\) fyrir öll \\(y\\) (sama línan).</p>'}]},
+{id:'N-J5', t:'jof', src:nt(12, '5.5'), q:`Jafnvægisverð þriggja tengdra markaða uppfylla ${D(T`\begin{aligned}2P_1 - P_2 &= 2\\ -P_1 + 3P_2 - P_3 &= 4\\ -P_2 + 2P_3 &= 6\end{aligned}`)}Finnið öll þrjú verðin með reglu Cramers.`,
+ steps: bCramer(M([[2,-1,0],[-1,3,-1],[0,-1,2]]), [2,4,6].map(Q.of), ['P_1','P_2','P_3']).steps, chk:{sys:[M([[2,-1,0],[-1,3,-1],[0,-1,2]]), [2,4,6].map(Q.of), [3,4,5].map(Q.of)]}},
+{id:'N-J6', t:'jof', src:nt(12, '5.5'), q:`Gefið er kerfið ${D(T`\begin{aligned}kx + y &= 1\\ x + y &= 2\end{aligned}`)}<ol type="a"><li>Fyrir hvaða \\(k\\) er til ótvíræð lausn?</li><li>Finnið \\(x\\) og \\(y\\) sem föll af \\(k\\) með reglu Cramers.</li><li>Reiknið lausnina fyrir \\(k = 3\\) og prófið.</li></ol>`,
+ steps:[
+  {titill:'a) |A| ≠ 0', stig:1, lausn: D(T`|A| = \begin{vmatrix}k&1\\1&1\end{vmatrix} = k - 1 \ne 0 \;\Leftrightarrow\; k \ne 1`)},
+  {titill:'b) Cramer', stig:3, lausn: AL([T`x^* &= \frac{\begin{vmatrix}1&1\\2&1\end{vmatrix}}{k-1} = \frac{1 - 2}{k-1} = -\frac{1}{k-1}`, T`y^* &= \frac{\begin{vmatrix}k&1\\1&2\end{vmatrix}}{k-1} = \frac{2k - 1}{k-1}`])},
+  {titill:'c) k = 3', stig:1, lausn: D(T`x^* = -\tfrac{1}{2},\qquad y^* = \tfrac{5}{2}`) + '<p>Prófun: \\(3\\cdot(-\\tfrac12) + \\tfrac52 = 1\\) og \\(-\\tfrac12 + \\tfrac52 = 2\\).</p>'}],
+ chk:{sys:[M([[3,1],[1,1]]), [1,2].map(Q.of), [q(-1,2), q(5,2)]]}},
+// ===== dif =====
+{id:'N-R1', t:'dif', src:nt(13, '7.2–7.3'), q:`Diffrið og þáttið svarið eins og hægt er: ${D(T`f(x) = (x^2 + 1)(3x - 2)^3`)}`,
+ steps:[
+  {titill:'Margfeldisregla með keðjureglu', stig:2, lausn: AL([T`u &= x^2 + 1, & u' &= 2x`, T`v &= (3x-2)^3, & v' &= 3(3x-2)^2\cdot 3 = 9(3x-2)^2`])},
+  {titill:"f′ = u′v + uv′", stig:1, lausn: D(T`f'(x) = 2x(3x-2)^3 + 9(x^2+1)(3x-2)^2`)},
+  {titill:'Taka (3x−2)² út fyrir sviga', stig:2, lausn: AL([T`f'(x) &= (3x-2)^2\left[2x(3x-2) + 9(x^2+1)\right]`, T`&= (3x-2)^2\left(6x^2 - 4x + 9x^2 + 9\right)`, T`&= (3x-2)^2(15x^2 - 4x + 9)`])}],
+ chk:{d1:[x => (x*x+1)*(3*x-2)**3, x => (3*x-2)**2*(15*x*x-4*x+9)]}},
+{id:'N-R2', t:'dif', src:nt(13, '7.2'), q:`Diffrið með deilingarreglunni og reiknið \\(f'(1)\\). ${D(T`f(x) = \frac{2x+1}{x^2+3}`)}`,
+ steps:[
+  {titill:'Skilgreina u og v', stig:1, lausn: AL([T`u &= 2x + 1, & u' &= 2`, T`v &= x^2 + 3, & v' &= 2x`])},
+  {titill:'Deilingarreglan', stig:2, lausn: AL([T`f'(x) &= \frac{2(x^2+3) - (2x+1)\cdot 2x}{(x^2+3)^2}`, T`&= \frac{2x^2 + 6 - 4x^2 - 2x}{(x^2+3)^2} = \frac{-2x^2 - 2x + 6}{(x^2+3)^2}`])},
+  {titill:"f′(1)", stig:1, lausn: D(T`f'(1) = \frac{-2 - 2 + 6}{4^2} = \frac{2}{16} = \frac{1}{8}`)}],
+ chk:{d1:[x => (2*x+1)/(x*x+3), x => (-2*x*x-2*x+6)/(x*x+3)**2]}},
+{id:'N-R3', t:'dif', src:nt(13, '7.3'), q:`Notið keðjuregluna:<ol type="a"><li>\\(f(x) = (3x^2 + 1)^5\\)</li><li>\\(g(x) = e^{x^2 - 3x}\\)</li><li>\\(h(x) = \\ln(x^2 + 4)\\)</li><li>\\(k(x) = \\sqrt{1 + 2x^3}\\)</li></ol>`,
+ steps:[
+  {titill:'a)', stig:1, lausn: D(T`f'(x) = 5(3x^2+1)^4\cdot 6x = 30x(3x^2+1)^4`)},
+  {titill:'b)', stig:1, lausn: D(T`g'(x) = (2x - 3)\,e^{x^2-3x}`)},
+  {titill:'c)', stig:1, lausn: D(T`h'(x) = \frac{2x}{x^2+4}`)},
+  {titill:'d)', stig:1, lausn: D(T`k'(x) = \tfrac12(1+2x^3)^{-1/2}\cdot 6x^2 = \frac{3x^2}{\sqrt{1+2x^3}}`)}],
+ chk:{d1:[x => (3*x*x+1)**5, x => 30*x*(3*x*x+1)**4], d1b:[x => Math.exp(x*x-3*x), x => (2*x-3)*Math.exp(x*x-3*x)], d1c:[x => Math.log(x*x+4), x => 2*x/(x*x+4)], d1d:[x => Math.sqrt(1+2*x**3), x => 3*x*x/Math.sqrt(1+2*x**3), true]}},
+{id:'N-R4', t:'dif', src:nt(13, '7.3 (andhverfureglan)'), q:`<ol type="a"><li>Sýnið að \\(y = x^3 + 2x + 1\\) eigi andhverft fall og finnið \\(\\frac{dx}{dy}\\) þegar \\(x = 1\\).</li><li>Sama fyrir \\(y = \\ln x + x\\), \\(x \\gt 0\\), almennt.</li></ol>`,
+ steps:[
+  {titill:'a) Stranglega vaxandi', stig:2, lausn: D(T`\frac{dy}{dx} = 3x^2 + 2 \gt 0`) + '<p>Fallið er stranglega vaxandi og á því andhverft fall.</p>'},
+  {titill:'a) Andhverfureglan', stig:1, lausn: D(T`\frac{dx}{dy} = \frac{1}{3x^2+2}\Big|_{x=1} = \frac{1}{5}`)},
+  {titill:'b)', stig:2, lausn: AL([T`\frac{dy}{dx} &= \frac{1}{x} + 1 = \frac{1+x}{x} \gt 0 \text{ fyrir } x \gt 0`, T`\frac{dx}{dy} &= \frac{x}{1+x}`])}]},
+{id:'N-R5', t:'dif', src:nt(13, '7.2 (meðalkostnaður)'), q:`Kostnaðarfall fyrirtækis er \\(C(Q) = 2Q^2 + 3Q + 50\\).<ol type="a"><li>Finnið meðalkostnað \\(AC = C/Q\\) og jaðarkostnað \\(MC\\).</li><li>Notið deilingarregluna til að sýna að \\(\\frac{d(AC)}{dQ} = \\frac{1}{Q}(MC - AC)\\).</li><li>Hvar er \\(AC\\) lágmarkaður og hvað gildir þar um \\(MC\\)?</li></ol>`,
+ steps:[
+  {titill:'a)', stig:1, lausn: AL([T`AC &= 2Q + 3 + \frac{50}{Q}`, T`MC &= C'(Q) = 4Q + 3`])},
+  {titill:'b) Deilingarregla', stig:2, lausn: AL([T`\frac{d}{dQ}\left(\frac{C}{Q}\right) &= \frac{C'(Q)\cdot Q - C\cdot 1}{Q^2}`, T`&= \frac{1}{Q}\left(C'(Q) - \frac{C}{Q}\right) = \frac{1}{Q}(MC - AC)`]) + '<p>Meðalkostnaður fellur meðan \\(MC \\lt AC\\) og hækkar þegar \\(MC \\gt AC\\).</p>'},
+  {titill:'c) Lágmark', stig:2, lausn: AL([T`\frac{d(AC)}{dQ} &= 2 - \frac{50}{Q^2} = 0 \;\Rightarrow\; Q^* = 5`, T`AC(5) &= 10 + 3 + 10 = 23`, T`MC(5) &= 20 + 3 = 23`]) + '<p>Í lágmarki meðalkostnaðar er \\(MC = AC\\).</p>'}],
+ chk:{d1:[x => (2*x*x+3*x+50)/x, x => 2 - 50/(x*x), true]}},
+{id:'N-R6', t:'dif', src:nt(13, '7.2 (jaðartekjur)'), q:`Andhverft eftirspurnarfall er \\(P = 100 - 2Q\\).<ol type="a"><li>Notið margfeldisregluna á \\(R = P(Q)\\cdot Q\\) til að finna jaðartekjur.</li><li>Fyrir hvaða \\(Q\\) eru jaðartekjur núll? Hvert er verðið þar?</li></ol>`,
+ steps:[
+  {titill:'a) Margfeldisregla', stig:3, lausn: AL([T`MR &= \frac{dR}{dQ} = P'(Q)\cdot Q + P(Q)\cdot 1`, T`&= -2Q + 100 - 2Q = 100 - 4Q`])},
+  {titill:'b)', stig:2, lausn: D(T`100 - 4Q = 0 \;\Rightarrow\; Q = 25,\qquad P = 100 - 50 = 50`) + '<p>Þar eru heildartekjur í hámarki.</p>'}]},
+{id:'N-R7', t:'dif', src:nt(13, '7.3'), q:`Gefið er \\(z = y^2\\), \\(y = 3x + 1\\) og \\(x = w^2 + 1\\). Finnið \\(\\frac{dz}{dw}\\) með keðjureglunni og reiknið gildið þegar \\(w = 1\\).`,
+ steps:[
+  {titill:'Hlekkirnir', stig:2, lausn: AL([T`\frac{dz}{dy} &= 2y, & \frac{dy}{dx} &= 3, & \frac{dx}{dw} &= 2w`])},
+  {titill:'Margfalda saman', stig:2, lausn: AL([T`\frac{dz}{dw} &= 2y\cdot 3\cdot 2w = 12wy`, T`&= 12w\left(3(w^2+1) + 1\right) = 12w(3w^2 + 4)`])},
+  {titill:'w = 1', stig:1, lausn: D(T`\frac{dz}{dw}\Big|_{w=1} = 12\cdot 1\cdot 7 = 84`)}],
+ chk:{d1:[w => (3*(w*w+1)+1)**2, w => 12*w*(3*w*w+4)]}},
+{id:'N-R8', t:'dif', src:nt(13, '7.2–7.3'), q:`Diffrið og einfaldið: ${D(T`f(x) = \frac{x^2e^{3x}}{x+1}`)}`,
+ steps:[
+  {titill:'Teljarinn með margfeldisreglu', stig:2, lausn: D(T`u = x^2e^{3x},\qquad u' = 2xe^{3x} + 3x^2e^{3x} = e^{3x}(2x + 3x^2)`)},
+  {titill:'Deilingarreglan', stig:2, lausn: D(T`f'(x) = \frac{e^{3x}(2x+3x^2)(x+1) - x^2e^{3x}\cdot 1}{(x+1)^2}`)},
+  {titill:'Einfalda', stig:2, lausn: AL([T`f'(x) &= \frac{e^{3x}\left(3x^3 + 5x^2 + 2x - x^2\right)}{(x+1)^2}`, T`&= \frac{x\,e^{3x}(3x^2 + 4x + 2)}{(x+1)^2}`])}],
+ chk:{d1:[x => x*x*Math.exp(3*x)/(x+1), x => x*Math.exp(3*x)*(3*x*x+4*x+2)/(x+1)**2]}},
+// ===== hlu =====
+{id:'N-H1', t:'hlu', src:nt(14, '7.4'), q:`Framleiðslufall er \\(Q = 4K^{1/2}L^{1/4}\\).<ol type="a"><li>Finnið jaðarframleiðni fjármagns og vinnuafls.</li><li>Finnið allar aðrar hlutafleiður og staðfestið setningu Young.</li><li>Reiknið jaðarframleiðnina þegar \\(K = L = 16\\).</li></ol>`,
+ steps:[
+  {titill:'a)', stig:2, lausn: AL([T`Q_K &= 4\cdot\tfrac12K^{-1/2}L^{1/4} = 2K^{-1/2}L^{1/4}`, T`Q_L &= 4\cdot\tfrac14K^{1/2}L^{-3/4} = K^{1/2}L^{-3/4}`])},
+  {titill:'b)', stig:3, lausn: AL([T`Q_{KK} &= -K^{-3/2}L^{1/4} \lt 0`, T`Q_{LL} &= -\tfrac34K^{1/2}L^{-7/4} \lt 0`, T`Q_{KL} &= 2\cdot\tfrac14K^{-1/2}L^{-3/4} = \tfrac12K^{-1/2}L^{-3/4}`, T`Q_{LK} &= \tfrac12K^{-1/2}L^{-3/4} = Q_{KL}`]) + '<p>Neikvæðar \\(Q_{KK}\\) og \\(Q_{LL}\\): minnkandi jaðarframleiðni.</p>'},
+  {titill:'c) K = L = 16', stig:2, lausn: AL([T`Q_K &= 2\cdot\tfrac14\cdot 2 = 1`, T`Q_L &= 4\cdot\tfrac18 = \tfrac12`]) + '<p>Notað: \\(16^{1/2} = 4\\), \\(16^{1/4} = 2\\), \\(16^{3/4} = 8\\).</p>'}],
+ chk:{part2:[p => 4*Math.sqrt(p[0])*p[1]**0.25, [16,16], [1, 0.5]]}},
+{id:'N-H2', t:'hlu', src:nt(14, '7.4'), q:`Nytjafall er \\(U(x,y) = \\ln x + 2\\ln y\\), \\(x, y \\gt 0\\).<ol type="a"><li>Finnið jaðarnyt hvorrar vöru.</li><li>Finnið jaðarstaðkvæmdarhlutfallið \\(MRS = U_x/U_y\\) og reiknið það í \\((2, 6)\\).</li></ol>`,
+ steps:[
+  {titill:'a)', stig:2, lausn: AL([T`U_x &= \frac{1}{x}`, T`U_y &= \frac{2}{y}`])},
+  {titill:'b)', stig:2, lausn: AL([T`MRS &= \frac{1/x}{2/y} = \frac{y}{2x}`, T`MRS(2,6) &= \frac{6}{4} = \frac{3}{2}`])}],
+ chk:{part2:[p => Math.log(p[0]) + 2*Math.log(p[1]), [2,6], [0.5, 1/3]]}},
+{id:'N-H3', t:'hlu', src:nt(14, '7.4'), q:`Finnið fyrstu hlutafleiðurnar og einfaldið: ${D(T`f(x,y) = \frac{x+y}{x-y}`)}`,
+ steps:[
+  {titill:'f_x: y fast', stig:2, lausn: D(T`f_x = \frac{1\cdot(x-y) - (x+y)\cdot 1}{(x-y)^2} = \frac{-2y}{(x-y)^2}`)},
+  {titill:'f_y: x fast', stig:2, lausn: D(T`f_y = \frac{1\cdot(x-y) - (x+y)\cdot(-1)}{(x-y)^2} = \frac{2x}{(x-y)^2}`)}],
+ chk:{part2:[p => (p[0]+p[1])/(p[0]-p[1]), [3,1], [-2/4, 6/4]]}},
+{id:'N-H4', t:'hlu', src:nt(14, '7.4'), q:`Gefið er \\(f(x,y,z) = x\\,e^{yz}\\). Finnið \\(f_x\\), \\(f_y\\), \\(f_z\\) og sýnið að \\(f_{yz} = f_{zy}\\).`,
+ steps:[
+  {titill:'Fyrstu hlutafleiður', stig:2, lausn: AL([T`f_x &= e^{yz}`, T`f_y &= xz\,e^{yz}`, T`f_z &= xy\,e^{yz}`])},
+  {titill:'Krossafleiður', stig:2, lausn: AL([T`f_{yz} &= \frac{\partial}{\partial z}(xz\,e^{yz}) = x\,e^{yz} + xz\cdot y\,e^{yz} = x\,e^{yz}(1 + yz)`, T`f_{zy} &= \frac{\partial}{\partial y}(xy\,e^{yz}) = x\,e^{yz} + xy\cdot z\,e^{yz} = x\,e^{yz}(1 + yz)`])}]},
+{id:'N-H5', t:'hlu', src:nt(14, '7.4'), q:`Gefið er \\(f(x,y) = x^3y^2\\). Finnið stigulinn \\(\\nabla f\\) og Hessian-fylkið í punktinum \\((1, 2)\\).`,
+ steps:[
+  {titill:'Stigull', stig:2, lausn: AL([T`f_x &= 3x^2y^2, & f_x(1,2) &= 12`, T`f_y &= 2x^3y, & f_y(1,2) &= 4`]) + D(T`\nabla f(1,2) = (12,\; 4)`)},
+  {titill:'Hessian', stig:3, lausn: AL([T`f_{xx} &= 6xy^2 = 24`, T`f_{yy} &= 2x^3 = 2`, T`f_{xy} &= 6x^2y = 12`]) + D(T`H(1,2) = \begin{bmatrix}24&12\\12&2\end{bmatrix}`)}],
+ chk:{part2:[p => p[0]**3*p[1]**2, [1,2], [12, 4]]}},
+{id:'N-H6', t:'hlu', src:nt(14, '7.4'), q:`Gefið er \\(f(x,y) = \\ln(x^2 + y^2)\\). Finnið \\(f_x\\), \\(f_y\\) og krossafleiðuna \\(f_{xy}\\).`,
+ steps:[
+  {titill:'Keðjureglan', stig:2, lausn: AL([T`f_x &= \frac{2x}{x^2+y^2}`, T`f_y &= \frac{2y}{x^2+y^2}`])},
+  {titill:'f_xy', stig:2, lausn: D(T`f_{xy} = \frac{\partial}{\partial y}\left(2x(x^2+y^2)^{-1}\right) = -2x(x^2+y^2)^{-2}\cdot 2y = -\frac{4xy}{(x^2+y^2)^2}`)}],
+ chk:{part2:[p => Math.log(p[0]**2 + p[1]**2), [1,2], [2/5, 4/5]]}},
+// ===== hes =====
+{id:'N-S1', t:'hes', src:nt(21, '11.4'), q:`Gefið er \\(f(x,y) = x^3 - 3x + y^2 - 4y\\).<ol type="a"><li>Finnið alla stöðupunkta.</li><li>Flokkið hvern þeirra með Hessian-fylkinu.</li></ol>`,
+ steps:[
+  {titill:'a) FGS', stig:2, lausn: AL([T`f_x &= 3x^2 - 3 = 0 \;\Rightarrow\; x = \pm 1`, T`f_y &= 2y - 4 = 0 \;\Rightarrow\; y = 2`]) + '<p>Stöðupunktar: \\((1, 2)\\) og \\((-1, 2)\\).</p>'},
+  {titill:'b) Hessian (háð x)', stig:1, lausn: D(T`H = \begin{bmatrix}6x&0\\0&2\end{bmatrix}`)},
+  {titill:'b) (1, 2)', stig:2, lausn: AL([T`|H_1| &= 6 \gt 0`, T`|H_2| &= 12 \gt 0`]) + '<p>Lágmark.</p>'},
+  {titill:'b) (−1, 2)', stig:2, lausn: AL([T`|H_1| &= -6`, T`|H_2| &= -12 \lt 0`]) + '<p>Söðulpunktur.</p>'}],
+ chk:{hess:[[mono(1,3,0), mono(-3,1,0), mono(1,0,2), mono(-4,0,1)], [1,2], 'min', [6,12]], hess2:[[mono(1,3,0), mono(-3,1,0), mono(1,0,2), mono(-4,0,1)], [-1,2], 'sod', [-6,-12]]}},
+{id:'N-S2', t:'hes', src:nt(21, '11.4'), q:`Fyrirtæki framleiðir tvær vörur í magni \\(x\\) og \\(y\\) með hagnaðarfall \\(\\pi = 10x + 8y - x^2 - xy - y^2\\).<ol type="a"><li>Finnið það magn sem uppfyllir fyrstu gráðu skilyrðin.</li><li>Sýnið með Hessian-fylkinu að um hámark sé að ræða.</li><li>Hver er hámarkshagnaðurinn?</li></ol>`,
+ steps:[
+  {titill:'a) FGS', stig:2, lausn: AL([T`\pi_x &= 10 - 2x - y = 0`, T`\pi_y &= 8 - x - 2y = 0`])},
+  {titill:'a) Leysa', stig:2, lausn: AL([T`2x + y &= 10`, T`x + 2y &= 8`, T`x^* &= \frac{\begin{vmatrix}10&1\\8&2\end{vmatrix}}{\begin{vmatrix}2&1\\1&2\end{vmatrix}} = \frac{12}{3} = 4, \qquad y^* = \frac{\begin{vmatrix}2&10\\1&8\end{vmatrix}}{3} = \frac{6}{3} = 2`])},
+  {titill:'b) Hessian', stig:2, lausn: D(T`H = \begin{bmatrix}-2&-1\\-1&-2\end{bmatrix},\qquad |H_1| = -2 \lt 0,\quad |H_2| = 4 - 1 = 3 \gt 0`) + '<p>Formerkin skiptast (−, +): hámark. Fylkið er fast, svo fallið er hvelft og hámarkið algilt.</p>'},
+  {titill:'c) Hagnaður', stig:1, lausn: D(T`\pi(4,2) = 40 + 16 - 16 - 8 - 4 = 28`)}],
+ chk:{hess:[[mono(10,1,0), mono(8,0,1), mono(-1,2,0), mono(-1,1,1), mono(-1,0,2)], [4,2], 'max', [-2,3]]}},
+{id:'N-S3', t:'hes', src:nt(14, '7.4 · Hessian'), q:`Er fallið \\(f(x,y) = x^{1/3}y^{1/3}\\), \\(x, y \\gt 0\\), hvelft eða kúpt? Notið Hessian-fylkið.`,
+ steps:[
+  {titill:'Hlutafleiður', stig:2, lausn: AL([T`f_x &= \tfrac13x^{-2/3}y^{1/3}, & f_y &= \tfrac13x^{1/3}y^{-2/3}`, T`f_{xx} &= -\tfrac29x^{-5/3}y^{1/3}, & f_{yy} &= -\tfrac29x^{1/3}y^{-5/3}`, T`f_{xy} &= \tfrac19x^{-2/3}y^{-2/3}`])},
+  {titill:'|H₁| og |H₂|', stig:2, lausn: AL([T`|H_1| &= -\tfrac29x^{-5/3}y^{1/3} \lt 0`, T`|H_2| &= \tfrac{4}{81}x^{-4/3}y^{-4/3} - \tfrac{1}{81}x^{-4/3}y^{-4/3} = \tfrac{3}{81}x^{-4/3}y^{-4/3} \gt 0`])},
+  {titill:'Niðurstaða', stig:1, lausn:'<p>Stranglega hvelft (\\(a + b = \\tfrac23 \\lt 1\\)).</p>'}],
+ chk:{cd:[1, 1/3, 1/3, 'shv', 1/27]}},
+{id:'N-S4', t:'hes', src:nt(14, '7.4 · Hessian'), q:`Kannið hvort \\(f(x,y) = x^2 + xy + y^2\\) sé hvelft, kúpt eða hvorugt.`,
+ steps:[
+  {titill:'Hessian', stig:2, lausn: D(T`f_{xx} = 2,\quad f_{yy} = 2,\quad f_{xy} = 1,\qquad H = \begin{bmatrix}2&1\\1&2\end{bmatrix}`)},
+  {titill:'Höfuðhlutákveður', stig:2, lausn: AL([T`|H_1| &= 2 \gt 0`, T`|H_2| &= 4 - 1 = 3 \gt 0`]) + '<p>Allar jákvæðar fyrir öll \\((x,y)\\): fallið er <b>stranglega kúpt</b>.</p>'}]},
+{id:'N-S5', t:'hes', src:nt(14, '7.4 · Hessian'), q:`Gefið er \\(f(x,y) = x^2 + axy + y^2\\). Fyrir hvaða gildi á \\(a\\) er fallið stranglega kúpt, kúpt en ekki stranglega, eða hvorugt?`,
+ steps:[
+  {titill:'Hessian', stig:1, lausn: D(T`H = \begin{bmatrix}2&a\\a&2\end{bmatrix},\qquad |H_1| = 2 \gt 0,\qquad |H_2| = 4 - a^2`)},
+  {titill:'Flokkun eftir a', stig:3, lausn:'<ul><li>\\(|a| \\lt 2\\): \\(|H_2| \\gt 0\\), <b>stranglega kúpt</b>.</li><li>\\(|a| = 2\\): \\(|H_2| = 0\\), <b>kúpt</b> en ekki stranglega, t.d. \\(f = (x \\pm y)^2\\).</li><li>\\(|a| \\gt 2\\): \\(|H_2| \\lt 0\\), <b>hvorki</b> hvelft né kúpt.</li></ul>'}]},
+{id:'N-S6', t:'hes', src:nt(21, '11.4'), q:`Gefið er \\(f(x,y,z) = -x^2 - y^2 - z^2 + xy + 2z\\).<ol type="a"><li>Finnið stöðupunktinn.</li><li>Notið leiðandi höfuðhlutákveður til að flokka hann.</li></ol>`,
+ steps:[
+  {titill:'a) FGS', stig:3, lausn: AL([T`f_x &= -2x + y = 0`, T`f_y &= x - 2y = 0`, T`f_z &= -2z + 2 = 0`]) + '<p>Fyrstu tvær gefa \\(y = 2x\\) og \\(x = 2y = 4x\\), svo \\(x = y = 0\\). Þriðja gefur \\(z = 1\\). Stöðupunktur: \\((0, 0, 1)\\).</p>'},
+  {titill:'b) Hessian', stig:1, lausn: D(T`H = \begin{bmatrix}-2&1&0\\1&-2&0\\0&0&-2\end{bmatrix}`)},
+  {titill:'b) Höfuðhlutákveður', stig:3, lausn: AL([T`|H_1| &= -2 \lt 0`, T`|H_2| &= 4 - 1 = 3 \gt 0`, T`|H_3| &= -2\cdot|H_2| = -6 \lt 0`]) + '<p>Liðað eftir röð 3. Formerkin skiptast (−, +, −): <b>hámark</b>.</p>'}],
+ chk:{hess:[[mono(-1,2,0,0), mono(-1,0,2,0), mono(-1,0,0,2), mono(1,1,1,0), mono(2,0,0,1)], [0,0,1], 'max', [-2,3,-6]]}},
+{id:'N-S7', t:'hes', src:nt(21, '11.4') + ' · sbr. dæmi 45', q:`Fyrirtæki með framleiðslufall \\(Q = K^{1/2}L^{1/4}\\) selur á verðinu \\(p = 4\\) og greiðir \\(r = 1\\) fyrir fjármagn og \\(w = 1\\) fyrir vinnuafl.<ol type="a"><li>Ritið hagnaðarfallið og fyrstu gráðu skilyrðin.</li><li>Leysið fyrir \\(K^*\\) og \\(L^*\\).</li><li>Sýnið að annarrar gráðu skilyrðin fyrir hámarki séu uppfyllt.</li></ol>`,
+ steps:[
+  {titill:'a) Hagnaður og FGS', stig:2, lausn: D(T`\pi = 4K^{1/2}L^{1/4} - K - L`) + AL([T`\pi_K &= 2K^{-1/2}L^{1/4} - 1 = 0`, T`\pi_L &= K^{1/2}L^{-3/4} - 1 = 0`])},
+  {titill:'b) Leysa', stig:3, lausn: AL([T`\text{Úr } \pi_L:\quad K^{1/2} &= L^{3/4}`, T`\text{Inn í } \pi_K:\quad 2L^{1/4} &= L^{3/4} \;\Rightarrow\; L^{1/2} = 2`, T`L^* &= 4,\qquad K^* = (4^{3/4})^2 = 4^{3/2} = 8`])},
+  {titill:'c) Aðrar hlutafleiður í (8, 4)', stig:3, lausn: AL([T`\pi_{KK} &= -K^{-3/2}L^{1/4} = -\tfrac{1}{16\sqrt2}\cdot\sqrt2 = -\tfrac{1}{16}`, T`\pi_{LL} &= -\tfrac34K^{1/2}L^{-7/4} = -\tfrac34\cdot 2\sqrt2\cdot\tfrac{1}{8\sqrt2} = -\tfrac{3}{16}`, T`\pi_{KL} &= \tfrac12K^{-1/2}L^{-3/4} = \tfrac12\cdot\tfrac{1}{2\sqrt2}\cdot\tfrac{1}{2\sqrt2} = \tfrac{1}{16}`])},
+  {titill:'c) Höfuðhlutákveður', stig:2, lausn: AL([T`|H_1| &= -\tfrac{1}{16} \lt 0`, T`|H_2| &= \tfrac{3}{256} - \tfrac{1}{256} = \tfrac{1}{128} \gt 0`]) + '<p>Formerkin (−, +): hámark.</p>'}],
+ chk:{part2:[p => 4*Math.sqrt(p[0])*p[1]**0.25 - p[0] - p[1], [8,4], [0, 0]]}},
+// ===== mis =====
+{id:'N-M1', t:'mis', src:nt(15, '8.1'), q:`Gefið er \\(y = 3x^2 - 2x\\).<ol type="a"><li>Reiknið \\(dy\\) þegar \\(x = 2\\) og \\(dx = 0{,}1\\).</li><li>Reiknið raunbreytinguna \\(\\Delta y\\) og skekkjuliðinn.</li></ol>`,
+ steps:[
+  {titill:'a)', stig:2, lausn: AL([T`dy &= f'(x)\,dx = (6x - 2)\,dx`, T`dy &= 10\cdot 0{,}1 = 1`])},
+  {titill:'b)', stig:3, lausn: AL([T`f(2{,}1) &= 3\cdot 4{,}41 - 4{,}2 = 9{,}03`, T`f(2) &= 12 - 4 = 8`, T`\Delta y &= 9{,}03 - 8 = 1{,}03`, T`\Delta y - dy &= 0{,}03 = 3\,(dx)^2`]) + '<p>Skekkjan er af stærðargráðu \\((dx)^2\\) og hverfur hraðar en \\(dx\\).</p>'}]},
+{id:'N-M2', t:'mis', src:nt(15, '8.2'), q:`Gefið er \\(z = x^2y + \\ln(xy)\\), \\(x, y \\gt 0\\). Finnið \\(dz\\) og reiknið það í \\((1, 2)\\) þegar \\(dx = 0{,}1\\) og \\(dy = -0{,}2\\).`,
+ steps:[
+  {titill:'Hlutafleiður', stig:2, lausn: D(T`z = x^2y + \ln x + \ln y`) + AL([T`z_x &= 2xy + \frac{1}{x}`, T`z_y &= x^2 + \frac{1}{y}`])},
+  {titill:'dz', stig:1, lausn: D(T`dz = \left(2xy + \frac{1}{x}\right)dx + \left(x^2 + \frac{1}{y}\right)dy`)},
+  {titill:'Innsetning', stig:2, lausn: AL([T`z_x(1,2) &= 4 + 1 = 5, \qquad z_y(1,2) = 1 + \tfrac12 = \tfrac32`, T`dz &= 5\cdot 0{,}1 + \tfrac32\cdot(-0{,}2) = 0{,}5 - 0{,}3 = 0{,}2`])}],
+ chk:{part2:[p => p[0]**2*p[1] + Math.log(p[0]*p[1]), [1,2], [5, 1.5]]}},
+{id:'N-M3', t:'mis', src:nt(15, '8.3'), q:`Notið reglur um mismun (ekki afleiður beint) til að finna \\(dy\\):<ol type="a"><li>\\(y = (x^2 + 1)x^3\\)</li><li>\\(y = \\dfrac{x+1}{x-1}\\)</li><li>\\(y = 5u^3\\) þar sem \\(u\\) er breyta.</li></ol>`,
+ steps:[
+  {titill:'a) d(uv) = v du + u dv', stig:2, lausn: AL([T`dy &= x^3\,d(x^2+1) + (x^2+1)\,d(x^3)`, T`&= x^3\cdot 2x\,dx + (x^2+1)\cdot 3x^2\,dx = (5x^4 + 3x^2)\,dx`])},
+  {titill:'b) d(u/v) = (v du − u dv)/v²', stig:2, lausn: AL([T`dy &= \frac{(x-1)\,dx - (x+1)\,dx}{(x-1)^2}`, T`&= \frac{-2}{(x-1)^2}\,dx`])},
+  {titill:'c) d(cuⁿ) = cnuⁿ⁻¹du', stig:1, lausn: D(T`dy = 15u^2\,du`)}],
+ chk:{d1:[x => (x*x+1)*x**3, x => 5*x**4 + 3*x*x], d1b:[x => (x+1)/(x-1), x => -2/(x-1)**2]}},
+{id:'N-M4', t:'mis', src:'C&W 8.1 (teygni, aukaefni)', q:`Eftirspurnin er \\(Q = 120 - 3P\\).<ol type="a"><li>Notið mismun til að finna punktteygnina sem fall af \\(P\\).</li><li>Reiknið hana við \\(P = 10\\) og \\(P = 30\\) og túlkið.</li><li>Við hvaða verð er einingarteygni?</li></ol><p class="hint">Teygni kemur ekki fyrir í fyrirlestrarnótunum; hún er í C&W 8.1.</p>`,
+ steps:[
+  {titill:'a)', stig:2, lausn: AL([T`dQ &= -3\,dP`, T`\varepsilon &= \frac{dQ/Q}{dP/P} = \frac{dQ}{dP}\cdot\frac{P}{Q} = \frac{-3P}{120 - 3P}`])},
+  {titill:'b)', stig:2, lausn: AL([T`\varepsilon(10) &= \frac{-30}{90} = -\frac13 \quad (\text{óteygin})`, T`\varepsilon(30) &= \frac{-90}{30} = -3 \quad (\text{teygin})`])},
+  {titill:'c)', stig:1, lausn: D(T`\frac{3P}{120 - 3P} = 1 \;\Rightarrow\; 6P = 120 \;\Rightarrow\; P = 20`)}]},
+{id:'N-M5', t:'mis', src:nt(15, '8.2') + ' · vaxtarbókhald', q:`Framleiðsla er \\(Y = AK^{0{,}3}L^{0{,}7}\\) með \\(A\\) fast.<ol type="a"><li>Finnið heildarmismuninn \\(dY\\).</li><li>Sýnið að \\(\\frac{dY}{Y} = 0{,}3\\frac{dK}{K} + 0{,}7\\frac{dL}{L}\\).</li><li>Fjármagn eykst um 2% og vinnuafl um 1%. Hver er áætluð hlutfallsleg breyting framleiðslu?</li></ol>`,
+ steps:[
+  {titill:'a)', stig:2, lausn: AL([T`dY &= Y_K\,dK + Y_L\,dL`, T`&= 0{,}3AK^{-0{,}7}L^{0{,}7}\,dK + 0{,}7AK^{0{,}3}L^{-0{,}3}\,dL`])},
+  {titill:'b) Deila með Y', stig:2, lausn: AL([T`Y_K &= 0{,}3\frac{Y}{K}, \qquad Y_L = 0{,}7\frac{Y}{L}`, T`\frac{dY}{Y} &= 0{,}3\frac{dK}{K} + 0{,}7\frac{dL}{L}`])},
+  {titill:'c)', stig:1, lausn: D(T`\frac{dY}{Y} = 0{,}3\cdot 2\% + 0{,}7\cdot 1\% = 0{,}6\% + 0{,}7\% = 1{,}3\%`)}]},
+{id:'N-M6', t:'mis', src:nt(15, '8.2'), q:`Nytjafall er \\(U = x^{1/2}y^{1/2}\\). Notið heildarmismun með \\(dU = 0\\) til að finna halla jafnnytjaferilsins \\(\\frac{dy}{dx}\\) og reiknið hann í \\((4, 9)\\).`,
+ steps:[
+  {titill:'Heildarmismunur', stig:2, lausn: D(T`dU = \tfrac12x^{-1/2}y^{1/2}\,dx + \tfrac12x^{1/2}y^{-1/2}\,dy`)},
+  {titill:'dU = 0', stig:2, lausn: AL([T`\frac{dy}{dx} &= -\frac{U_x}{U_y} = -\frac{\tfrac12x^{-1/2}y^{1/2}}{\tfrac12x^{1/2}y^{-1/2}} = -\frac{y}{x}`, T`\frac{dy}{dx}\Big|_{(4,9)} &= -\frac{9}{4}`])}]},
+{id:'N-M7', t:'mis', src:nt(15, '8.2') + ' · margfaldari', q:`Í hagkerfi gildir \\(Y = C + I\\) og \\(C = 100 + 0{,}8Y\\). Notið mismun til að finna hve mikið \\(Y\\) breytist ef fjárfesting eykst um \\(dI = 10\\).`,
+ steps:[
+  {titill:'Mismunur beggja jafna', stig:2, lausn: AL([T`dY &= dC + dI`, T`dC &= 0{,}8\,dY`])},
+  {titill:'Leysa fyrir dY', stig:2, lausn: AL([T`dY &= 0{,}8\,dY + dI`, T`0{,}2\,dY &= dI \;\Rightarrow\; dY = 5\,dI`, T`dY &= 5\cdot 10 = 50`]) + '<p>Margfaldarinn er \\(1/(1-0{,}8) = 5\\).</p>'}]},
+{id:'N-M8', t:'mis', src:nt(15, '8.2'), q:`Gefið er \\(z = 3x^2y - 2xy^3\\). Reiknið \\(dz\\) í punktinum \\((1, -1)\\) þegar \\(dx = 0{,}1\\) og \\(dy = 0{,}05\\).`,
+ steps:[
+  {titill:'Hlutafleiður', stig:2, lausn: AL([T`z_x &= 6xy - 2y^3, & z_x(1,-1) &= -6 + 2 = -4`, T`z_y &= 3x^2 - 6xy^2, & z_y(1,-1) &= 3 - 6 = -3`])},
+  {titill:'dz', stig:2, lausn: D(T`dz = -4\cdot 0{,}1 + (-3)\cdot 0{,}05 = -0{,}4 - 0{,}15 = -0{,}55`)}],
+ chk:{part2:[p => 3*p[0]**2*p[1] - 2*p[0]*p[1]**3, [1,-1], [-4, -3]]}},
+{id:'N-M9', t:'mis', src:'C&W 8.1 (teygni, aukaefni)', q:`Finnið punktteygnina \\(\\varepsilon = \\frac{dy}{dx}\\cdot\\frac{x}{y}\\):<ol type="a"><li>\\(y = 5x^3\\) almennt.</li><li>\\(y = x^2 + 2x\\) þegar \\(x = 2\\).</li></ol>`,
+ steps:[
+  {titill:'a) Veldisfall: föst teygni', stig:2, lausn: D(T`\varepsilon = 15x^2\cdot\frac{x}{5x^3} = 3`)},
+  {titill:'b)', stig:2, lausn: AL([T`\frac{dy}{dx} &= 2x + 2 = 6, \qquad y(2) = 8`, T`\varepsilon &= 6\cdot\frac{2}{8} = \frac{3}{2}`])}]},
+];
+
+// ===== data_final.js =====
+// ---------- föst dæmi fyrir lokaprófið ----------
+// einföld fallamynd (SVG) með litatáknum
+function fnSvg(o){
+  const W = 320, H = Math.round(W * (o.h || 0.7)); const {xmin, xmax, ymin, ymax} = o;
+  const X = x => ((x - xmin) / (xmax - xmin) * W).toFixed(1), Y = y => ((ymax - y) / (ymax - ymin) * H).toFixed(1);
+  let g = `<line x1="0" y1="${Y(0)}" x2="${W}" y2="${Y(0)}" class="va"/><line x1="${X(0)}" y1="0" x2="${X(0)}" y2="${H}" class="va"/>`;
+  (o.asym || []).forEach(a => { g += `<line x1="${X(a)}" y1="0" x2="${X(a)}" y2="${H}" class="vg" stroke-dasharray="4 4"/>`; });
+  (o.curves || []).forEach((c, i) => { let d = '', pen = false; const n = 240;
+    for (let k = 0; k <= n; k++) { const x = xmin + (xmax - xmin) * k / n; const y = c.f(x); if (!Number.isFinite(y) || y > ymax || y < ymin || (c.dom && !c.dom(x))) { pen = false; continue; } d += (pen ? 'L' : 'M') + X(x) + ' ' + Y(y) + ' '; pen = true; }
+    g += `<path d="${d}" class="pc${c.cls ?? i}"/>`; if (c.label) g += `<text x="${X(c.lx)}" y="${Y(c.ly)}" class="pt${c.cls ?? i}">${c.label}</text>`; });
+  (o.points || []).forEach(p => { g += `<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="3.5" class="pdot"/><text x="${+X(p.x) + 6}" y="${+Y(p.y) - 6}" class="plbl">${p.label}</text>`; });
+  return `<div class="svgwrap plot"><svg viewBox="-24 -16 ${W + 48} ${H + 32}" style="width:100%;max-width:${W + 48}px;height:auto" role="img" aria-label="${o.alt || 'Mynd af falli'}"><rect x="0" y="0" width="${W}" height="${H}" class="pbg"/>${g}</svg></div>`;
+}
+const DB = n => `Dæmablað, dæmi ${n}`;
+const FINAL_PROBS = [
+// ================= Diffrun og föll af einni breytu (dæmablað) =================
+{id:'D8', t:'dif', src:DB(8), q:`Finnið fyrstu afleiður (a, b, c jákvæðir fastar):<ol type="a"><li>\\(a\\)</li><li>\\(ax^3 + bx^{-2}\\)</li><li>\\(a\\sqrt{x} + b\\)</li><li>\\(\\ln(ax + b)\\)</li><li>\\(ae^{bx+c}\\)</li><li>\\(ab^{x}\\)</li><li>\\(x^2\\ln x\\)</li><li>\\((ax^3 + bx^{-2})^2\\)</li><li>\\(ab^{\\ln x}\\)</li><li>\\(e^{ax}\\)</li></ol>`,
+ steps:[
+  {titill:'a)–c) Veldisreglan', stig:2, lausn: AL([T`(a)' &= 0`, T`(ax^3 + bx^{-2})' &= 3ax^2 - 2bx^{-3}`, T`(a\sqrt{x} + b)' &= \tfrac{a}{2}x^{-1/2} = \frac{a}{2\sqrt{x}}`])},
+  {titill:'d)–f) Lograr og veldisföll', stig:2, lausn: AL([T`(\ln(ax+b))' &= \frac{a}{ax + b}`, T`(ae^{bx+c})' &= ab\,e^{bx+c}`, T`(ab^{x})' &= ab^{x}\ln b`])},
+  {titill:'g)–h) Margfeldi og keðja', stig:2, lausn: AL([T`(x^2\ln x)' &= 2x\ln x + x^2\cdot\tfrac{1}{x} = 2x\ln x + x`, T`((ax^3 + bx^{-2})^2)' &= 2(ax^3 + bx^{-2})(3ax^2 - 2bx^{-3})`])},
+  {titill:'i)–j) Keðjureglan', stig:2, lausn: AL([T`(ab^{\ln x})' &= ab^{\ln x}\ln b\cdot\frac{1}{x}`, T`(e^{ax})' &= a\,e^{ax}`])}]},
+{id:'D10', t:'dif', src:DB(10), q:`Finnið fyrstu og aðra afleiðu:<ol type="a"><li>\\(f(x) = (2x + 3)(3x^2)\\)</li><li>\\(f(x) = (4x - 7)^3\\)</li><li>\\(f(x) = \\sqrt{4 + x^4}\\)</li></ol>`,
+ steps:[
+  {titill:'a)', stig:2, lausn: AL([T`f(x) &= 6x^3 + 9x^2`, T`f'(x) &= 18x^2 + 18x`, T`f''(x) &= 36x + 18`])},
+  {titill:'b)', stig:2, lausn: AL([T`f'(x) &= 3(4x-7)^2\cdot 4 = 12(4x - 7)^2`, T`f''(x) &= 24(4x - 7)\cdot 4 = 96(4x - 7)`])},
+  {titill:'c)', stig:3, lausn: AL([T`f'(x) &= \tfrac12(4 + x^4)^{-1/2}\cdot 4x^3 = \frac{2x^3}{\sqrt{4 + x^4}}`, T`f''(x) &= \frac{6x^2\sqrt{4+x^4} - 2x^3\cdot\frac{2x^3}{\sqrt{4+x^4}}}{4 + x^4} = \frac{2x^2(x^4 + 12)}{(4 + x^4)^{3/2}}`])}],
+ chk:{d1:[x => (2*x+3)*3*x*x, x => 18*x*x + 18*x], d1b:[x => (4*x-7)**3, x => 12*(4*x-7)**2], d1c:[x => 2*x**3/Math.sqrt(4+x**4), x => 2*x*x*(x**4+12)/(4+x**4)**1.5]}},
+{id:'D11', t:'dif', src:DB(11), q:`Diffrið (a, b, c jákvæðir fastar):<ol type="a"><li>\\(f(x) = \\left((x^2 + a)^3 + bx\\right)^2\\)</li><li>\\(f(x) = ax^b(\\ln x + x)\\)</li><li>\\(f(x) = \\frac{a}{x^b} + \\cos(cx)\\)</li></ol>`,
+ steps:[
+  {titill:'a) Keðjureglan tvisvar', stig:3, lausn: D(T`f'(x) = 2\left((x^2 + a)^3 + bx\right)\cdot\left(3(x^2 + a)^2\cdot 2x + b\right) = 2\left((x^2+a)^3 + bx\right)\left(6x(x^2+a)^2 + b\right)`)},
+  {titill:'b) Margfeldisreglan', stig:2, lausn: AL([T`f'(x) &= abx^{b-1}(\ln x + x) + ax^b\left(\tfrac{1}{x} + 1\right)`, T`&= ax^{b-1}\left(b\ln x + bx + 1 + x\right)`])},
+  {titill:'c)', stig:2, lausn: D(T`f'(x) = -abx^{-b-1} - c\sin(cx)`)}]},
+{id:'D12', t:'ein', src:DB(12), q:`Fyrir liggur fallið \\(f(x) = x^3 - 2x\\).<ol type="a"><li>Finnið öll útmörk fallsins.</li><li>Kannið hvort útmörkin séu hámörk eða lágmörk.</li><li>Rissið upp graf fallsins.</li></ol>`,
+ steps:[
+  {titill:'a) FGS', stig:2, lausn: D(T`f'(x) = 3x^2 - 2 = 0 \;\Rightarrow\; x = \pm\sqrt{\tfrac23} = \pm\frac{\sqrt6}{3}`)},
+  {titill:'b) f″', stig:2, lausn: AL([T`f''(x) &= 6x`, T`f''\!\left(-\tfrac{\sqrt6}{3}\right) &= -2\sqrt6 \lt 0 \;\Rightarrow\; \text{staðbundið hámark},\; f = \tfrac{4\sqrt6}{9}`, T`f''\!\left(\tfrac{\sqrt6}{3}\right) &= 2\sqrt6 \gt 0 \;\Rightarrow\; \text{staðbundið lágmark},\; f = -\tfrac{4\sqrt6}{9}`])},
+  {titill:'c) Riss', stig:2, lausn: fnSvg({xmin:-2.2, xmax:2.2, ymin:-3, ymax:3, curves:[{f:x => x**3 - 2*x}], points:[{x:-0.816, y:1.089, label:'hámark'}, {x:0.816, y:-1.089, label:'lágmark'}, {x:0, y:0, label:'beygjuskil'}], alt:'Graf x³ − 2x'}) + '<p>Skurðpunktar við x-ás: \\(x = 0\\) og \\(x = \\pm\\sqrt2\\). Beygjuskil í \\(x = 0\\).</p>'}],
+ chk:{close:[[3*(Math.sqrt(6)/3)**2 - 2, 0], [(Math.sqrt(6)/3)**3 - 2*Math.sqrt(6)/3, -4*Math.sqrt(6)/9]]}},
+{id:'D13', t:'ein', src:DB(13), q:`Fyrir liggur fallið \\(f(x) = -2x^2 + 5\\).<ol type="a"><li>Finnið öll útmörk.</li><li>Hámark eða lágmark?</li><li>Rissið grafið.</li></ol>`,
+ steps:[
+  {titill:'a)–b)', stig:3, lausn: AL([T`f'(x) &= -4x = 0 \;\Rightarrow\; x = 0`, T`f''(x) &= -4 \lt 0`]) + '<p>\\(x = 0\\) er hámark, \\(f(0) = 5\\). Þar sem \\(f\'\' \\lt 0\\) alls staðar er fallið stranglega hvelft og hámarkið <b>algilt</b>.</p>'},
+  {titill:'c) Riss', stig:1, lausn: fnSvg({xmin:-3, xmax:3, ymin:-4, ymax:6, curves:[{f:x => -2*x*x + 5}], points:[{x:0, y:5, label:'(0, 5)'}], alt:'Graf −2x² + 5'}) + '<p>Skurðpunktar við x-ás: \\(x = \\pm\\sqrt{5/2}\\).</p>'}]},
+{id:'D14', t:'ein', src:DB(14), q:`Fyrir liggur fallið \\(f(x) = e^{x-1} - x\\).<ol type="a"><li>Finnið öll útmörk.</li><li>Hámark eða lágmark?</li><li>Rissið grafið.</li></ol>`,
+ steps:[
+  {titill:'a) FGS', stig:2, lausn: D(T`f'(x) = e^{x-1} - 1 = 0 \;\Rightarrow\; e^{x-1} = 1 \;\Rightarrow\; x = 1`)},
+  {titill:'b) AGS', stig:2, lausn: D(T`f''(x) = e^{x-1} \gt 0`) + '<p>Stranglega kúpt alls staðar, svo \\(x = 1\\) er <b>algilt lágmark</b> með \\(f(1) = e^0 - 1 = 0\\).</p>'},
+  {titill:'c) Riss', stig:1, lausn: fnSvg({xmin:-2, xmax:3, ymin:-0.5, ymax:4, curves:[{f:x => Math.exp(x - 1) - x}], points:[{x:1, y:0, label:'(1, 0)'}, {x:0, y:Math.exp(-1), label:'(0, 1/e)'}], alt:'Graf e^(x−1) − x'})}]},
+{id:'D15', t:'ein', src:DB(15), q:`Fyrir liggur fallið ${D(T`f(x) = \frac{8x}{3x^2 + 4}`)}<ol type="a"><li>Finnið öll útmörk.</li><li>Hámörk eða lágmörk?</li><li>Rissið grafið.</li></ol>`,
+ steps:[
+  {titill:'a) Deilingarreglan', stig:2, lausn: AL([T`f'(x) &= \frac{8(3x^2 + 4) - 8x\cdot 6x}{(3x^2+4)^2} = \frac{32 - 24x^2}{(3x^2 + 4)^2}`, T`f'(x) = 0 &\;\Rightarrow\; x^2 = \tfrac43 \;\Rightarrow\; x = \pm\frac{2}{\sqrt3}`])},
+  {titill:'b) Formerkjagreining á f′', stig:3, lausn:'<p>Nefnarinn er alltaf jákvæður, svo formerki \\(f\'\\) ræðst af \\(32 - 24x^2\\): jákvætt fyrir \\(|x| \\lt 2/\\sqrt3\\), neikvætt utan þess.</p>' + AL([T`x = -\tfrac{2}{\sqrt3}: &\quad f' \text{ fer úr } - \text{ í } + \;\Rightarrow\; \text{lágmark},\; f = -\tfrac{2}{\sqrt3}`, T`x = \tfrac{2}{\sqrt3}: &\quad f' \text{ fer úr } + \text{ í } - \;\Rightarrow\; \text{hámark},\; f = \tfrac{2}{\sqrt3}`]) + '<p>Þar sem \\(f \\to 0\\) þegar \\(x \\to \\pm\\infty\\) eru þetta algild útmörk.</p>'},
+  {titill:'c) Riss', stig:1, lausn: fnSvg({xmin:-5, xmax:5, ymin:-1.5, ymax:1.5, curves:[{f:x => 8*x/(3*x*x + 4)}], points:[{x:1.155, y:1.155, label:'hámark'}, {x:-1.155, y:-1.155, label:'lágmark'}], alt:'Graf 8x/(3x²+4)'})}],
+ chk:{d1:[x => 8*x/(3*x*x+4), x => (32-24*x*x)/(3*x*x+4)**2]}},
+{id:'D16', t:'ein', src:DB(16), q:`Gefið er fallið ${D(T`f(x) = \frac{6x}{\frac12x + 5}`)}<ol type="a"><li>Hvert er formengið?</li><li>Er fallið diffranlegt í öllum punktum?</li><li>Diffrið fallið.</li><li>Er fallið vaxandi eða minnkandi?</li><li>Finnið \\(f(1)\\) og \\(f'(1)\\) og útskýrið.</li></ol>`,
+ steps:[
+  {titill:'a)–b) Formengi', stig:2, lausn: D(T`f(x) = \frac{12x}{x + 10}, \qquad D = \{x \mid x \ne -10\}`) + '<p>Fallið er diffranlegt í öllum punktum formengisins (deiling tveggja margliða þar sem nefnari er ekki 0).</p>'},
+  {titill:'c) Deilingarreglan', stig:2, lausn: D(T`f'(x) = \frac{12(x + 10) - 12x}{(x+10)^2} = \frac{120}{(x + 10)^2}`)},
+  {titill:'d) Vaxandi', stig:1, lausn:'<p>\\(f\'(x) \\gt 0\\) fyrir öll \\(x \\ne -10\\): fallið er vaxandi á hvoru bili formengisins.</p>'},
+  {titill:'e) f(1) og f′(1)', stig:2, lausn: AL([T`f(1) &= \frac{12}{11}`, T`f'(1) &= \frac{120}{121}`]) + '<p>\\(f(1)\\) er fallgildið; \\(f\'(1)\\) er halli snertilsins í \\(x = 1\\): ef \\(x\\) eykst um eina einingu eykst \\(f\\) um u.þ.b. \\(120/121\\).</p>'}],
+ chk:{d1:[x => 6*x/(x/2+5), x => 120/(x+10)**2]}},
+// ================= Heildarafleiður, fólgin föll, einsleitni, Taylor, útmörk (dæmablað 35–46) =================
+{id:'D35', t:'mis', src:DB(35), q:`Ritið líkingar fyrir heildarafleiður:<ol type="a"><li>${D(T`f(x) = f\big(g(x),\, ax,\, h(x),\, g(x) + h(x)\big)`)}</li><li>${D(T`f(x) = f(x,\, \ln x,\, x + e^x)`)}</li></ol>`,
+ steps:[
+  {titill:'Aðferð', stig:1, lausn:'<p>Taka heildarmismun, deila með \\(dx\\). \\(f_i\\) er hlutafleiða m.t.t. \\(i\\)-ta sætis.</p>'},
+  {titill:'a)', stig:3, lausn: D(T`\frac{df}{dx} = f_1\,g'(x) + f_2\,a + f_3\,h'(x) + f_4\left(g'(x) + h'(x)\right)`)},
+  {titill:'b)', stig:2, lausn: D(T`\frac{df}{dx} = f_1 + f_2\cdot\frac{1}{x} + f_3\,(1 + e^x)`)}]},
+{id:'D36', t:'dul', src:DB(36), q:`Kannið tilvist dulins falls \\(y = f(x)\\) og reiknið fyrstu afleiðu:<ol type="a"><li>\\(\\ln(xy) = 0\\)</li><li>\\(x^ay^b = c\\) (a, b, c jákvæðir fastar)</li></ol>`,
+ steps:[
+  {titill:'a) F og skilyrðið', stig:2, lausn: D(T`F(y, x) = \ln x + \ln y = 0, \qquad F_y = \frac{1}{y} \ne 0 \;\; (y \gt 0)`) + '<p>Hlutafleiðurnar eru samfelldar á \\(x, y \\gt 0\\), svo dulið fall er til.</p>'},
+  {titill:'a) Afleiðan', stig:2, lausn: D(T`\frac{dy}{dx} = -\frac{F_x}{F_y} = -\frac{1/x}{1/y} = -\frac{y}{x}`) + '<p>Til samanburðar: \\(xy = 1 \\Rightarrow y = 1/x\\), \\(y\' = -1/x^2 = -y/x\\). Rétt.</p>'},
+  {titill:'b)', stig:3, lausn: AL([T`F(y, x) &= x^ay^b - c = 0`, T`F_y &= bx^ay^{b-1} \ne 0 \text{ fyrir } x, y \gt 0`, T`\frac{dy}{dx} &= -\frac{ax^{a-1}y^b}{bx^ay^{b-1}} = -\frac{a\,y}{b\,x}`])}]},
+{id:'D37', t:'dul', src:DB(37), q:`Kannið tilvist dulins falls \\(y = f(x, z)\\) og reiknið fyrstu hlutafleiður:<ol type="a"><li>\\(e^{xyz} = c\\)</li><li>\\(x^a + y^b + z^c = d\\)</li></ol>`,
+ steps:[
+  {titill:'a)', stig:3, lausn: AL([T`F &= e^{xyz} - c = 0, \qquad F_y = xz\,e^{xyz} \ne 0 \text{ ef } x, z \ne 0`, T`\frac{\partial y}{\partial x} &= -\frac{yz\,e^{xyz}}{xz\,e^{xyz}} = -\frac{y}{x}, \qquad \frac{\partial y}{\partial z} = -\frac{xy\,e^{xyz}}{xz\,e^{xyz}} = -\frac{y}{z}`])},
+  {titill:'b)', stig:3, lausn: AL([T`F &= x^a + y^b + z^c - d = 0, \qquad F_y = by^{b-1} \ne 0 \text{ ef } y \gt 0`, T`\frac{\partial y}{\partial x} &= -\frac{ax^{a-1}}{by^{b-1}}, \qquad \frac{\partial y}{\partial z} = -\frac{cz^{c-1}}{by^{b-1}}`])}]},
+{id:'D38', t:'dul', src:DB(38) + ' · sbr. lokapróf 2023, dæmi 5', q:`Gefið er nytjafallið ${D(T`u = U(x, y) = \frac{x^\beta}{y^{\beta - 1}}`)}þar sem \\(x, y \\gt 0\\) og \\(0 \\lt \\beta \\lt 1\\).<ol type="a"><li>Notið setninguna um dulin föll til að kanna tilvist dulins falls \\(y = g(x)\\).</li><li>Hvað kallast dulda fallið?</li><li>Reiknið fyrstu og aðra afleiðu dulda fallsins.</li><li>Rissið mynd.</li></ol>`,
+ steps:[
+  {titill:'a) Umrita og athuga F_y', stig:3, lausn: AL([T`F(y, x) &= x^\beta y^{1-\beta} - u_0 = 0`, T`F_y &= (1 - \beta)x^\beta y^{-\beta} \gt 0`]) + '<p>Hlutafleiðurnar eru samfelldar á \\(x, y \\gt 0\\) og \\(F_y \\ne 0\\) því \\(0 \\lt \\beta \\lt 1\\). Dulið fall \\(y = g(x)\\) er til.</p>'},
+  {titill:'b) Nafn', stig:1, lausn:'<p><b>Jafnnytjaferill</b> (indifference curve): allar samsetningar \\((x, y)\\) sem gefa sama nyt \\(u_0\\).</p>'},
+  {titill:'c) Fyrsta afleiða', stig:2, lausn: AL([T`F_x &= \beta x^{\beta-1}y^{1-\beta}`, T`\frac{dy}{dx} &= -\frac{F_x}{F_y} = -\frac{\beta x^{\beta-1}y^{1-\beta}}{(1-\beta)x^\beta y^{-\beta}} = -\frac{\beta}{1-\beta}\cdot\frac{y}{x} \lt 0`])},
+  {titill:'c) Önnur afleiða', stig:3, lausn: AL([T`\frac{d^2y}{dx^2} &= -\frac{\beta}{1-\beta}\cdot\frac{y'x - y}{x^2}`, T`&= -\frac{\beta}{1-\beta}\cdot\frac{-\frac{\beta}{1-\beta}y - y}{x^2}`, T`&= \frac{\beta}{(1-\beta)^2}\cdot\frac{y}{x^2} \gt 0`]) + '<p>Notað: \\(\\frac{\\beta}{1-\\beta} + 1 = \\frac{1}{1-\\beta}\\).</p>'},
+  {titill:'d) Mynd', stig:1, lausn: fnSvg({xmin:0, xmax:6, ymin:0, ymax:6, curves:[{f:x => 4 / x, label:'u₀', lx:5, ly:1.1}, {f:x => 7 / x, cls:1, label:'u₁ > u₀', lx:4.3, ly:2.2}], alt:'Jafnnytjaferlar'}) + '<p>Hallar niður (\\(y\' \\lt 0\\)) og er kúptur (\\(y\'\' \\gt 0\\)): venjulegur jafnnytjaferill. Hærri ferill = meira nyt.</p>'}]},
+{id:'D39', t:'eins', src:DB(39), q:`Er fallið \\(f(x, y) = \\ln(Ax^\\gamma y^{1-\\gamma})\\) einsleitt (\\(A \\gt 0\\), \\(0 \\lt \\gamma \\lt 1\\))? Ef svo er, af hvaða gráðu?`,
+ steps:[
+  {titill:'Margfalda breyturnar með j', stig:2, lausn: AL([T`f(jx, jy) &= \ln\!\left(A(jx)^\gamma(jy)^{1-\gamma}\right)`, T`&= \ln\!\left(j\cdot Ax^\gamma y^{1-\gamma}\right) = \ln j + f(x, y)`])},
+  {titill:'Niðurstaða', stig:2, lausn:'<p>\\(\\ln j + f \\ne j^r f\\) almennt, svo fallið er <b>ekki einsleitt</b>. Það er hins vegar <b>þenjanlegt</b>: einhalla vörpun (\\(\\ln\\)) af einsleitu falli af gráðu 1. Hæðarlínurnar eru þær sömu og fyrir \\(Ax^\\gamma y^{1-\\gamma}\\).</p>'}]},
+{id:'D40', t:'eins', src:DB(40), q:`Cobb-Douglas framleiðslufall \\(Y = AK^\\alpha L^\\beta\\), \\(A \\gt 0\\), \\(0 \\lt \\alpha, \\beta \\lt 1\\).<ol type="a"><li>Er fallið einsleitt? Af hvaða gráðu? Túlkið.</li><li>Reiknið fyrstu og aðrar afleiður og sýnið að fallið sé stranglega hvelft ef \\(\\alpha + \\beta \\lt 1\\).</li><li>Leysið \\(Y_0 = AK^\\alpha L^\\beta\\) fyrir \\(K = f(L)\\) og reiknið fyrstu og aðra afleiðu.</li><li>Notið setninguna um dulin föll og berið saman.</li></ol>`,
+ steps:[
+  {titill:'a) Einsleitni', stig:2, lausn: D(T`Y(jK, jL) = A(jK)^\alpha(jL)^\beta = j^{\alpha+\beta}Y`) + '<p>Einsleitt af gráðu \\(\\alpha + \\beta\\): stærðarhagkvæmni ef \\(\\gt 1\\), föst ef \\(= 1\\), stærðaróhagkvæmni ef \\(\\lt 1\\).</p>'},
+  {titill:'b) Hessian', stig:3, lausn: AL([T`Y_{KK} &= \alpha(\alpha-1)AK^{\alpha-2}L^\beta \lt 0`, T`Y_{LL} &= \beta(\beta-1)AK^\alpha L^{\beta-2}`, T`Y_{KL} &= \alpha\beta AK^{\alpha-1}L^{\beta-1}`, T`|H_2| &= A^2\alpha\beta(1 - \alpha - \beta)K^{2\alpha-2}L^{2\beta-2} \gt 0 \text{ ef } \alpha + \beta \lt 1`]) + '<p>\\(|H_1| \\lt 0\\), \\(|H_2| \\gt 0\\): stranglega hvelft.</p>'},
+  {titill:'c) Jafnmagnsferill beint', stig:3, lausn: AL([T`K &= \left(\frac{Y_0}{AL^\beta}\right)^{1/\alpha} = \left(\frac{Y_0}{A}\right)^{1/\alpha}L^{-\beta/\alpha}`, T`\frac{dK}{dL} &= -\frac{\beta}{\alpha}\cdot\frac{K}{L} \lt 0`, T`\frac{d^2K}{dL^2} &= \frac{\beta(\alpha + \beta)}{\alpha^2}\cdot\frac{K}{L^2} \gt 0`]) + '<p>Hallar niður og er kúptur. Hærra \\(Y_1\\) gefur feril lengra frá upphafspunkti.</p>'},
+  {titill:'d) Dulin föll', stig:2, lausn: D(T`\frac{dK}{dL} = -\frac{F_L}{F_K} = -\frac{\beta AK^\alpha L^{\beta-1}}{\alpha AK^{\alpha-1}L^\beta} = -\frac{\beta}{\alpha}\cdot\frac{K}{L}`) + '<p>Sama niðurstaða. \\(F_K = \\alpha AK^{\\alpha-1}L^\\beta \\ne 0\\) fyrir \\(K, L \\gt 0\\).</p>'}]},
+{id:'D41', t:'tay', src:DB(41), q:`Framkvæmið annarrar gráðu Taylor-nálgun um \\(x_0 = 1\\):<ol type="a"><li>\\(f(x) = a + bx + cx^2\\)</li><li>\\(f(x) = \\sqrt{x}\\)</li></ol>`,
+ steps:[
+  {titill:'a) Afleiður í 1', stig:2, lausn: AL([T`f(1) &= a + b + c, \quad f'(1) = b + 2c, \quad f''(1) = 2c`, T`P_2(x) &= (a + b + c) + (b + 2c)(x - 1) + c(x - 1)^2`, T`&= a + bx + cx^2`]) + '<p>Nálgunin er nákvæm: önnur gráðu margliða er sín eigin 2. gráðu Taylor-röð.</p>'},
+  {titill:'b) Afleiður í 1', stig:2, lausn: AL([T`f(1) &= 1, \quad f'(1) = \tfrac12, \quad f''(1) = -\tfrac14`])},
+  {titill:'b) Nálgunin', stig:2, lausn: AL([T`P_2(x) &= 1 + \tfrac12(x - 1) - \tfrac18(x - 1)^2`, T`&= -\tfrac18x^2 + \tfrac34x + \tfrac38`])}],
+ chk:{close:[[-1/8*1.2**2 + 3/4*1.2 + 3/8, Math.sqrt(1.2), 2e-3]]}},
+{id:'D42', t:'tay', src:DB(42), q:`Í hagfræði er oft notað að \\(e^r \\approx 1 + r\\), þar sem \\(r\\) eru raunvextir. Notið fyrstu gráðu Taylor-nálgun á \\(e^r\\) um \\(r = 0\\) til að ræða nákvæmnina. Hvaða forsendu þarf að gefa sér um \\(r\\)?`,
+ steps:[
+  {titill:'1. gráða', stig:2, lausn: D(T`e^r \approx e^0 + e^0(r - 0) = 1 + r`)},
+  {titill:'Afgangsliður', stig:2, lausn: D(T`R_1 = \frac{e^p}{2!}r^2, \quad p \text{ milli } 0 \text{ og } r`) + '<p>Skekkjan er af stærðargráðu \\(r^2/2\\). Fyrir \\(r = 0{,}03\\) er hún um 0,00045, en fyrir \\(r = 0{,}5\\) um 0,125.</p>'},
+  {titill:'Forsenda', stig:1, lausn:'<p>\\(r\\) þarf að vera <b>lítið</b> (nálægt 0). Þá er \\(r^2\\) hverfandi og \\(1 + r\\) góð nálgun.</p>'}]},
+{id:'D43', t:'ein', src:DB(43), q:`Gefin eru föllin \\(f(x) = x + \\frac{1}{x}\\) og \\(g(x) = x^3 + 3x^2 - 2\\). Fyrir hvort fall:<ol type="a"><li>Tilgreinið formengi.</li><li>Finnið krítíska punkta.</li><li>Flokkið þá.</li><li>Kannið hvar fallið er vaxandi/minnkandi og hvelft/kúpt.</li><li>Eru útmörkin algild?</li></ol>`,
+ steps:[
+  {titill:'f: formengi og FGS', stig:2, lausn: AL([T`D_f &= \{x \mid x \ne 0\}`, T`f'(x) &= 1 - \frac{1}{x^2} = \frac{(x-1)(x+1)}{x^2} = 0 \;\Rightarrow\; x = \pm 1`])},
+  {titill:'f: flokkun', stig:2, lausn: AL([T`f''(x) &= \frac{2}{x^3}`, T`f''(-1) &= -2 \lt 0: \;\text{staðbundið hámark},\; f(-1) = -2`, T`f''(1) &= 2 \gt 0: \;\text{staðbundið lágmark},\; f(1) = 2`])},
+  {titill:'f: bil og algild?', stig:2, lausn:'<p>Vaxandi á \\((-\\infty, -1)\\) og \\((1, \\infty)\\), minnkandi á \\((-1, 0)\\) og \\((0, 1)\\). Hvelft fyrir \\(x \\lt 0\\), kúpt fyrir \\(x \\gt 0\\). Ekki algild: \\(f \\to \\pm\\infty\\) við \\(x \\to 0^\\pm\\) og \\(x \\to \\pm\\infty\\).</p>' + fnSvg({xmin:-4, xmax:4, ymin:-6, ymax:6, asym:[0], curves:[{f:x => x + 1/x, dom:x => Math.abs(x) > 0.05}], points:[{x:-1, y:-2, label:'(−1, −2)'}, {x:1, y:2, label:'(1, 2)'}], alt:'Graf x + 1/x'})},
+  {titill:'g: FGS og flokkun', stig:3, lausn: AL([T`D_g &= \mathbb{R}, \qquad g'(x) = 3x^2 + 6x = 3x(x + 2) = 0 \;\Rightarrow\; x \in \{-2, 0\}`, T`g''(x) &= 6x + 6`, T`g''(-2) &= -6 \lt 0: \;\text{hámark},\; g(-2) = -8 + 12 - 2 = 2`, T`g''(0) &= 6 \gt 0: \;\text{lágmark},\; g(0) = -2`])},
+  {titill:'g: bil og algild?', stig:2, lausn:'<p>Vaxandi á \\((-\\infty, -2)\\) og \\((0, \\infty)\\), minnkandi á \\((-2, 0)\\). Hvelft fyrir \\(x \\lt -1\\), kúpt fyrir \\(x \\gt -1\\); beygjuskil í \\(x = -1\\). Ekki algild útmörk (þriðja stigs margliða).</p>' + fnSvg({xmin:-3.5, xmax:1.5, ymin:-4, ymax:4, curves:[{f:x => x**3 + 3*x*x - 2}], points:[{x:-2, y:2, label:'(−2, 2)'}, {x:0, y:-2, label:'(0, −2)'}], alt:'Graf x³ + 3x² − 2'})}]},
+{id:'D44', t:'hes', src:DB(44), q:`Finnið öll staðbundin útmörk og greinið þau:<ol type="a"><li>${D(T`f(x, y) = 2x + y + xy - x^2 - y^2`)}</li><li>${D(T`f(x, y) = x^3 - 6x^2 + 3y^3 + 9y^2 - 63x - 72y`)}</li></ol>`,
+ steps:[
+  {titill:'a) FGS', stig:2, lausn: AL([T`f_x &= 2 + y - 2x = 0`, T`f_y &= 1 + x - 2y = 0`]) + '<p>Úr fyrri: \\(y = 2x - 2\\). Inn í seinni: \\(1 + x - 4x + 4 = 0 \\Rightarrow x = \\tfrac53\\), \\(y = \\tfrac43\\).</p>'},
+  {titill:'a) AGS', stig:2, lausn: D(T`H = \begin{bmatrix}-2&1\\1&-2\end{bmatrix},\quad |H_1| = -2 \lt 0,\quad |H_2| = 3 \gt 0`) + '<p>Hámark, \\(f = \\tfrac73\\). \\(H\\) er fast og neikvætt ákveðið, svo fallið er stranglega hvelft og hámarkið <b>algilt</b>.</p>'},
+  {titill:'b) FGS', stig:3, lausn: AL([T`f_x &= 3x^2 - 12x - 63 = 3(x - 7)(x + 3) = 0 \;\Rightarrow\; x \in \{-3, 7\}`, T`f_y &= 9y^2 + 18y - 72 = 9(y + 4)(y - 2) = 0 \;\Rightarrow\; y \in \{-4, 2\}`])},
+  {titill:'b) Flokkun', stig:4, lausn: D(T`H = \begin{bmatrix}6x - 12 & 0\\ 0 & 18y + 18\end{bmatrix}`) + '<div class="scroll"><table class="tt"><thead><tr><th>Punktur</th><th>\\(|H_1|\\)</th><th>\\(|H_2|\\)</th><th>Niðurstaða</th></tr></thead><tbody><tr><td>\\((-3, -4)\\)</td><td>−30</td><td>1620</td><td>staðbundið hámark, \\(f = 348\\)</td></tr><tr><td>\\((-3, 2)\\)</td><td>−30</td><td>−1620</td><td>söðulpunktur</td></tr><tr><td>\\((7, -4)\\)</td><td>30</td><td>−1620</td><td>söðulpunktur</td></tr><tr><td>\\((7, 2)\\)</td><td>30</td><td>1620</td><td>staðbundið lágmark, \\(f = -476\\)</td></tr></tbody></table></div><p>Ekki algild: fallið er ótakmarkað (þriðja stigs liðir).</p>'}],
+ chk:{hess:[[mono(2,1,0), mono(1,0,1), mono(1,1,1), mono(-1,2,0), mono(-1,0,2)], [q(5,3).v, q(4,3).v], 'max', [-2, 3]], hess2:[[mono(1,3,0), mono(-6,2,0), mono(3,0,3), mono(9,0,2), mono(-63,1,0), mono(-72,0,1)], [-3,-4], 'max', [-30, 1620]], hess3:[[mono(1,3,0), mono(-6,2,0), mono(3,0,3), mono(9,0,2), mono(-63,1,0), mono(-72,0,1)], [7,2], 'min', [30, 1620]], hess4:[[mono(1,3,0), mono(-6,2,0), mono(3,0,3), mono(9,0,2), mono(-63,1,0), mono(-72,0,1)], [-3,2], 'sod', [-30, -1620]]}},
+{id:'D45', t:'ham', src:DB(45), q:`Fyrirtæki með framleiðslufall \\(f(k, l) = k^\\alpha l^\\beta\\), \\(0 \\lt \\alpha, \\beta \\lt 1\\), selur á verði \\(p\\). Fjármagnskostnaður er \\(r + \\delta\\) og laun \\(w\\).<ol type="a"><li>Ritið hagnaðarfallið og hámörkunarvandamálið.</li><li>Finnið nauðsynleg skilyrði.</li><li>Eru þau nægjanleg? Hvaða forsendu þarf?</li><li>Leysið fyrir \\(k^*\\) og \\(l^*\\). Hverju lýsa föllin?</li><li>Hvernig breytast þau þegar \\(w\\) eða \\(p\\) hækkar?</li></ol>`,
+ steps:[
+  {titill:'a) Hagnaður', stig:2, lausn: D(T`\max_{k,l}\;\pi = p\,k^\alpha l^\beta - (r + \delta)k - wl`)},
+  {titill:'b) FGS', stig:2, lausn: AL([T`\pi_k &= p\alpha k^{\alpha-1}l^\beta - (r + \delta) = 0`, T`\pi_l &= p\beta k^\alpha l^{\beta-1} - w = 0`]) + '<p>Virði jaðarframleiðni = verð aðfangs.</p>'},
+  {titill:'c) AGS', stig:3, lausn: D(T`|H_1| = p\alpha(\alpha - 1)k^{\alpha-2}l^\beta \lt 0, \qquad |H_2| = p^2\alpha\beta(1 - \alpha - \beta)k^{2\alpha-2}l^{2\beta-2}`) + '<p>Nægjanleg ef \\(\\alpha + \\beta \\lt 1\\) (stærðaróhagkvæmni). Ef \\(\\alpha + \\beta \\ge 1\\) er ekkert innra hámark.</p>'},
+  {titill:'d) Lausn', stig:3, lausn:'<p>Deila FGS: \\(\\frac{\\alpha l}{\\beta k} = \\frac{r + \\delta}{w} \\Rightarrow l = \\frac{\\beta(r+\\delta)}{\\alpha w}k\\). Inn í fyrra skilyrðið:</p>' + AL([T`k^* &= \left(p\,\alpha^{1-\beta}\beta^\beta (r+\delta)^{\beta-1}w^{-\beta}\right)^{\frac{1}{1-\alpha-\beta}}`, T`l^* &= \left(p\,\alpha^\alpha\beta^{1-\alpha}(r+\delta)^{-\alpha}w^{\alpha-1}\right)^{\frac{1}{1-\alpha-\beta}}`]) + '<p>Þetta eru <b>eftirspurnarföll eftir aðföngum</b>.</p>'},
+  {titill:'e) Samanburður', stig:2, lausn:'<p>Veldið \\(\\frac{1}{1-\\alpha-\\beta} \\gt 0\\). \\(p\\) hefur jákvætt veldi í báðum, svo hærra \\(p\\) eykur \\(k^*\\) og \\(l^*\\). \\(w\\) hefur neikvætt veldi í báðum (\\(-\\beta\\) og \\(\\alpha - 1\\)), svo hærri laun minnka bæði. Í samræmi við innsæi: dýrara vinnuafl dregur úr framleiðslu og notkun beggja aðfanga.</p>'}]},
+{id:'D46', t:'ham', src:DB(46), q:`Gefið er \\(f(x, a) = \\sqrt{x} - ax\\), \\(a \\gt 0\\) ytri breyta, \\(x\\) stýribreyta.<ol type="a"><li>Finnið krítíska punkta og eðli þeirra.</li><li>Reiknið virðisfallið.</li><li>Kannið áhrif \\(a\\) á virðisfallið með virðisfallinu og umslagssetningunni.</li></ol>`,
+ steps:[
+  {titill:'a)', stig:3, lausn: AL([T`f_x &= \frac{1}{2\sqrt{x}} - a = 0 \;\Rightarrow\; x^* = \frac{1}{4a^2}`, T`f_{xx} &= -\tfrac14x^{-3/2} \lt 0 \;\Rightarrow\; \text{hámark}`])},
+  {titill:'b)', stig:2, lausn: D(T`V(a) = \frac{1}{2a} - \frac{a}{4a^2} = \frac{1}{4a}`)},
+  {titill:'c)', stig:3, lausn: AL([T`\frac{dV}{da} &= -\frac{1}{4a^2}`, T`\frac{\partial f}{\partial a}\Big|_{x^*} &= -x^* = -\frac{1}{4a^2}`]) + '<p>Sama: hærra \\(a\\) lækkar hámarksgildið.</p>'}],
+ chk:{close:[[nder(a => 1/(4*a), 2), -1/16]]}},
+// ================= Lokapróf 2023 =================
+{id:'L23-3', t:'ein', src:'Lokapróf 2023, dæmi 3 (15%)', exam:15, q:`Gefið er fallið \\(f(x) = \\ln\\left(\\frac{1}{x}\\right)\\).<ol><li>Hvert er formengi fallsins?</li><li>Kannið fyrstu afleiðu og segið hvort fallið sé vaxandi eða minnkandi.</li><li>Kannið aðra afleiðu og segið hvort fallið sé hvelft eða kúpt.</li><li>Finnið krítíska punkta, ef þeir eru til.</li><li>Rissið fallið; merkið formengi, krítíska punkta og skurðpunkta við ása.</li></ol>`,
+ steps:[
+  {titill:'1. Formengi', stig:2, lausn: D(T`\frac{1}{x} \gt 0 \;\Leftrightarrow\; x \gt 0, \qquad D = (0, \infty)`) + '<p>Einfaldara form: \\(f(x) = \\ln 1 - \\ln x = -\\ln x\\).</p>'},
+  {titill:'2. Fyrsta afleiða', stig:3, lausn: D(T`f'(x) = -\frac{1}{x} \lt 0 \text{ fyrir } x \gt 0`) + '<p>Fallið er <b>minnkandi</b> á öllu formenginu.</p>'},
+  {titill:'3. Önnur afleiða', stig:3, lausn: D(T`f''(x) = \frac{1}{x^2} \gt 0`) + '<p>Fallið er <b>stranglega kúpt</b>.</p>'},
+  {titill:'4. Krítískir punktar', stig:3, lausn:'<p>\\(f\'(x) = -1/x \\ne 0\\) fyrir öll \\(x \\gt 0\\). Engir krítískir punktar.</p>'},
+  {titill:'5. Riss', stig:4, lausn:'<p>Skurðpunktur við x-ás: \\(-\\ln x = 0 \\Rightarrow x = 1\\). Enginn skurður við y-ás (0 er ekki í formenginu). \\(f \\to \\infty\\) þegar \\(x \\to 0^+\\) og \\(f \\to -\\infty\\) þegar \\(x \\to \\infty\\).</p>' + fnSvg({xmin:-0.5, xmax:5, ymin:-2, ymax:3, curves:[{f:x => -Math.log(x), dom:x => x > 0.02}], points:[{x:1, y:0, label:'(1, 0)'}], alt:'Graf ln(1/x)'})}]},
+{id:'L23-4', t:'ham', src:'Lokapróf 2023, dæmi 4 (30%)', exam:30, q:`Fyrirtæki framleiðir \\(Q\\) með fjármunum \\(K\\) og vinnuafli \\(L\\): ${D(T`Q = f(K, L) = -K^2 - L^2 + 4L + 2K`)}Verð er \\(p \\ge 1\\), vextir \\(r = 2\\) og laun \\(w = 4\\).<ol><li>Ritið hámörkunarvandamálið formlega.</li><li>Finnið \\(K\\) og \\(L\\) sem hámarka hagnað.</li><li>Kannið annarrar gráðu skilyrði.</li><li>Hvaða áhrif hefur hækkun á \\(p\\) á \\(K\\) og \\(L\\)? Túlkið.</li><li>Útskýrið hvað virðisfallið er.</li><li>Nýtið umslagssetninguna: hver eru áhrif hækkunar á \\(p\\) á virðisfallið? Eru þau jákvæð eða neikvæð ef \\(p = 10\\)?</li></ol>`,
+ steps:[
+  {titill:'1. Vandamálið', stig:4, lausn: D(T`\max_{K,L}\;\pi(K, L) = p\left(-K^2 - L^2 + 4L + 2K\right) - 2K - 4L`)},
+  {titill:'2. FGS', stig:6, lausn: AL([T`\pi_K &= p(-2K + 2) - 2 = 0 &&\Rightarrow\; K^* = 1 - \frac{1}{p} = \frac{p - 1}{p}`, T`\pi_L &= p(-2L + 4) - 4 = 0 &&\Rightarrow\; L^* = 2 - \frac{2}{p} = \frac{2(p - 1)}{p}`]) + '<p>Bæði \\(\\ge 0\\) því \\(p \\ge 1\\).</p>'},
+  {titill:'3. AGS', stig:5, lausn: AL([T`\pi_{KK} &= -2p, \quad \pi_{LL} = -2p, \quad \pi_{KL} = 0`, T`|H_1| &= -2p \lt 0, \qquad |H_2| = 4p^2 \gt 0`]) + '<p>Hámark.</p>'},
+  {titill:'4. Áhrif p', stig:5, lausn: AL([T`\frac{\partial K^*}{\partial p} &= \frac{1}{p^2} \gt 0`, T`\frac{\partial L^*}{\partial p} &= \frac{2}{p^2} \gt 0`]) + '<p>Hærra verð gerir hverja framleiðslueiningu verðmætari; virði jaðarframleiðni hækkar en kostnaður aðfanga ekki, svo fyrirtækið eykur notkun beggja.</p>'},
+  {titill:'5. Virðisfall', stig:4, lausn: D(T`V(p) = \pi\left(K^*(p), L^*(p); p\right)`) + '<p>Hámarkshagnaðurinn sem fall af ytri breytunni \\(p\\), þegar \\(K\\) og \\(L\\) eru alltaf valin best.</p>'},
+  {titill:'6. Umslagssetningin', stig:6, lausn: AL([T`\frac{dV}{dp} &= \pi_K\frac{\partial K^*}{\partial p} + \pi_L\frac{\partial L^*}{\partial p} + \frac{\partial \pi}{\partial p} = \frac{\partial \pi}{\partial p} = Q(K^*, L^*)`, T`p = 10: \quad K^* &= 0{,}9, \quad L^* = 1{,}8`, T`\frac{dV}{dp} &= -0{,}81 - 3{,}24 + 7{,}2 + 1{,}8 = 4{,}95 \gt 0`]) + '<p>Jákvæð áhrif. Almennt: \\(\\frac{dV}{dp} = 5 - \\frac{5}{p^2}\\).</p>'}],
+ chk:{close:[[nder(pp => pp*(-((1-1/pp)**2)-(2-2/pp)**2+4*(2-2/pp)+2*(1-1/pp))-2*(1-1/pp)-4*(2-2/pp), 10), 4.95]]}},
+{id:'L23-5', t:'dul', src:'Lokapróf 2023, dæmi 5 (15%)', exam:15, q:`Gefið er nytjafallið ${D(T`u = U(x, y) = \frac{x^\beta}{y^{\beta - 1}}`)}þar sem \\(x, y \\gt 0\\) og \\(0 \\lt \\beta \\lt 1\\).<ol><li>Kannið hvort fallið sé einsleitt og þá af hvaða gráðu. Túlkið.</li><li>Notið setninguna um dulin föll til að kanna tilvist dulins falls \\(y = g(x)\\). Hvað kallast það?</li><li>Reiknið fyrstu afleiðu dulda fallsins.</li><li>Rissið mynd.</li></ol>`,
+ steps:[
+  {titill:'1. Einsleitni', stig:4, lausn: AL([T`U &= x^\beta y^{1-\beta}`, T`U(jx, jy) &= j^\beta x^\beta j^{1-\beta}y^{1-\beta} = j\,U(x, y)`]) + '<p>Einsleitt af gráðu 1 (línulega einsleitt): tvöföldun beggja vara tvöfaldar nytina.</p>'},
+  {titill:'2. Tilvist', stig:4, lausn: AL([T`F(y, x) &= x^\beta y^{1-\beta} - u_0 = 0`, T`F_y &= (1 - \beta)x^\beta y^{-\beta} \ne 0`]) + '<p>Samfelldar hlutafleiður og \\(F_y \\ne 0\\) á \\(x, y \\gt 0\\): dulið fall er til. Það er <b>jafnnytjaferill</b>.</p>'},
+  {titill:'3. Afleiða', stig:4, lausn: D(T`\frac{dy}{dx} = -\frac{F_x}{F_y} = -\frac{\beta x^{\beta-1}y^{1-\beta}}{(1-\beta)x^\beta y^{-\beta}} = -\frac{\beta}{1 - \beta}\cdot\frac{y}{x} \lt 0`)},
+  {titill:'4. Mynd', stig:3, lausn: fnSvg({xmin:0, xmax:6, ymin:0, ymax:6, curves:[{f:x => 4 / x}], alt:'Jafnnytjaferill'}) + '<p>Hallar niður og er kúptur að upphafspunkti (\\(y\'\' \\gt 0\\), sjá dæmi 38).</p>'}]},
+{id:'L23-6', t:'tay', src:'Lokapróf 2023, dæmi 6 (10%)', exam:10, q:`Höfum fallið \\(f(x) = 20 - \\frac15x^2\\).<ol><li>Teiknið fallið, merkið skurðpunkta við ása og punktinn \\(x_0 = 5\\).</li><li>Framkvæmið 1. gráðu Taylor-nálgun um \\(x_0 = 5\\). Teiknið og túlkið.</li><li>Framkvæmið 2. gráðu Taylor-nálgun um \\(x_0 = 5\\). Teiknið og túlkið.</li></ol>`,
+ steps:[
+  {titill:'1. Skurðpunktar', stig:2, lausn: AL([T`f(0) &= 20`, T`20 - \tfrac15x^2 = 0 &\;\Rightarrow\; x = \pm 10`, T`f(5) &= 20 - 5 = 15`])},
+  {titill:'2. 1. gráða', stig:4, lausn: AL([T`f'(x) &= -\tfrac25x, \qquad f'(5) = -2`, T`P_1(x) &= 15 - 2(x - 5) = 25 - 2x`]) + '<p>Snertill fallsins í \\((5, 15)\\). Góð nálgun nálægt 5, en ofmetur fallið fjær (fallið er hvelft og liggur undir snertlinum).</p>'},
+  {titill:'3. 2. gráða', stig:4, lausn: AL([T`f''(x) &= -\tfrac25`, T`P_2(x) &= 15 - 2(x - 5) - \tfrac15(x - 5)^2`, T`&= 15 - 2x + 10 - \tfrac15x^2 + 2x - 5 = 20 - \tfrac15x^2`]) + '<p>Nálgunin er nákvæmlega fallið sjálft: annars stigs margliða hefur \\(f\'\'\' = 0\\), svo afgangsliðurinn er 0.</p>' + fnSvg({xmin:-12, xmax:12, ymin:-10, ymax:25, curves:[{f:x => 20 - x*x/5, label:'f = P₂', lx:-9, ly:6}, {f:x => 25 - 2*x, cls:1, label:'P₁', lx:9, ly:9}], points:[{x:5, y:15, label:'(5, 15)'}, {x:10, y:0, label:'10'}, {x:-10, y:0, label:'−10'}], alt:'Fall og Taylor-nálganir'})}]},
+// ================= Lokapróf 2025 (heild) =================
+{id:'L25-4', t:'mis', src:'Lokapróf 2025, dæmi 4 (15%)', exam:15, q:`Gefið er fallið ${D(T`U = \frac{2xy}{x+y}`)}<ol type="a"><li>Finnið heildarmismun \\(dU\\). Einfaldið m.t.t. \\(dx\\) og \\(dy\\). (6%)</li><li>Hver er heildarmismunurinn ef \\(x = 2\\), \\(y = 2\\), \\(dy = 0{,}2\\) og \\(dx = 0\\)? (3%)</li><li>Gefið er að \\(x = 3y^2\\). Teiknið flæðirit sem sýnir bein og óbein áhrif \\(y\\) á \\(U\\). (2%)</li><li>Reiknið heildarafleiðuna \\(\\frac{dU}{dy}\\) sem fall af \\(y\\) einu. (4%)</li></ol>`,
+ steps:[
+  {titill:'a) U_x og U_y', stig:4, lausn: AL([T`U_x &= \frac{2y(x+y) - 2xy}{(x+y)^2} = \frac{2y^2}{(x+y)^2}`, T`U_y &= \frac{2x(x+y) - 2xy}{(x+y)^2} = \frac{2x^2}{(x+y)^2}`])},
+  {titill:'a) dU', stig:2, lausn: D(T`dU = \frac{2y^2}{(x+y)^2}\,dx + \frac{2x^2}{(x+y)^2}\,dy`)},
+  {titill:'b) Innsetning', stig:3, lausn: D(T`dU = \frac{8}{16}\cdot 0 + \frac{8}{16}\cdot 0{,}2 = 0{,}1`)},
+  {titill:'c) Flæðirit', stig:2, lausn:'<div class="flow"><span>y</span><span class="arr">→</span><span>U</span><span class="lbl">bein áhrif: \\(U_y\\)</span></div><div class="flow"><span>y</span><span class="arr">→</span><span>x</span><span class="arr">→</span><span>U</span><span class="lbl">óbein: \\(U_x\\cdot\\frac{dx}{dy}\\)</span></div>'},
+  {titill:'d) Heildarafleiða', stig:4, lausn: AL([T`\frac{dU}{dy} &= U_x\frac{dx}{dy} + U_y = \frac{2y^2}{(x+y)^2}\cdot 6y + \frac{2x^2}{(x+y)^2}`, T`(x + y)^2 &= (3y^2 + y)^2 = y^2(3y + 1)^2`, T`\frac{dU}{dy} &= \frac{12y^3 + 18y^4}{y^2(3y+1)^2} = \frac{6y(3y + 2)}{(3y + 1)^2}`]) + '<p>Prófun: \\(U = \\frac{6y^3}{3y^2 + y} = \\frac{6y^2}{3y + 1}\\), og deilingarreglan gefur sama svar.</p>'}],
+ chk:{close:[[nder(Yy => 6*Yy*Yy/(3*Yy+1), 1.7), 6*1.7*(3*1.7+2)/(3*1.7+1)**2]]}},
+{id:'L25-5', t:'dul', src:'Lokapróf 2025, dæmi 5 (10%)', exam:10, q:`Gefið er samband ${D(T`F(x, y) = 3x^2 + 2xy + 4y^2 = 0`)}<ol type="a"><li>Notið setninguna um dulin föll til að kanna tilvist fólgins falls \\(x = f(y)\\) í punktinum \\((x, y) = \\left(\\tfrac14, -\\tfrac14\\right)\\). (5%)</li><li>Reiknið \\(\\frac{dx}{dy}\\). (5%)</li></ol>`,
+ steps:[
+  {titill:'Athugasemd um punktinn', stig:1, lausn: D(T`F\!\left(\tfrac14, -\tfrac14\right) = \tfrac{3}{16} - \tfrac{2}{16} + \tfrac{4}{16} = \tfrac{5}{16} \ne 0`) + '<p>Punkturinn uppfyllir ekki \\(F = 0\\); raunar er \\((0, 0)\\) eina rauntölulausnin. Á prófinu: taktu þetta fram og lestu sambandið sem hæðarlínuna \\(F(x, y) = \\tfrac{5}{16}\\) gegnum punktinn. Aðferðin og svarið eru þau sömu.</p>'},
+  {titill:'a) Skilyrðin', stig:4, lausn: AL([T`F_x &= 6x + 2y, \qquad F_y = 2x + 8y \quad (\text{samfelldar})`, T`F_x\!\left(\tfrac14, -\tfrac14\right) &= \tfrac64 - \tfrac24 = 1 \ne 0`]) + '<p>\\(F_x \\ne 0\\), svo til er fólgið fall \\(x = f(y)\\) í grennd við punktinn.</p>'},
+  {titill:'b) Afleiðan', stig:5, lausn: AL([T`F_y\!\left(\tfrac14, -\tfrac14\right) &= \tfrac24 - \tfrac84 = -\tfrac32`, T`\frac{dx}{dy} &= -\frac{F_y}{F_x} = -\frac{-3/2}{1} = \frac32`])}]},
+{id:'L25-6', t:'tay', src:'Lokapróf 2025, dæmi 6 (15%)', exam:15, q:`Gefið er fallið \\(f(x) = 4x^3 - 3x^2 + 2x + 5\\).<ol type="a"><li>Framkvæmið 1. gráðu Taylor-nálgun um \\(x_0 = 2\\) og einfaldið. (6%)</li><li>Framkvæmið 2. gráðu Taylor-nálgun um \\(x_0 = 2\\) og einfaldið. (6%)</li><li>Hvað verður um afgangsliðinn ef framkvæmd er 3. gráðu Taylor-nálgun? (3%)</li></ol>`,
+ steps:[
+  {titill:'Afleiður í 2', stig:3, lausn: AL([T`f(2) &= 32 - 12 + 4 + 5 = 29`, T`f'(x) &= 12x^2 - 6x + 2, & f'(2) &= 48 - 12 + 2 = 38`, T`f''(x) &= 24x - 6, & f''(2) &= 42`, T`f'''(x) &= 24`])},
+  {titill:'a) 1. gráða', stig:3, lausn: AL([T`P_1(x) &= 29 + 38(x - 2) = 38x - 47`])},
+  {titill:'b) 2. gráða', stig:6, lausn: AL([T`P_2(x) &= 29 + 38(x - 2) + \frac{42}{2}(x - 2)^2`, T`&= 38x - 47 + 21(x^2 - 4x + 4)`, T`&= 21x^2 - 46x + 37`])},
+  {titill:'c) Afgangsliður', stig:3, lausn: D(T`R_3 = \frac{f^{(4)}(p)}{4!}(x - 2)^4 = 0`) + '<p>\\(f^{(4)} = 0\\) fyrir þriðja stigs margliðu: 3. gráðu nálgunin er nákvæm og afgangsliðurinn hverfur.</p>'}],
+ chk:{close:[[nder(x => 21*x*x-46*x+37, 2), 38], [21*4-46*2+37, 29]]}},
+{id:'L25-7', t:'ham', src:'Lokapróf 2025, dæmi 7 (20%)', exam:20, q:`Gefið er fall ${D(T`f(x,y,z) = xz + x^2 - y + yz + y^2 + 3z^2`)}<ol type="a"><li>Er fallið einsleitt, og þá af hvaða gráðu? (4%)</li><li>Finnið krítíska punkta skv. fyrstu gráðu skilyrðum. (8%)</li><li>Beitið annarrar gráðu skilyrðum í Hessian-fylki til að ákvarða hvort krítískir punktar séu hámörk eða lágmörk. (8%)</li></ol>`,
+ steps:[
+  {titill:'a) Einsleitni', stig:4, lausn: D(T`f(jx, jy, jz) = j^2\left(xz + x^2 + yz + y^2 + 3z^2\right) - j\,y`) + '<p>Liðurinn \\(-y\\) er af gráðu 1 en hinir af gráðu 2. Ekki hægt að þátta út \\(j^r\\): fallið er <b>ekki einsleitt</b>.</p>'},
+  {titill:'b) FGS', stig:3, lausn: AL([T`f_x &= 2x + z = 0`, T`f_y &= -1 + 2y + z = 0`, T`f_z &= x + y + 6z = 0`])},
+  {titill:'b) Leysa', stig:5, lausn:'<p>Úr fyrstu tveimur: \\(x = -\\tfrac{z}{2}\\) og \\(y = \\tfrac{1 - z}{2}\\). Inn í þá þriðju:</p>' + AL([T`-\tfrac{z}{2} + \tfrac{1-z}{2} + 6z &= 0`, T`\tfrac{1}{2} + 5z &= 0 \;\Rightarrow\; z^* = -\tfrac{1}{10}`, T`x^* &= \tfrac{1}{20},\qquad y^* = \tfrac{11}{20}`])},
+  {titill:'c) Hessian', stig:3, lausn: D(T`H = \begin{bmatrix}2&0&1\\0&2&1\\1&1&6\end{bmatrix}`)},
+  {titill:'c) Flokkun', stig:5, lausn: AL([T`|H_1| &= 2 \gt 0`, T`|H_2| &= 4 \gt 0`, T`|H_3| &= 2\begin{vmatrix}2&1\\1&6\end{vmatrix} + 1\begin{vmatrix}0&2\\1&1\end{vmatrix} = 22 - 2 = 20 \gt 0`]) + '<p>Allar jákvæðar: <b>lágmark</b>. \\(H\\) er fast, svo fallið er stranglega kúpt og lágmarkið algilt.</p>'}],
+ chk:{hess:[[mono(1,1,0,1), mono(1,2,0,0), mono(-1,0,1,0), mono(1,0,1,1), mono(1,0,2,0), mono(3,0,0,2)], [1/20, 11/20, -1/10], 'min', [2,4,20]]}},
+// ================= Miðannarpróf 2025 =================
+{id:'M25-1', t:'fyl', src:'Miðannarpróf 2025, dæmi 1 (12,5%)', exam:12.5, q:`Gefin eru ${D(T`A = \begin{bmatrix}1&2\\0&-1\\3&-4\end{bmatrix},\quad B = \begin{bmatrix}2&-1\\1&0\\-2&3\end{bmatrix},\quad C = \begin{bmatrix}2\\1\\3\end{bmatrix}`)}<ol type="a"><li>Reiknið \\(A + B\\). (2,5%)</li><li>Reiknið \\(A'B\\). (5%)</li><li>Reiknið \\(B'C\\). (5%)</li></ol>`,
+ steps:(() => { const A = M([[1,2],[0,-1],[3,-4]]), B = M([[2,-1],[1,0],[-2,3]]), C = M([[2],[1],[3]]);
+  return [{titill:'a) Stak fyrir stak', stig:2, lausn: D(T`A + B = ${tm(madd(A, B))}`)}, ...pre('b)', bMul(tr(A), B, "A'", 'B').steps), ...pre('c)', bMul(tr(B), C, "B'", 'C').steps)]; })()},
+{id:'M25-2', t:'and', src:'Miðannarpróf 2025, dæmi 2 (35%)', exam:35, q:`Gefið er jöfnukerfi ${D(T`2x + y = 3 + z \qquad x - 2y = 5 - 3z \qquad 3x + y = 10 - 2z`)}<ol type="a"><li>Setjið upp á fylkjaformi \\(Ax = d\\), \\(x' = [x\\;\\,y\\;\\,z]\\). (5%)</li><li>Finnið \\(|A|\\). (10%)</li><li>Finnið \\(\\operatorname{adj}A\\). (10%)</li><li>Finnið \\(A^{-1}\\). (5%)</li><li>Finnið \\(x^*\\). (5%)</li></ol>`,
+ steps:(() => { const A = M([[2,1,-1],[1,-2,3],[3,1,2]]); const b = bInv3(A); const d = [3,5,10].map(Q.of); const xs = mmul(b.inv, d.map(v => [v]));
+  return [{titill:'a) Breytur vinstra megin', stig:2, lausn: D(T`\begin{aligned}2x + y - z &= 3\\ x - 2y + 3z &= 5\\ 3x + y + 2z &= 10\end{aligned} \;\Rightarrow\; ${tm(A)}\begin{bmatrix}x\\y\\z\end{bmatrix} = \begin{bmatrix}3\\5\\10\end{bmatrix}`)},
+   ...b.steps.slice(0, 4), {titill:'e) x = A⁻¹d', stig:2, lausn: AL(b.inv.map((r, i) => `${VARS3[i]}^* &= ` + r.map((c, k) => txp(c) + '\\cdot ' + txp(d[k])).join(' + ') + ' = ' + tx(xs[i][0])))}]; })(),
+ chk:{sys:[M([[2,1,-1],[1,-2,3],[3,1,2]]), [3,5,10].map(Q.of), [q(13,7), q(1), q(12,7)]]}},
+{id:'M25-3', t:'akv', src:'Miðannarpróf 2025, dæmi 3 (22,5%)', exam:22.5, q:`Gefin eru ${D(T`A = \begin{bmatrix}1&2&-1&2\\1&2&0&2\\4&2&-2&6\\3&-2&0&3\end{bmatrix},\quad x = \begin{bmatrix}x\\y\\z\\w\end{bmatrix},\quad d = \begin{bmatrix}3\\4\\-2\\6\end{bmatrix}`)}<ol type="a"><li>Notið Laplace-útvíkkun til að reikna \\(|A|\\). (10%)</li><li>Hver verður ákveðan ef \\(A\\) er margfaldað með \\(k = 2\\)? (2,5%)</li><li>Notið reglu Cramers til að leysa fyrir \\(y\\). (10%)</li></ol>`,
+ steps:(() => { const A = M([[1,2,-1,2],[1,2,0,2],[4,2,-2,6],[3,-2,0,3]]); const d = [3,4,-2,6].map(Q.of); const A2 = repCol(A, 1, d);
+  return [...pre('a)', bDet(A).steps), {titill:'b) |kA| = kⁿ|A|', stig:2, lausn: D(T`|2A| = 2^4|A| = 16\cdot(-2) = -32`) + '<p>Allar fjórar raðirnar margfaldast með 2.</p>'}, ...pre('c) |A₂|:', bDet(A2, 'A_2').steps), {titill:'c) y*', stig:1, lausn: D(T`y^* = \frac{|A_2|}{|A|} = \frac{${tx(det(A2))}}{-2} = ${tx(det(A2).div(det(A)))}`)}]; })(),
+ chk:{det:[M([[1,2,-1,2],[1,2,0,2],[4,2,-2,6],[3,-2,0,3]]), q(-2)]}},
+{id:'M25-4', t:'hes', src:'Miðannarpróf 2025, dæmi 4 (20%)', exam:20, q:`Gefið er \\(f(x, y) = 2x^2 + 3y^2 + 4xy\\).<ol type="a"><li>Reiknið allar fyrstu og aðrar hlutafleiður. (10%)</li><li>Notið Hessian-fylkið til að meta hvort fallið sé stranglega hvelft eða kúpt. (10%)</li></ol>`,
+ steps:[
+  {titill:'a) Hlutafleiður', stig:5, lausn: AL([T`f_x &= 4x + 4y, & f_y &= 6y + 4x`, T`f_{xx} &= 4, & f_{yy} &= 6, \quad f_{xy} = f_{yx} = 4`])},
+  {titill:'b) Hessian', stig:5, lausn: D(T`H = \begin{bmatrix}4&4\\4&6\end{bmatrix},\qquad |H_1| = 4 \gt 0,\qquad |H_2| = 24 - 16 = 8 \gt 0`) + '<p>Fallið er <b>stranglega kúpt</b>.</p>'}]},
+{id:'M25-5', t:'mis', src:'Miðannarpróf 2025, dæmi 5 (10%)', exam:10, q:`Finnið heildarmismun fallsins ${D(T`f(x, y) = \frac{x + y}{2x^2}`)}`,
+ steps:[
+  {titill:'f_x', stig:2, lausn: D(T`f_x = \frac{1\cdot 2x^2 - (x + y)\cdot 4x}{4x^4} = \frac{-2x^2 - 4xy}{4x^4} = -\frac{x + 2y}{2x^3}`)},
+  {titill:'f_y og df', stig:2, lausn: D(T`f_y = \frac{1}{2x^2}, \qquad df = -\frac{x + 2y}{2x^3}\,dx + \frac{1}{2x^2}\,dy`)}],
+ chk:{part2:[p => (p[0]+p[1])/(2*p[0]**2), [1.5, 0.7], [-(1.5+1.4)/(2*1.5**3), 1/(2*1.5**2)]]}},
+// ================= Skilaverkefni 2 =================
+{id:'S2-1', t:'dif', src:'Skilaverkefni 2, dæmi 1', q:`Diffrið m.t.t. \\(x\\):<ol><li>\\(f(x) = \\frac{2x^2 + 3x - 1}{x^2 + 2}\\)</li><li>\\(f(x) = \\left(2x^2 + 3x\\right)^4\\)</li><li>\\(f(x, y) = 3x^2y + 2xy^2 + 4y\\)</li></ol>`,
+ steps:[
+  {titill:'1. Deilingarreglan', stig:3, lausn: AL([T`f'(x) &= \frac{(4x + 3)(x^2 + 2) - (2x^2 + 3x - 1)\cdot 2x}{(x^2+2)^2}`, T`&= \frac{4x^3 + 3x^2 + 8x + 6 - 4x^3 - 6x^2 + 2x}{(x^2+2)^2} = \frac{-3x^2 + 10x + 6}{(x^2 + 2)^2}`])},
+  {titill:'2. Keðjureglan', stig:2, lausn: D(T`f'(x) = 4(2x^2 + 3x)^3(4x + 3)`)},
+  {titill:'3. Hlutafleiða', stig:1, lausn: D(T`\frac{\partial f}{\partial x} = 6xy + 2y^2`)}],
+ chk:{d1:[x => (2*x*x+3*x-1)/(x*x+2), x => (-3*x*x+10*x+6)/(x*x+2)**2]}},
+{id:'S2-2', t:'hes', src:'Skilaverkefni 2, dæmi 2', q:`Kannið hvort \\(f(x, y) = \\frac{x^2}{y + 1}\\) er hvelft, kúpt eða hvorugt og fyrir hvaða gildi á \\(y\\) niðurstaðan gildir.`,
+ steps:[
+  {titill:'Aðrar hlutafleiður', stig:3, lausn: AL([T`f_{xx} &= \frac{2}{y+1}, \qquad f_{yy} = \frac{2x^2}{(y+1)^3}, \qquad f_{xy} = -\frac{2x}{(y+1)^2}`, T`|H_2| &= \frac{4x^2}{(y+1)^4} - \frac{4x^2}{(y+1)^4} = 0`])},
+  {titill:'Niðurstaða', stig:3, lausn:'<p>\\(|H_2| = 0\\) alls staðar, svo fallið er hvorki stranglega hvelft né kúpt. Skoða þarf allar höfuðhlutákveður (\\(f_{xx}\\), \\(f_{yy}\\), \\(|H|\\)):</p><ul><li>\\(y \\gt -1\\): \\(f_{xx} \\gt 0\\), \\(f_{yy} \\ge 0\\), \\(|H| = 0\\): <b>kúpt</b> (ekki stranglega).</li><li>\\(y \\lt -1\\): \\(f_{xx} \\lt 0\\), \\(f_{yy} \\le 0\\), \\(|H| = 0\\): <b>hvelft</b> (ekki stranglega).</li><li>\\(y = -1\\): ekki skilgreint.</li></ul>'}]},
+{id:'S2-3', t:'mis', src:'Skilaverkefni 2, dæmi 3', q:`Gefin eru \\(w_1 = x^{1/3}y^{2/3}\\) og \\(w_2 = x^\\alpha y^\\beta z^\\delta\\).<ol type="i"><li>Reiknið heildarmismun hvors falls.</li><li>Bæði \\(x\\) og \\(y\\) eru föll af \\(z\\). Sýnið áhrif \\(z\\) á \\(w_1\\) og \\(w_2\\) myndrænt.</li><li>\\(x = e^z\\), \\(y = z^2\\) í \\(w_1\\), en \\(x = \\ln z\\), \\(y = z^2\\) í \\(w_2\\). Reiknið heildarafleiður m.t.t. \\(z\\).</li></ol>`,
+ steps:[
+  {titill:'i) Heildarmismunir', stig:3, lausn: AL([T`dw_1 &= \tfrac13x^{-2/3}y^{2/3}\,dx + \tfrac23x^{1/3}y^{-1/3}\,dy`, T`dw_2 &= \frac{\alpha w_2}{x}\,dx + \frac{\beta w_2}{y}\,dy + \frac{\delta w_2}{z}\,dz`])},
+  {titill:'ii) Flæðirit', stig:2, lausn:'<div class="flow"><span>z</span><span class="arr">→</span><span>x</span><span class="arr">→</span><span>w₁</span></div><div class="flow"><span>z</span><span class="arr">→</span><span>y</span><span class="arr">→</span><span>w₁</span></div><p>Fyrir \\(w_2\\) bætist við bein ör \\(z \\to w_2\\).</p>'},
+  {titill:'iii) w₁', stig:3, lausn: AL([T`\frac{dw_1}{dz} &= \tfrac13x^{-2/3}y^{2/3}\cdot e^z + \tfrac23x^{1/3}y^{-1/3}\cdot 2z`, T`&= \tfrac13e^{z/3}z^{4/3} + \tfrac43e^{z/3}z^{1/3} = \tfrac13e^{z/3}z^{1/3}(z + 4)`])},
+  {titill:'iii) w₂', stig:3, lausn: AL([T`\frac{dw_2}{dz} &= \frac{\alpha w_2}{x}\cdot\frac{1}{z} + \frac{\beta w_2}{y}\cdot 2z + \frac{\delta w_2}{z}`, T`&= \frac{w_2}{z}\left(\frac{\alpha}{\ln z} + 2\beta + \delta\right), \quad w_2 = (\ln z)^\alpha z^{2\beta + \delta}`])}],
+ chk:{close:[[nder(zz => Math.exp(zz/3)*zz**(4/3), 1.3), Math.exp(1.3/3)*1.3**(1/3)*(1.3+4)/3]]}},
+// ================= Ný dæmi =================
+{id:'N-E1', t:'ein', src:'Fyrirlestrarnótur 20 · C&W 9.3–9.4', q:`Gefið er \\(f(x) = x\\,e^{-x}\\).<ol type="a"><li>Finnið krítíska punkta og flokkið þá.</li><li>Á hvaða bilum er fallið vaxandi/minnkandi og hvelft/kúpt?</li><li>Er útmarkið algilt?</li></ol>`,
+ steps:[
+  {titill:'a) FGS', stig:2, lausn: D(T`f'(x) = e^{-x} - xe^{-x} = (1 - x)e^{-x} = 0 \;\Rightarrow\; x = 1`)},
+  {titill:'a) AGS', stig:2, lausn: AL([T`f''(x) &= -e^{-x} - (1 - x)e^{-x} = (x - 2)e^{-x}`, T`f''(1) &= -e^{-1} \lt 0 \;\Rightarrow\; \text{hámark},\; f(1) = e^{-1}`])},
+  {titill:'b) Bil', stig:2, lausn:'<p>\\(e^{-x} \\gt 0\\), svo formerkin ráðast af \\((1 - x)\\) og \\((x - 2)\\). Vaxandi fyrir \\(x \\lt 1\\), minnkandi fyrir \\(x \\gt 1\\). Hvelft fyrir \\(x \\lt 2\\), kúpt fyrir \\(x \\gt 2\\); beygjuskil í \\(x = 2\\).</p>'},
+  {titill:'c) Algilt?', stig:1, lausn:'<p>Já. Eini krítíski punkturinn er hámark og fallið er vaxandi á undan og minnkandi á eftir, svo \\(f(1) = 1/e\\) er <b>algilt hámark</b>.</p>' + fnSvg({xmin:-1, xmax:6, ymin:-1, ymax:0.6, curves:[{f:x => x*Math.exp(-x)}], points:[{x:1, y:Math.exp(-1), label:'(1, 1/e)'}, {x:2, y:2*Math.exp(-2), label:'beygjuskil'}], alt:'Graf x e^(−x)'})}],
+ chk:{d1:[x => x*Math.exp(-x), x => (1-x)*Math.exp(-x)]}},
+{id:'N-E2', t:'ein', src:'Fyrirlestrarnótur 20 · C&W 9.3–9.4', q:`Gefið er \\(f(x) = \\ln(x^2 + 1)\\).<ol type="a"><li>Formengi og krítískir punktar.</li><li>Flokkun.</li><li>Hvar er fallið hvelft og hvar kúpt?</li></ol>`,
+ steps:[
+  {titill:'a)', stig:2, lausn: D(T`D = \mathbb{R} \;(x^2 + 1 \gt 0), \qquad f'(x) = \frac{2x}{x^2+1} = 0 \;\Rightarrow\; x = 0`)},
+  {titill:'b)', stig:2, lausn: AL([T`f''(x) &= \frac{2(x^2+1) - 2x\cdot 2x}{(x^2+1)^2} = \frac{2(1 - x^2)}{(x^2+1)^2}`, T`f''(0) &= 2 \gt 0 \;\Rightarrow\; \text{lágmark}, \; f(0) = 0`]) + '<p>Algilt lágmark, því \\(\\ln(x^2+1) \\ge \\ln 1 = 0\\).</p>'},
+  {titill:'c)', stig:2, lausn:'<p>Kúpt fyrir \\(|x| \\lt 1\\), hvelft fyrir \\(|x| \\gt 1\\); beygjuskil í \\(x = \\pm 1\\).</p>'}],
+ chk:{d1:[x => Math.log(x*x+1), x => 2*x/(x*x+1)], d1b:[x => 2*x/(x*x+1), x => 2*(1-x*x)/(x*x+1)**2]}},
+{id:'N-E3', t:'ein', src:'Sbr. lokapróf 2023, dæmi 3', q:`Gefið er \\(f(x) = \\frac{x - 2}{x + 1}\\).<ol type="a"><li>Formengi?</li><li>Vaxandi eða minnkandi?</li><li>Hvelft eða kúpt?</li><li>Krítískir punktar?</li><li>Skurðpunktar við ása; rissið.</li></ol>`,
+ steps:[
+  {titill:'a)', stig:1, lausn: D(T`D = \{x \mid x \ne -1\}`)},
+  {titill:'b)', stig:2, lausn: D(T`f'(x) = \frac{(x+1) - (x-2)}{(x+1)^2} = \frac{3}{(x+1)^2} \gt 0`) + '<p>Vaxandi á hvoru bili formengisins.</p>'},
+  {titill:'c)', stig:2, lausn: D(T`f''(x) = -\frac{6}{(x+1)^3}`) + '<p>Kúpt fyrir \\(x \\lt -1\\), hvelft fyrir \\(x \\gt -1\\). Ekki beygjuskil, því \\(x = -1\\) er ekki í formenginu.</p>'},
+  {titill:'d)–e)', stig:2, lausn:'<p>Engir krítískir punktar (\\(f\' \\ne 0\\)). Skurðpunktar: \\((2, 0)\\) og \\((0, -2)\\). Lóðrétt aðfella \\(x = -1\\), lárétt \\(y = 1\\).</p>' + fnSvg({xmin:-6, xmax:6, ymin:-6, ymax:6, asym:[-1], curves:[{f:x => (x-2)/(x+1), dom:x => Math.abs(x + 1) > 0.08}], points:[{x:2, y:0, label:'(2, 0)'}, {x:0, y:-2, label:'(0, −2)'}], alt:'Graf (x−2)/(x+1)'})}],
+ chk:{d1:[x => (x-2)/(x+1), x => 3/(x+1)**2]}},
+{id:'N-T1', t:'mis', src:'Fyrirlestrarnótur 16 · C&W 8.4', q:`\\(y = x^2w + 3w\\) og \\(x = 2w + 1\\). Finnið \\(\\frac{dy}{dw}\\) og reiknið í \\(w = 1\\). Staðfestið með beinni innsetningu.`,
+ steps:[
+  {titill:'Heildarafleiðan', stig:3, lausn: AL([T`\frac{dy}{dw} &= \frac{\partial y}{\partial x}\frac{dx}{dw} + \frac{\partial y}{\partial w} = 2xw\cdot 2 + (x^2 + 3)`, T`w = 1,\; x = 3: \quad \frac{dy}{dw} &= 12 + 12 = 24`])},
+  {titill:'Prófun', stig:2, lausn: AL([T`y &= (2w + 1)^2w + 3w`, T`y' &= 4(2w+1)w + (2w+1)^2 + 3 = 12 + 9 + 3 = 24 \;\checkmark`])}],
+ chk:{close:[[nder(ww => (2*ww+1)**2*ww + 3*ww, 1), 24]]}},
+{id:'N-T2', t:'mis', src:'Fyrirlestrarnótur 16 · tilfelli A', q:`\\(y = f(x_1, x_2, w) = x_1x_2 + w^2\\) með \\(x_1 = w^2\\) og \\(x_2 = e^w\\). Teiknið flæðirit og finnið \\(\\frac{dy}{dw}\\).`,
+ steps:[
+  {titill:'Flæðirit', stig:1, lausn:'<div class="flow"><span>w</span><span class="arr">→</span><span>x₁</span><span class="arr">→</span><span>y</span></div><div class="flow"><span>w</span><span class="arr">→</span><span>x₂</span><span class="arr">→</span><span>y</span></div><div class="flow"><span>w</span><span class="arr">→</span><span>y</span><span class="lbl">bein áhrif</span></div>'},
+  {titill:'Heildarafleiðan', stig:3, lausn: AL([T`\frac{dy}{dw} &= \frac{\partial y}{\partial x_1}\frac{dx_1}{dw} + \frac{\partial y}{\partial x_2}\frac{dx_2}{dw} + \frac{\partial y}{\partial w}`, T`&= x_2\cdot 2w + x_1\cdot e^w + 2w`, T`&= 2we^w + w^2e^w + 2w`])}],
+ chk:{close:[[nder(ww => ww*ww*Math.exp(ww) + ww*ww, 0.8), 2*0.8*Math.exp(0.8) + 0.64*Math.exp(0.8) + 1.6]]}},
+{id:'N-T3', t:'mis', src:'Fyrirlestrarnótur 16 · tilfelli B', q:`\\(y = x_1^2 + x_2u + v\\) með \\(x_1 = uv\\) og \\(x_2 = u + v\\). Finnið hlut-heildarafleiðuna \\(\\frac{\\S y}{\\S u}\\).`,
+ steps:[
+  {titill:'Formúlan', stig:2, lausn: D(T`\frac{\S y}{\S u} = \frac{\partial y}{\partial x_1}\frac{\partial x_1}{\partial u} + \frac{\partial y}{\partial x_2}\frac{\partial x_2}{\partial u} + \frac{\partial y}{\partial u}`)},
+  {titill:'Reikna', stig:3, lausn: AL([T`&= 2x_1\cdot v + u\cdot 1 + x_2`, T`&= 2uv^2 + u + u + v = 2uv^2 + 2u + v`]) + '<p>Prófun: \\(y = u^2v^2 + u^2 + uv + v\\), \\(\\partial y/\\partial u = 2uv^2 + 2u + v\\).</p>'}]},
+{id:'N-I1', t:'dul', src:'Fyrirlestrarnótur 17 · C&W 8.5', q:`Gefið er \\(F(x, y) = x^2 + xy + y^2 - 7 = 0\\).<ol type="a"><li>Sýnið að \\((1, 2)\\) uppfylli sambandið.</li><li>Kannið tilvist fólgins falls \\(y = f(x)\\) í punktinum.</li><li>Reiknið \\(\\frac{dy}{dx}\\) þar.</li></ol>`,
+ steps:[
+  {titill:'a)', stig:1, lausn: D(T`1 + 2 + 4 - 7 = 0 \;\checkmark`)},
+  {titill:'b)', stig:2, lausn: D(T`F_x = 2x + y, \quad F_y = x + 2y, \quad F_y(1, 2) = 5 \ne 0`) + '<p>Samfelldar hlutafleiður og \\(F_y \\ne 0\\): fólgið fall er til.</p>'},
+  {titill:'c)', stig:2, lausn: D(T`\frac{dy}{dx} = -\frac{F_x}{F_y} = -\frac{4}{5}`)}],
+ chk:{close:[[(() => { const sY = X => { let Y = 2; for (let i = 0; i < 40; i++) Y -= (X*X + X*Y + Y*Y - 7) / (X + 2*Y); return Y; }; return (sY(1.0001) - sY(0.9999)) / 0.0002; })(), -0.8]]}},
+{id:'N-I2', t:'dul', src:'Fyrirlestrarnótur 17 · hæðarlínur', q:`Nytjafall \\(U = x^{1/2}y^{1/2}\\). Jafnnytjaferillinn \\(U = 4\\) gengur í gegnum \\((4, 4)\\).<ol type="a"><li>Notið setninguna um fólgin föll til að finna halla ferilsins almennt.</li><li>Reiknið hallann í \\((4, 4)\\) og \\((2, 8)\\).</li></ol>`,
+ steps:[
+  {titill:'a)', stig:3, lausn: AL([T`F &= x^{1/2}y^{1/2} - 4 = 0, \qquad F_y = \tfrac12x^{1/2}y^{-1/2} \ne 0`, T`\frac{dy}{dx} &= -\frac{\tfrac12x^{-1/2}y^{1/2}}{\tfrac12x^{1/2}y^{-1/2}} = -\frac{y}{x}`]) + '<p>Þetta er jaðarstaðkvæmdarhlutfallið (MRS) með mínusmerki.</p>'},
+  {titill:'b)', stig:2, lausn: AL([T`(4, 4): \quad \frac{dy}{dx} &= -1`, T`(2, 8): \quad \frac{dy}{dx} &= -4`]) + '<p>Ferillinn er brattari þar sem lítið er af \\(x\\): kúptur ferill.</p>'}]},
+{id:'N-I3', t:'dul', src:'Fyrirlestrarnótur 16–17 · m breytur', q:`Gefið er \\(F(y, x, z) = y^3 + xyz - 12 = 0\\).<ol type="a"><li>Sýnið að \\((y, x, z) = (2, 1, 2)\\) uppfylli sambandið og að til sé fólgið fall \\(y = f(x, z)\\).</li><li>Reiknið \\(\\frac{\\partial y}{\\partial x}\\) og \\(\\frac{\\partial y}{\\partial z}\\) í punktinum.</li></ol>`,
+ steps:[
+  {titill:'a)', stig:2, lausn: AL([T`F(2, 1, 2) &= 8 + 4 - 12 = 0 \;\checkmark`, T`F_y &= 3y^2 + xz = 12 + 2 = 14 \ne 0`])},
+  {titill:'b)', stig:3, lausn: AL([T`\frac{\partial y}{\partial x} &= -\frac{F_x}{F_y} = -\frac{yz}{3y^2 + xz} = -\frac{4}{14} = -\frac27`, T`\frac{\partial y}{\partial z} &= -\frac{F_z}{F_y} = -\frac{xy}{3y^2 + xz} = -\frac{2}{14} = -\frac17`])}],
+ chk:{close:[[(() => { const sY = X => { let Y = 2; for (let i = 0; i < 40; i++) Y -= (Y**3 + X*Y*2 - 12) / (3*Y*Y + 2*X); return Y; }; return (sY(1.0001) - sY(0.9999)) / 0.0002; })(), -2/7]]}},
+{id:'N-Y1', t:'tay', src:'Fyrirlestrarnótur 18 · Maclaurin', q:`Finnið 2. gráðu Maclaurin-nálgun (Taylor um \\(x_0 = 0\\)) á \\(f(x) = e^{2x}\\) og notið hana til að nálga \\(e^{0{,}2}\\).`,
+ steps:[
+  {titill:'Afleiður í 0', stig:2, lausn: D(T`f(0) = 1, \quad f'(x) = 2e^{2x} \Rightarrow 2, \quad f''(x) = 4e^{2x} \Rightarrow 4`)},
+  {titill:'Nálgun', stig:2, lausn: AL([T`P_2(x) &= 1 + 2x + \frac{4}{2!}x^2 = 1 + 2x + 2x^2`, T`e^{0{,}2} = f(0{,}1) &\approx 1 + 0{,}2 + 0{,}02 = 1{,}22`]) + '<p>Rétt gildi er um 1,2214.</p>'}],
+ chk:{close:[[1.22, Math.exp(0.2), 2e-3]]}},
+{id:'N-Y2', t:'tay', src:'Fyrirlestrarnótur 18', q:`Finnið 2. gráðu Taylor-nálgun á \\(f(x) = \\ln x\\) um \\(x_0 = 1\\) og nálgið \\(\\ln 1{,}1\\).`,
+ steps:[
+  {titill:'Afleiður í 1', stig:2, lausn: D(T`f(1) = 0, \quad f'(1) = 1, \quad f''(1) = -1`)},
+  {titill:'Nálgun', stig:2, lausn: AL([T`P_2(x) &= (x - 1) - \tfrac12(x - 1)^2`, T`\ln 1{,}1 &\approx 0{,}1 - 0{,}005 = 0{,}095`]) + '<p>Rétt gildi um 0,0953.</p>'}],
+ chk:{close:[[0.095, Math.log(1.1), 1e-3]]}},
+{id:'N-Y3', t:'tay', src:'Fyrirlestrarnótur 18', q:`\\(f(x) = x^3 - 2x + 1\\). Finnið 1., 2. og 3. gráðu Taylor-nálgun um \\(x_0 = 1\\). Hvað er afgangsliðurinn í hverju tilfelli?`,
+ steps:[
+  {titill:'Afleiður í 1', stig:2, lausn: D(T`f(1) = 0, \quad f'(1) = 3 - 2 = 1, \quad f''(1) = 6, \quad f'''(1) = 6`)},
+  {titill:'Nálganir', stig:3, lausn: AL([T`P_1 &= (x - 1)`, T`P_2 &= (x - 1) + 3(x - 1)^2 = 3x^2 - 5x + 2`, T`P_3 &= (x - 1) + 3(x - 1)^2 + (x - 1)^3 = x^3 - 2x + 1`])},
+  {titill:'Afgangsliðir', stig:2, lausn: AL([T`R_1 &= 3(x-1)^2 + (x-1)^3`, T`R_2 &= (x - 1)^3`, T`R_3 &= 0`]) + '<p>Afgangsliðurinn minnkar eftir því sem gráðan hækkar og hverfur við gráðu 3.</p>'}]},
+{id:'N-S1', t:'eins', src:'Fyrirlestrarnótur 19 · C&W 12.6', q:`Sýnið að \\(f(x, y) = x^3 + 2x^2y - y^3\\) sé einsleitt, finnið gráðuna og staðfestið setningu Eulers.`,
+ steps:[
+  {titill:'Einsleitni', stig:2, lausn: D(T`f(jx, jy) = j^3x^3 + 2j^2x^2\,jy - j^3y^3 = j^3f(x, y)`) + '<p>Gráða 3.</p>'},
+  {titill:'Euler', stig:3, lausn: AL([T`f_x &= 3x^2 + 4xy, \qquad f_y = 2x^2 - 3y^2`, T`xf_x + yf_y &= 3x^3 + 4x^2y + 2x^2y - 3y^3 = 3x^3 + 6x^2y - 3y^3 = 3f \;\checkmark`])}]},
+{id:'N-S2', t:'eins', src:'Fyrirlestrarnótur 19–20', q:`Hver eftirfarandi falla eru einsleit, og af hvaða gráðu? Eru þau sem eru ekki einsleit þenjanleg?<ol type="a"><li>\\(f = x^2y + y + 1\\)</li><li>\\(g = 10K^{1/4}L^{1/2}\\)</li><li>\\(h = \\ln K + \\ln L\\)</li><li>\\(k = \\frac{x}{y}\\)</li></ol>`,
+ steps:[
+  {titill:'a)', stig:1, lausn:'<p>Liðir af gráðu 3, 1 og 0: <b>ekki einsleitt</b>.</p>'},
+  {titill:'b)', stig:2, lausn: D(T`g(jK, jL) = j^{1/4 + 1/2}g = j^{3/4}g`) + '<p>Gráða \\(\\tfrac34 \\lt 1\\): stærðaróhagkvæmni.</p>'},
+  {titill:'c)', stig:2, lausn: D(T`h(jK, jL) = 2\ln j + h(K, L)`) + '<p>Ekki einsleitt, en <b>þenjanlegt</b>: \\(h = \\ln(KL)\\) er einhalla vörpun af \\(KL\\), sem er einsleitt af gráðu 2.</p>'},
+  {titill:'d)', stig:1, lausn: D(T`k(jx, jy) = \frac{jx}{jy} = j^0k`) + '<p>Einsleitt af gráðu 0.</p>'}]},
+{id:'N-O1', t:'ham', src:'Fyrirlestrarnótur 21 · umslagssetningin', q:`\\(f(x; a) = a\\ln x - x\\), \\(x \\gt 0\\), \\(a \\gt 0\\).<ol type="a"><li>Finnið \\(x^*\\) og sýnið að það sé hámark.</li><li>Finnið virðisfallið \\(V(a)\\).</li><li>Sýnið að \\(V'(a)\\) sé jafnt \\(\\frac{\\partial f}{\\partial a}\\) í hámarkinu.</li></ol>`,
+ steps:[
+  {titill:'a)', stig:2, lausn: AL([T`f_x &= \frac{a}{x} - 1 = 0 \;\Rightarrow\; x^* = a`, T`f_{xx} &= -\frac{a}{x^2} \lt 0`])},
+  {titill:'b)', stig:2, lausn: D(T`V(a) = a\ln a - a`)},
+  {titill:'c)', stig:2, lausn: AL([T`V'(a) &= \ln a + 1 - 1 = \ln a`, T`\frac{\partial f}{\partial a}\Big|_{x^*} &= \ln x^* = \ln a \;\checkmark`])}],
+ chk:{close:[[nder(aa => aa*Math.log(aa) - aa, 2.3), Math.log(2.3)]]}},
+{id:'N-O2', t:'ham', src:'Fyrirlestrarnótur 21 · sbr. dæmi 45', q:`Fyrirtæki: \\(Q = K^{1/4}L^{1/4}\\), \\(p = 8\\), \\(r = w = 1\\).<ol type="a"><li>Er framleiðslufallið einsleitt? Af hvaða gráðu?</li><li>Finnið \\(K^*\\), \\(L^*\\) og hámarkshagnað.</li><li>Kannið AGS.</li><li>Hver er \\(\\frac{dV}{dp}\\) í \\(p = 8\\)?</li></ol>`,
+ steps:[
+  {titill:'a)', stig:1, lausn:'<p>Gráða \\(\\tfrac14 + \\tfrac14 = \\tfrac12\\): stærðaróhagkvæmni, svo innra hámark er til.</p>'},
+  {titill:'b) FGS', stig:4, lausn: AL([T`\pi_K &= 2K^{-3/4}L^{1/4} - 1 = 0`, T`\pi_L &= 2K^{1/4}L^{-3/4} - 1 = 0`]) + '<p>Deila: \\(L/K = 1\\), svo \\(K = L\\). Þá \\(2K^{-1/2} = 1\\):</p>' + AL([T`K^* &= L^* = 4`, T`\pi^* &= 8\cdot 4^{1/2} - 4 - 4 = 8`])},
+  {titill:'c) AGS', stig:3, lausn: AL([T`\pi_{KK} &= -\tfrac32K^{-7/4}L^{1/4} = -\tfrac{3}{16}`, T`\pi_{LL} &= -\tfrac{3}{16}, \qquad \pi_{KL} = \tfrac12K^{-3/4}L^{-3/4} = \tfrac{1}{16}`, T`|H_1| &= -\tfrac{3}{16} \lt 0, \qquad |H_2| = \tfrac{9}{256} - \tfrac{1}{256} = \tfrac{1}{32} \gt 0`]) + '<p>Hámark.</p>'},
+  {titill:'d) Umslagssetning', stig:2, lausn: D(T`\frac{dV}{dp} = Q(K^*, L^*) = 4^{1/4}\cdot 4^{1/4} = 2`)}],
+ chk:{close:[[2*4**(-0.75)*4**0.25 - 1, 0], [8*2 - 8, 8]]}},
+{id:'N-O3', t:'hes', src:'Fyrirlestrarnótur 20 · C&W 11.2', q:`Einokunarfyrirtæki selur á tveimur mörkuðum með andhverfa eftirspurn \\(P_1 = 12 - Q_1\\) og \\(P_2 = 20 - 2Q_2\\). Jaðarkostnaður er fastur, 2.<ol type="a"><li>Ritið hagnaðarfallið.</li><li>Finnið hagnaðarhámarkandi magn.</li><li>Sýnið að AGS séu uppfyllt og finnið verð og hagnað.</li></ol>`,
+ steps:[
+  {titill:'a)', stig:1, lausn: D(T`\pi = (12 - Q_1)Q_1 + (20 - 2Q_2)Q_2 - 2(Q_1 + Q_2)`)},
+  {titill:'b) FGS', stig:2, lausn: AL([T`\pi_1 &= 12 - 2Q_1 - 2 = 0 \;\Rightarrow\; Q_1^* = 5`, T`\pi_2 &= 20 - 4Q_2 - 2 = 0 \;\Rightarrow\; Q_2^* = 4{,}5`])},
+  {titill:'c) AGS og niðurstöður', stig:3, lausn: D(T`H = \begin{bmatrix}-2&0\\0&-4\end{bmatrix}, \quad |H_1| = -2 \lt 0, \quad |H_2| = 8 \gt 0`) + AL([T`P_1 &= 7, \qquad P_2 = 11`, T`\pi^* &= 7\cdot 5 + 11\cdot 4{,}5 - 2\cdot 9{,}5 = 35 + 49{,}5 - 19 = 65{,}5`])}],
+ chk:{hess:[[mono(10,1,0), mono(-1,2,0), mono(18,0,1), mono(-2,0,2)], [5, 4.5], 'max', [-2, 8]]}},
+];
+
+// ===== quick_wrap.js =====
+// ---------- hraðspurningar (svör reiknuð með sympy) og skrá yfir föst dæmi ----------
+const QUICK = [{"id": "Q-F1", "t": "fyl", "src": "Fyrirlestrarnótur 8", "q": "Hvert er stakið í röð 2, dálki 1 í \\(AB\\)? \\[A = \\begin{bmatrix}2 & -1 \\\\ 3 & 4\\end{bmatrix},\\quad B = \\begin{bmatrix}1 & 5 \\\\ -2 & 0\\end{bmatrix}\\]", "a": "-5"}, {"id": "Q-F2", "t": "fyl", "src": "Fyrirlestrarnótur 8", "q": "Hvert er stakið í röð 1, dálki 2 í \\(BA\\)? \\[A = \\begin{bmatrix}2 & -1 \\\\ 3 & 4\\end{bmatrix},\\quad B = \\begin{bmatrix}1 & 5 \\\\ -2 & 0\\end{bmatrix}\\]", "a": "19"}, {"id": "Q-F3", "t": "fyl", "src": "Fyrirlestrarnótur 8", "q": "Hver er summa allra staka í \\(2A - B\\)? \\[A = \\begin{bmatrix}2 & -1 \\\\ 3 & 4\\end{bmatrix},\\quad B = \\begin{bmatrix}1 & 5 \\\\ -2 & 0\\end{bmatrix}\\]", "a": "12"}, {"id": "Q-F4", "t": "fyl", "src": "Fyrirlestrarnótur 8", "q": "Reiknið efra stakið í \\(Ab\\). \\[A = \\begin{bmatrix}1 & 0 & 2 \\\\ -1 & 3 & 1\\end{bmatrix},\\quad b = \\begin{bmatrix}2 \\\\ 1 \\\\ -1\\end{bmatrix}\\]", "a": "0"}, {"id": "Q-F5", "t": "fyl", "src": "Fyrirlestrarnótur 9", "q": "Reiknið \\(u'v\\). \\[u = \\begin{bmatrix}3 \\\\ -1 \\\\ 2\\end{bmatrix},\\quad v = \\begin{bmatrix}1 \\\\ 4 \\\\ -2\\end{bmatrix}\\]", "a": "-5"}, {"id": "Q-F6", "t": "fyl", "src": "Fyrirlestrarnótur 9", "q": "Hvert er stakið í röð 3, dálki 2 í \\(uv'\\)? \\[u = \\begin{bmatrix}3 \\\\ -1 \\\\ 2\\end{bmatrix},\\quad v = \\begin{bmatrix}1 \\\\ 4 \\\\ -2\\end{bmatrix}\\]", "a": "8"}, {"id": "Q-F7", "t": "fyl", "src": "Fyrirlestrarnótur 9", "q": "Finnið \\(k\\) þannig að \\([2\\;\\;k\\;\\;-1]'\\) og \\([3\\;\\;1\\;\\;4]'\\) séu hornréttir.", "a": "-2"}, {"id": "Q-F8", "t": "fyl", "src": "Fyrirlestrarnótur 9", "q": "Hvað hefur \\(x'x\\) mörg stök ef \\(x\\) er \\(5\\times 1\\)?", "a": "1"}, {"id": "Q-F9", "t": "fyl", "src": "Fyrirlestrarnótur 9", "q": "\\(A\\) er \\(2\\times 3\\) og \\(B\\) er \\(3\\times 4\\). Hver er víddin á \\(AB\\)?", "o": ["\\(2\\times 4\\)", "\\(3\\times 3\\)", "\\(4\\times 2\\)", "\\(2\\times 3\\)", "Ekki skilgreint"], "a": 0}, {"id": "Q-F10", "t": "fyl", "src": "Fyrirlestrarnótur 9", "q": "\\(A\\) er \\(2\\times 3\\) og \\(B\\) er \\(3\\times 4\\). Hver er víddin á \\(B\\'A\\'\\)?", "o": ["\\(4\\times 2\\)", "\\(2\\times 4\\)", "\\(3\\times 3\\)", "\\(4\\times 4\\)", "Ekki skilgreint"], "a": 0}, {"id": "Q-F11", "t": "fyl", "src": "Fyrirlestrarnótur 9", "q": "Hvað af eftirfarandi gildir <b>ekki</b> almennt fyrir fylki?", "o": ["\\(AB = BA\\)", "\\((AB)C = A(BC)\\)", "\\(A(B+C) = AB + AC\\)", "\\((AB)' = B'A'\\)", "\\(AI = A\\)"], "a": 0}, {"id": "Q-F12", "t": "fyl", "src": "Fyrirlestrarnótur 9", "q": "Hvert er rétt um \\((ABC)'\\)?", "o": ["\\(C'B'A'\\)", "\\(A'B'C'\\)", "\\(B'A'C'\\)", "\\(C'A'B'\\)", "\\(ABC\\)"], "a": 0}, {"id": "Q-F13", "t": "fyl", "src": "Fyrirlestrarnótur 9", "q": "Tveir vigrar \\(u\\) og \\(v\\) eru hornréttir ef og aðeins ef", "o": ["\\(u'v = 0\\)", "\\(u = kv\\)", "\\(uv' = 0\\)", "\\(u + v = 0\\)", "\\(|u| = |v|\\)"], "a": 0}, {"id": "Q-F14", "t": "fyl", "src": "Fyrirlestrarnótur 10 · C&W 4.7", "q": "Hversu margir eru í ástandi B eftir eitt tímabil? \\[x_0^\\prime = \\begin{bmatrix}500 & 500\\end{bmatrix},\\quad M = \\begin{bmatrix}0{,}8 & 0{,}2\\\\ 0{,}3 & 0{,}7\\end{bmatrix}\\]", "a": "450"}, {"id": "Q-F15", "t": "fyl", "src": "Fyrirlestrarnótur 10 · C&W 4.7", "q": "Sama keðja: hversu margir eru í ástandi A eftir tvö tímabil? \\[x_0^\\prime = \\begin{bmatrix}500 & 500\\end{bmatrix},\\quad M = \\begin{bmatrix}0{,}8 & 0{,}2\\\\ 0{,}3 & 0{,}7\\end{bmatrix}\\]", "a": "575"}, {"id": "Q-F16", "t": "fyl", "src": "Fyrirlestrarnótur 10 · C&W 4.7", "q": "Hvað þarf að gilda um hverja röð í færslufylki Markov-keðju?", "o": ["Hún summast í 1", "Hún summast í 0", "Ákveðan er 1", "Hornalínustökin eru 1", "Dálkarnir summast í 1"], "a": 0}, {"id": "Q-K1", "t": "akv", "src": "Fyrirlestrarnótur 11", "q": "Reiknið ákveðuna. \\[\\begin{vmatrix}3 & -2 \\\\ 5 & 4\\end{vmatrix}\\]", "a": "22"}, {"id": "Q-K2", "t": "akv", "src": "Fyrirlestrarnótur 11", "q": "Reiknið ákveðuna. \\[\\begin{vmatrix}-1 & 6 \\\\ 2 & -3\\end{vmatrix}\\]", "a": "-9"}, {"id": "Q-K3", "t": "akv", "src": "Fyrirlestrarnótur 11", "q": "Reiknið ákveðuna. \\[\\begin{vmatrix}\\frac{1}{2} & 2 \\\\ 3 & 4\\end{vmatrix}\\]", "a": "-4"}, {"id": "Q-K4", "t": "akv", "src": "Fyrirlestrarnótur 11 · Laplace", "q": "Reiknið ákveðuna. \\[\\begin{vmatrix}2 & 0 & 1 \\\\ 1 & 3 & 0 \\\\ 0 & -1 & 2\\end{vmatrix}\\]", "a": "11"}, {"id": "Q-K5", "t": "akv", "src": "Fyrirlestrarnótur 11 · Laplace", "q": "Reiknið ákveðuna. \\[\\begin{vmatrix}1 & 2 & 3 \\\\ 0 & -1 & 4 \\\\ 0 & 0 & 5\\end{vmatrix}\\]", "a": "-5"}, {"id": "Q-K6", "t": "akv", "src": "Fyrirlestrarnótur 11 · Laplace", "q": "Reiknið ákveðuna. \\[\\begin{vmatrix}0 & 2 & 0 \\\\ 1 & 3 & 4 \\\\ 2 & 1 & 0\\end{vmatrix}\\]", "a": "16"}, {"id": "Q-K7", "t": "akv", "src": "Fyrirlestrarnótur 11 · Laplace", "q": "Reiknið ákveðuna. \\[\\begin{vmatrix}1 & -1 & 2 \\\\ 2 & 0 & 1 \\\\ 3 & 1 & 0\\end{vmatrix}\\]", "a": "0"}, {"id": "Q-K8", "t": "akv", "src": "Fyrirlestrarnótur 11 · fylgiþættir", "q": "Hver er fylgiþátturinn \\(|C_{12}|\\)? \\[\\begin{bmatrix}2 & 0 & 1 \\\\ 1 & 3 & 0 \\\\ 0 & -1 & 2\\end{bmatrix}\\]", "a": "-2"}, {"id": "Q-K9", "t": "akv", "src": "Fyrirlestrarnótur 11 · fylgiþættir", "q": "Hver er fylgiþátturinn \\(|C_{23}|\\)? \\[\\begin{bmatrix}2 & 0 & 1 \\\\ 1 & 3 & 0 \\\\ 0 & -1 & 2\\end{bmatrix}\\]", "a": "2"}, {"id": "Q-K10", "t": "akv", "src": "Fyrirlestrarnótur 11 · eiginleikar", "q": "\\(A\\) er \\(3\\times 3\\) og \\(|A| = 4\\). Hvað er \\(|2A|\\)?", "a": "32"}, {"id": "Q-K11", "t": "akv", "src": "Fyrirlestrarnótur 11 · eiginleikar", "q": "\\(A\\) og \\(B\\) eru \\(2\\times 2\\), \\(|A| = -3\\) og \\(|B| = 2\\). Hvað er \\(|AB^{-1}|\\)?", "a": "-3/2"}, {"id": "Q-K12", "t": "akv", "src": "Fyrirlestrarnótur 11 · eiginleikar", "q": "\\(|A| = 5\\) fyrir \\(3\\times 3\\) fylki. Hvað er \\(|-A'|\\)?", "a": "-5"}, {"id": "Q-K13", "t": "akv", "src": "Fyrirlestrarnótur 11 · eiginleikar", "q": "Hvaða línuaðgerð breytir <b>ekki</b> ákveðu?", "o": ["Að leggja margfeldi einnar raðar við aðra", "Að víxla tveimur röðum", "Að margfalda röð með 2", "Að margfalda allt fylkið með −1 (3×3)", "Að skipta út röð fyrir núllröð"], "a": 0}, {"id": "Q-K14", "t": "akv", "src": "Fyrirlestrarnótur 10 · C&W 5.1", "q": "Hver er raðtala \\(\\begin{bmatrix}1&2&3\\\\2&4&6\\\\1&0&1\\end{bmatrix}\\)?", "o": ["2", "1", "3", "0", "4"], "a": 0}, {"id": "Q-K15", "t": "akv", "src": "Fyrirlestrarnótur 11", "q": "Fyrir hvaða \\(k\\) er \\(\\begin{bmatrix}2&k\\\\3&6\\end{bmatrix}\\) sérstætt?", "a": "4"}, {"id": "Q-A1", "t": "and", "src": "Fyrirlestrarnótur 12", "q": "Hvert er stakið í röð 1, dálki 2 í \\(A^{-1}\\)? \\[A = \\begin{bmatrix}3 & 1 \\\\ 5 & 2\\end{bmatrix}\\]", "a": "-1"}, {"id": "Q-A2", "t": "and", "src": "Fyrirlestrarnótur 12", "q": "Hvert er stakið í röð 2, dálki 1 í \\(A^{-1}\\)? \\[A = \\begin{bmatrix}4 & 2 \\\\ 3 & 2\\end{bmatrix}\\]", "a": "-3/2"}, {"id": "Q-A3", "t": "and", "src": "Fyrirlestrarnótur 12", "q": "Hvert er stakið í röð 2, dálki 2 í \\(A^{-1}\\)? \\[A = \\begin{bmatrix}-1 & 2 \\\\ 1 & -3\\end{bmatrix}\\]", "a": "-1"}, {"id": "Q-A4", "t": "and", "src": "Fyrirlestrarnótur 12", "q": "Hvert er stakið í röð 1, dálki 3 í \\(\\operatorname{adj}A\\)? \\[A = \\begin{bmatrix}1 & 2 & 1 \\\\ 0 & 1 & 0 \\\\ 2 & 0 & 3\\end{bmatrix}\\]", "a": "-1"}, {"id": "Q-A5", "t": "and", "src": "Fyrirlestrarnótur 12", "q": "Hvert er stakið í röð 3, dálki 1 í \\(A^{-1}\\)? \\[A = \\begin{bmatrix}1 & 2 & 1 \\\\ 0 & 1 & 0 \\\\ 2 & 0 & 3\\end{bmatrix}\\]", "a": "-2"}, {"id": "Q-A6", "t": "and", "src": "Fyrirlestrarnótur 12", "q": "Hvert er stakið í röð 2, dálki 2 í \\(A^{-1}\\)? \\[A = \\begin{bmatrix}1 & 0 & 1 \\\\ 1 & 1 & 0 \\\\ 0 & 1 & 1\\end{bmatrix}\\]", "a": "1/2"}, {"id": "Q-A7", "t": "and", "src": "Fyrirlestrarnótur 12", "q": "\\(|A| = -2\\) fyrir \\(3\\times 3\\) fylki. Hvað er \\(|\\operatorname{adj}A|\\)? (Ábending: \\(A\\operatorname{adj}A = |A|I\\).)", "a": "4"}, {"id": "Q-A8", "t": "and", "src": "Fyrirlestrarnótur 12", "q": "Hver er rétt röð skrefa til að finna \\(A^{-1}\\) með aðoka fylki?", "o": ["\\(|A|\\) → fylgiþáttafylki \\(C\\) → bylta \\(C\\) → deila með \\(|A|\\)", "Bylta \\(A\\) → fylgiþættir → deila með \\(|A|\\)", "Fylgiþættir → deila með \\(|A|\\) → margfalda með \\(A\\)", "\\(|A|\\) → hlutákveður án formerkja → deila", "Bylta \\(A\\) → deila með \\(|A|\\)"], "a": 0}, {"id": "Q-A9", "t": "and", "src": "Fyrirlestrarnótur 9", "q": "Hvert er \\((AB)^{-1}\\)?", "o": ["\\(B^{-1}A^{-1}\\)", "\\(A^{-1}B^{-1}\\)", "\\(A^{-1} + B^{-1}\\)", "\\((BA)'\\)", "\\(\\frac{1}{AB}\\)"], "a": 0}, {"id": "Q-A10", "t": "and", "src": "Fyrirlestrarnótur 12", "q": "\\(AX = B\\) og \\(A\\) er andhverfanlegt. Hvað er \\(X\\)?", "o": ["\\(A^{-1}B\\)", "\\(BA^{-1}\\)", "\\(B/A\\)", "\\(A'B\\)", "\\(B^{-1}A\\)"], "a": 0}, {"id": "Q-A11", "t": "and", "src": "Fyrirlestrarnótur 10", "q": "Hvert þessara er <b>nægjanlegt</b> skilyrði fyrir því að ferningsfylki sé andhverfanlegt?", "o": ["Raðirnar eru línulega óháðar", "Fylkið er samhverft", "Öll stök eru ekki núll", "Hornalínan er ekki núll", "Fylkið er ferningsfylki"], "a": 0}, {"id": "Q-A12", "t": "and", "src": "Fyrirlestrarnótur 12", "q": "Hvert er stakið í röð 1, dálki 1 í \\(A^{-1}\\) ef \\(A = \\begin{bmatrix}2&0&0\\\\0&5&0\\\\0&0&-1\\end{bmatrix}\\)?", "a": "1/2"}, {"id": "Q-J1", "t": "jof", "src": "Fyrirlestrarnótur 12 · Cramer", "q": "Finnið \\(x_1\\) með reglu Cramers. \\[\\begin{aligned}2 x_{1} + x_{2} &= 7 \\\\ x_{1} - x_{2} &= -1\\end{aligned}\\]", "a": "2"}, {"id": "Q-J2", "t": "jof", "src": "Fyrirlestrarnótur 12 · Cramer", "q": "Finnið \\(x_2\\) með reglu Cramers. \\[\\begin{aligned}3 x_{1} - 2 x_{2} &= 5 \\\\ x_{1} + 4 x_{2} &= 11\\end{aligned}\\]", "a": "2"}, {"id": "Q-J3", "t": "jof", "src": "Fyrirlestrarnótur 12 · Cramer", "q": "Finnið \\(x_1\\) með reglu Cramers. \\[\\begin{aligned}x_{1} + 2 x_{2} &= 4 \\\\ 3 x_{1} - x_{2} &= 5\\end{aligned}\\]", "a": "2"}, {"id": "Q-J4", "t": "jof", "src": "Fyrirlestrarnótur 12 · Cramer", "q": "Hvert er \\(|A|\\) fyrir kerfið? \\[\\begin{aligned}x + y &= 3\\\\ 2y + z &= 5\\\\ x + z &= 4\\end{aligned}\\]", "a": "3"}, {"id": "Q-J5", "t": "jof", "src": "Fyrirlestrarnótur 12 · Cramer", "q": "Hvert er \\(|A_2|\\) (dálki 2 skipt út fyrir \\(d\\))? \\[\\begin{aligned}x + y &= 3\\\\ 2y + z &= 5\\\\ x + z &= 4\\end{aligned}\\]", "a": "4"}, {"id": "Q-J6", "t": "jof", "src": "Fyrirlestrarnótur 12 · Cramer", "q": "Leysið fyrir \\(z\\). \\[\\begin{aligned}x + y &= 3\\\\ 2y + z &= 5\\\\ x + z &= 4\\end{aligned}\\]", "a": "7/3"}, {"id": "Q-J7", "t": "jof", "src": "Lokapróf 2025 · æfing", "q": "Gefið er \\(A^{-1}\\) og \\(d\\). Hvert er \\(x_3^*\\)? \\[A^{-1} = \\begin{bmatrix}1 & -2 & 2 \\\\ 2 & -3 & 4 \\\\ -2 & 2 & -3\\end{bmatrix},\\quad d = \\begin{bmatrix}1 \\\\ 0 \\\\ 1\\end{bmatrix}\\]", "a": "-5"}, {"id": "Q-J8", "t": "jof", "src": "Fyrirlestrarnótur 12", "q": "Regla Cramers virkar aðeins ef", "o": ["\\(|A| \\ne 0\\)", "\\(|A| = 1\\)", "\\(d \\ne 0\\)", "kerfið er 2×2", "\\(A\\) er samhverft"], "a": 0}, {"id": "Q-J9", "t": "jof", "src": "Fyrirlestrarnótur 12", "q": "Í reglu Cramers er \\(|A_j|\\) ákveða fylkisins þar sem", "o": ["dálki \\(j\\) er skipt út fyrir \\(d\\)", "röð \\(j\\) er skipt út fyrir \\(d\\)", "dálkur \\(j\\) er tekinn út", "\\(d\\) er bætt við sem nýjum dálki", "röð og dálkur \\(j\\) eru teknir út"], "a": 0}, {"id": "Q-J10", "t": "jof", "src": "Fyrirlestrarnótur 12 · þjóðhagslíkan", "q": "\\(Y = C + 200\\) og \\(C = 40 + 0{,}6Y\\). Hvert er \\(Y^*\\)?", "a": "600"}, {"id": "Q-R1", "t": "dif", "src": "Fyrirlestrarnótur 13 · Margfeldisregla", "q": "Reiknið \\(f'(2)\\) þegar \\[f(x) = \\left(2 x - 3\\right) \\left(x^{2} + 1\\right)\\]", "a": "14"}, {"id": "Q-R2", "t": "dif", "src": "Fyrirlestrarnótur 13 · Deilingarregla", "q": "Reiknið \\(f'(1)\\) þegar \\[f(x) = \\frac{3 x - 1}{x + 2}\\]", "a": "7/9"}, {"id": "Q-R3", "t": "dif", "src": "Fyrirlestrarnótur 13 · Deilingarregla", "q": "Reiknið \\(f'(1)\\) þegar \\[f(x) = \\frac{x^{2} - 1}{x^{2} + 1}\\]", "a": "1"}, {"id": "Q-R4", "t": "dif", "src": "Fyrirlestrarnótur 13 · Keðjuregla", "q": "Reiknið \\(f'(0)\\) þegar \\[f(x) = \\left(2 x + 1\\right)^{4}\\]", "a": "8"}, {"id": "Q-R5", "t": "dif", "src": "Fyrirlestrarnótur 13 · Keðjuregla", "q": "Reiknið \\(f'(0)\\) þegar \\[f(x) = e^{2 x^{2} - 4 x}\\]", "a": "-4"}, {"id": "Q-R6", "t": "dif", "src": "Fyrirlestrarnótur 13 · Keðjuregla", "q": "Reiknið \\(f'(1)\\) þegar \\[f(x) = \\ln{\\left(3 x^{2} + 1 \\right)}\\]", "a": "3/2"}, {"id": "Q-R7", "t": "dif", "src": "Fyrirlestrarnótur 13 · Keðjuregla", "q": "Reiknið \\(f'(2)\\) þegar \\[f(x) = \\sqrt{4 x + 1}\\]", "a": "2/3"}, {"id": "Q-R8", "t": "dif", "src": "Fyrirlestrarnótur 13 · Margfeldisregla", "q": "Reiknið \\(f'(0)\\) þegar \\[f(x) = x^{2} e^{x}\\]", "a": "0"}, {"id": "Q-R9", "t": "dif", "src": "Fyrirlestrarnótur 13 · Margfeldisregla", "q": "Reiknið \\(f'(1)\\) þegar \\[f(x) = x \\ln{\\left(x \\right)}\\]", "a": "1"}, {"id": "Q-R10", "t": "dif", "src": "Fyrirlestrarnótur 13 · Margfeldis- og keðjuregla", "q": "Reiknið \\(f'(0)\\) þegar \\[f(x) = \\left(x - 1\\right)^{3} \\left(x + 1\\right)^{2}\\]", "a": "1"}, {"id": "Q-R11", "t": "dif", "src": "Fyrirlestrarnótur 13 · andhverfuregla", "q": "\\(y = 2x^3 + x\\). Hvert er \\(\\frac{dx}{dy}\\) þegar \\(x = 1\\)?", "a": "1/7"}, {"id": "Q-R12", "t": "dif", "src": "Fyrirlestrarnótur 13 · andhverfuregla", "q": "\\(y = e^{x} + 3x\\). Hvert er \\(\\frac{dx}{dy}\\) þegar \\(x = 0\\)?", "a": "1/4"}, {"id": "Q-R13", "t": "dif", "src": "Fyrirlestrarnótur 13", "q": "Hver er afleiða \\(\\frac{f(x)}{g(x)}\\)?", "o": ["\\(\\frac{f'g - fg'}{g^2}\\)", "\\(\\frac{fg' - f'g}{g^2}\\)", "\\(\\frac{f'}{g'}\\)", "\\(\\frac{f'g + fg'}{g^2}\\)", "\\(\\frac{f'g - fg'}{g}\\)"], "a": 0}, {"id": "Q-R14", "t": "dif", "src": "Fyrirlestrarnótur 13", "q": "Hver er afleiða \\(\\ln(g(x))\\)?", "o": ["\\(\\frac{g'(x)}{g(x)}\\)", "\\(\\frac{1}{g'(x)}\\)", "\\(\\ln(g'(x))\\)", "\\(\\frac{1}{g(x)}\\)", "\\(g'(x)\\ln g(x)\\)"], "a": 0}, {"id": "Q-H1", "t": "hlu", "src": "Fyrirlestrarnótur 14", "q": "Reiknið \\(f_x(1, 2)\\) fyrir \\(f = 3 x^{2} y - 2 x y^{3} + 5 y\\).", "a": "-4"}, {"id": "Q-H2", "t": "hlu", "src": "Fyrirlestrarnótur 14", "q": "Reiknið \\(f_y(1, 2)\\) fyrir \\(f = 3 x^{2} y - 2 x y^{3} + 5 y\\).", "a": "-16"}, {"id": "Q-H3", "t": "hlu", "src": "Fyrirlestrarnótur 14", "q": "Reiknið \\(f_{xy}(1, 2)\\) fyrir \\(f = 3 x^{2} y - 2 x y^{3} + 5 y\\).", "a": "-18"}, {"id": "Q-H4", "t": "hlu", "src": "Fyrirlestrarnótur 14", "q": "Reiknið \\(f_{yy}(1, 2)\\) fyrir \\(f = 3 x^{2} y - 2 x y^{3} + 5 y\\).", "a": "-24"}, {"id": "Q-H5", "t": "hlu", "src": "Fyrirlestrarnótur 14", "q": "Reiknið \\(f_{xy}(3, 0)\\) fyrir \\(f = xe^{2y}\\).", "a": "2"}, {"id": "Q-H6", "t": "hlu", "src": "Fyrirlestrarnótur 14", "q": "Reiknið \\(f_x(2, 5)\\) fyrir \\(f = \\ln(x^2y)\\).", "a": "1"}, {"id": "Q-H7", "t": "hlu", "src": "Fyrirlestrarnótur 14", "q": "\\(Q = 6K^{1/2}L^{1/3}\\). Hver er jaðarframleiðni fjármagns \\(Q_K\\) þegar \\(K = 9\\), \\(L = 8\\)?", "a": "2"}, {"id": "Q-H8", "t": "hlu", "src": "Fyrirlestrarnótur 14", "q": "\\(Q = 6K^{1/2}L^{1/3}\\). Hver er \\(Q_L\\) þegar \\(K = 9\\), \\(L = 8\\)?", "a": "3/2"}, {"id": "Q-H9", "t": "hlu", "src": "Fyrirlestrarnótur 14", "q": "Setning Young segir að", "o": ["\\(f_{xy} = f_{yx}\\)", "\\(f_{xx} = f_{yy}\\)", "\\(f_x = f_y\\) í útmarki", "Hessian-fylkið sé andhverfanlegt", "\\(f_{xy} = 0\\)"], "a": 0}, {"id": "Q-H10", "t": "hlu", "src": "Fyrirlestrarnótur 14", "q": "Hvað er stigull (gradient) falls \\(f(x_1, \\dots, x_n)\\)?", "o": ["Vigur fyrstu hlutafleiðnanna", "Fylki annarra hlutafleiðnanna", "Ákveða Hessian-fylkisins", "Summa hlutafleiðnanna", "Heildarmismunurinn"], "a": 0}, {"id": "Q-S1", "t": "hes", "src": "Fyrirlestrarnótur 21", "q": "Reiknið \\(|H_2|\\) fyrir \\(f = 2 x^{2} - 3 x y + 4 y^{2}\\).", "a": "23"}, {"id": "Q-S2", "t": "hes", "src": "Fyrirlestrarnótur 21", "q": "Reiknið \\(|H_2|\\) fyrir \\(f = - x^{2} + 4 x y - y^{2}\\).", "a": "-12"}, {"id": "Q-S3", "t": "hes", "src": "Fyrirlestrarnótur 21", "q": "Hvers konar punktur er \\((0,0)\\) fyrir \\(f = - x^{2} + 4 x y - y^{2}\\)?", "o": ["Söðulpunktur", "Hámark", "Lágmark", "Ekki stöðupunktur", "Ekki hægt að segja"], "a": 0}, {"id": "Q-S4", "t": "hes", "src": "Fyrirlestrarnótur 21", "q": "Hvers konar punktur er \\((0,0)\\) fyrir \\(f = 2 x^{2} - 3 x y + 4 y^{2}\\)?", "o": ["Lágmark", "Hámark", "Söðulpunktur", "Ekki stöðupunktur", "Ekki hægt að segja"], "a": 0}, {"id": "Q-S5", "t": "hes", "src": "Fyrirlestrarnótur 21", "q": "Í stöðupunkti eru \\(|H_1| = -3\\), \\(|H_2| = 5\\), \\(|H_3| = -2\\). Punkturinn er", "o": ["Hámark", "Lágmark", "Söðulpunktur", "Ekki hægt að segja", "Beygjuskil"], "a": 0}, {"id": "Q-S6", "t": "hes", "src": "Fyrirlestrarnótur 21", "q": "Í stöðupunkti eru \\(|H_1| = 2\\), \\(|H_2| = 3\\), \\(|H_3| = -4\\). Punkturinn er", "o": ["Hvorki hámark né lágmark", "Hámark", "Lágmark", "Algilt lágmark", "Ekki stöðupunktur"], "a": 0}, {"id": "Q-S7", "t": "hes", "src": "Fyrirlestrarnótur 14", "q": "Fall af tveimur breytum er <b>hvelft</b> ef", "o": ["\\(|H_1| \\le 0\\) og \\(|H_2| \\ge 0\\)", "\\(|H_1| \\ge 0\\) og \\(|H_2| \\ge 0\\)", "\\(|H_1| \\le 0\\) og \\(|H_2| \\le 0\\)", "\\(|H_2| \\lt 0\\)", "\\(f_{xy} \\lt 0\\)"], "a": 0}, {"id": "Q-S8", "t": "hes", "src": "Fyrirlestrarnótur 14", "q": "Er \\(f(x,y) = x^{1/2}y^{1/2}\\) á \\(x, y \\gt 0\\) hvelft eða kúpt?", "o": ["Hvelft en ekki stranglega", "Stranglega hvelft", "Stranglega kúpt", "Hvorugt", "Kúpt en ekki stranglega"], "a": 0}, {"id": "Q-S9", "t": "hes", "src": "Fyrirlestrarnótur 14", "q": "Er \\(f(x) = e^{-2x}\\) hvelft eða kúpt?", "o": ["Stranglega kúpt", "Stranglega hvelft", "Hvorugt", "Bæði", "Hvelft fyrir x > 0"], "a": 0}, {"id": "Q-S10", "t": "hes", "src": "Fyrirlestrarnótur 21", "q": "Reiknið \\(|H_3|\\) fyrir \\(f = x^{2} + x y + y^{2} + y z + z^{2}\\).", "a": "4"}, {"id": "Q-S11", "t": "hes", "src": "Fyrirlestrarnótur 21", "q": "Finnið \\(x\\)-hnit stöðupunkts \\(f = x^2 - 6x + y^2 + 2y\\).", "a": "3"}, {"id": "Q-S12", "t": "hes", "src": "Fyrirlestrarnótur 21", "q": "Hvaða \\(a\\) gerir \\(f = x^2 + axy + 4y^2\\) <b>ekki</b> stranglega kúpt?", "o": ["5", "3", "0", "−2", "1"], "a": 0}, {"id": "Q-M1", "t": "mis", "src": "Fyrirlestrarnótur 15 · C&W 8.1", "q": "\\(y = x^3 - 2x\\). Reiknið \\(dy\\) þegar \\(x = 2\\) og \\(dx = 0{,}1\\).", "a": "1"}, {"id": "Q-M2", "t": "mis", "src": "Fyrirlestrarnótur 15 · C&W 8.1", "q": "\\(y = \\ln x\\). Reiknið \\(dy\\) þegar \\(x = 4\\) og \\(dx = 0{,}2\\).", "a": "1/20"}, {"id": "Q-M3", "t": "mis", "src": "Fyrirlestrarnótur 15 · C&W 8.2", "q": "\\(z = x^{2} y + 3 y^{2}\\). Reiknið \\(dz\\) í \\((1, 2)\\) þegar \\(dx = 0{,}1\\), \\(dy = -0{,}1\\).", "a": "-9/10"}, {"id": "Q-M4", "t": "mis", "src": "Fyrirlestrarnótur 15 · C&W 8.2", "q": "\\(U = xy\\). Í \\((3, 5)\\): hve mikið þarf \\(y\\) að breytast (\\(dy\\)) til að \\(U\\) haldist óbreytt ef \\(dx = 0{,}3\\)?", "a": "-1/2"}, {"id": "Q-M5", "t": "mis", "src": "C&W 8.1 (teygni)", "q": "\\(Q = 100 - 2P\\). Hver er punktteygni eftirspurnar þegar \\(P = 20\\)?", "a": "-2/3"}, {"id": "Q-M6", "t": "mis", "src": "C&W 8.1 (teygni)", "q": "\\(Q = 80P^{-3/2}\\). Hver er verðteygnin?", "a": "-3/2"}, {"id": "Q-M7", "t": "mis", "src": "C&W 8.1 (teygni)", "q": "\\(y = 4x^2 + 4\\). Hver er teygni \\(y\\) m.t.t. \\(x\\) þegar \\(x = 1\\)?", "a": "1"}, {"id": "Q-M8", "t": "mis", "src": "Fyrirlestrarnótur 15 · C&W 8.3", "q": "Hvað er \\(d(uv)\\)?", "o": ["\\(v\\,du + u\\,dv\\)", "\\(du\\,dv\\)", "\\(u\\,du + v\\,dv\\)", "\\(v\\,du - u\\,dv\\)", "\\(\\frac{du}{dv}\\)"], "a": 0}, {"id": "Q-M9", "t": "mis", "src": "Fyrirlestrarnótur 15 · C&W 8.3", "q": "Hvað er \\(d\\!\\left(\\frac{u}{v}\\right)\\)?", "o": ["\\(\\frac{v\\,du - u\\,dv}{v^2}\\)", "\\(\\frac{u\\,dv - v\\,du}{v^2}\\)", "\\(\\frac{du}{dv}\\)", "\\(\\frac{v\\,du + u\\,dv}{v^2}\\)", "\\(\\frac{du - dv}{v}\\)"], "a": 0}, {"id": "Q-M10", "t": "mis", "src": "Fyrirlestrarnótur 15 · C&W 8.2", "q": "Heildarmismunur \\(z = f(x, y)\\) er", "o": ["\\(dz = f_x\\,dx + f_y\\,dy\\)", "\\(dz = f_x + f_y\\)", "\\(dz = f_x\\,dy + f_y\\,dx\\)", "\\(dz = f_{xy}\\,dx\\,dy\\)", "\\(dz = \\frac{f_x}{f_y}\\)"], "a": 0}, {"id": "Q-M11", "t": "mis", "src": "Fyrirlestrarnótur 15 · C&W 8.2", "q": "\\(Y = C + I\\), \\(C = 50 + 0{,}75Y\\). Hve mikið breytist \\(Y\\) ef \\(dI = 20\\)?", "a": "80"}, {"id": "Q-M12", "t": "mis", "src": "Fyrirlestrarnótur 15 · C&W 8.2", "q": "\\(Y = K^{0{,}4}L^{0{,}6}\\). K eykst um 5% og L um 0%. Um hve mörg % eykst Y u.þ.b.?", "a": "2"}, {"id": "Q-E1", "t": "ein", "src": "Fyrirlestrarnótur 20 · C&W 9.4", "q": "Hvert er \\(x\\)-hnit staðbundins hámarks \\(f(x) = x^3 - 3x\\)?", "a": "-1"}, {"id": "Q-E2", "t": "ein", "src": "Fyrirlestrarnótur 20 · C&W 9.4", "q": "Hvert er fallgildið í staðbundnu lágmarki \\(f(x) = x^3 - 6x^2 + 9x + 1\\)?", "a": "1"}, {"id": "Q-E3", "t": "ein", "src": "Fyrirlestrarnótur 20 · C&W 9.4", "q": "Hvar eru beygjuskil \\(f(x) = x^3 - 6x^2 + 9x + 1\\)? Svaraðu með \\(x\\).", "a": "2"}, {"id": "Q-E4", "t": "ein", "src": "Fyrirlestrarnótur 20", "q": "Reiknið \\(f\\'\\'(1)\\) fyrir \\(f(x) = x^4 - 2x^2\\).", "a": "8"}, {"id": "Q-E5", "t": "ein", "src": "Lokapróf 2023 · æfing", "q": "Hvert er formengi \\(f(x) = \\ln(x - 3)\\)?", "o": ["\\(x \\gt 3\\)", "\\(x \\ge 3\\)", "\\(x \\ne 3\\)", "\\(x \\gt 0\\)", "Allar rauntölur"], "a": 0}, {"id": "Q-E6", "t": "ein", "src": "Fyrirlestrarnótur 20 · C&W 9.3", "q": "\\(f\\'(x_0) = 0\\) og \\(f\\'\\'(x_0) = 0\\). Hvað má álykta?", "o": ["Ekkert án frekari athugunar", "Hámark", "Lágmark", "Beygjuskil", "Söðulpunktur"], "a": 0}, {"id": "Q-E7", "t": "ein", "src": "Fyrirlestrarnótur 20", "q": "Fall er stranglega kúpt á öllu formenginu og hefur krítískan punkt. Hann er", "o": ["Algilt lágmark", "Algilt hámark", "Staðbundið hámark", "Beygjuskil", "Ekki hægt að segja"], "a": 0}, {"id": "Q-E8", "t": "ein", "src": "Lokapróf 2023 · æfing", "q": "Er \\(f(x) = \\ln(1/x)\\) vaxandi eða minnkandi á \\(x \\gt 0\\)?", "o": ["Minnkandi", "Vaxandi", "Hvorugt", "Vaxandi fyrir x < 1", "Fast"], "a": 0}, {"id": "Q-T1", "t": "mis", "src": "Fyrirlestrarnótur 16 · C&W 8.4", "q": "\\(y = x^2 + xw\\), \\(x = 3w\\). Reiknið \\(\\frac{dy}{dw}\\) í \\(w = 1\\).", "a": "24"}, {"id": "Q-T2", "t": "mis", "src": "Fyrirlestrarnótur 16 · C&W 8.4", "q": "\\(y = xw + w^2\\), \\(x = w^3\\). Reiknið \\(\\frac{dy}{dw}\\) í \\(w = 1\\).", "a": "6"}, {"id": "Q-T3", "t": "mis", "src": "Fyrirlestrarnótur 16 · C&W 8.4", "q": "\\(U = \\frac{2xy}{x+y}\\), \\(x = 3y^2\\). Reiknið \\(\\frac{dU}{dy}\\) í \\(y = 1\\).", "a": "15/8"}, {"id": "Q-T4", "t": "mis", "src": "Fyrirlestrarnótur 16", "q": "\\(y = f(x, w)\\), \\(x = g(w)\\). Hver er heildarafleiðan \\(\\frac{dy}{dw}\\)?", "o": ["\\(f_x g\\'(w) + f_w\\)", "\\(f_x + f_w\\)", "\\(f_x g\\'(w)\\)", "\\(f_w g\\'(w)\\)", "\\(f_x f_w g\\'(w)\\)"], "a": 0}, {"id": "Q-T5", "t": "mis", "src": "Fyrirlestrarnótur 16", "q": "Hvað táknar \\(\\S y / \\S u\\)?", "o": ["Hlut-heildarafleiðu: heildaráhrif u þegar v er fast", "Hlutafleiðu y m.t.t. u", "Heildarmismun", "Aðra afleiðu", "Krossafleiðu"], "a": 0}, {"id": "Q-I1", "t": "dul", "src": "Fyrirlestrarnótur 17 · C&W 8.5", "q": "\\(x^2 + xy + y^2 = 7\\). Reiknið \\(\\frac{dy}{dx}\\) í \\((1, 2)\\).", "a": "-4/5"}, {"id": "Q-I2", "t": "dul", "src": "Fyrirlestrarnótur 17 · C&W 8.5", "q": "\\(xy = 6\\). Reiknið \\(\\frac{dy}{dx}\\) í \\((2, 3)\\).", "a": "-3/2"}, {"id": "Q-I3", "t": "dul", "src": "Fyrirlestrarnótur 17 · C&W 8.5", "q": "\\(x^2 + y^2 = 25\\). Reiknið \\(\\frac{dy}{dx}\\) í \\((3, 4)\\).", "a": "-3/4"}, {"id": "Q-I4", "t": "dul", "src": "Fyrirlestrarnótur 17 · C&W 8.5", "q": "\\(y^3 + xyz = 12\\). Reiknið \\(\\frac{\\partial y}{\\partial z}\\) í \\((y,x,z) = (2,1,2)\\).", "a": "-1/7"}, {"id": "Q-I5", "t": "dul", "src": "Lokapróf 2025 · æfing", "q": "\\(F = 3x^2 + 2xy + 4y^2\\). Reiknið \\(\\frac{dx}{dy} = -F_y/F_x\\) í \\(\\left(\\tfrac14, -\\tfrac14\\right)\\).", "a": "3/2"}, {"id": "Q-I6", "t": "dul", "src": "Fyrirlestrarnótur 16", "q": "Hvaða skilyrði þarf (auk samfelldra hlutafleiðna) til að \\(F(y, x) = 0\\) skilgreini fólgið fall \\(y = f(x)\\) í punkti?", "o": ["\\(F_y \\ne 0\\) í punktinum", "\\(F_x \\ne 0\\)", "\\(F_y = 0\\)", "\\(F = 1\\)", "\\(F_{xy} = F_{yx}\\)"], "a": 0}, {"id": "Q-I7", "t": "dul", "src": "Fyrirlestrarnótur 17", "q": "Hver er formúlan fyrir hlutafleiðu fólgins falls \\(y = f(x_1, \\dots, x_m)\\)?", "o": ["\\(\\frac{\\partial y}{\\partial x_i} = -\\frac{F_i}{F_y}\\)", "\\(\\frac{\\partial y}{\\partial x_i} = \\frac{F_i}{F_y}\\)", "\\(\\frac{\\partial y}{\\partial x_i} = -\\frac{F_y}{F_i}\\)", "\\(\\frac{\\partial y}{\\partial x_i} = F_i F_y\\)", "\\(\\frac{\\partial y}{\\partial x_i} = F_i\\)"], "a": 0}, {"id": "Q-I8", "t": "dul", "src": "Fyrirlestrarnótur 16", "q": "Setningin um fólgin föll gefur skilyrði sem eru", "o": ["Nægjanleg en ekki nauðsynleg", "Nauðsynleg en ekki nægjanleg", "Bæði nauðsynleg og nægjanleg", "Hvorki", "Aðeins fyrir línuleg föll"], "a": 0}, {"id": "Q-Y1", "t": "tay", "src": "Fyrirlestrarnótur 18 · C&W 9.5", "q": "Hver er stuðullinn við \\(x^2\\) í Maclaurin-röð \\(e^{3x}\\)?", "a": "9/2"}, {"id": "Q-Y2", "t": "tay", "src": "Fyrirlestrarnótur 18 · C&W 9.5", "q": "1. gráðu Taylor-nálgun \\(f(x) = x^2\\) um \\(x_0 = 3\\) er \\(ax + b\\). Hvert er \\(b\\)?", "a": "-9"}, {"id": "Q-Y3", "t": "tay", "src": "Fyrirlestrarnótur 18 · C&W 9.5", "q": "Nálgið \\(\\sqrt{4{,}4}\\) með 1. gráðu Taylor um \\(x_0 = 4\\).", "a": "21/10"}, {"id": "Q-Y4", "t": "tay", "src": "Fyrirlestrarnótur 18 · C&W 9.5", "q": "2. gráðu Taylor \\(f(x) = 4x^3 - 3x^2 + 2x + 5\\) um \\(x_0 = 2\\): stuðullinn við \\(x\\) eftir einföldun?", "a": "-46"}, {"id": "Q-Y5", "t": "tay", "src": "Fyrirlestrarnótur 18", "q": "Hvert er \\(4!\\)?", "a": "24"}, {"id": "Q-Y6", "t": "tay", "src": "Fyrirlestrarnótur 18", "q": "Hvað er 1. gráðu Taylor-nálgun myndrænt?", "o": ["Snertill fallsins í x₀", "Sniðill gegnum tvo punkta", "Lárétt lína", "Fleygbogi", "Aðfella"], "a": 0}, {"id": "Q-Y7", "t": "tay", "src": "Fyrirlestrarnótur 18", "q": "Afgangsliðurinn \\(R_n\\) í Taylor-nálgun stækkar almennt þegar", "o": ["x fjarlægist x₀ og n er minna", "x nálgast x₀", "n stækkar", "fallið er margliða", "aldrei"], "a": 0}, {"id": "Q-Y8", "t": "tay", "src": "Lokapróf 2025 · æfing", "q": "Hvað er afgangsliðurinn í 3. gráðu Taylor-nálgun á þriðja stigs margliðu?", "o": ["0", "\\(f\\'\\'\\'(x_0)\\)", "1", "\\(\\frac{1}{4!}\\)", "Óendanlegur"], "a": 0}, {"id": "Q-S13", "t": "eins", "src": "Fyrirlestrarnótur 19 · C&W 12.6", "q": "Af hvaða gráðu er \\(f(x,y) = x^2y^3 + 4xy^4\\) einsleitt?", "a": "5"}, {"id": "Q-S14", "t": "eins", "src": "Fyrirlestrarnótur 19 · C&W 12.6", "q": "Af hvaða gráðu er \\(Q = 5K^{1/3}L^{1/2}\\) einsleitt?", "a": "5/6"}, {"id": "Q-S15", "t": "eins", "src": "Fyrirlestrarnótur 19 · C&W 12.6", "q": "Af hvaða gráðu er \\(f(x,y) = \\frac{x^2}{y}\\) einsleitt?", "a": "1"}, {"id": "Q-S16", "t": "eins", "src": "Fyrirlestrarnótur 19 · Euler", "q": "\\(f\\) er einsleitt af gráðu 2 og \\(f(3,1) = 7\\). Hvað er \\(3f_x(3,1) + 1\\cdot f_y(3,1)\\)?", "a": "14"}, {"id": "Q-S17", "t": "eins", "src": "Fyrirlestrarnótur 19", "q": "Framleiðslufall einsleitt af gráðu \\(r \\gt 1\\) sýnir", "o": ["Stærðarhagkvæmni", "Stærðaróhagkvæmni", "Fasta stærðarhagkvæmni", "Minnkandi jaðarframleiðni", "Ekkert um stærðarhagkvæmni"], "a": 0}, {"id": "Q-S18", "t": "eins", "src": "Fyrirlestrarnótur 20", "q": "Hvert er satt?", "o": ["Öll einsleit föll eru þenjanleg, en ekki öfugt", "Öll þenjanleg föll eru einsleit", "Einsleit og þenjanleg föll eru það sama", "Ekkert einsleitt fall er þenjanlegt", "Aðeins línuleg föll eru þenjanleg"], "a": 0}, {"id": "Q-S19", "t": "eins", "src": "Lokapróf 2025 · æfing", "q": "Er \\(f = xz + x^2 - y + yz + y^2 + 3z^2\\) einsleitt?", "o": ["Nei", "Já, af gráðu 2", "Já, af gráðu 1", "Já, af gráðu 3", "Já, af gráðu 0"], "a": 0}, {"id": "Q-S20", "t": "eins", "src": "Fyrirlestrarnótur 19", "q": "Setning Eulers fyrir fall einsleitt af gráðu 1 segir", "o": ["\\(f = x_1f_1 + \\dots + x_nf_n\\)", "\\(f = f_1 + \\dots + f_n\\)", "\\(f_{ij} = f_{ji}\\)", "\\(rf = 0\\)", "\\(f(jx) = f(x)\\)"], "a": 0}, {"id": "Q-O1", "t": "ham", "src": "Lokapróf 2023 · æfing", "q": "\\(\\pi = p(-K^2 - L^2 + 4L + 2K) - 2K - 4L\\). Hvert er \\(L^*\\) þegar \\(p = 4\\)?", "a": "3/2"}, {"id": "Q-O2", "t": "ham", "src": "Lokapróf 2023 · æfing", "q": "Sama fyrirtæki: hvert er \\(\\frac{dV}{dp}\\) þegar \\(p = 10\\)? (Umslagssetningin.)", "a": "99/20"}, {"id": "Q-O3", "t": "ham", "src": "Fyrirlestrarnótur 21", "q": "\\(f(x; a) = ax - x^2\\). Hvert er \\(\\frac{dV}{da}\\) í \\(a = 6\\)?", "a": "3"}, {"id": "Q-O4", "t": "ham", "src": "Dæmablað 46", "q": "\\(f = \\sqrt{x} - ax\\). Hvert er \\(V(a)\\) í \\(a = 1\\)?", "a": "1/4"}, {"id": "Q-O5", "t": "ham", "src": "Fyrirlestrarnótur 21", "q": "Umslagssetningin segir að \\(\\frac{dV}{d\\phi}\\) sé", "o": ["\\(\\frac{\\partial f}{\\partial \\phi}\\) metið í hámarkinu", "0", "\\(f_x\\frac{\\partial x^*}{\\partial\\phi}\\)", "\\(f(x^*, \\phi)\\)", "\\(\\frac{\\partial x^*}{\\partial\\phi}\\)"], "a": 0}, {"id": "Q-O6", "t": "ham", "src": "Fyrirlestrarnótur 21", "q": "Hvers vegna hverfa óbeinu áhrifin í umslagssetningunni?", "o": ["Því \\(f_x = f_y = 0\\) í hámarkinu", "Því \\(\\phi\\) er fasti", "Því \\(x^*\\) breytist ekki", "Því Hessian er neikvætt", "Því fallið er einsleitt"], "a": 0}, {"id": "Q-O7", "t": "ham", "src": "Fyrirlestrarnótur 21", "q": "Hvað er virðisfall?", "o": ["Hámarksgildi markmiðsfallsins sem fall af ytri breytu", "Afleiða markmiðsfallsins", "Fallið áður en hámarkað er", "Hessian-ákveðan", "Hagnaður í núllpunkti"], "a": 0}, {"id": "Q-O8", "t": "hes", "src": "Fyrirlestrarnótur 20 · C&W 11.2", "q": "Annarrar gráðu nægjanleg skilyrði fyrir hámarki í tveimur breytum eru", "o": ["\\(f_{xx} \\lt 0,\\; f_{yy} \\lt 0,\\; f_{xx}f_{yy} \\gt f_{xy}^2\\)", "\\(f_{xx} \\gt 0,\\; f_{xx}f_{yy} \\gt f_{xy}^2\\)", "\\(f_x = f_y = 0\\)", "\\(f_{xx}f_{yy} \\lt f_{xy}^2\\)", "\\(f_{xy} \\lt 0\\)"], "a": 0}];
+const KIND_OF = p => p.src.startsWith('Dæmablað') ? 'blad' : /^(Lokapróf|Skilaverkefni|Miðannarpróf)/.test(p.src) ? 'old' : 'new';
+const STATIC = [...new Map([...SHEET_PROBS, ...NEW_PROBS, ...FINAL_PROBS].map(p => [p.id, p])).values()].map(p => ({...p, kind: KIND_OF(p)}));
+
+// ===== sheet.js =====
+// ---------- Blaðið: það sem þarf að kunna utanbókar ----------
+const SHEET = SHEET_HTML;
+
+// ---------- áætlun: út frá Google Calendar og Ugla ----------
+const PLAN = [
+ {d:'2026-11-12', h:'Fimmtudagur 12. nóv.', cal:'Tímar til 18:10', items:[
+  {at:'20:00', m:30, h:'Lesa nýju kaflana á Blaðinu', p:'Kaflar 11 og 14–19: ein breyta, heildarafleiður, fólgin föll, Taylor, einsleitni, hámörkun. Bara lestur.', go:{v:'sheet', sec:'s11'}},
+  {at:'20:30', m:10, h:'Hlé', brk:true},
+  {at:'20:40', m:25, h:'Hraðæfing: nýja efnið', p:'Sjáðu hvar þú stendur áður en æfingin hefst.', go:{v:'quick', topics:['ein', 'mis', 'dul', 'tay', 'eins', 'ham']}}]},
+ {d:'2026-11-13', h:'Föstudagur 13. nóv.', cal:'Dæmatímar 11:40–16:30 · Laugó 17:30', items:[
+  {at:'08:30', m:45, h:'Föll af einni breytu og útmörk', p:'Dæmablað 12–16 og 43. Gátlistinn: formengi, f′, f″, krítískir punktar, riss.', go:{v:'practice', topics:['ein']}},
+  {at:'09:15', m:10, h:'Hlé', brk:true},
+  {at:'09:25', m:45, h:'Diffrunarreglur upprifjun', p:'Dæmablað 8, 10, 11 og Skilaverkefni 2, dæmi 1.', go:{v:'practice', topics:['dif']}}]},
+ {d:'2026-11-14', h:'Laugardagur 14. nóv.', cal:'Engir tímar', items:[
+  {at:'10:00', m:45, h:'Heildarmismunur og heildarafleiður', p:'Dæmi 34–35, lokapróf 2025 dæmi 4 og rafallinn. Teiknaðu flæðirit í hvert sinn.', go:{v:'practice', topics:['mis']}},
+  {at:'10:45', m:15, h:'Hlé', brk:true},
+  {at:'11:00', m:45, h:'Fólgin föll', p:'Dæmi 36–38 og lokapróf 2025 dæmi 5. Skrifaðu skilyrðin fimm upp í hvert sinn.', go:{v:'practice', topics:['dul']}},
+  {at:'14:00', m:40, h:'Einsleit og þenjanleg föll', p:'Dæmi 39–40 og Euler.', go:{v:'practice', topics:['eins']}}]},
+ {d:'2026-11-15', h:'Sunnudagur 15. nóv.', cal:'Engir tímar', items:[
+  {at:'10:00', m:180, h:'Lokapróf 2023 á tíma, á pappír', p:'3 klst. án hlés, sími í annað herbergi. Ekkert efni opið.', go:{v:'exam', start:'L23'}, exam:true},
+  {at:'13:00', m:45, h:'Hádegismatur', brk:true},
+  {at:'13:45', m:45, h:'Gefa sér stig og skrá villurnar', p:'Fyrir hverja villu: ein lína á blað um hvað fór úrskeiðis.', go:{v:'exam'}}]},
+ {d:'2026-11-16', h:'Mánudagur 16. nóv.', cal:'HAG103G 08:20 · HAG107G 11:40 · HAG101G dæmat. 16:40 · Laugó 17:30', note:'Dæmatíminn skarast við Laugó. Ef þú nærð fyrri hlutanum: spyrðu um það sem fór úrskeiðis í prófinu í gær.', items:[
+  {at:'13:30', m:45, h:'Taylor-nálgun', p:'Dæmi 41–42, lokapróf 2023 dæmi 6 og 2025 dæmi 6.', go:{v:'practice', topics:['tay']}},
+  {at:'14:15', m:10, h:'Hlé', brk:true},
+  {at:'14:25', m:45, h:'Veikustu flokkarnir úr prófi 2023', p:'Yfirlitið sýnir hverjir þeir eru.', go:{v:'weak'}}]},
+ {d:'2026-11-17', h:'Þriðjudagur 17. nóv.', cal:'HAG101G 13:20 · Fjármálahagfræði 15:50–19:00', note:'Ef nýtt efni kemur í tímanum (nótur 22+), sendu mér glósurnar og ég bæti því við.', items:[
+  {at:'09:00', m:45, h:'Hámörkun og umslagssetning', p:'Dæmi 44–46 og lokapróf 2023 dæmi 4: FGS, AGS, samanburðarstöðugreining, virðisfall.', go:{v:'practice', topics:['ham']}},
+  {at:'09:45', m:10, h:'Hlé', brk:true},
+  {at:'09:55', m:45, h:'Hessian: útmörk margra breyta', p:'Rafalarnir fyrir 2 og 3 breytur og lokapróf 2025 dæmi 7.', go:{v:'practice', topics:['hes']}}]},
+ {d:'2026-11-18', h:'Miðvikudagur 18. nóv.', cal:'HAG108G 10:00 · HAG107G 14:10 · HAG103G dæmat. 16:40 · Laugó 19:00', items:[
+  {at:'08:00', m:40, h:'Fylki, ákveður og andhverfa', p:'Upprifjun á miðannarefninu: dæmi 26–28 og 3×3 rafallinn.', go:{v:'practice', topics:['fyl', 'akv', 'and']}},
+  {at:'08:40', m:10, h:'Hlé', brk:true},
+  {at:'08:50', m:40, h:'Jöfnukerfi og Cramer', p:'Dæmi 29 og lokaprófsliðirnir.', go:{v:'practice', topics:['jof']}},
+  {at:'12:00', m:20, h:'Hraðæfing, allir flokkar', go:{v:'quick'}}]},
+ {d:'2026-11-19', h:'Fimmtudagur 19. nóv.', cal:'Tímar 08:20–18:10 með hléi 09:50–11:40', items:[
+  {at:'10:00', m:40, h:'Miðannarpróf 2025 sem upphitun', p:'Fyrstu tvö dæmin á 40 mín.', go:{v:'practice', kind:'old', topics:['fyl', 'akv', 'and', 'jof']}},
+  {at:'10:40', m:10, h:'Hlé', brk:true},
+  {at:'10:50', m:40, h:'Villubankinn', go:{v:'wrong'}},
+  {at:'20:00', m:30, h:'Blaðið: kaflar 14–19', go:{v:'sheet', sec:'s14'}}]},
+ {d:'2026-11-20', h:'Föstudagur 20. nóv.', cal:'Dæmatímar 11:40–16:30', note:'Engin Laugó-vakt er í dagatalinu í kvöld. Ef þú átt vakt, færðu kvöldblokkina.', items:[
+  {at:'08:30', m:45, h:'Rafalar: nýja efnið', p:'Sama aðferð, nýjar tölur: Taylor, fólgin föll, heildarafleiður, hámörkun.', go:{v:'practice', kind:'gen', topics:['mis', 'dul', 'tay', 'eins', 'ham', 'ein']}},
+  {at:'09:15', m:10, h:'Hlé', brk:true},
+  {at:'09:25', m:45, h:'Veikustu flokkarnir', go:{v:'weak'}},
+  {at:'19:00', m:40, h:'Hraðæfing og villubanki', go:{v:'wrong'}}]},
+ {d:'2026-11-21', h:'Laugardagur 21. nóv.', cal:'Engir tímar', items:[
+  {at:'10:00', m:180, h:'Lokapróf 2025 á tíma, á pappír', p:'3 klst. Markmið: hærra en 2023 og öll dæmi reynd.', go:{v:'exam', start:'L25'}, exam:true},
+  {at:'13:00', m:45, h:'Hádegismatur', brk:true},
+  {at:'13:45', m:45, h:'Yfirferð prófs 2025', go:{v:'exam'}},
+  {at:'14:30', m:15, h:'Hlé', brk:true},
+  {at:'14:45', m:40, h:'Æfa villurnar strax', go:{v:'practice', review:true}}]},
+ {d:'2026-11-22', h:'Sunnudagur 22. nóv.', cal:'Engir tímar', items:[
+  {at:'10:00', m:45, h:'Veikustu flokkarnir', go:{v:'weak'}},
+  {at:'10:45', m:15, h:'Hlé', brk:true},
+  {at:'11:00', m:45, h:'Hámörkun: heilt dæmi á 30 mín.', p:'Rafallinn fyrir hagnaðarhámörkun er 25% af prófinu.', go:{v:'practice', kind:'gen', topics:['ham']}},
+  {at:'14:00', m:40, h:'Fylkjahlutinn í rafölum', go:{v:'practice', kind:'gen', topics:['fyl', 'akv', 'and', 'jof']}},
+  {at:'20:00', m:20, h:'Blaðið: gildrur', go:{v:'sheet', sec:'s20'}}]},
+ {d:'2026-11-23', h:'Mánudagur 23. nóv.', cal:'Laugó 17:30', items:[
+  {at:'09:00', m:180, h:'Blandað próf á tíma, á pappír', p:'Síðasta heila prófið. Nýjar samsetningar.', go:{v:'exam', start:'mix'}, exam:true},
+  {at:'12:00', m:45, h:'Hádegismatur', brk:true},
+  {at:'12:45', m:45, h:'Yfirferð', go:{v:'exam'}}]},
+ {d:'2026-11-24', h:'Þriðjudagur 24. nóv.', cal:'Engir tímar', note:'Léttur dagur. Ekkert nýtt efni og snemma í háttinn.', items:[
+  {at:'10:00', m:40, h:'Tæma villubankann', go:{v:'wrong'}},
+  {at:'10:40', m:15, h:'Hlé', brk:true},
+  {at:'10:55', m:30, h:'Blaðið utanbókar', p:'Skrifaðu reglurnar á autt blað og berðu saman.', go:{v:'sheet'}},
+  {at:'16:00', m:20, h:'Hraðæfing', go:{v:'quick'}}]},
+ {d:'2026-11-25', h:'Miðvikudagur 25. nóv. · prófdagur', cal:'Laugó 19:00', note:'Ekkert nýtt efni í dag.', items:[
+  {at:'09:30', m:20, h:'Gildrur og frágangur', p:'Kaflar 20 og 21 á Blaðinu.', go:{v:'sheet', sec:'s20'}},
+  {at:'09:50', m:10, h:'Hlé', brk:true},
+  {at:'10:00', m:15, h:'Tíu hraðspurningar til upphitunar', go:{v:'quick'}},
+  {at:'13:00', m:20, h:'Mæta í Á301', p:'Skriffæri, skilríki, vatn.'},
+  {at:'13:30', m:180, h:'Lokaprófið', p:'Lestu öll dæmin fyrst. Byrjaðu á fylkjunum.', exam:true}]},
+];
+
+export { STATIC, QUICK, GENS };
