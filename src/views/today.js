@@ -6,6 +6,7 @@ import { suggestBlock, daysSince } from '../engine/today.js';
 import { topicStats, modeOf } from '../engine/practice.js';
 import { dueIds } from '../engine/review.js';
 import { countdownShort } from '../ui/countdown.js';
+import { timeToExam } from '../engine/time.js';
 import { pctTxt, plural } from '../ui/format.js';
 import { esc } from '../ui/dom.js';
 import { startBlock, segLabel, hrefFor } from './block.js';
@@ -51,7 +52,7 @@ export function render({ app, store, go }) {
     <div style="min-width:0"><b>${esc(segLabel(s))}</b><div class="hint">${s.kind === 'due' ? `${plural(s.n, 'villa', 'villur')} sem ${s.n % 10 === 1 && s.n % 100 !== 11 ? 'er komin' : 'eru komnar'} á tíma` : s.kind === 'mix' ? '10 atriði; fagið birtist eftir svar' : `um ${plural(s.n, 'atriði', 'atriði')}`} · ${s.minutes} mín.</div></div>
     <a class="btn small" href="${hrefFor(s)}">Opna</a></li>`;
   const top = sug.ranking[0];
-  const why = top && top.prio > 0 ? `${top.course.code} hefur hæstan forgang: ${top.days === null ? 'próf óstaðfest' : `próf eftir ${plural(Math.max(0, Math.ceil(top.days)), 'dag', 'daga')}`}, ${top.share === null ? 'ekkert æft enn' : `${Math.round(top.share * 100)}% rétt nýlega`}.` : '';
+  const why = top && top.prio > 0 ? `${top.course.code} hefur hæstan forgang: ${top.days === null ? 'próf óstaðfest' : `próf ${timeToExam(top.exam, now).text}`}, ${top.share === null ? 'ekkert æft enn' : `${Math.round(top.share * 100)}% rétt nýlega`}.` : '';
   const dueAll = COURSES.reduce((s, c) => s + dueIds(S, c.id, now).length, 0);
 
   app.innerHTML = `<div class="stack" style="gap:22px">

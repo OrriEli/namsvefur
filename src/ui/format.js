@@ -45,6 +45,12 @@ export function fmtWhen(t) {
 }
 
 // Lengd í mm:ss (eða h:mm:ss).
+/** Lengd prófs í orðum: 180 → „3 klst.“, 90 → „1 klst. 30 mín.“, 45 → „45 mín.“ */
+export function durText(min) {
+  const m = Math.round(min), h = Math.floor(m / 60), r = m % 60;
+  return h ? `${h} klst.${r ? ` ${r} mín.` : ''}` : `${r} mín.`;
+}
+
 export function fmtDur(ms) {
   const s = Math.max(0, Math.round(ms / 1000)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), r = s % 60;
   return (h ? h + ':' : '') + String(m).padStart(2, '0') + ':' + String(r).padStart(2, '0');

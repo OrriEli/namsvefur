@@ -4,19 +4,19 @@
 
 import { buildExam, finishExam, timeLeft, needsGrading, toGrade, scoreExam, breakdown, pointsOf } from '../engine/exam.js';
 import { answered, renderAnswer, renderSteps, verdictHTML, clickAnswer, inputAnswer, keyToIndex, stepTotal, ptsTxt } from '../engine/items/index.js';
-import { fmtDur, grade10, fmtWhen } from '../ui/format.js';
+import { fmtDur, grade10, fmtWhen, durText, plural } from '../ui/format.js';
 import { esc, plain, clip, barCls, setTopH } from '../ui/dom.js';
 import { itemMeta, topicLabel } from './itemmeta.js';
 
 const results = new Map();   // nýjasta niðurstaða hvers fags, sýnd þar til nýtt próf hefst
 const setups = new Map();    // val í blönduðu prófi: fyrirlestrar, blanda, lengd, skýringar
 
-/** „20 · 1:00:00“: fjöldi spurninga og tími prófsniðs. */
+/** „6 dæmi · 3 klst.“ eða „50 spurningar · 3 klst.“: fjöldi og lengd prófsniðs. */
 export function formatMeta(c, f) {
   const p = f.pick;
   const n = p.by === 'quota' ? Object.values(p.quota).reduce((a, b) => a + b, 0) : p.by === 'fixed' ? p.ids.length : p.by === 'blueprint' ? p.sections.length : p.by === 'levels' ? p.lengths.find(l => l.id === p.defaultLength).n : p.n;
   const min = f.minutes || (p.lengths && p.lengths.find(l => l.id === p.defaultLength).minutes);
-  return `${n} · ${fmtDur(min * 60e3)}`;
+  return `${c.engine === 'written' ? `${n} dæmi` : plural(n, 'spurning', 'spurningar')} · ${durText(min)}`;
 }
 
 const fmtPts = v => ptsTxt(v);

@@ -1,0 +1,87 @@
+/* Hönnunartókar námsvefsins: allir litir, letur, bil, horn og skuggar á einum stað.
+   Ljós stilling: hlýr pappír. Dökk stilling: hlýtt dökkt, ekki blásvart. Fylgir prefers-color-scheme
+   sjálfkrafa; rofi í Stillingum setur data-theme="light" eða "dark" á <html>.
+   Blár (--action) er frátekinn fyrir aðgerðir. Allur texti nær WCAG AA á --bg, --surface og --surface-sunken. */
+
+:root{
+  /* flötir */
+  --bg:#f6f1e7;               /* síðan og hausinn */
+  --surface:#fffcf5;          /* spjöld */
+  --surface-sunken:#efe8da;   /* innfelldir reitir, ósnertir reitir */
+  /* texti */
+  --ink:#211d17;
+  --ink-2:#4f483e;            /* aukatexti */
+  --ink-3:#6b6255;            /* skýringar, merkimiðar (≥ 4,5:1) */
+  /* línur */
+  --rule:#e0d7c6;
+  --rule-strong:#c9bda8;
+  /* aðgerðir */
+  --action:#1d5ea8; --action-hover:#174f8f; --on-action:#ffffff; --action-weak:#e4ecf6;
+  /* staða */
+  --good:#256a41; --good-weak:#e3efe4;
+  --bad:#b2382c;  --bad-weak:#f6e2dc;
+  --warn:#8a5a00; --warn-weak:#f3e7cc;
+  /* fög */
+  --course-101:#34539f; --course-108:#ab2b40; --course-107:#7f3f86; --course-103:#136f56; --course-106:#9a5219;
+  /* skuggar */
+  --shadow-sm:0 1px 2px rgba(43,33,20,.07),0 1px 1px rgba(43,33,20,.04);
+  --shadow-md:0 2px 8px rgba(43,33,20,.08),0 1px 2px rgba(43,33,20,.05);
+  color-scheme:light;
+
+  /* letur */
+  --font-serif:"Newsreader Variable", Newsreader, Georgia, "Times New Roman", serif;
+  --font-sans:"Source Sans 3 Variable", "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-code:ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  /* stærðarskali: miklar andstæður, ein stór tala segir meira en margar litlar */
+  --fs-xs:.8125rem; --fs-sm:.875rem; --fs-base:1rem; --fs-md:1.125rem; --fs-lg:1.375rem;
+  --fs-xl:1.75rem; --fs-2xl:2.25rem; --fs-3xl:3rem; --fs-display:clamp(3.5rem, 13vw, 6.5rem);
+  /* bil */
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px; --sp-8:64px;
+  /* horn */
+  --radius-sm:4px; --radius-md:6px; --radius-lg:10px;
+  /* breidd */
+  --page-max:960px; --read-max:700px;
+}
+
+/* dökk stilling: sjálfvirk eftir kerfinu, nema notandi hafi valið ljóst */
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1b1916; --surface:#23201c; --surface-sunken:#2b2823;
+  --ink:#ede7dd; --ink-2:#c9c0b2; --ink-3:#a69d8f;
+  --rule:#39352e; --rule-strong:#4b463d;
+  --action:#8fbaf0; --action-hover:#a8caf5; --on-action:#13202f; --action-weak:#26303b;
+  --good:#86c99b; --good-weak:#1f3326; --bad:#f2958a; --bad-weak:#3d2420; --warn:#e3b55e; --warn-weak:#3a2f18;
+  --course-101:#93aaf5; --course-108:#f2919f; --course-107:#d29fdb; --course-103:#6ccfa8; --course-106:#eba86a;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.35); --shadow-md:0 2px 10px rgba(0,0,0,.4);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#1b1916; --surface:#23201c; --surface-sunken:#2b2823;
+  --ink:#ede7dd; --ink-2:#c9c0b2; --ink-3:#a69d8f;
+  --rule:#39352e; --rule-strong:#4b463d;
+  --action:#8fbaf0; --action-hover:#a8caf5; --on-action:#13202f; --action-weak:#26303b;
+  --good:#86c99b; --good-weak:#1f3326; --bad:#f2958a; --bad-weak:#3d2420; --warn:#e3b55e; --warn-weak:#3a2f18;
+  --course-101:#93aaf5; --course-108:#f2919f; --course-107:#d29fdb; --course-103:#6ccfa8; --course-106:#eba86a;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.35); --shadow-md:0 2px 10px rgba(0,0,0,.4);
+  color-scheme:dark;
+}
+
+/* Gömlu heitin sem base.css og legacy.css (efni spurninga og blaða úr gömlu síðunum) nota.
+   Hærri sértækni en blokkir base.css svo þessi tenging ræður í öllum stillingum. */
+:root:root:root{
+  --paper:var(--surface); --muted:var(--ink-3); --line:var(--rule); --soft:var(--surface-sunken);
+  --accent:var(--action); --accent-ink:var(--on-action); --accent-weak:var(--action-weak);
+  --f-display:var(--font-serif); --f-body:var(--font-sans); --f-mono:var(--font-sans); --r:var(--radius-md);
+  /* fagalitir: c.color í gögnunum vísar á --c-<fag> */
+  --c-hag101g:var(--course-101); --c-hag108g:var(--course-108); --c-hag107g:var(--course-107);
+  --c-hag103g:var(--course-103); --c-hag106g:var(--course-106);
+  /* áherslulitur sem fagsíða setur á rótina sína; utan faga er hann hlutlaus */
+  --course-accent:var(--ink-2);
+}
+
+/* prentun er alltaf ljós */
+@media print{:root:root:root:root{
+  --bg:#ffffff; --surface:#ffffff; --surface-sunken:#f2f2f2; --ink:#111111; --ink-2:#333333; --ink-3:#555555;
+  --rule:#cccccc; --rule-strong:#999999; --action:#1d5ea8; --on-action:#ffffff; --action-weak:#e4ecf6;
+  --course-101:#34539f; --course-108:#ab2b40; --course-107:#7f3f86; --course-103:#136f56; --course-106:#9a5219;
+  --shadow-sm:none; --shadow-md:none; color-scheme:light;
+}}

@@ -265,9 +265,10 @@ Verkið er unnið í sjö áföngum. Hverjum áfanga lýkur með keyrðum prófu
 
 ## Útlit, mál og talnasnið
 
-Útlit B, valið 17. nóv. 2026 (`src/ui/theme.css`): dökkt, í anda Canvas hjá HÍ. Dökkblá efsta stika, efni í línum frekar en spjöldum, 4 px horn, bláir tenglar og hnappar, engir merkimiðar í hástöfum. Vefurinn er alltaf dökkur, nema við prentun. Hönnunarbreyturnar (`--bg`, `--paper`, `--ink`, `--accent` o.s.frv.) koma enn úr HAG103G-síðunni en fá gildi útlits B.
+Endurhönnun frá 17. nóv. 2026: vefurinn á að líða eins og vel uppsett stærðfræðiglósubók, rólegur, skýr og með sterkt stigveldi. Allir tókar eru í `src/ui/tokens.css`: hlýr pappír í ljósri stillingu, hlýtt dökkt (ekki blásvart) í dökkri. Stillingarnar eru jafngildar, fylgja `prefers-color-scheme` sjálfkrafa og hægt er að velja í Stillingum. Hausinn er í sama lit og síðan, með þunnri línu undir. Blár (`--action`) er frátekinn fyrir aðgerðir. Fagalitir eru tókar (`--course-101` o.s.frv.) og hver fagsíða setur `--course-accent`. Gömlu breytuheitin (`--bg`, `--paper`, `--ink`, `--accent` o.s.frv.), sem efni úr gömlu síðunum notar, eru tengd tókunum.
 
-- **Letur:** Lato (allt viðmót og tölur), jafnbreitt kerfisletur aðeins í forritskóða.
+- **Letur:** Newsreader (fyrirsagnir og stórar tölur) og Source Sans 3 (viðmót), sett upp með @fontsource svo þau virki án nets. `tabular-nums` á allar tölur. Jafnbreitt kerfisletur aðeins í forritskóða.
+- **Tími í próf:** eitt fall (`src/engine/time.js`) í almanaksdögum, notað alls staðar.
 - **Litir faga:** hvert fag fær einn áherslulit sem sést í dagatali, kunnáttukorti og merkjum. Litur ber aldrei merkingu einn og sér; nafn fags fylgir alltaf.
 - **Sími fyrst:** 16 px hliðarbil, snertifletir minnst 44 px, engin lárétt skrun á síðunni (töflur skruna innan eigin ramma).
 - **Mál:** allt viðmót á íslensku. Texti spurninga, útskýringa og blaða er fluttur orðrétt og ekki endurskrifaður.

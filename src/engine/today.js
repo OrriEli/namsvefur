@@ -12,6 +12,7 @@
 
 import { entriesOf, weakest, topicStats, inMode, modeOf } from './practice.js';
 import { dueIds } from './review.js';
+import { daysUntil } from './time.js';
 
 export const DAY = 864e5;
 const HORIZON = 14;
@@ -24,7 +25,8 @@ export function examFor(courseId, exams, now) {
   return list[0] || null;
 }
 
-export const daysTo = (exam, now) => exam && exam.at ? (new Date(exam.at).getTime() - now) / DAY : null;
+/** Dagar í próf: sama fall og allur vefurinn notar (engine/time.js), í almanaksdögum. */
+export const daysTo = (exam, now) => exam && exam.at ? daysUntil(exam.at, now) : null;
 
 export function proximity(exam, now) {
   if (!exam) return 0;

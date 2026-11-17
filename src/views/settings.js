@@ -20,8 +20,14 @@ export function render({ app, store }) {
 
   function prefsHTML() {
     const P = S.settings.prefs;
+    const THEMES = [['auto', 'Sjálfvirkt'], ['light', 'Ljóst'], ['dark', 'Dökkt']];
+    const theme = `<div class="panel stack" style="gap:10px">
+      <h2>Útlit</h2>
+      <div class="seg" role="group" aria-label="Litastilling">${THEMES.map(([k, l]) => `<button data-theme-set="${k}" aria-pressed="${(P.theme || 'auto') === k}">${l}</button>`).join('')}</div>
+      <p class="hint">Sjálfvirkt fylgir stillingu tölvunnar eða símans.</p>
+    </div>`;
     const num = (k, label) => `<label class="row hint" style="gap:6px">${label} <input type="number" class="ninp" style="width:7ch" min="5" max="120" step="5" data-block="${k}" value="${P.block[k]}"> mín.</label>`;
-    return `<div class="panel stack" style="gap:12px">
+    return `${theme}<div class="panel stack" style="gap:12px">
       <h2>Lærdómsblokk</h2>
       <div class="row" style="gap:16px">${num('first', 'Fyrri hluti')}${num('pause', 'Hlé')}${num('second', 'Seinni hluti')}</div>
       <div class="frow"><span class="eyebrow">Upptekin kvöld</span><div class="chips">${DAYS.map(([d, l]) => `<button class="chip" data-busy="${d}" aria-pressed="${P.busy.includes(d)}">${l}</button>`).join('')}</div></div>
@@ -88,6 +94,8 @@ export function render({ app, store }) {
   };
 
   app.onclick = async e => {
+    const th = e.target.closest('[data-theme-set]');
+    if (th) { S.settings.prefs.theme = th.dataset.themeSet; store.save(); return draw(); }
     const bz = e.target.closest('[data-busy]');
     if (bz) { const P = S.settings.prefs; const d = +bz.dataset.busy; P.busy = P.busy.includes(d) ? P.busy.filter(x => x !== d) : [...P.busy, d].sort(); store.save(); return draw(); }
     if (e.target.closest('[data-act="export"]')) {

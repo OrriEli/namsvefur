@@ -1,11 +1,15 @@
 // Ræsing og leiðsögn. Slóðir: #/idag, #/fog, #/fag/<id>[/aefing|/prof|/bladid|/aaetlun][?…], #/villur, #/upprifjun,
 // #/vikan, #/bladin[?q=…], #/stillingar
 
+// Letur sett upp á vélinni (@fontsource), svo vefurinn virki án nets. Röðin skiptir máli: tokens.css kemur
+// á eftir base.css og legacy.css og tengir gömlu breytuheitin þeirra við tókana.
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/source-sans-3';
 import './ui/base.css';
 import './ui/legacy.css';
 import 'katex/dist/katex.min.css';
+import './ui/tokens.css';
 import './ui/styles.css';
-import './ui/theme.css';
 import renderMathInElement from 'katex/contrib/auto-render';
 import { createStore } from './store/store.js';
 import { courseById } from './courses/index.js';
@@ -23,6 +27,13 @@ import { dueIds } from './engine/review.js';
 import { COURSES } from './courses/index.js';
 
 const store = createStore();
+
+/** Ljóst, dökkt eða sjálfvirkt (eftir kerfinu), úr Stillingum. */
+function applyTheme() {
+  const t = store.state.settings.prefs.theme;
+  if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme;
+}
+applyTheme();
 let current = null;
 
 const NAV = [
@@ -106,7 +117,7 @@ const mathObs = new MutationObserver(() => {
 });
 mathObs.observe(app, { childList: true, subtree: true });
 
-store.onChange(() => { renderNav(parse().parts); renderBar(); });
+store.onChange(() => { applyTheme(); renderNav(parse().parts); renderBar(); });
 window.addEventListener('hashchange', route);
 window.addEventListener('resize', setTopH);
 document.addEventListener('keydown', e => {
