@@ -561,3 +561,34 @@ Atriðin eru því ekki fryst sem JSON heldur reiknuð úr orðréttum kóða g�
 - **Stærðfræði:** KaTeX í öllum fögum; allt TeX í öllum fögum teiknast villulaust (`tests/katex.test.js`).
 - **Rafall sem skilar NaN, Infinity eða undefined** í texta er keyrður aftur (sjá úttektina).
 
+## Áfangi 4: þvert á fög (17. nóv. 2026)
+
+### Villubanki með dreifðri endurtekningu (`src/engine/review.js`)
+
+| Atburður | Áhrif |
+| --- | --- |
+| Rangt svar | `box = 1`, `due = nú + 1 dagur`; `sureWrong = true` ef merkt var *Viss* |
+| Rétt svar þegar `due ≤ nú` | næsta hólf: 1 → 3 → 7 → 16 dagar (`due = nú + hólf`); rétt í hólfi 16 → út |
+| Rétt svar áður en á tíma | engin breyting á hólfi |
+| Rangt svar í hvaða hólfi sem er | aftur í hólf 1 |
+
+Vægi í úrtaki: villa á tíma 5, rafall 2, ósnert 3, villa sem er ekki á tíma 1, náð tvisvar í röð 0,25, annars 1. Innflutt villa úr gömlu síðunum er á tíma strax.
+
+Ný svið á `ItemProgress`: `conf` (öryggismat síðasta svars), `sureWrong`, `note` („Hvað hugsaði ég vitlaust?“) og `tags`.
+
+### Tillaga að blokk (`src/engine/today.js`)
+
+- **Forgangur** = nálægð × veikleiki. Nálægð = 1 / min(dagar í próf, 14); óstaðfest próf 1/14; liðið próf 0. Veikleiki = 1 − hlutfall réttra síðustu 14 daga (úr lotum), dempað með 4 hlutlausum tilraunum; án lota er notað heildarhlutfall fagsins og án nokkurra svara 0,5.
+- **Fyrri helmingur:** villur á tíma (öll fög með komandi próf, elstu fyrst, eins margar og komast fyrir), svo tveir veikustu flokkar fagsins með hæstan forgang.
+- **Seinni helmingur:** tveir veikustu flokkar næsta fags í forgangsröð; ef ekkert annað fag hefur komandi próf, blönduð upprifjun.
+- Áætlaður tími á atriði: hraðspurning 1 mín., kross 2, tölusvar, „veldu allt“ og pörun 3, skriflegt dæmi 8.
+- **Upptekið kvöld** (sjálfgefið mán., mið., fös.): aðeins fyrri helmingurinn.
+
+### Stillingar (`state.settings.prefs`)
+
+`{confidence: true, block: {first: 25, pause: 10, second: 25}, busy: [1, 3, 5]}`; sjálfgefin gildi úr `src/config.js`, breytt á `#/stillingar`.
+
+### Lærdómsblokk í gangi (`state.block`)
+
+`{created, segments, first, pause, second, phase: 'first'|'pause'|'ready'|'second'|'done', phaseStart, idx}`. Stikan undir efstu stiku sýnir tímann og núverandi lið á öllum síðum.
+

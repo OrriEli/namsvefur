@@ -1,7 +1,7 @@
 // Æfingapotturinn: færslur (föst atriði og rafalar), hættir, vegið úrtak, tilvik og staða eftir flokkum.
 // Vélin veit ekki úr hvaða fagi færsla kemur; hún les aðeins Course-hlutinn.
 
-import { inBank } from './review.js';
+import { inBank, isDue } from './review.js';
 
 /** @typedef {Object} Entry
  *  @property {string} gid         alþjóðlegt auðkenni, 'hag103g:H25-1', 'hag106g:g-ev@2', 'hag101g:q:g-mul'
@@ -47,12 +47,13 @@ export function inMode(e, mode) {
 
 export const modeOf = (course, id) => (course.modes || []).find(m => m.id === id) || (course.modes || [])[0] || null;
 
-// Vægi í úrtaki: í villubanka 5, rafall 2, ósnert 3, náð tvisvar í röð 0,25, annars 1.
-export function weight(e, state) {
+// Vægi í úrtaki: villa á tíma 5, rafall 2, ósnert 3, villa sem er ekki á tíma 1, náð tvisvar í röð 0,25, annars 1.
+export function weight(e, state, now = Date.now()) {
   const p = state.items[e.gid];
-  if (inBank(p)) return 5;
+  if (isDue(p, now)) return 5;
   if (e.kind === 'gen') return 2;
   if (!p) return 3;
+  if (inBank(p)) return 1;
   return p.streak >= 2 ? 0.25 : 1;
 }
 

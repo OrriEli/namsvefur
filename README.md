@@ -51,5 +51,5 @@ npm run inventory      # úttekt á gömlu síðunum (JSON); `-- --write` uppfæ
 | 1 | Vél + HAG103G og HAG107G | lokið |
 | 2 | HAG106G og HAG108G | lokið |
 | 3 | HAG101G | lokið |
-| 4 | Í dag, kunnáttukort, upprifjun, dreifð endurtekning, öryggismat | |
+| 4 | Í dag, kunnáttukort, upprifjun, dreifð endurtekning, öryggismat | lokið |
 | 5 | Vikan, leit í Blöðunum, útflutningur, gamla sagan | innflutningur gömlu sögunnar lokið |

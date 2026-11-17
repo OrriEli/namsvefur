@@ -49,3 +49,52 @@ a.ccard:hover{border-color:var(--muted);border-left-color:var(--cc,var(--accent)
 
 /* prentun A4-blaðsins: aðeins blaðið sjálft */
 @media print{.course-head,.tabs{display:none!important}}
+
+/* ===================== Áfangi 4: Í dag, blokk, upprifjun, villur ===================== */
+/* öryggismat og athugasemd við villu */
+.conf{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;border:1px dashed var(--accent);border-radius:12px;background:var(--accent-weak)}
+.noterow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-top:1px dashed var(--line);padding-top:10px}
+.noterow label{width:100%}
+.note-in{font:inherit;font-size:.92rem;flex:2 1 260px;min-width:0;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--paper);color:var(--ink);min-height:40px}
+.note-in.tags-in{flex:1 1 180px;font-family:var(--f-mono);font-size:.85rem}
+.tag.sure{background:var(--warn-weak);color:var(--warn)}
+
+/* prófadagatal */
+.excal{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.excard{display:flex;flex-direction:column;gap:4px;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--cc,var(--accent));border-radius:12px;padding:10px 12px;min-width:0}
+.excard.next{box-shadow:inset 0 0 0 1px var(--cc,var(--accent))}
+.excard .cchip{width:fit-content}
+
+/* tillaga að blokk */
+.segs{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.seg-row{display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg)}
+
+/* blokk í gangi */
+#blockbar{padding-inline:max(16px,env(safe-area-inset-left,0px))}
+.bbar{max-width:880px;margin:10px auto 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--accent-weak);border:1px solid var(--accent);border-radius:12px;padding:8px 12px}
+.bbar.pause{background:var(--warn-weak);border-color:var(--warn)}
+.bbar.done{background:var(--good-weak);border-color:var(--good)}
+.bbar .mono{font-size:1.05rem}
+.bbar .btn{margin-left:auto}
+.bbar .btn + .btn{margin-left:0}
+
+/* kunnáttukort */
+.kmap{display:flex;flex-direction:column;gap:8px;overflow-x:auto;padding-bottom:4px}
+.krow{display:grid;grid-template-columns:88px minmax(0,1fr);gap:10px;align-items:start}
+.krow>.cchip{text-decoration:none;margin-top:6px;width:fit-content}
+.kcells{display:flex;flex-wrap:wrap;gap:4px}
+.kcell{display:flex;flex-direction:column;gap:2px;width:96px;min-height:48px;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--soft);color:var(--ink);text-decoration:none;font-size:.74rem;line-height:1.2}
+.kcell:hover{border-color:var(--ink)}
+.kcell .kn{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.kcell .kp{font-size:.82rem;margin-top:auto}
+.kcell.lo{background:var(--bad-weak);border-color:var(--bad)}
+.kcell.mid{background:var(--warn-weak);border-color:var(--warn)}
+.kcell.hi{background:var(--good-weak);border-color:var(--good)}
+.kdot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle;background:var(--soft);border:1px solid var(--line)}
+.kdot.lo{background:var(--bad-weak);border-color:var(--bad)} .kdot.mid{background:var(--warn-weak);border-color:var(--warn)} .kdot.hi{background:var(--good-weak);border-color:var(--good)}
+
+/* villubankinn */
+.wlist2{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.wrow{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg)}
+.wrow .noterow{border-top:0;padding-top:0}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}

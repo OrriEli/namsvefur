@@ -4,7 +4,7 @@
 // Vörpun (sjá docs/schema.md):
 //   st[k] = {n, c, s}       → items['<fag>:k'] = {n, c, streak: s}          (103, 106, 107, 108; 101 hraðspurningar í qs)
 //   st[k] = {n, p, m}       → items['<fag>:k'] = {n, c: n·p/m, p, m, streak: 0}   (101 skrifleg dæmi)
-//   wrong[k]                → í villubanka, hólf 1, á tíma strax; hits = wrong[k] (rétt í röð síðan)
+//   wrong[k]                → í villubanka, hólf 1, á tíma strax
 //   cards[id] = {seen, again} → items['<fag>:id'] = {n: seen, again}         (106, 108)
 //   hist[]                  → state.hist (merkt legacy), adapt → stigvaxandi stig
 // Innflutningur má endurtaka: hlutur gömlu síðunnar í n og c er geymdur í `imp` og skipt út, ekki lagður við.
@@ -59,7 +59,7 @@ export function importLegacy(state, course, old, { now = Date.now(), key = '' } 
     if (pts) { p.p = (p.p || 0) + pts.p - (prev.p || 0); p.m = (p.m || 0) + pts.m - (prev.m || 0); p.imp.p = pts.p; p.imp.m = pts.m; }
     if (fresh) {
       p.streak = streak;
-      if (k in wrong) { p.box = 1; p.due = now; p.hits = num(wrong[k]); } else { delete p.box; delete p.due; delete p.hits; }
+      if (k in wrong) { p.box = 1; p.due = now; } else { delete p.box; delete p.due; }
     }
     if (p.n <= 0 && !p.box && !p.again) delete state.items[gid];
     return p;

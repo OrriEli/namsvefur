@@ -1,6 +1,8 @@
 // Geymslulag: öll framvinda fer hingað í gegn, svo hægt sé að skipta um geymslu (t.d. samstilltan
 // bakenda) án þess að snerta vélina. Bakendi er hlutur með read() → string|null og write(string).
 
+import { BLOCK, BUSY_EVENINGS } from '../config.js';
+
 export const STORE_KEY = 'namsvefur-v1';
 export const VERSION = 1;
 
@@ -10,11 +12,10 @@ export const VERSION = 1;
  *  @property {number} c                summa einkunna (0–1 á tilraun)
  *  @property {number} streak           rétt í röð
  *  @property {number} [last]           síðasta tilraun (ms)
- *  @property {'viss'|'halfviss'|'gisk'} [conf]
- *  @property {boolean} [sureWrong]
- *  @property {number} [box]            hólf í villubanka; vantar = ekki í banka
+ *  @property {'viss'|'halfviss'|'gisk'} [conf] öryggismat síðasta svars
+ *  @property {boolean} [sureWrong]     rangt þótt merkt væri „Viss“
+ *  @property {number} [box]            hólf í villubanka (1, 3, 7, 16 dagar); vantar = ekki í banka
  *  @property {number} [due]            næst á tíma (ms)
- *  @property {number} [hits]           rétt í röð síðan atriðið fór í bankann (einfaldi bankinn í áfanga 1)
  *  @property {string} [note]
  *  @property {string[]} [tags]
  *  @property {boolean} [again]
@@ -33,11 +34,14 @@ export const VERSION = 1;
  *  @property {ExamResult[]} hist
  *  @property {Object<string,*>} exams          próf í gangi, eitt á fag
  *  @property {{plan:Object<string,{done:Object<string,boolean>}>, adapt:Object<string,{lvl:number, up:number, down:number, msg:string}>,
- *             imported:Object<string,{at:number, key:string, items:number, bank:number, hist:number, skipped:number}>}} settings
+ *             imported:Object<string,{at:number, key:string, items:number, bank:number, hist:number, skipped:number}>,
+ *             prefs:{confidence:boolean, block:{first:number, pause:number, second:number}, busy:number[]}}} settings
+ *  @property {Object} [block]          lærdómsblokk í gangi (sjá views/block.js)
  */
 
 /** @returns {State} */
-export const fresh = () => ({ v: VERSION, items: {}, sessions: [], hist: [], exams: {}, settings: { plan: {}, adapt: {}, imported: {} } });
+export const defaultPrefs = () => ({ confidence: true, block: { ...BLOCK }, busy: [...BUSY_EVENINGS] });
+export const fresh = () => ({ v: VERSION, items: {}, sessions: [], hist: [], exams: {}, settings: { plan: {}, adapt: {}, imported: {}, prefs: defaultPrefs() } });
 
 // Flutningsföll á milli útgáfa: MIGRATIONS[n] breytir útgáfu n í n + 1.
 const MIGRATIONS = {};
@@ -50,7 +54,9 @@ export function migrate(raw) {
     s = step(s);
   }
   const base = fresh();
-  return { ...base, ...s, settings: { ...base.settings, ...(s.settings || {}) } };
+  const settings = { ...base.settings, ...(s.settings || {}) };
+  settings.prefs = { ...base.settings.prefs, ...(settings.prefs || {}) };
+  return { ...base, ...s, settings };
 }
 
 export function localBackend(key = STORE_KEY) {

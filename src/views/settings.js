@@ -1,4 +1,4 @@
-// Stillingar. Fyrst um sinn: innflutningur gömlu sögunnar, einn reitur á hvert fag með leiðbeiningum.
+// Stillingar: lærdómsblokk, upptekin kvöld og öryggismat; innflutningur gömlu sögunnar, einn reitur á hvert fag.
 
 import { COURSES } from '../courses/index.js';
 import { LEGACY_KEYS, consoleCommand, parseLegacy, importLegacy } from '../store/legacy-import.js';
@@ -14,6 +14,20 @@ export function render({ app, store }) {
   const S = store.state;
   const msg = {};
 
+  const DAYS = [[1, 'mán.'], [2, 'þri.'], [3, 'mið.'], [4, 'fim.'], [5, 'fös.'], [6, 'lau.'], [0, 'sun.']];
+
+  function prefsHTML() {
+    const P = S.settings.prefs;
+    const num = (k, label) => `<label class="row hint" style="gap:6px">${label} <input type="number" class="ninp" style="width:7ch" min="5" max="120" step="5" data-block="${k}" value="${P.block[k]}"> mín.</label>`;
+    return `<div class="panel stack" style="gap:12px">
+      <h2>Lærdómsblokk</h2>
+      <div class="row" style="gap:16px">${num('first', 'Fyrri hluti')}${num('pause', 'Hlé')}${num('second', 'Seinni hluti')}</div>
+      <div class="frow"><span class="eyebrow">Upptekin kvöld</span><div class="chips">${DAYS.map(([d, l]) => `<button class="chip" data-busy="${d}" aria-pressed="${P.busy.includes(d)}">${l}</button>`).join('')}</div></div>
+      <p class="hint">Á upptekinni kvöldi er tillagan aðeins fyrri hlutinn.</p>
+      <label class="switch"><input type="checkbox" id="conf" ${P.confidence ? 'checked' : ''}> Öryggismat: spyrja „Viss · Hálfviss · Gisk“ áður en lausnin birtist</label>
+    </div>`;
+  }
+
   function draw() {
     const cards = COURSES.map(c => {
       const done = S.settings.imported[c.id];
@@ -27,6 +41,7 @@ export function render({ app, store }) {
     }).join('');
     app.innerHTML = `<div class="stack" style="gap:18px">
       <h1>Stillingar</h1>
+      ${prefsHTML()}
       <div class="panel stack" style="gap:8px">
         <h2>Gamla sagan</h2>
         <p class="muted" style="max-width:66ch">Gömlu síðurnar geyma árangurinn þinn í vafrageymslu sem þessi vefur nær ekki í. Svona flytur þú hann hingað, eitt fag í einu:</p>
@@ -42,7 +57,15 @@ export function render({ app, store }) {
     </div>`;
   }
 
+  app.onchange = e => {
+    const P = S.settings.prefs; const t = e.target;
+    if (t.dataset.block) { const v = Math.round(+t.value); if (v >= 0 && v <= 180) { P.block = { ...P.block, [t.dataset.block]: v }; store.save(); } }
+    if (t.id === 'conf') { P.confidence = t.checked; store.save(); }
+  };
+
   app.onclick = async e => {
+    const bz = e.target.closest('[data-busy]');
+    if (bz) { const P = S.settings.prefs; const d = +bz.dataset.busy; P.busy = P.busy.includes(d) ? P.busy.filter(x => x !== d) : [...P.busy, d].sort(); store.save(); return draw(); }
     const cp = e.target.closest('[data-copy]');
     if (cp) { try { await navigator.clipboard.writeText(consoleCommand(cp.dataset.copy)); cp.textContent = 'Afritað'; } catch (err) { cp.textContent = 'Veldu og afritaðu'; } return; }
     const b = e.target.closest('[data-imp]'); if (!b) return;

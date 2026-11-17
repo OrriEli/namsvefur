@@ -3,7 +3,7 @@
 import { describe, it, expect } from 'vitest';
 import { validateCourse, validateItem } from '../src/schema.js';
 import { createStore, memoryBackend, fresh, migrate, logActivity } from '../src/store/store.js';
-import { recordAnswer, inBank, bankIds } from '../src/engine/review.js';
+import { recordAnswer, inBank, isDue, bankIds, dueIds, nextDue } from '../src/engine/review.js';
 import { entriesOf, weight, instantiate, topicStats, weakest, inMode } from '../src/engine/practice.js';
 import { grade, answered, blank, parseNum, parseFrac } from '../src/engine/items/index.js';
 import { courses, byId } from './helpers.js';
@@ -88,15 +88,57 @@ describe('geymsla', () => {
   });
 });
 
-describe('villubanki (einfaldur)', () => {
-  it('rangt → inn; tvö rétt í röð → út; rangt á milli byrjar upp á nýtt', () => {
+describe('villubanki með dreifðri endurtekningu', () => {
+  const D = 864e5, t0 = Date.UTC(2026, 10, 17, 12);
+
+  it('rangt → hólf 1, á tíma eftir 1 dag', () => {
     const S = fresh(); const g = 'hag107g:x';
-    recordAnswer(S, g, 0); expect(inBank(S.items[g])).toBe(true);
-    recordAnswer(S, g, 1); expect(inBank(S.items[g])).toBe(true);
-    recordAnswer(S, g, 0); recordAnswer(S, g, 1); expect(inBank(S.items[g])).toBe(true);
-    recordAnswer(S, g, 1); expect(inBank(S.items[g])).toBe(false);
+    recordAnswer(S, g, 0, { now: t0 });
+    expect(S.items[g]).toMatchObject({ box: 1, due: t0 + D });
+    expect(isDue(S.items[g], t0 + D - 1)).toBe(false);
+    expect(isDue(S.items[g], t0 + D)).toBe(true);
+  });
+
+  it('rétt þegar á tíma → 3, 7, 16 dagar og svo út; rétt áður en á tíma breytir engu', () => {
+    const S = fresh(); const g = 'hag103g:y'; let t = t0;
+    recordAnswer(S, g, 0, { now: t });
+    recordAnswer(S, g, 1, { now: t + 3600e3 });             // ekki á tíma
+    expect(S.items[g].box).toBe(1);
+    for (const [box, next] of [[1, 3], [3, 7], [7, 16]]) {
+      t = S.items[g].due; expect(S.items[g].box).toBe(box);
+      recordAnswer(S, g, 1, { now: t });
+      expect(S.items[g]).toMatchObject({ box: next, due: t + next * D });
+    }
+    recordAnswer(S, g, 1, { now: S.items[g].due });
+    expect(inBank(S.items[g])).toBe(false);
     expect(bankIds(S)).toEqual([]);
   });
+
+  it('rangt í hvaða hólfi sem er → aftur í hólf 1', () => {
+    const S = fresh(); const g = 'hag108g:z';
+    recordAnswer(S, g, 0, { now: t0 }); recordAnswer(S, g, 1, { now: t0 + D }); recordAnswer(S, g, 1, { now: t0 + 4 * D });
+    expect(S.items[g].box).toBe(7);
+    recordAnswer(S, g, 0, { now: t0 + 5 * D });
+    expect(S.items[g]).toMatchObject({ box: 1, due: t0 + 6 * D });
+  });
+
+  it('„Viss“ en rangt fær sérmerki sem fer þegar villan fer út', () => {
+    const S = fresh(); const g = 'hag101g:L25-1';
+    recordAnswer(S, g, 0, { now: t0, conf: 'viss' });
+    expect(S.items[g]).toMatchObject({ sureWrong: true, conf: 'viss' });
+    let t = t0; for (let i = 0; i < 4; i++) { t = S.items[g].due; recordAnswer(S, g, 1, { now: t, conf: 'halfviss' }); }
+    expect(S.items[g].sureWrong).toBeUndefined();
+    recordAnswer(S, 'hag101g:L25-2', 0, { now: t0, conf: 'gisk' });
+    expect(S.items['hag101g:L25-2'].sureWrong).toBeUndefined();
+  });
+
+  it('á tíma núna og næsti tími', () => {
+    const S = fresh();
+    recordAnswer(S, 'hag103g:a', 0, { now: t0 }); recordAnswer(S, 'hag103g:b', 0, { now: t0 + 2 * D });
+    expect(dueIds(S, 'hag103g', t0 + 1.5 * D)).toEqual(['hag103g:a']);
+    expect(nextDue(S, 'hag103g', t0 + 1.5 * D)).toBe(t0 + 3 * D);
+  });
+
   it('hlutastig undir passScore telst rangt', () => {
     const S = fresh();
     expect(recordAnswer(S, 'a', 0.8, { passScore: 1 })).toBe(false);
@@ -108,15 +150,18 @@ describe('æfingapottur', () => {
   const c = byId.hag103g; const es = entriesOf(c);
   const item = es.find(e => e.kind === 'item'), gen = es.find(e => e.kind === 'gen');
 
-  it('vægi: villubanki 5 > ósnert 3 > rafall 2 > 1 > náð 0,25', () => {
-    const S = fresh();
-    expect(weight(item, S)).toBe(3);
-    expect(weight(gen, S)).toBe(2);
-    recordAnswer(S, item.gid, 0); recordAnswer(S, gen.gid, 0);
-    expect(weight(item, S)).toBe(5);
-    expect(weight(gen, S)).toBe(5);
-    recordAnswer(S, item.gid, 1); recordAnswer(S, item.gid, 1);
-    expect(weight(item, S)).toBe(0.25);
+  it('vægi: villa á tíma 5 > ósnert 3 > rafall 2 > 1 (villa ekki á tíma, eða séð) > náð 0,25', () => {
+    const S = fresh(); const t = Date.now();
+    expect(weight(item, S, t)).toBe(3);
+    expect(weight(gen, S, t)).toBe(2);
+    recordAnswer(S, item.gid, 0, { now: t }); recordAnswer(S, gen.gid, 0, { now: t });
+    expect(weight(item, S, t)).toBe(1);
+    expect(weight(gen, S, t)).toBe(2);
+    expect(weight(item, S, t + 864e5)).toBe(5);
+    expect(weight(gen, S, t + 864e5)).toBe(5);
+    const other = es.find(e => e.kind === 'item' && e.gid !== item.gid);
+    recordAnswer(S, other.gid, 1); recordAnswer(S, other.gid, 1);
+    expect(weight(other, S)).toBe(0.25);
   });
 
   it('tilvik halda réttu svari eftir stokkun (kross, veldu allt, pörun)', () => {

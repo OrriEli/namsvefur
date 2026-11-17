@@ -1,4 +1,4 @@
-// Ræsing og leiðsögn. Slóðir: #/fog, #/fag/<id>[/aefing|/prof|/bladid|/aaetlun][?…], #/villur, #/stillingar
+// Ræsing og leiðsögn. Slóðir: #/idag, #/fog, #/fag/<id>[/aefing|/prof|/bladid|/aaetlun][?…], #/villur, #/upprifjun, #/stillingar
 
 import './ui/base.css';
 import './ui/legacy.css';
@@ -7,19 +7,25 @@ import './ui/styles.css';
 import renderMathInElement from 'katex/contrib/auto-render';
 import { createStore } from './store/store.js';
 import { courseById } from './courses/index.js';
-import { bankIds } from './engine/review.js';
 import { $, setTopH } from './ui/dom.js';
 import * as coursesView from './views/courses.js';
 import * as courseView from './views/course.js';
 import * as wrongView from './views/wrong.js';
 import * as settingsView from './views/settings.js';
+import * as todayView from './views/today.js';
+import * as reviewView from './views/upprifjun.js';
+import { barHTML, barKey, clockText, advanceByTime, nextSegment, startSecond } from './views/block.js';
+import { dueIds } from './engine/review.js';
+import { COURSES } from './courses/index.js';
 
 const store = createStore();
 let current = null;
 
 const NAV = [
-  { href: '#/fog', label: 'Fög', match: p => !p[0] || p[0] === 'fog' || p[0] === 'fag' },
+  { href: '#/idag', label: 'Í dag', match: p => !p[0] || p[0] === 'idag' },
+  { href: '#/fog', label: 'Fög', match: p => p[0] === 'fog' || p[0] === 'fag' },
   { href: '#/villur', label: 'Villur', match: p => p[0] === 'villur', pill: true },
+  { href: '#/upprifjun', label: 'Upprifjun', match: p => p[0] === 'upprifjun' },
   { href: '#/stillingar', label: 'Stillingar', match: p => p[0] === 'stillingar' }
 ];
 
@@ -29,7 +35,7 @@ function parse() {
 }
 
 function renderNav(parts) {
-  const n = bankIds(store.state).length;
+  const n = COURSES.reduce((s, c) => s + dueIds(store.state, c.id).length, 0);   // villur á tíma
   $('#nav').innerHTML = NAV.map(x => `<a href="${x.href}" ${x.match(parts) ? 'aria-current="page"' : ''}>${x.label}${x.pill && n ? `<span class="pill">${n}</span>` : ''}</a>`).join('');
 }
 
@@ -43,11 +49,33 @@ function route() {
   if (course) current = courseView.render({ ...ctx, course, tab: parts[2] || 'yfirlit' });
   else if (parts[0] === 'villur') current = wrongView.render(ctx);
   else if (parts[0] === 'stillingar') current = settingsView.render(ctx);
-  else current = coursesView.render(ctx);
+  else if (parts[0] === 'upprifjun') current = reviewView.render(ctx);
+  else if (parts[0] === 'fog') current = coursesView.render(ctx);
+  else current = todayView.render(ctx);
   renderNav(parts);
+  renderBar();
   setTopH();
   window.scrollTo(0, 0);
 }
+
+// Lærdómsblokk í gangi: stika undir efstu stiku, uppfærð á sekúndu fresti.
+// Stikan er aðeins teiknuð upp á nýtt þegar áfangi eða liður breytist, svo smellir á hnappana tapist ekki;
+// klukkan ein er uppfærð á sekúndu fresti.
+let barShown = null;
+function renderBar() {
+  const el = $('#blockbar'); const key = barKey(store.state);
+  if (key !== barShown) { barShown = key; el.innerHTML = barHTML(store.state); el.hidden = !key; setTopH(); }
+  const clk = el.querySelector('[data-clock]'); if (clk) clk.textContent = clockText(store.state);
+}
+setInterval(() => { if (!store.state.block) return; advanceByTime(store); renderBar(); }, 1000);
+$('#blockbar').addEventListener('click', e => {
+  const b = e.target.closest('[data-blk]'); if (!b) return;
+  const act = b.dataset.blk;
+  if (act === 'next') { const h = nextSegment(store); if (h) location.hash = h; }
+  if (act === 'second') { const h = startSecond(store); if (h) location.hash = h; }
+  if (act === 'end') { delete store.state.block; store.save(); }
+  renderBar(); setTopH();
+});
 
 // Stærðfræði: KaTeX teiknar \( \) og \[ \] í hvert sinn sem #app breytist (eins og í HAG108G).
 const MATHOPT = {
@@ -64,7 +92,7 @@ const mathObs = new MutationObserver(() => {
 });
 mathObs.observe(app, { childList: true, subtree: true });
 
-store.onChange(() => renderNav(parse().parts));
+store.onChange(() => { renderNav(parse().parts); renderBar(); });
 window.addEventListener('hashchange', route);
 window.addEventListener('resize', setTopH);
 document.addEventListener('keydown', e => {
