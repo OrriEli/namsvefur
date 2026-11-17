@@ -19,7 +19,7 @@ export const CONF = [['viss', 'Viss', 'v'], ['halfviss', 'Hálfviss', 'h'], ['gi
 export function createPlayer(o) {
   const { course: c, item: it, store } = o;
   const S = store.state;
-  const st = { resp: blank(it), done: false, ok: null, conf: null, pending: null, showSol: false };
+  const st = { resp: blank(it), done: false, ok: null, conf: null, pending: null, showSol: false, shown: Date.now() };
   const confOn = () => S.settings.prefs.confidence;
   const prog = () => S.items[it.gid] || (S.items[it.gid] = { n: 0, c: 0, streak: 0 });
 
@@ -28,7 +28,7 @@ export function createPlayer(o) {
     st.done = true;
     const pts = c.engine === 'written' && it.type === 'steps' ? { pts: score * stepTotal(it), max: stepTotal(it) } : {};
     st.ok = recordAnswer(S, it.gid, score, { passScore: c.passScore, conf: st.conf || undefined, ...pts });
-    logActivity(S, c.id, 'practice', score);
+    logActivity(S, c.id, 'practice', score, Date.now(), { from: st.shown, conf: st.conf, ok: st.ok });
     store.save();
     if (o.onDone) o.onDone(score, st.ok);
     o.redraw();

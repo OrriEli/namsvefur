@@ -1,7 +1,7 @@
 // Geymslulag: öll framvinda fer hingað í gegn, svo hægt sé að skipta um geymslu (t.d. samstilltan
 // bakenda) án þess að snerta vélina. Bakendi er hlutur með read() → string|null og write(string).
 
-import { BLOCK, BUSY_EVENINGS } from '../config.js';
+import { BLOCK, BUSY_EVENINGS, GOALS } from '../config.js';
 
 export const STORE_KEY = 'namsvefur-v1';
 export const VERSION = 1;
@@ -24,7 +24,7 @@ export const VERSION = 1;
  *  @property {{n:number, c:number, p?:number, m?:number}} [imp] hlutur gömlu síðunnar (svo endurtekinn innflutningur tvítelji ekki)
  */
 
-/** @typedef {{course:string, kind:'practice'|'exam', start:number, end:number, n:number, c:number}} Session */
+/** @typedef {{course:string, kind:'practice'|'exam', start:number, end:number, n:number, c:number, sure?:number, sureWrong?:number}} Session */
 /** @typedef {{course:string, format:string, label:string, at:number, used:number, n:number, score:number, max:number, timeout:boolean, legacy?:boolean}} ExamResult */
 
 /** @typedef {Object} State
@@ -35,12 +35,13 @@ export const VERSION = 1;
  *  @property {Object<string,*>} exams          próf í gangi, eitt á fag
  *  @property {{plan:Object<string,{done:Object<string,boolean>}>, adapt:Object<string,{lvl:number, up:number, down:number, msg:string}>,
  *             imported:Object<string,{at:number, key:string, items:number, bank:number, hist:number, skipped:number}>,
- *             prefs:{confidence:boolean, block:{first:number, pause:number, second:number}, busy:number[]}}} settings
+ *             prefs:{confidence:boolean, block:{first:number, pause:number, second:number}, busy:number[], goals:Object<string,string>},
+ *             weekGoal?:{text:string, at:number}}} settings
  *  @property {Object} [block]          lærdómsblokk í gangi (sjá views/block.js)
  */
 
 /** @returns {State} */
-export const defaultPrefs = () => ({ confidence: true, block: { ...BLOCK }, busy: [...BUSY_EVENINGS] });
+export const defaultPrefs = () => ({ confidence: true, block: { ...BLOCK }, busy: [...BUSY_EVENINGS], goals: { ...GOALS } });
 export const fresh = () => ({ v: VERSION, items: {}, sessions: [], hist: [], exams: {}, settings: { plan: {}, adapt: {}, imported: {}, prefs: defaultPrefs() } });
 
 // Flutningsföll á milli útgáfa: MIGRATIONS[n] breytir útgáfu n í n + 1.
@@ -83,11 +84,14 @@ export function createStore(backend = localBackend()) {
 }
 
 // Lotuskráning: æfing lengir síðustu lotu ef innan við 15 mín. eru liðnar, annars hefst ný.
+// `from` er hvenær atriðið birtist (svo fyrsta svarið teljist líka til tíma), þó aldrei meira en 15 mín.
+// aftur í tímann. `conf`/`ok` telja „Viss“-svör og hve mörg þeirra voru röng (fyrir Vikuna).
 const GAP = 15 * 60e3;
-export function logActivity(state, course, kind, score, now = Date.now()) {
+export function logActivity(state, course, kind, score, now = Date.now(), { from, conf, ok } = {}) {
   const last = [...state.sessions].reverse().find(s => s.course === course && s.kind === kind);
-  if (kind === 'practice' && last && now - last.end < GAP) { last.end = now; last.n++; last.c += score; return last; }
-  const s = { course, kind, start: now, end: now, n: 1, c: score };
-  state.sessions.push(s);
+  let s;
+  if (kind === 'practice' && last && now - last.end < GAP) { s = last; s.end = now; s.n++; s.c += score; }
+  else { s = { course, kind, start: Math.max(from ?? now, now - GAP), end: now, n: 1, c: score }; state.sessions.push(s); }
+  if (conf === 'viss') { s.sure = (s.sure || 0) + 1; if (ok === false) s.sureWrong = (s.sureWrong || 0) + 1; }
   return s;
 }

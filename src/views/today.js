@@ -42,12 +42,13 @@ export function render({ app, store, go }) {
   const exams = EXAMS.filter(x => !x.at || new Date(x.at).getTime() + (x.minutes || 0) * 60e3 > now)
     .sort((a, b) => (a.at ? new Date(a.at).getTime() : Infinity) - (b.at ? new Date(b.at).getTime() : Infinity));
   const cal = exams.map((x, i) => { const c = COURSES.find(y => y.id === x.course);
-    return `<div class="excard ${i === 0 ? 'next' : ''}" style="--cc:var(${c.color})"><span class="cchip">${c.code}</span><b>${esc(c.short)}</b><span class="hint mono">${countdownTxt(x, now)}</span></div>`; }).join('');
+    const goal = (prefs.goals || {})[c.id];
+    return `<div class="excard ${i === 0 ? 'next' : ''}" style="--cc:var(${c.color})"><span class="cchip">${c.code}</span><b>${esc(c.short)}</b><span class="hint mono">${countdownTxt(x, now)}</span>${goal ? `<span class="hint">Markmið: ${esc(goal)}</span>` : ''}</div>`; }).join('');
 
   const sug = suggestBlock(COURSES, S, { now, exams: EXAMS, prefs });
   const running = S.block && S.block.phase !== 'done';
   const segRow = s => `<li class="seg-row"><span class="eyebrow">${s.half === 1 ? 'Fyrri hluti' : 'Seinni hluti'}</span>
-    <div style="min-width:0"><b>${esc(segLabel(s))}</b><div class="hint">${s.kind === 'due' ? `${plural(s.n, 'villa', 'villur')} sem ${s.n === 1 ? 'er' : 'eru'} komnar á tíma` : s.kind === 'mix' ? '10 atriði; fagið birtist eftir svar' : `um ${plural(s.n, 'atriði', 'atriði')}`} · ${s.minutes} mín.</div></div>
+    <div style="min-width:0"><b>${esc(segLabel(s))}</b><div class="hint">${s.kind === 'due' ? `${plural(s.n, 'villa', 'villur')} sem ${s.n % 10 === 1 && s.n % 100 !== 11 ? 'er komin' : 'eru komnar'} á tíma` : s.kind === 'mix' ? '10 atriði; fagið birtist eftir svar' : `um ${plural(s.n, 'atriði', 'atriði')}`} · ${s.minutes} mín.</div></div>
     <a class="btn small" href="${hrefFor(s)}">Opna</a></li>`;
   const top = sug.ranking[0];
   const why = top && top.prio > 0 ? `${top.course.code} hefur hæstan forgang: ${top.days === null ? 'próf óstaðfest' : `próf eftir ${plural(Math.max(0, Math.ceil(top.days)), 'dag', 'daga')}`}, ${top.share === null ? 'ekkert æft enn' : `${Math.round(top.share * 100)}% rétt nýlega`}.` : '';
@@ -55,6 +56,7 @@ export function render({ app, store, go }) {
 
   app.innerHTML = `<div class="stack" style="gap:22px">
     <div class="hero"><span class="eyebrow">${WEEKDAYS[d.getDay()]} ${d.getDate()}. ${MONTHS[d.getMonth()]}</span><h1>Í dag</h1></div>
+    ${S.settings.weekGoal ? `<div class="panel"><span class="eyebrow">Markmið vikunnar</span><p>${esc(S.settings.weekGoal.text)}</p></div>` : ''}
     <div class="excal">${cal}</div>
     <div class="panel stack" style="gap:12px">
       <div class="row" style="justify-content:space-between;align-items:baseline"><h2>Lærdómsblokk</h2><span class="mono hint">${sug.busy ? `${sug.first} mín. · upptekið kvöld` : `${sug.first} + ${sug.pause} hlé + ${sug.second} mín.`}</span></div>

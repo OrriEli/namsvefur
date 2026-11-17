@@ -52,4 +52,9 @@ npm run inventory      # úttekt á gömlu síðunum (JSON); `-- --write` uppfæ
 | 2 | HAG106G og HAG108G | lokið |
 | 3 | HAG101G | lokið |
 | 4 | Í dag, kunnáttukort, upprifjun, dreifð endurtekning, öryggismat | lokið |
-| 5 | Vikan, leit í Blöðunum, útflutningur, gamla sagan | innflutningur gömlu sögunnar lokið |
+| 5 | Vikan, leit í Blöðunum, útflutningur, gamla sagan | lokið |
+| 6 | Samstilling milli tækja | ekki þörf (vefurinn er aðeins notaður í tölvu) |
+
+## Gögnin
+
+Öll framvinda er í vafrageymslu þessa vafra. Á `#/stillingar` er hægt að sækja hana sem eina JSON-skrá og hlaða henni inn aftur, t.d. í öðrum vafra. Innflutningur sameinar og skrifar ekki yfir nýrri gögn. Árangur úr gömlu síðunum er fluttur inn á sama stað.

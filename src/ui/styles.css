@@ -98,3 +98,17 @@ a.ccard:hover{border-color:var(--muted);border-left-color:var(--cc,var(--accent)
 .wrow{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg)}
 .wrow .noterow{border-top:0;padding-top:0}
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+/* ===================== Áfangi 5: Vikan, Blöðin ===================== */
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;height:150px;align-items:end}
+.dcol{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%}
+.dcol i{display:block;width:70%;min-height:2px;background:var(--accent);border-radius:6px 6px 2px 2px}
+.up{color:var(--good)} .down{color:var(--bad)}
+.search{font-size:1.05rem;padding:12px 14px;width:100%}
+.toc-list{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:4px 16px}
+.toc-list a{text-decoration:none}
+.toc-list a:hover{text-decoration:underline}
+.hit{display:flex;flex-direction:column;gap:4px;text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.hit:hover{border-color:var(--accent)}
+.snip{font-size:.9rem;color:var(--muted)}
+.snip mark{background:var(--warn-weak);color:var(--ink);border-radius:3px;padding:0 2px}

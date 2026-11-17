@@ -592,3 +592,39 @@ Ný svið á `ItemProgress`: `conf` (öryggismat síðasta svars), `sureWrong`, 
 
 `{created, segments, first, pause, second, phase: 'first'|'pause'|'ready'|'second'|'done', phaseStart, idx}`. Stikan undir efstu stiku sýnir tímann og núverandi lið á öllum síðum.
 
+## Áfangi 5: Vikan, Blöðin, útflutningur (17. nóv. 2026)
+
+### Lotur (`state.sessions`)
+
+`logActivity(state, course, kind, score, now, {from, conf, ok})` skráir hvert svar. Æfingarsvar sem kemur innan 15 mín. frá lokum síðustu æfingarlotu sama fags lengir hana; annars hefst ný lota. Lota hefst þegar atriðið birtist (`from`), þó ekki fyrr en 15 mín. fyrir svarið, svo atriði sem stóð opið yfir nótt telst ekki með. Ný svið: `sure` (svör merkt *Viss*) og `sureWrong` (þau sem voru röng). Hvert próf er ein lota frá upphafi til skila.
+
+### Vikan (`src/engine/stats.js`)
+
+`weekSummary(state, courses, now)` tekur saman síðustu 7 sólarhringa (`[nú − 7 d, nú]`) og 7 sólarhringana þar á undan: mínútur, atriði og hlutfall réttra á fag, mínútur á dag og hlutfall *Viss*-svara sem voru röng. Lota telst til tímabils og dags eftir því hvenær hún endaði. `weekText(sum, goal)` býr til textann sem afritunartakkinn setur á klemmuspjaldið; fög án virkni báðar vikurnar sleppa.
+
+Markmið næstu viku: `state.settings.weekGoal = {text, at}`, birt á forsíðunni. Markmið faga: `state.settings.prefs.goals = {hag101g: '…'}`, sjálfgefin úr `src/config.js`, birt í prófadagatalinu.
+
+### Leit í Blöðunum (`src/engine/sheets.js`)
+
+Hver kafli í Blaði hvers fags er gerður að hreinum texta (HTML-merki fjarlægð, TeX gert læsilegt: `\le` → ≤). Texti og leitarorð eru felld staf fyrir staf (lágstafir, kommur burt, ð → d), svo „nuvirdi“ finnur „núvirði“ og staðsetning samsvörunar í felldum texta er sú sama og í upprunalegum. Öll orð (2 stafir eða fleiri) þurfa að finnast í kaflanum. Innan fags koma fyrst kaflar sem bera orðið í fyrirsögn, svo eftir fjölda samsvarana. Smellur opnar kaflann í Blaði fagsins (`#/fag/<id>/bladid?k=<kafli>`).
+
+### Útflutningur og innflutningur (`src/store/backup.js`)
+
+Skráin er `{app: 'namsvefur', v, exported, state}`; innflutningur tekur líka við hreinu ástandi. Sameining breytir ástandi þessa vafra og skrifar ekki yfir nýrri gögn:
+
+| Hluti | Regla |
+| --- | --- |
+| `items` | atriði sem vantar bætast við; ef bæði hafa atriðið gildir það sem var æft síðast (`last`) |
+| `sessions` | sameinaðar eftir (fag, gerð, upphaf); sama lota í báðum: sú sem endaði síðar |
+| `hist` | sameinuð eftir (fag, tími, heiti) |
+| `settings.plan` | hök sameinast |
+| `settings.adapt`, `settings.imported` | aðeins fyllt þar sem vantar |
+| `settings.weekGoal` | nýrra gildir |
+| `settings.prefs`, `exams`, `block` | þessi vafri heldur sínu |
+
+Sami innflutningur tvisvar breytir engu í seinna skiptið.
+
+### Viðmið
+
+`tests/phase5.test.js`: gamla HAG103G-síðan er keyrð í `vm`, 300 svörum svarað, vistunin flutt inn, og hlutfall hvers flokks í kunnáttukortinu er borið saman við `topicStats` gömlu síðunnar.
+

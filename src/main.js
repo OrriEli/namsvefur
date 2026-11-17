@@ -1,4 +1,5 @@
-// Ræsing og leiðsögn. Slóðir: #/idag, #/fog, #/fag/<id>[/aefing|/prof|/bladid|/aaetlun][?…], #/villur, #/upprifjun, #/stillingar
+// Ræsing og leiðsögn. Slóðir: #/idag, #/fog, #/fag/<id>[/aefing|/prof|/bladid|/aaetlun][?…], #/villur, #/upprifjun,
+// #/vikan, #/bladin[?q=…], #/stillingar
 
 import './ui/base.css';
 import './ui/legacy.css';
@@ -14,6 +15,8 @@ import * as wrongView from './views/wrong.js';
 import * as settingsView from './views/settings.js';
 import * as todayView from './views/today.js';
 import * as reviewView from './views/upprifjun.js';
+import * as weekView from './views/week.js';
+import * as sheetsView from './views/blodin.js';
 import { barHTML, barKey, clockText, advanceByTime, nextSegment, startSecond } from './views/block.js';
 import { dueIds } from './engine/review.js';
 import { COURSES } from './courses/index.js';
@@ -26,6 +29,8 @@ const NAV = [
   { href: '#/fog', label: 'Fög', match: p => p[0] === 'fog' || p[0] === 'fag' },
   { href: '#/villur', label: 'Villur', match: p => p[0] === 'villur', pill: true },
   { href: '#/upprifjun', label: 'Upprifjun', match: p => p[0] === 'upprifjun' },
+  { href: '#/vikan', label: 'Vikan', match: p => p[0] === 'vikan' },
+  { href: '#/bladin', label: 'Blöðin', match: p => p[0] === 'bladin' },
   { href: '#/stillingar', label: 'Stillingar', match: p => p[0] === 'stillingar' }
 ];
 
@@ -50,6 +55,8 @@ function route() {
   else if (parts[0] === 'villur') current = wrongView.render(ctx);
   else if (parts[0] === 'stillingar') current = settingsView.render(ctx);
   else if (parts[0] === 'upprifjun') current = reviewView.render(ctx);
+  else if (parts[0] === 'vikan') current = weekView.render(ctx);
+  else if (parts[0] === 'bladin') current = sheetsView.render(ctx);
   else if (parts[0] === 'fog') current = coursesView.render(ctx);
   else current = todayView.render(ctx);
   renderNav(parts);
