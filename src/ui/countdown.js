@@ -24,6 +24,14 @@ export function countdownParts(x, now = Date.now()) {
   return { label: x.label, left: days ? `${days} d. ${h} klst.` : `${h} klst. ${m} mín.`, when };
 }
 
+/** Stutt, fyrir línur: „Lokapróf eftir <b>7 d.</b> · mið. 25. nóv. kl. 13:30“ eða „Lokapróf · óstaðfest“. */
+export function countdownShort(x, now = Date.now()) {
+  const p = countdownParts(x, now);
+  if (!p.left) return p.when ? `${p.label} · ${p.when}` : p.label;
+  const m = p.left.match(/^\d+ d\./);
+  return `${p.label} eftir <b>${m ? m[0] : p.left}</b> · ${p.when}`;
+}
+
 /** „Lokapróf eftir <b>26 d. 4 klst.</b> · mið. 25. nóv. kl. 13:30“, í tveimur hlutum (.cd-a og .cd-w) sem
  *  brotna hvor í sína línu á mjóum skjá; punkturinn á milli er í CSS. */
 export function countdownTxt(x, now = Date.now()) {

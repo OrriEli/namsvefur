@@ -5,6 +5,7 @@ import './ui/base.css';
 import './ui/legacy.css';
 import 'katex/dist/katex.min.css';
 import './ui/styles.css';
+import './ui/theme.css';
 import renderMathInElement from 'katex/contrib/auto-render';
 import { createStore } from './store/store.js';
 import { courseById } from './courses/index.js';

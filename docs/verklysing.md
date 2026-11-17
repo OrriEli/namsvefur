@@ -265,9 +265,9 @@ Verkið er unnið í sjö áföngum. Hverjum áfanga lýkur með keyrðum prófu
 
 ## Útlit, mál og talnasnið
 
-Byggðu á útliti HAG103G-síðunnar, sem er heilsteyptast. Notaðu hönnunarbreyturnar þaðan (`--bg`, `--paper`, `--ink`, `--accent` o.s.frv.) með ljósum og dökkum ham.
+Útlit B, valið 17. nóv. 2026 (`src/ui/theme.css`): dökkt, í anda Canvas hjá HÍ. Dökkblá efsta stika, efni í línum frekar en spjöldum, 4 px horn, bláir tenglar og hnappar, engir merkimiðar í hástöfum. Vefurinn er alltaf dökkur, nema við prentun. Hönnunarbreyturnar (`--bg`, `--paper`, `--ink`, `--accent` o.s.frv.) koma enn úr HAG103G-síðunni en fá gildi útlits B.
 
-- **Letur:** IBM Plex Sans (meginmál), IBM Plex Mono (tölur, formúlur), Zilla Slab (fyrirsagnir).
+- **Letur:** Lato (allt viðmót og tölur), jafnbreitt kerfisletur aðeins í forritskóða.
 - **Litir faga:** hvert fag fær einn áherslulit sem sést í dagatali, kunnáttukorti og merkjum. Litur ber aldrei merkingu einn og sér; nafn fags fylgir alltaf.
 - **Sími fyrst:** 16 px hliðarbil, snertifletir minnst 44 px, engin lárétt skrun á síðunni (töflur skruna innan eigin ramma).
 - **Mál:** allt viðmót á íslensku. Texti spurninga, útskýringa og blaða er fluttur orðrétt og ekki endurskrifaður.

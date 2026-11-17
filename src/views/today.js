@@ -5,7 +5,7 @@ import { EXAMS } from '../config.js';
 import { suggestBlock, daysSince } from '../engine/today.js';
 import { topicStats, modeOf } from '../engine/practice.js';
 import { dueIds } from '../engine/review.js';
-import { countdownParts } from '../ui/countdown.js';
+import { countdownShort } from '../ui/countdown.js';
 import { pctTxt, plural } from '../ui/format.js';
 import { esc } from '../ui/dom.js';
 import { startBlock, segLabel, hrefFor } from './block.js';
@@ -43,9 +43,7 @@ export function render({ app, store, go }) {
     .sort((a, b) => (a.at ? new Date(a.at).getTime() : Infinity) - (b.at ? new Date(b.at).getTime() : Infinity));
   const cal = exams.map((x, i) => { const c = COURSES.find(y => y.id === x.course);
     const goal = (prefs.goals || {})[c.id];
-    const p = countdownParts(x, now);
-    const big = p.left || (x.at ? 'í gangi' : 'óstaðfest'), line = x.at ? `${x.label} · ${p.when}` : x.label;
-    return `<a class="excard ${i === 0 ? 'next' : ''}" href="#/fag/${c.id}" style="--cc:var(${c.color})" aria-label="${esc(`${c.code} ${c.short}: ${line}${p.left ? ', eftir ' + p.left : ', ' + big}`)}"><span class="cchip">${c.code}</span><b class="exn">${esc(c.short)}</b><span class="exl mono">${p.left ? p.left.replace(/^(\d+ d\.) (.*)$/, '<b>$1</b> <span>$2</span>') : big}</span><span class="exw hint">${esc(line)}</span>${goal ? `<span class="exg hint">Markmið: ${esc(goal)}</span>` : ''}</a>`; }).join('');
+    return `<li><a class="rowlink ${i === 0 ? 'next' : ''}" href="#/fag/${c.id}" style="--cc:var(${c.color})"><span class="rname"><span class="cchip">${c.code}</span><b>${esc(c.name)}</b></span><span class="rright">${countdownShort(x, now)}</span>${goal ? `<span class="rsub">Markmið: ${esc(goal)}</span>` : ''}</a></li>`; }).join('');
 
   const sug = suggestBlock(COURSES, S, { now, exams: EXAMS, prefs });
   const running = S.block && S.block.phase !== 'done';
@@ -59,7 +57,7 @@ export function render({ app, store, go }) {
   app.innerHTML = `<div class="stack" style="gap:22px">
     <div class="hero"><span class="eyebrow">${WEEKDAYS[d.getDay()]} ${d.getDate()}. ${MONTHS[d.getMonth()]}</span><h1>Í dag</h1></div>
     ${S.settings.weekGoal ? `<div class="panel"><span class="eyebrow">Markmið vikunnar</span><p>${esc(S.settings.weekGoal.text)}</p></div>` : ''}
-    <div class="excal">${cal}</div>
+    <section class="stack" style="gap:10px"><h2>Prófin framundan</h2><ul class="rows">${cal}</ul></section>
     <div class="panel stack" style="gap:12px">
       <div class="row" style="justify-content:space-between;align-items:baseline"><h2>Lærdómsblokk</h2><span class="mono hint">${sug.busy ? `${sug.first} mín. · upptekið kvöld` : `${sug.first} + ${sug.pause} hlé + ${sug.second} mín.`}</span></div>
       ${why ? `<p class="hint">${esc(why)}${dueAll ? ` ${plural(dueAll, 'villa er', 'villur eru')} á tíma.` : ''}</p>` : ''}

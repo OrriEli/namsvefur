@@ -1,0 +1,143 @@
+/* Útlit B (17. nóv. 2026): dökkt, í anda Canvas hjá HÍ. Dökkblá efsta stika, efni í línum frekar en
+   spjöldum, Lato, 4 px horn, bláir tenglar og hnappar, engir hástafamerkimiðar. Hlaðið síðast og ræður
+   yfir base.css, legacy.css og styles.css. Vefurinn er alltaf dökkur nema við prentun. */
+
+/* ---------- litir og letur ---------- */
+:root:root:root{
+  --bg:#121821; --paper:#19212c; --ink:#e3e8ef; --muted:#9aa7b7; --line:#2b3647; --soft:#212b38;
+  --accent:#5aa3ec; --accent-ink:#0b1a2b; --accent-weak:#1a3150; --accent-fill:#2d6fc4; --accent-fill-hover:#3a7fd6;
+  --good:#62c584; --good-weak:#163020; --bad:#ff8f84; --bad-weak:#3b1e1d; --warn:#eab354; --warn-weak:#382b13;
+  --top:#003066; --top-ink:#ffffff; --top-muted:#bcd0e8; --link:#7db8f2;
+  --c-hag101g:#8fa8ff; --c-hag103g:#4fd1a5; --c-hag106g:#f0a35e; --c-hag107g:#d79be0; --c-hag108g:#ff8a9e;
+  --f-display:Lato, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-body:Lato, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:Lato, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-code:ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --r:4px;
+  color-scheme:dark;
+}
+@media print{:root:root:root{
+  --bg:#ffffff; --paper:#ffffff; --ink:#111111; --muted:#555555; --line:#cccccc; --soft:#eeeeee;
+  --accent:#1f5fa8; --accent-ink:#ffffff; --accent-weak:#e3eefa; --link:#1f5fa8; color-scheme:light;
+  --c-hag101g:#3b5bab; --c-hag103g:#0f7a5c; --c-hag106g:#a3561a; --c-hag107g:#8a3b8f; --c-hag108g:#b3263e;
+}}
+
+body{font-size:16px;line-height:1.55}
+.mono,.clock,.nres,.numres,.selfscore{font-variant-numeric:tabular-nums}
+pre.code,code,kbd{font-family:var(--f-code)}
+
+/* ---------- fyrirsagnir og merkimiðar: venjulegar, ekki hástafir ---------- */
+h1{font-size:clamp(1.6rem,4vw,2rem);font-weight:400;letter-spacing:0}
+h2{font-size:1.2rem;font-weight:700}
+h3{font-size:1rem;font-weight:700}
+.eyebrow,.tt tr.grp td,.c-hag107g .tt tr.grp td,.flash .side{font-family:var(--f-body);font-size:.85rem;letter-spacing:0;text-transform:none;color:var(--muted)}
+.tt tr.grp td{font-weight:700}
+.verdict,.score b,.facts b,.flash .front{font-weight:700}
+.hint{font-size:.85rem}
+
+/* ---------- efsta stika ---------- */
+body::before{background:var(--top)}
+.top{background:var(--top);border-bottom:0;color:var(--top-ink)}
+.top-in{padding-block:0;min-height:48px}
+.brand{font-family:var(--f-body);font-weight:700;font-size:1.1rem;color:var(--top-ink)}
+.brand small{font-family:var(--f-body);font-size:.78rem;color:var(--top-muted);letter-spacing:0}
+#nav{gap:4px;align-self:stretch}
+#nav a{color:var(--top-muted);font-weight:400;font-size:.95rem;border-radius:0;padding:0 8px;min-height:48px;background:none}
+#nav a:hover{color:var(--top-ink)}
+#nav a[aria-current="page"]{color:var(--top-ink);background:none;box-shadow:inset 0 -3px 0 var(--top-ink)}
+nav .pill{font-family:var(--f-body);font-weight:700;background:#c8372d;color:#fff;border-radius:8px;padding:0 6px}
+:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+.top :focus-visible{outline-color:#fff}
+@media (max-width:720px){
+  .top-in{padding-block:8px 0;min-height:0}
+  #nav a{min-height:44px;padding:0 10px}
+}
+
+/* ---------- brauðmolar ---------- */
+.crumbs{font-size:.88rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px;margin-left:0;width:auto}
+.crumbs a{color:var(--link);text-decoration:none}
+.crumbs a:hover{text-decoration:underline}
+
+/* ---------- flötir: hlutar aðskildir með línum, ekki kassar í kössum ---------- */
+.panel{background:none;border:0;border-top:1px solid var(--line);border-radius:0;padding:16px 0 0}
+.panel.empty{border:1px dashed var(--line);border-radius:var(--r);padding:28px 16px}
+.panel.row{background:var(--accent-weak);border:1px solid var(--accent);border-radius:var(--r);padding:10px 14px}
+.panel.filters,.panel.adapt{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+
+/* ---------- hnappar og stýringar ---------- */
+.btn{font-weight:400;border-radius:var(--r);background:var(--soft);border-color:#3a4658}
+.btn:hover{border-color:var(--muted);background:#283343}
+.btn.primary{background:var(--accent-fill);border-color:var(--accent-fill);color:#fff}
+.btn.primary:hover{background:var(--accent-fill-hover);filter:none}
+a.btn{text-decoration:none;display:inline-flex;align-items:center}
+.chip{border-radius:var(--r)}
+.chip[aria-pressed="true"]{background:var(--accent-weak);border-color:var(--accent);color:var(--ink)}
+.seg{border-radius:var(--r)}
+.seg button[aria-pressed="true"]{background:var(--accent-weak);color:var(--ink);font-weight:700}
+.tag,.lv,.wt{font-family:var(--f-body);letter-spacing:0;border-radius:3px}
+kbd{border-radius:3px}
+.day.today>header h2::after{font-family:var(--f-body);font-weight:700;background:var(--accent-fill);color:#fff;border-radius:3px}
+
+/* ---------- horn: 4 px alls staðar þar sem gömlu síðurnar höfðu 8–16 px ---------- */
+.qcard,.opt,.action,.facts,.f,pre.code,.sheet section,.step,details.rv,.grid button,.ans-in,.ninp,.numrow input,.note-in,
+.flow span,.conf,.bbar,.hit,.kcell,.prio li,.selfr,.selfpill,.mx .cell,.flash,.mrow,.mseg button,.sstep,.notice,.sheet .rule,
+.sheet details.ex,.trap,ul.traps,textarea.scratch,.stp,.slideerr,.unconf,.callout,input[type="time"],.search,.wrow,.toc button{border-radius:var(--r)}
+.sstep>header{border-radius:3px 3px 0 0}
+.sstep.locked>header{border-radius:3px}
+.opt .k,.opt.multi .k{border-radius:3px;font-family:var(--f-body);font-weight:700}
+.bar,.bar i,.tbar{border-radius:2px}
+.dcol i{border-radius:2px 2px 0 0}
+
+/* ---------- yfirlit fags ---------- */
+.count{background:none;border:0;border-radius:0;padding:0;font-size:.95rem;color:var(--muted)}
+.count b{color:var(--ink);font-weight:700}
+@media (max-width:560px){.count{border-radius:0;padding:0}}
+.facts{gap:1px}
+.action{background:var(--paper)}
+.action:hover{border-color:var(--link)}
+.action.main{background:var(--accent-fill);border-color:var(--accent-fill);color:#fff}
+.action.main p{color:#fff;opacity:.88}
+.tabs a{font-weight:400;font-size:.95rem}
+.tabs a[aria-current="page"]{font-weight:700;border-bottom-color:var(--link)}
+
+/* ---------- fagmerki: litur ferningur og kóði ---------- */
+.cchip{font-family:var(--f-body);font-size:.85rem;font-weight:700;letter-spacing:0;background:none;border:0;border-radius:0;padding:0;
+  display:inline-flex;align-items:center;gap:7px;color:var(--ink)}
+.cchip::before{content:"";width:10px;height:10px;border-radius:2px;background:var(--cc,var(--accent));flex:0 0 10px}
+.course-head h1{align-items:center}
+.course-head h1 .cchip{font-size:.95rem;color:var(--muted)}
+
+/* ---------- listar: prófin framundan og fögin ---------- */
+.rows{margin:0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.rows>li{border-bottom:1px solid var(--line)}
+.rowlink{display:flex;justify-content:space-between;align-items:baseline;gap:6px 16px;flex-wrap:wrap;padding:10px 4px;text-decoration:none;color:inherit;min-height:44px}
+.rowlink:hover{background:var(--soft)}
+.rowlink .rname{display:inline-flex;align-items:baseline;gap:10px;min-width:0}
+.rowlink .rname b{color:var(--link);font-weight:400}
+.rowlink:hover .rname b{text-decoration:underline}
+.rowlink .rright{color:var(--muted);font-size:.92rem;white-space:nowrap}
+.rowlink .rright b{color:var(--ink);font-weight:700}
+.rowlink .rsub{flex-basis:100%;font-size:.85rem;color:var(--muted);padding-left:17px}
+.rowlink.next .rright b{color:var(--link)}
+@media (max-width:560px){.rowlink .rright{white-space:normal;padding-left:17px}}
+
+/* ---------- lærdómsblokk ---------- */
+.segs{gap:0;border-top:1px solid var(--line)}
+.seg-row{border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;padding:10px 4px}
+
+/* ---------- kunnáttukort, Vikan, Blöðin ---------- */
+.kcell{background:var(--paper)}
+.kcell:hover{border-color:var(--link)}
+.krow>.cchip{margin-top:4px}
+.hit{background:none;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:10px 4px}
+.hit b{color:var(--link);font-weight:400}
+.hit:hover{background:var(--soft)}
+.toc-list a{color:var(--link)}
+.wrow{background:none}
+.bbar{background:var(--accent-weak);border-color:var(--accent)}
+
+/* ---------- Blaðið ---------- */
+.sheet section{background:var(--paper)}
+.sheet h2 .n{font-family:var(--f-body);font-weight:700;color:var(--link)}
+.sheet h2 .kafli{font-family:var(--f-body)}
+.toc button{border-radius:var(--r)}

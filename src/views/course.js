@@ -22,7 +22,8 @@ export function render(ctx) {
   const tab = tabs.find(t => t.id === ctx.tab) || tabs[0];
   const running = ctx.store.state.exams[c.id];
   app.innerHTML = `<div class="stack c-${c.id}" style="gap:18px;--cc:var(${c.color})">
-    <div class="course-head">
+    <nav class="crumbs" aria-label="Brauðmolar"><a href="#/fog">Fög</a><span aria-hidden="true">›</span><a href="#/fag/${c.id}">${c.code}</a><span aria-hidden="true">›</span><span aria-current="page">${tab.label}</span></nav>
+    <div class="course-head" style="margin-top:-10px">
       <h1><span class="cchip">${c.code}</span>${esc(c.name)}</h1>
       <span class="count mono" id="cd">${countdownTxt(nextExam(c.id))}</span>
     </div>
