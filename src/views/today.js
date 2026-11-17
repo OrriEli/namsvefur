@@ -5,7 +5,7 @@ import { EXAMS } from '../config.js';
 import { suggestBlock, daysSince } from '../engine/today.js';
 import { topicStats, modeOf } from '../engine/practice.js';
 import { dueIds } from '../engine/review.js';
-import { countdownTxt } from '../ui/countdown.js';
+import { countdownParts } from '../ui/countdown.js';
 import { pctTxt, plural } from '../ui/format.js';
 import { esc } from '../ui/dom.js';
 import { startBlock, segLabel, hrefFor } from './block.js';
@@ -43,7 +43,9 @@ export function render({ app, store, go }) {
     .sort((a, b) => (a.at ? new Date(a.at).getTime() : Infinity) - (b.at ? new Date(b.at).getTime() : Infinity));
   const cal = exams.map((x, i) => { const c = COURSES.find(y => y.id === x.course);
     const goal = (prefs.goals || {})[c.id];
-    return `<div class="excard ${i === 0 ? 'next' : ''}" style="--cc:var(${c.color})"><span class="cchip">${c.code}</span><b>${esc(c.short)}</b><span class="hint mono">${countdownTxt(x, now)}</span>${goal ? `<span class="hint">Markmið: ${esc(goal)}</span>` : ''}</div>`; }).join('');
+    const p = countdownParts(x, now);
+    const big = p.left || (x.at ? 'í gangi' : 'óstaðfest'), line = x.at ? `${x.label} · ${p.when}` : x.label;
+    return `<a class="excard ${i === 0 ? 'next' : ''}" href="#/fag/${c.id}" style="--cc:var(${c.color})" aria-label="${esc(`${c.code} ${c.short}: ${line}${p.left ? ', eftir ' + p.left : ', ' + big}`)}"><span class="cchip">${c.code}</span><b class="exn">${esc(c.short)}</b><span class="exl mono">${p.left ? p.left.replace(/^(\d+ d\.) (.*)$/, '<b>$1</b> <span>$2</span>') : big}</span><span class="exw hint">${esc(line)}</span>${goal ? `<span class="exg hint">Markmið: ${esc(goal)}</span>` : ''}</a>`; }).join('');
 
   const sug = suggestBlock(COURSES, S, { now, exams: EXAMS, prefs });
   const running = S.block && S.block.phase !== 'done';

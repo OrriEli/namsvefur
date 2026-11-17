@@ -42,6 +42,12 @@ function parse() {
 function renderNav(parts) {
   const n = COURSES.reduce((s, c) => s + dueIds(store.state, c.id).length, 0);   // villur á tíma
   $('#nav').innerHTML = NAV.map(x => `<a href="${x.href}" ${x.match(parts) ? 'aria-current="page"' : ''}>${x.label}${x.pill && n ? `<span class="pill">${n}</span>` : ''}</a>`).join('');
+  // Á mjóum skjá er valmyndin ein lína sem skrunast; virki tengillinn er hafður sýnilegur.
+  const nav = $('#nav'), cur = nav.querySelector('[aria-current]');
+  if (cur && nav.scrollWidth > nav.clientWidth) {
+    const l = cur.offsetLeft - nav.offsetLeft, r = l + cur.offsetWidth;
+    if (l < nav.scrollLeft + 24 || r > nav.scrollLeft + nav.clientWidth - 24) nav.scrollLeft = Math.max(0, l - (nav.clientWidth - cur.offsetWidth) / 2);
+  }
 }
 
 function route() {

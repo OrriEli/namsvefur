@@ -15,8 +15,9 @@ export function render({ app, store }) {
     for (const e of es) { const p = S.items[e.gid]; if (p) { n += p.n; k += p.c; seen++; } }
     const bank = bankIds(S, c.id).length;
     return `<a class="ccard" href="#/fag/${c.id}" style="--cc:var(${c.color})">
-      <div class="row" style="justify-content:space-between"><span class="cchip">${c.code}</span><span class="hint mono">${countdownTxt(nextExam(c.id))}</span></div>
+      <span class="cchip">${c.code}</span>
       <h2>${esc(c.name)}</h2>
+      <p class="cd mono">${countdownTxt(nextExam(c.id))}</p>
       <p class="hint">${plural(c.items.length, 'spurning', 'spurningar')} og ${plural(c.gens.length, 'rafall', 'rafalar')} · séð ${seen}/${es.length} · rétt ${pctTxt(n ? k / n : null)}${bank ? ` · ${bank} í villubanka` : ''}</p>
     </a>`;
   }).join('');
