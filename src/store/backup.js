@@ -3,7 +3,8 @@
 //   items     atriði sem vantar bætast við; ef bæði hafa atriðið gildir það sem var æft síðast (`last`)
 //   sessions  sameinaðar eftir (fag, gerð, upphaf); ef sama lotan er í báðum gildir sú sem endaði síðar
 //   hist      sameinuð eftir (fag, tími, heiti)
-//   settings  stillingar þessa vafra halda sér; hök í áætlunum sameinast; markmið vikunnar: nýrra gildir
+//   settings  stillingar þessa vafra halda sér; hök í áætlunum sameinast; markmið vikunnar og sjálfsmat
+//             hvers fags: nýrra gildir
 //   exams, block  próf og blokk í gangi í þessum vafra halda sér
 
 import { migrate, VERSION } from './store.js';
@@ -48,5 +49,6 @@ export function mergeStates(a, b) {
   }
   for (const k of ['adapt', 'imported']) for (const [c, v] of Object.entries(bs[k] || {})) if (!a.settings[k][c]) a.settings[k][c] = v;
   if (bs.weekGoal && (!a.settings.weekGoal || bs.weekGoal.at > a.settings.weekGoal.at)) a.settings.weekGoal = bs.weekGoal;
+  for (const [c, v] of Object.entries(bs.self || {})) { const mine = a.settings.self[c]; if (!mine || (v.ts || 0) > (mine.ts || 0)) a.settings.self[c] = v; }
   return sum;
 }

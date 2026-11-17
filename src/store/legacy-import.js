@@ -11,6 +11,7 @@
 // Ef atriði hefur verið æft á nýja vefnum ræður nýja staðan streak, villubanka og „sýna aftur“.
 
 import { entriesOf } from '../engine/practice.js';
+import { hasSelf } from '../engine/self.js';
 
 /** Geymslulyklar gömlu síðnanna, nýjasti fyrst. */
 export const LEGACY_KEYS = {
@@ -99,6 +100,16 @@ export function importLegacy(state, course, old, { now = Date.now(), key = '' } 
   state.hist.sort((a, b) => a.at - b.at);
 
   if (old.adapt && !state.settings.adapt[course.id]) state.settings.adapt[course.id] = { lvl: old.adapt.lvl || 1, up: num(old.adapt.up), down: num(old.adapt.down), msg: '' };
+
+  // Sjálfsmat á köflum Blaðsins (HAG101G frá 17. nóv.): flyst nema því hafi verið breytt hér.
+  if (hasSelf(course) && old.self && typeof old.self === 'object') {
+    const all = state.settings.self || (state.settings.self = {});
+    if (!all[course.id] || !all[course.id].ts) {
+      const v = {};
+      for (const [n, x] of Object.entries(old.self)) if (n in course.self.sections) v[n] = x === null || x === '' ? null : Math.max(0, Math.min(10, num(x)));
+      all[course.id] = { v, at: typeof old.selfAt === 'string' ? old.selfAt : course.self.at, ts: 0 };
+    }
+  }
 
   state.settings.imported[course.id] = { at: now, key, ...sum };
   return sum;

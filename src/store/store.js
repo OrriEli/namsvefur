@@ -36,13 +36,14 @@ export const VERSION = 1;
  *  @property {{plan:Object<string,{done:Object<string,boolean>}>, adapt:Object<string,{lvl:number, up:number, down:number, msg:string}>,
  *             imported:Object<string,{at:number, key:string, items:number, bank:number, hist:number, skipped:number}>,
  *             prefs:{confidence:boolean, block:{first:number, pause:number, second:number}, busy:number[], goals:Object<string,string>},
- *             weekGoal?:{text:string, at:number}}} settings
+ *             weekGoal?:{text:string, at:number},
+ *             self:Object<string,{v:Object<string,number|null>, at:string, ts:number}>}} settings  sjálfsmat á köflum Blaðsins (engine/self.js)
  *  @property {Object} [block]          lærdómsblokk í gangi (sjá views/block.js)
  */
 
 /** @returns {State} */
 export const defaultPrefs = () => ({ confidence: true, block: { ...BLOCK }, busy: [...BUSY_EVENINGS], goals: { ...GOALS } });
-export const fresh = () => ({ v: VERSION, items: {}, sessions: [], hist: [], exams: {}, settings: { plan: {}, adapt: {}, imported: {}, prefs: defaultPrefs() } });
+export const fresh = () => ({ v: VERSION, items: {}, sessions: [], hist: [], exams: {}, settings: { plan: {}, adapt: {}, imported: {}, self: {}, prefs: defaultPrefs() } });
 
 // Flutningsföll á milli útgáfa: MIGRATIONS[n] breytir útgáfu n í n + 1.
 const MIGRATIONS = {};

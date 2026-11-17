@@ -37,7 +37,7 @@ npm run inventory      # úttekt á gömlu síðunum (JSON); `-- --write` uppfæ
 - `legacy/`: gömlu síðurnar, aðeins lesnar.
 - `docs/`: úttekt (`legacy-inventory.md`) og gagnasnið (`schema.md`).
 - `scripts/`: útdráttur og úttekt. `lib/load-legacy.js` keyrir gamla síðu í lokuðu `vm`-umhverfi.
-- `src/courses/`: eitt fag = lýsigögn (`hag103g.js`) + gagnablokk gömlu síðunnar orðrétt (`legacy/hag103g.js`), búnar til af `extract-legacy.js` (ekki breyta þeim í höndunum), og eitt millilag á hverja vél (`adapters/`).
+- `src/courses/`: eitt fag = lýsigögn (`hag103g.js`) + gagnablokk gömlu síðunnar orðrétt (`legacy/hag103g.js`), búnar til af `extract-legacy.js` (ekki breyta þeim í höndunum), og eitt millilag á hverja vél (`adapters/`). Breytingar sem gerðar eru á fagi eftir að gamla síðan var afhent fara í `updates/` (nú HAG101G frá 17. nóv.); útdrátturinn setur þær ofan á það sem lesið er úr `legacy/`, sem helst óbreytt.
 - `src/engine/`: vélin (æfing, próf, villubanki). Hún veit ekki úr hvaða fagi atriði kemur.
 - `src/store/`: geymslulag með útgáfunúmeri; allt vistast undir `namsvefur-v1`.
 - `src/views/`: ein skrá á hverja skjámynd. `src/ui/`: stílar (`base.css` og `legacy.css` úr gömlu síðunum, `styles.css` viðbætur vefsins), talnasnið, hjálparföll.

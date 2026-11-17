@@ -416,236 +416,47 @@ export const meta = {
     ]
   },
   "plan": {
-    "eyebrow": "12. – 25. nóv.",
+    "eyebrow": "17. – 25. nóv.",
     "title": "Áætlun fram að lokaprófi",
-    "intro": "Byggð á Google Calendar og Ugla-stundatöflunni þinni og vöktunum á Laugó. Nýja efnið fyrst, svo upprifjun á miðannarefninu. Þrjú heil 3 klst. próf á pappír (15., 21. og 23. nóv.), léttur dagur fyrir próf. HAG101G er fyrsta lokaprófið; næsta er HAG108G 1. des.",
+    "intro": "Byggð á Google Calendar og Ugla-stundatöflunni þinni og vöktunum á Laugó. Endurskipulögð 17. nóv. eftir sjálfsmatinu: kaflarnir sem fengu 0–3 (Taylor, einsleitni, hámörkun, fólgin föll) koma fyrst. Tvö heil 3 klst. próf á pappír (21. og 23. nóv.), léttur dagur fyrir próf. HAG101G er fyrsta lokaprófið; næsta er HAG108G 1. des.",
     "days": [
       {
         "date": "2026-11-12",
-        "label": "Fimmtudagur 12. nóv.",
-        "cal": "Tímar til 18:10",
-        "items": [
-          {
-            "at": "20:00",
-            "m": 30,
-            "h": "Lesa nýju kaflana á Blaðinu",
-            "p": "Kaflar 11 og 14–19: ein breyta, heildarafleiður, fólgin föll, Taylor, einsleitni, hámörkun. Bara lestur.",
-            "go": {
-              "v": "sheet",
-              "sec": "s11"
-            }
-          },
-          {
-            "at": "20:30",
-            "m": 10,
-            "h": "Hlé",
-            "brk": true
-          },
-          {
-            "at": "20:40",
-            "m": 25,
-            "h": "Hraðæfing: nýja efnið",
-            "p": "Sjáðu hvar þú stendur áður en æfingin hefst.",
-            "go": {
-              "v": "quick",
-              "topics": [
-                "ein",
-                "mis",
-                "dul",
-                "tay",
-                "eins",
-                "ham"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "date": "2026-11-13",
-        "label": "Föstudagur 13. nóv.",
-        "cal": "Dæmatímar 11:40–16:30 · Laugó 17:30",
-        "items": [
-          {
-            "at": "08:30",
-            "m": 45,
-            "h": "Föll af einni breytu og útmörk",
-            "p": "Dæmablað 12–16 og 43. Gátlistinn: formengi, f′, f″, krítískir punktar, riss.",
-            "go": {
-              "v": "practice",
-              "topics": [
-                "ein"
-              ]
-            }
-          },
-          {
-            "at": "09:15",
-            "m": 10,
-            "h": "Hlé",
-            "brk": true
-          },
-          {
-            "at": "09:25",
-            "m": 45,
-            "h": "Diffrunarreglur upprifjun",
-            "p": "Dæmablað 8, 10, 11 og Skilaverkefni 2, dæmi 1.",
-            "go": {
-              "v": "practice",
-              "topics": [
-                "dif"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "date": "2026-11-14",
-        "label": "Laugardagur 14. nóv.",
-        "cal": "Engir tímar",
-        "items": [
-          {
-            "at": "10:00",
-            "m": 45,
-            "h": "Heildarmismunur og heildarafleiður",
-            "p": "Dæmi 34–35, lokapróf 2025 dæmi 4 og rafallinn. Teiknaðu flæðirit í hvert sinn.",
-            "go": {
-              "v": "practice",
-              "topics": [
-                "mis"
-              ]
-            }
-          },
-          {
-            "at": "10:45",
-            "m": 15,
-            "h": "Hlé",
-            "brk": true
-          },
-          {
-            "at": "11:00",
-            "m": 45,
-            "h": "Fólgin föll",
-            "p": "Dæmi 36–38 og lokapróf 2025 dæmi 5. Skrifaðu skilyrðin fimm upp í hvert sinn.",
-            "go": {
-              "v": "practice",
-              "topics": [
-                "dul"
-              ]
-            }
-          },
-          {
-            "at": "14:00",
-            "m": 40,
-            "h": "Einsleit og þenjanleg föll",
-            "p": "Dæmi 39–40 og Euler.",
-            "go": {
-              "v": "practice",
-              "topics": [
-                "eins"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "date": "2026-11-15",
-        "label": "Sunnudagur 15. nóv.",
-        "cal": "Engir tímar",
-        "items": [
-          {
-            "at": "10:00",
-            "m": 180,
-            "h": "Lokapróf 2023 á tíma, á pappír",
-            "p": "3 klst. án hlés, sími í annað herbergi. Ekkert efni opið.",
-            "go": {
-              "v": "exam",
-              "start": "L23"
-            }
-          },
-          {
-            "at": "13:00",
-            "m": 45,
-            "h": "Hádegismatur",
-            "brk": true
-          },
-          {
-            "at": "13:45",
-            "m": 45,
-            "h": "Gefa sér stig og skrá villurnar",
-            "p": "Fyrir hverja villu: ein lína á blað um hvað fór úrskeiðis.",
-            "go": {
-              "v": "exam"
-            }
-          }
-        ]
-      },
-      {
-        "date": "2026-11-16",
-        "label": "Mánudagur 16. nóv.",
-        "cal": "HAG103G 08:20 · HAG107G 11:40 · HAG101G dæmat. 16:40 · Laugó 17:30",
-        "note": "Dæmatíminn skarast við Laugó. Ef þú nærð fyrri hlutanum: spyrðu um það sem fór úrskeiðis í prófinu í gær.",
-        "items": [
-          {
-            "at": "13:30",
-            "m": 45,
-            "h": "Taylor-nálgun",
-            "p": "Dæmi 41–42, lokapróf 2023 dæmi 6 og 2025 dæmi 6.",
-            "go": {
-              "v": "practice",
-              "topics": [
-                "tay"
-              ]
-            }
-          },
-          {
-            "at": "14:15",
-            "m": 10,
-            "h": "Hlé",
-            "brk": true
-          },
-          {
-            "at": "14:25",
-            "m": 45,
-            "h": "Veikustu flokkarnir úr prófi 2023",
-            "p": "Yfirlitið sýnir hverjir þeir eru.",
-            "go": {
-              "v": "weak"
-            }
-          }
-        ]
+        "label": "Fimmtudagur 12. – mánudagur 16. nóv.",
+        "cal": "Fyrri hluti áætlunarinnar",
+        "note": "Sjálfsmatið 17. nóv. sýnir að Taylor, einsleitni og hámörkun (0/10) og fólgin föll (3/10) eru eftir. Áætlunin héðan í frá setur þau fremst: saman eru þau um helmingur prófsins.",
+        "items": []
       },
       {
         "date": "2026-11-17",
         "label": "Þriðjudagur 17. nóv.",
-        "cal": "HAG101G 13:20 · Fjármálahagfræði 15:50–19:00",
-        "note": "Ef nýtt efni kemur í tímanum (nótur 22+), sendu mér glósurnar og ég bæti því við.",
+        "cal": "HAG101G 13:20 · Fjármálahagfræði til 19:00",
         "items": [
           {
-            "at": "09:00",
-            "m": 45,
-            "h": "Hámörkun og umslagssetning",
-            "p": "Dæmi 44–46 og lokapróf 2023 dæmi 4: FGS, AGS, samanburðarstöðugreining, virðisfall.",
+            "at": "19:45",
+            "m": 40,
+            "h": "Taylor 1: lesa kafla 16 og leysa unnu dæmin",
+            "p": "Lestu kaflann, lokaðu honum og leystu dæmablað 41 og lokapróf 2025 dæmi 6 á blað.",
             "go": {
-              "v": "practice",
-              "topics": [
-                "ham"
-              ]
+              "v": "sheet",
+              "sec": "s16"
             }
           },
           {
-            "at": "09:45",
+            "at": "20:25",
             "m": 10,
             "h": "Hlé",
             "brk": true
           },
           {
-            "at": "09:55",
-            "m": 45,
-            "h": "Hessian: útmörk margra breyta",
-            "p": "Rafalarnir fyrir 2 og 3 breytur og lokapróf 2025 dæmi 7.",
+            "at": "20:35",
+            "m": 40,
+            "h": "Taylor 2: rafalar",
+            "p": "Margliður og e, ln, rót. Markmið: þrjú dæmi í röð með fullt hús.",
             "go": {
               "v": "practice",
               "topics": [
-                "hes"
+                "tay"
               ]
             }
           }
@@ -659,15 +470,11 @@ export const meta = {
           {
             "at": "08:00",
             "m": 40,
-            "h": "Fylki, ákveður og andhverfa",
-            "p": "Upprifjun á miðannarefninu: dæmi 26–28 og 3×3 rafallinn.",
+            "h": "Hámörkun 1: umslagssetningin",
+            "p": "Lestu kafla 19. Leystu dæmablað 46 og ný dæmi um virðisfall með einni breytu.",
             "go": {
-              "v": "practice",
-              "topics": [
-                "fyl",
-                "akv",
-                "and"
-              ]
+              "v": "sheet",
+              "sec": "s19"
             }
           },
           {
@@ -678,22 +485,44 @@ export const meta = {
           },
           {
             "at": "08:50",
-            "m": 40,
-            "h": "Jöfnukerfi og Cramer",
-            "p": "Dæmi 29 og lokaprófsliðirnir.",
+            "m": 45,
+            "h": "Hámörkun 2: virðisfall í æfingu",
             "go": {
               "v": "practice",
               "topics": [
-                "jof"
+                "ham"
               ]
             }
           },
           {
             "at": "12:00",
-            "m": 20,
-            "h": "Hraðæfing, allir flokkar",
+            "m": 40,
+            "h": "Einsleitni og Euler",
+            "p": "Lestu kafla 17. Dæmablað 39–40 og rafalarnir. Lærðu prófið: settu jx inn og þáttaðu út j^r.",
             "go": {
-              "v": "quick"
+              "v": "practice",
+              "topics": [
+                "eins"
+              ]
+            }
+          },
+          {
+            "at": "12:40",
+            "m": 10,
+            "h": "Hlé",
+            "brk": true
+          },
+          {
+            "at": "12:50",
+            "m": 30,
+            "h": "Hraðæfing: Taylor, einsleitni, umslag",
+            "go": {
+              "v": "quick",
+              "topics": [
+                "tay",
+                "eins",
+                "ham"
+              ]
             }
           }
         ]
@@ -701,22 +530,17 @@ export const meta = {
       {
         "date": "2026-11-19",
         "label": "Fimmtudagur 19. nóv.",
-        "cal": "Tímar 08:20–18:10 með hléi 09:50–11:40",
+        "cal": "HAG103G 08:20 · HAG101G 11:40 (síðasti tími) · tímar til 18:10",
+        "note": "Spurðu í tímanum kl. 11:40 um það sem þú festist í í hámörkun eða Taylor.",
         "items": [
           {
             "at": "10:00",
             "m": 40,
-            "h": "Miðannarpróf 2025 sem upphitun",
-            "p": "Fyrstu tvö dæmin á 40 mín.",
+            "h": "Fólgin föll 1",
+            "p": "Lestu kafla 15. Skrifaðu skilyrðin fimm upp og leystu dæmablað 36–37.",
             "go": {
-              "v": "practice",
-              "topics": [
-                "fyl",
-                "akv",
-                "and",
-                "jof"
-              ],
-              "kind": "old"
+              "v": "sheet",
+              "sec": "s15"
             }
           },
           {
@@ -728,18 +552,26 @@ export const meta = {
           {
             "at": "10:50",
             "m": 40,
-            "h": "Villubankinn",
+            "h": "Fólgin föll 2",
+            "p": "Dæmablað 38, lokapróf 2023 dæmi 5 og 2025 dæmi 5, rafallinn.",
             "go": {
-              "v": "wrong"
+              "v": "practice",
+              "topics": [
+                "dul"
+              ]
             }
           },
           {
             "at": "20:00",
-            "m": 30,
-            "h": "Blaðið: kaflar 14–19",
+            "m": 50,
+            "h": "Hámörkun 3: heilt hagnaðardæmi",
+            "p": "Lokapróf 2023 dæmi 4 á 50 mín., svo yfirferð.",
             "go": {
-              "v": "sheet",
-              "sec": "s14"
+              "v": "practice",
+              "topics": [
+                "ham"
+              ],
+              "kind": "old"
             }
           }
         ]
@@ -748,24 +580,18 @@ export const meta = {
         "date": "2026-11-20",
         "label": "Föstudagur 20. nóv.",
         "cal": "Dæmatímar 11:40–16:30",
-        "note": "Engin Laugó-vakt er í dagatalinu í kvöld. Ef þú átt vakt, færðu kvöldblokkina.",
+        "note": "Engin Laugó-vakt er í dagatalinu. Ef þú átt vakt, færðu kvöldblokkina.",
         "items": [
           {
             "at": "08:30",
             "m": 45,
-            "h": "Rafalar: nýja efnið",
-            "p": "Sama aðferð, nýjar tölur: Taylor, fólgin föll, heildarafleiður, hámörkun.",
+            "h": "Heildarmismunur og heildarafleiður",
+            "p": "Kaflar 13–14 (mat 5 og 6). Dæmablað 34–35, lokapróf 2025 dæmi 4 og flæðirit í hvert sinn.",
             "go": {
               "v": "practice",
               "topics": [
-                "mis",
-                "dul",
-                "tay",
-                "eins",
-                "ham",
-                "ein"
-              ],
-              "kind": "gen"
+                "mis"
+              ]
             }
           },
           {
@@ -777,17 +603,43 @@ export const meta = {
           {
             "at": "09:25",
             "m": 45,
-            "h": "Veikustu flokkarnir",
+            "h": "Hámörkun 4: Hessian og samanburðarstöðugreining",
+            "p": "Dæmablað 44–45, lokapróf 2025 dæmi 7.",
             "go": {
-              "v": "weak"
+              "v": "practice",
+              "topics": [
+                "ham",
+                "hes"
+              ]
             }
           },
           {
             "at": "19:00",
             "m": 40,
-            "h": "Hraðæfing og villubanki",
+            "h": "Rafalar: Taylor og fólgin föll",
             "go": {
-              "v": "wrong"
+              "v": "practice",
+              "topics": [
+                "tay",
+                "dul"
+              ],
+              "kind": "gen"
+            }
+          },
+          {
+            "at": "19:40",
+            "m": 10,
+            "h": "Hlé",
+            "brk": true
+          },
+          {
+            "at": "19:50",
+            "m": 20,
+            "h": "Uppfæra sjálfsmatið á Blaðinu",
+            "p": "Gefðu köflum 13–19 nýja einkunn; forgangsröðin á Yfirliti uppfærist.",
+            "go": {
+              "v": "sheet",
+              "sec": "s13"
             }
           }
         ]
@@ -801,11 +653,12 @@ export const meta = {
             "at": "10:00",
             "m": 180,
             "h": "Lokapróf 2025 á tíma, á pappír",
-            "p": "3 klst. Markmið: hærra en 2023 og öll dæmi reynd.",
+            "p": "3 klst. án hlés, sími í annað herbergi.",
             "go": {
               "v": "exam",
               "start": "L25"
-            }
+            },
+            "exam": true
           },
           {
             "at": "13:00",
@@ -816,7 +669,7 @@ export const meta = {
           {
             "at": "13:45",
             "m": 45,
-            "h": "Yfirferð prófs 2025",
+            "h": "Gefa sér stig",
             "go": {
               "v": "exam"
             }
@@ -832,7 +685,8 @@ export const meta = {
             "m": 40,
             "h": "Æfa villurnar strax",
             "go": {
-              "v": "practice"
+              "v": "practice",
+              "review": true
             }
           }
         ]
@@ -845,7 +699,8 @@ export const meta = {
           {
             "at": "10:00",
             "m": 45,
-            "h": "Veikustu flokkarnir",
+            "h": "Efst í forgangsröðinni",
+            "p": "Yfirlitið velur flokkana út frá sjálfsmati og æfingu.",
             "go": {
               "v": "weak"
             }
@@ -859,38 +714,35 @@ export const meta = {
           {
             "at": "11:00",
             "m": 45,
-            "h": "Hámörkun: heilt dæmi á 30 mín.",
-            "p": "Rafallinn fyrir hagnaðarhámörkun er 25% af prófinu.",
+            "h": "Ákveður og andhverfa",
+            "p": "Mat 6,5 og 7: 4×4 Laplace (miðannarpróf 2025 dæmi 3) og aðoka fylki.",
             "go": {
               "v": "practice",
               "topics": [
-                "ham"
-              ],
-              "kind": "gen"
+                "akv",
+                "and"
+              ]
             }
           },
           {
             "at": "14:00",
             "m": 40,
-            "h": "Fylkjahlutinn í rafölum",
+            "h": "Föll af einni breytu",
+            "p": "Mat 6: lokapróf 2023 dæmi 3 og dæmablað 43.",
             "go": {
               "v": "practice",
               "topics": [
-                "fyl",
-                "akv",
-                "and",
-                "jof"
-              ],
-              "kind": "gen"
+                "ein"
+              ]
             }
           },
           {
             "at": "20:00",
             "m": 20,
-            "h": "Blaðið: gildrur",
+            "h": "Blaðið: kaflar 15–19",
             "go": {
               "v": "sheet",
-              "sec": "s20"
+              "sec": "s15"
             }
           }
         ]
@@ -903,12 +755,13 @@ export const meta = {
           {
             "at": "09:00",
             "m": 180,
-            "h": "Blandað próf á tíma, á pappír",
-            "p": "Síðasta heila prófið. Nýjar samsetningar.",
+            "h": "Lokapróf 2023 á tíma, á pappír",
+            "p": "Síðasta heila prófið. Ef þú tókst það 15. nóv., taktu blandað próf í staðinn.",
             "go": {
               "v": "exam",
-              "start": "mix"
-            }
+              "start": "L23"
+            },
+            "exam": true
           },
           {
             "at": "12:00",
@@ -950,9 +803,10 @@ export const meta = {
             "at": "10:55",
             "m": 30,
             "h": "Blaðið utanbókar",
-            "p": "Skrifaðu reglurnar á autt blað og berðu saman.",
+            "p": "Skrifaðu reglurnar í köflum 14–19 á autt blað og berðu saman.",
             "go": {
-              "v": "sheet"
+              "v": "sheet",
+              "sec": "s14"
             }
           },
           {
@@ -1005,7 +859,8 @@ export const meta = {
             "at": "13:30",
             "m": 180,
             "h": "Lokaprófið",
-            "p": "Lestu öll dæmin fyrst. Byrjaðu á fylkjunum."
+            "p": "Lestu öll dæmin fyrst. Byrjaðu á fylkjunum.",
+            "exam": true
           }
         ]
       }
@@ -1013,7 +868,7 @@ export const meta = {
   },
   "examInfo": {
     "title": "Lokaprófið",
-    "note": "Vægið er á 100 stiga skala og byggt á lokaprófum 2023 og 2025. * = flokkar deila dæmi: fylki/ákveða/andhverfa 15, ein breyta/diffrun 10, fólgin föll/einsleitni 10, hámörkun/Hessian 25. Hlutafleiður koma fyrir í flestum dæmum. „Skrifleg“ er hlutfall stiga sem þú hakaðir rétt.",
+    "note": "Vægið er á 100 stiga skala og byggt á lokaprófum 2023 og 2025. * = flokkar deila dæmi: fylki/ákveða/andhverfa 15, ein breyta/diffrun 10, fólgin föll/einsleitni 10, hámörkun/Hessian 25. Hlutafleiður koma fyrir í flestum dæmum. „Mat“ er sjálfsmatið af Blaðinu (0–10). „Skrifleg“ er hlutfall stiga sem þú hakaðir rétt.",
     "facts": [
       {
         "value": "3 klst.",
@@ -1073,6 +928,66 @@ export const meta = {
   "legacy": {
     "key": "hag101g-lokaprof-v1",
     "file": "HAG101G lokapróf.html"
+  },
+  "self": {
+    "sections": {
+      "1": "fyl",
+      "2": "fyl",
+      "3": "and",
+      "4": "fyl",
+      "5": "akv",
+      "6": "akv",
+      "7": "and",
+      "8": "jof",
+      "9": "dif",
+      "10": "dif",
+      "11": "ein",
+      "12": "hlu",
+      "13": "mis",
+      "14": "mis",
+      "15": "dul",
+      "16": "tay",
+      "17": "eins",
+      "18": "hes",
+      "19": "ham"
+    },
+    "initial": {
+      "1": 8,
+      "2": 9,
+      "3": 8,
+      "4": 8,
+      "5": 8,
+      "6": 6.5,
+      "7": 7,
+      "8": 7,
+      "9": 8,
+      "10": 8,
+      "11": 6,
+      "12": 7.5,
+      "13": 5,
+      "14": 6,
+      "15": 3,
+      "16": 0,
+      "17": 0,
+      "18": 7,
+      "19": 0
+    },
+    "at": "17. nóv."
+  },
+  "examWeights": {
+    "fyl": 7,
+    "akv": 6,
+    "and": 6,
+    "jof": 15,
+    "dif": 3,
+    "ein": 10,
+    "hlu": 3,
+    "mis": 8,
+    "dul": 11,
+    "eins": 4,
+    "tay": 12,
+    "hes": 8,
+    "ham": 22
   }
 };
 

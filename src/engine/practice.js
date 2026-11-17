@@ -2,6 +2,7 @@
 // Vélin veit ekki úr hvaða fagi færsla kemur; hún les aðeins Course-hlutinn.
 
 import { inBank, isDue } from './review.js';
+import { hasSelf, byPriority } from './self.js';
 
 /** @typedef {Object} Entry
  *  @property {string} gid         alþjóðlegt auðkenni, 'hag103g:H25-1', 'hag106g:g-ev@2', 'hag101g:q:g-mul'
@@ -108,8 +109,10 @@ export function topicStats(course, state, topic, filter = e => e.type !== 'card'
   return { n, c, seen, total, pct: den ? num / den : null };
 }
 
-/** k veikustu flokkarnir (upprifjunarflokkar undanskildir), ósnertir taldir 50%. */
+/** k veikustu flokkarnir (upprifjunarflokkar undanskildir), ósnertir taldir 50%.
+ *  Í fagi með sjálfsmati (HAG101G) gildir forgangsröðin í engine/self.js í staðinn. */
 export function weakest(course, state, k = 2, filter) {
+  if (hasSelf(course)) return byPriority(course, state).slice(0, k);
   return course.topics.filter(t => !t.review).map(t => ({ t: t.id, s: topicStats(course, state, t.id, filter) }))
     .sort((a, b) => ((a.s.pct ?? 0.5) - (b.s.pct ?? 0.5)) || (a.s.n - b.s.n)).slice(0, k).map(x => x.t);
 }

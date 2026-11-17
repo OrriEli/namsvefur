@@ -37,6 +37,8 @@ export const grade10 = p => F.dec(p * 10, 1);
 
 // Dagsetning og tími á íslensku óháð stillingum vafrans: „17. nóv. kl. 16:44“.
 const MON = ['jan.', 'feb.', 'mars', 'apr.', 'maí', 'júní', 'júlí', 'ág.', 'sept.', 'okt.', 'nóv.', 'des.'];
+/** „17. nóv.“ */
+export const fmtDay = t => { const d = new Date(t); return `${d.getDate()}. ${MON[d.getMonth()]}`; };
 export function fmtWhen(t) {
   const d = new Date(t);
   return `${d.getDate()}. ${MON[d.getMonth()]} kl. ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;

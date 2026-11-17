@@ -112,3 +112,16 @@ a.ccard:hover{border-color:var(--muted);border-left-color:var(--cc,var(--accent)
 .hit:hover{border-color:var(--accent)}
 .snip{font-size:.9rem;color:var(--muted)}
 .snip mark{background:var(--warn-weak);color:var(--ink);border-radius:3px;padding:0 2px}
+
+/* ---------- Sjálfsmat og forgangsröð (HAG101G, 17. nóv.) ---------- */
+/* Reitir á Blaðinu (.selfr), mat í töflu (.selfpill) og forgangsröð á Yfirliti (.prio). Heitin eru aðeins
+   notuð hér; þau birtast bara í fagi sem hefur sjálfsmat. */
+.selfr{display:inline-flex;align-items:center;gap:4px;font-family:var(--f-mono);font-size:.74rem;font-weight:400;color:var(--muted);margin-left:auto;border:1px solid var(--line);border-radius:8px;padding:2px 6px;background:var(--paper)}
+.selfr input{width:3.6em;font:inherit;font-size:.85rem;border:0;background:transparent;color:var(--ink);text-align:right;padding:2px 0}
+.selfr.lo{border-color:var(--bad);background:var(--bad-weak)} .selfr.mid{border-color:var(--warn);background:var(--warn-weak)} .selfr.hi{border-color:var(--good);background:var(--good-weak)}
+.sheet h2 .selfr + .go{margin-left:8px}
+.selfpill{display:inline-block;min-width:2.6em;text-align:center;border-radius:6px;padding:1px 6px;background:var(--soft)}
+.selfpill.lo{background:var(--bad-weak);color:var(--bad)} .selfpill.mid{background:var(--warn-weak);color:var(--warn)} .selfpill.hi{background:var(--good-weak);color:var(--good)}
+.prio{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.prio li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.prio .pn{color:var(--accent);font-size:.9rem}

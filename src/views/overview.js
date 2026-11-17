@@ -1,5 +1,6 @@
 // Yfirlit fags: staðreyndir um prófið, aðgerðir og staðan, eins og forsíður gömlu síðnanna.
 // Krossavélin og skriflega vélin sýna flokka (eftir hlutum námskeiðs); fyrirlestravélin sýnir fylki fyrirlestra × stiga.
+// Í fagi með sjálfsmati (HAG101G) kemur forgangsröð á undan stöðunni og dálkurinn „Mat“ í stað „Séð“.
 
 import { topicStats, weakest, entriesOf } from '../engine/practice.js';
 import { bankIds } from '../engine/review.js';
@@ -7,6 +8,7 @@ import { pctTxt, plural } from '../ui/format.js';
 import { bar, barCls, esc } from '../ui/dom.js';
 import { ptsTxt } from '../engine/items/index.js';
 import { formatMeta } from './exam.js';
+import { hasSelf, selfOf, selfScore, writtenStats } from '../engine/self.js';
 
 export function render({ el, course: c, store, go }) {
   const S = store.state;
@@ -17,6 +19,9 @@ export function render({ el, course: c, store, go }) {
   const bank = bankIds(S, c.id).length;
   const running = S.exams[c.id];
   const written = c.engine === 'written', lecture = c.engine === 'lecture';
+  const self = written && hasSelf(c);
+  const scCls = sc => sc === null ? '' : sc < 0.4 ? 'lo' : sc < 0.7 ? 'mid' : 'hi';
+  const scTxt = sc => sc === null ? '–' : ptsTxt(sc * 10);
   const isW = e => !e.quick && e.type !== 'card', isQ = e => e.quick;
   const wk = weakest(c, S, 2, written ? isW : undefined);
   const name = id => c.topics.find(t => t.id === id).name;
@@ -68,18 +73,29 @@ export function render({ el, course: c, store, go }) {
       const grp = t.part && t.part !== part ? `<tr class="grp"><td colspan="${cols}">${esc(t.part)}</td></tr>` : ''; part = t.part;
       const share = written ? esc(t.weight || '–') : quota ? (quota.quota[t.id] ? `${quota.quota[t.id]} af ${qTotal}` : '–') : null;
       const quick = written ? `<td style="width:20%">${bar(topicStats(c, S, t.id, isQ).pct, pctTxt(topicStats(c, S, t.id, isQ).pct))}</td>` : '';
+      if (self) { const sc = selfScore(c, S, t.id), qq = topicStats(c, S, t.id, isQ);
+        return `<tr><td><b>${esc(t.name)}</b>${t.ref ? `<div class="hint">${esc(t.ref)}</div>` : ''}</td><td class="mono hide-sm">${share}</td><td class="mono"><span class="selfpill ${scCls(sc)}">${scTxt(sc)}</span></td><td style="width:20%">${bar(s.pct, pctTxt(s.pct))}</td><td style="width:20%" class="hide-sm">${bar(qq.pct, pctTxt(qq.pct))}</td>
+        <td><button class="btn small" data-act="topic" data-t="${t.id}">Æfa</button></td></tr>`; }
       return `${grp}<tr><td><b>${esc(t.name)}</b>${t.ref ? `<div class="hint">${esc(t.ref)}</div>` : ''}</td>${share !== null ? `<td class="mono hide-sm">${share}</td>` : ''}<td class="mono">${s.seen}/${s.total}</td>
         <td style="width:${written ? 20 : 28}%">${bar(s.pct, pctTxt(s.pct))}</td>${quick}<td><button class="btn small" data-act="topic" data-t="${t.id}">Æfa</button></td></tr>`;
     }).join('');
-    const head = `<tr><th>Flokkur</th>${written ? '<th class="hide-sm">Vægi</th>' : quota ? '<th class="hide-sm">Vægi á prófi</th>' : ''}<th>Séð</th><th>${written ? 'Skrifleg (stig)' : 'Rétt'}</th>${written ? '<th>Hraðæfing</th>' : ''}<th></th></tr>`;
+    const head = self ? '<tr><th>Flokkur</th><th class="hide-sm">Vægi</th><th>Mat</th><th>Skrifleg (stig)</th><th class="hide-sm">Hraðæfing</th><th></th></tr>' : `<tr><th>Flokkur</th>${written ? '<th class="hide-sm">Vægi</th>' : quota ? '<th class="hide-sm">Vægi á prófi</th>' : ''}<th>Séð</th><th>${written ? 'Skrifleg (stig)' : 'Rétt'}</th>${written ? '<th>Hraðæfing</th>' : ''}<th></th></tr>`;
     table = `<div class="scroll"><table class="tt"><thead>${head}</thead><tbody>${rows}</tbody></table></div>${c.examInfo.note ? `<p class="hint">${c.examInfo.note}</p>` : ''}`;
   }
+
+  // ---------- forgangsröð (sjálfsmat) ----------
+  const prio = !self ? '' : `<div class="panel stack" style="gap:10px">
+      <div class="row" style="justify-content:space-between"><h2>Forgangsröð</h2><span class="hint">Lítil kunnátta × mikið vægi á prófinu</span></div>
+      <ol class="prio">${weakest(c, S, 5).map((t, i) => { const sc = selfScore(c, S, t), w = writtenStats(c, S, t); return `<li><span class="mono pn">${i + 1}</span><div style="min-width:0"><b>${esc(name(t))}</b><div class="hint">Sjálfsmat ${scTxt(sc)}/10${w.seen >= 3 ? ` · æfing ${pctTxt(w.pct)}` : ''} · um ${c.examWeights[t]}% af prófinu</div></div><button class="btn small" data-act="topic" data-t="${t}">Æfa</button></li>`; }).join('')}</ol>
+      <p class="hint">Sjálfsmatið kemur frá Blaðinu (${esc(selfOf(c, S).at || '–')}); breyttu því þar þegar þú lærir kafla. Eftir þrjú æfð dæmi í flokki vegur æfingin til jafns við matið.</p>
+    </div>`;
 
   el.innerHTML = `<div class="stack" style="gap:22px">
     <p class="muted" style="max-width:64ch">${intro} Allt sem þú svarar er skráð hér í vafranum.</p>
     ${running ? `<div class="panel row" style="justify-content:space-between"><span><b>${esc(running.label)}</b> er í gangi.</span><a class="btn primary" href="#/fag/${c.id}/prof">Halda áfram</a></div>` : ''}
     <div class="facts">${c.examInfo.facts.map(f => `<div><b>${esc(f.value)}</b><span>${esc(f.label)}</span></div>`).join('')}</div>
     ${actions}
+    ${prio}
     <div class="panel stack" style="gap:10px">
       <div class="row" style="justify-content:space-between"><h2>${lecture ? 'Staðan: fyrirlestrar × stig' : 'Staðan eftir flokkum'}</h2>${last ? `<p class="hint">Síðasta próf: <span class="mono">${ptsTxt(last.score)}/${ptsTxt(last.max)}</span> · ${esc(last.label)}</p>` : ''}</div>
       ${table}

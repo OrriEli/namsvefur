@@ -628,3 +628,27 @@ Sami innflutningur tvisvar breytir engu í seinna skiptið.
 
 `tests/phase5.test.js`: gamla HAG103G-síðan er keyrð í `vm`, 300 svörum svarað, vistunin flutt inn, og hlutfall hvers flokks í kunnáttukortinu er borið saman við `topicStats` gömlu síðunnar.
 
+## HAG101G 17. nóv.: sjálfsmat, forgangsröð og ný áætlun
+
+Breytingarnar voru gerðar í sjálfstæðu útgáfu HAG101G-síðunnar. Gamla síðan í `legacy/` er skrifvarin, svo þær eru í `src/courses/updates/hag101g.js` og `scripts/extract-legacy.js` (`applyUpdates`) setur þær ofan á það sem lesið er úr henni. Hin fögin hafa enga slíka skrá.
+
+### Ný svið á `Course` (aðeins HAG101G)
+
+| Svið | Efni |
+| --- | --- |
+| `self.sections` | kafli Blaðsins → flokkur, kaflar 1–19 (`SEC_T`) |
+| `self.initial`, `self.at` | sjálfsmat Orra 17. nóv. (`SELF0`) og dagsetning þess |
+| `examWeights` | um það bil % af prófinu á hvern flokk (`EXW`) |
+
+Áætlunin (`plan`) og skýringin undir stöðutöflunni (`examInfo.note`) koma líka úr skránni. Liður í áætlun getur nú haft `exam: true` (birt sem próf) og `go.review: true` (villubanki skriflegra dæma, `?m=written&r=1`).
+
+### Reglur (`src/engine/self.js`)
+
+- **Sjálfsmat flokks** = meðaltal mats þeirra kafla sem tilheyra flokknum, á bilinu 0–1; tómir reitir teljast ekki með.
+- **Kunnátta** = sjálfsmatið; þegar flokkurinn hefur að minnsta kosti 3 æfð skrifleg dæmi (hraðspurningar ekki taldar) er hún meðaltal matsins og hlutfalls stiga. Án mats gildir æfingin, og án hvors tveggja 0,5.
+- **Forgangur** = (1 − kunnátta) × vægi á prófi. `weakest()` raðar eftir forgangi í fagi með sjálfsmati, svo „Skrifleg dæmi“ á Yfirliti, „Efst í forgangsröðinni“ í áætluninni og tillagan á forsíðunni fylgja honum.
+
+### Geymsla
+
+`state.settings.self[fag] = {v: {kafli: 0–10 | null}, at: '17. nóv.', ts}`. Upphafsgildin eru sett inn ef ekkert er vistað (`ts = 0`). Breyting á Blaðinu vistast strax, klemmd á 0–10, með dagsetningu og tíma. Við sameiningu útfluttra gagna gildir það mat sem var breytt síðast. Úr vistun sjálfstæðu síðunnar (`self`, `selfAt`) flyst matið inn nema því hafi verið breytt hér.
+

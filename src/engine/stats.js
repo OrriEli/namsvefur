@@ -1,6 +1,8 @@
 // Vikan: mínútur, atriði og hlutfall réttra á hvert fag síðustu 7 daga, borið saman við vikuna á undan,
 // og hlutfall „Viss“-svara sem voru röng. Allt reiknað úr lotum (state.sessions).
 
+import { fmtDay } from '../ui/format.js';
+
 export const DAY = 864e5;
 
 const empty = () => ({ minutes: 0, n: 0, c: 0, sure: 0, sureWrong: 0 });
@@ -25,8 +27,7 @@ export function weekSummary(state, courses, now = Date.now()) {
   return { from, to: now, rows, total: { ...total, pct: pct(total) }, prev: { ...prevTotal, pct: pct(prevTotal) }, days };
 }
 
-const MON = ['jan.', 'feb.', 'mars', 'apr.', 'maí', 'júní', 'júlí', 'ág.', 'sept.', 'okt.', 'nóv.', 'des.'];
-const dstr = t => { const d = new Date(t); return `${d.getDate()}. ${MON[d.getMonth()]}`; };
+const dstr = fmtDay;
 const perc = p => p === null ? '–' : Math.round(p * 100) + '%';
 const delta = (a, b, unit) => { const d = Math.round(a - b); return d === 0 ? `óbreytt` : `${d > 0 ? '↑' : '↓'} ${Math.abs(d)} ${unit}`; };
 

@@ -10,6 +10,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadLegacy, renderToHtml, inlineScripts, clickApp } from './lib/load-legacy.js';
+import hag101gUpdates from '../src/courses/updates/hag101g.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'src', 'courses');
@@ -124,7 +125,7 @@ function isoFromLabel(label) {
 }
 function normGo(go) {
   if (!go) return undefined;
-  if (typeof go === 'object') return clean({ v: go.v, topics: go.topics, kind: go.kind ? SOURCE_OF[go.kind] || go.kind : undefined, sec: go.sec, start: go.start });
+  if (typeof go === 'object') return clean({ v: go.v, topics: go.topics, kind: go.kind ? SOURCE_OF[go.kind] || go.kind : undefined, sec: go.sec, start: go.start, review: go.review });
   if (go === 'second') return { v: 'exam', start: 'second' };
   if (go.startsWith('t:')) return go === 't:all' ? { v: 'practice' } : { v: 'practice', topics: go.slice(2).split(',') };
   return { v: go };
@@ -134,13 +135,29 @@ function planOf(L) {
   const html = renderToHtml(L, 'renderPlan');
   const head = must(html.match(/<span class="eyebrow">([^<]*)<\/span><h1>([^<]*)<\/h1>/), 'fyrirsögn áætlunar');
   const intro = must(html.match(/<p class="muted" style="max-width:62ch">([\s\S]*?)<\/p>/), 'inngang áætlunar')[1];
-  const days = V.PLAN.map(d => {
-    const iso = /^\d{4}-\d\d-\d\d$/.test(d.d) ? d.d : isoFromLabel(d.d);
-    const label = /^\d{4}-/.test(d.d) ? d.h : d.d;
-    return clean({ date: iso, label, title: /^\d{4}-/.test(d.d) ? undefined : d.h, cal: d.cal, note: d.note,
-      items: d.items.map(s => clean({ at: s.at, m: s.m, h: s.h, p: s.p, go: normGo(s.go), brk: s.brk })) });
-  });
-  return { eyebrow: head[1], title: head[2], intro, days };
+  return { eyebrow: head[1], title: head[2], intro, days: V.PLAN.map(planDay) };
+}
+/** Dagur í PLAN gömlu síðnanna → dagur í áætlun vefsins. */
+function planDay(d) {
+  const iso = /^\d{4}-\d\d-\d\d$/.test(d.d) ? d.d : isoFromLabel(d.d);
+  const label = /^\d{4}-/.test(d.d) ? d.h : d.d;
+  return clean({ date: iso, label, title: /^\d{4}-/.test(d.d) ? undefined : d.h, cal: d.cal, note: d.note,
+    items: d.items.map(s => clean({ at: s.at, m: s.m, h: s.h, p: s.p, go: normGo(s.go), brk: s.brk, exam: s.exam })) });
+}
+
+// ---------- breytingar ofan á gömlu síðurnar (src/courses/updates/) ----------
+const UPDATES = { hag101g: hag101gUpdates };
+function applyUpdates(id, course) {
+  const u = UPDATES[id]; if (!u) return course;
+  const out = { ...course };
+  if (u.self) out.self = u.self;
+  if (u.examWeights) out.examWeights = u.examWeights;
+  if (u.plan) out.plan = { ...course.plan, eyebrow: u.plan.eyebrow, intro: u.plan.intro, days: u.plan.days.map(planDay) };
+  if (u.noteInsert) {
+    const note = must(course.examInfo.note && course.examInfo.note.includes(u.noteInsert.before) && course.examInfo.note, 'staðinn fyrir nýju setninguna í skýringunni');
+    out.examInfo = { ...course.examInfo, note: note.replace(u.noteInsert.before, u.noteInsert.text + u.noteInsert.before) };
+  }
+  return out;
 }
 
 // ---------- vélarnar ----------
@@ -229,7 +246,7 @@ export function extract(id) {
   const meta = META[id]; if (!meta) throw new Error('Óþekkt fag ' + id);
   const L = loadLegacy(join(ROOT, 'legacy', meta.file));
   const body = { mcq: mcqMeta, lecture: lectureMeta, written: writtenMeta }[meta.engine](id, meta, L);
-  const course = { id, code: meta.code, name: meta.name, short: meta.short, color: `--c-${id}`, engine: meta.engine, ...body, legacy: { key: L.vars.KEY || L.vars.STORE_KEY, file: meta.file } };
+  const course = applyUpdates(id, { id, code: meta.code, name: meta.name, short: meta.short, color: `--c-${id}`, engine: meta.engine, ...body, legacy: { key: L.vars.KEY || L.vars.STORE_KEY, file: meta.file } });
   return { course, legacyModule: legacyModule(id, meta, L), L };
 }
 
