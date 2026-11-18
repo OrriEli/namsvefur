@@ -21,6 +21,8 @@
   --good:#256a41; --good-weak:#e3efe4;
   --bad:#b2382c;  --bad-weak:#f6e2dc;
   --warn:#8a5a00; --warn-weak:#f3e7cc;
+  /* hitakort: aðeins sem bakgrunnur blandaður við flöt, aldrei sem textalitur */
+  --heat-lo:#d9573f; --heat-mid:#e3b02a; --heat-hi:#3f9a5c;
   /* fög */
   --course-101:#34539f; --course-108:#ab2b40; --course-107:#7f3f86; --course-103:#136f56; --course-106:#9a5219;
   /* skuggar */
@@ -51,6 +53,7 @@
   --action:#8fbaf0; --action-hover:#a8caf5; --on-action:#13202f; --action-weak:#26303b;
   --good:#86c99b; --good-weak:#1f3326; --bad:#f2958a; --bad-weak:#3d2420; --warn:#e3b55e; --warn-weak:#3a2f18;
   --course-101:#93aaf5; --course-108:#f2919f; --course-107:#d29fdb; --course-103:#6ccfa8; --course-106:#eba86a;
+  --heat-lo:#e2705c; --heat-mid:#d9a933; --heat-hi:#5cb87a;
   --shadow-sm:0 1px 2px rgba(0,0,0,.35); --shadow-md:0 2px 10px rgba(0,0,0,.4);
   color-scheme:dark;
 }}
@@ -61,6 +64,7 @@
   --action:#8fbaf0; --action-hover:#a8caf5; --on-action:#13202f; --action-weak:#26303b;
   --good:#86c99b; --good-weak:#1f3326; --bad:#f2958a; --bad-weak:#3d2420; --warn:#e3b55e; --warn-weak:#3a2f18;
   --course-101:#93aaf5; --course-108:#f2919f; --course-107:#d29fdb; --course-103:#6ccfa8; --course-106:#eba86a;
+  --heat-lo:#e2705c; --heat-mid:#d9a933; --heat-hi:#5cb87a;
   --shadow-sm:0 1px 2px rgba(0,0,0,.35); --shadow-md:0 2px 10px rgba(0,0,0,.4);
   color-scheme:dark;
 }

@@ -154,6 +154,8 @@ Efst er stika með: **Í dag · Fög · Framvinda**, og tannhjól fyrir Stilling
 
 Forsíðan er ein ákvörðun, ekki yfirlit. Efst er prófadagatal: niðurtalning fyrir hvert próf úr `config.js`, næsta próf fremst. Próf án dagsetningar sýnir „óstaðfest“.
 
+*Endurhönnun, áfangi 3 (18. nóv.):* efst er dagsetning, stór fyrirsögn með því sem á að gera núna (næsti óhakaði liður áætlunar dagsins, annars veikustu flokkar tillögunnar) og fjöldi daga í næsta próf í lit fagsins. Undir er dagaröð (`engine/timeline.js`), einn reitur á dag frá fyrsta degi áætlunar til síðasta staðfesta prófs: prófdagar fylltir og hærri, dagurinn í dag merktur, búnir dagar fylltir, liðnir ókláraðir skástrikaðir. Fag dags: prófdagur → fag prófsins; dagur í áætlun → fagið með flestar mínútur (hitt sem rönd); annars næsta próf, en þriðji hver dagur fer á prófið þar á eftir ef það er innan 7 daga. Dagur er búinn eftir 25 mín. í fagi dagsins, þegar áætlun dagsins er öll hökuð, eða þegar prófinu er lokið. Spjöldin „Lota kvöldsins“ (lærdómsblokkin, Byrja) og „Á áætlun“ (búnir dagar / allir dagar, ein setning). Kunnáttukortið er hitakort: grátt → rautt → gult → grænt (`--heat-*`), daufara eftir því sem lengra er síðan æft var.
+
 Undir því er tillaga að lærdómsblokk, reiknuð í `engine/today.js`:
 
 1. Forgangur hvers fags = vægi eftir nálægð prófs (t.d. 1 / dagar í próf, hámark við 14 daga) × veikleiki (1 − hlutfall réttra svara síðustu 14 daga).

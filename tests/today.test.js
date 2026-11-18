@@ -6,7 +6,7 @@ import { proximity, priorities, suggestBlock, examFor, recentShare } from '../sr
 import { recordAnswer } from '../src/engine/review.js';
 import { entriesOf } from '../src/engine/practice.js';
 import { fresh, defaultPrefs } from '../src/store/store.js';
-import { cellCls, cellOpacity } from '../src/views/today.js';
+import { heat } from '../src/views/today.js';
 import { pickReview } from '../src/views/upprifjun.js';
 import { courses, byId } from './helpers.js';
 
@@ -102,13 +102,14 @@ describe('tillaga að blokk', () => {
   });
 });
 
-describe('kunnáttukort', () => {
-  it('litur eftir hlutfalli og daufara eftir því sem lengra er síðan æft var', () => {
-    expect([cellCls(null), cellCls(0.5), cellCls(0.7), cellCls(0.9)]).toEqual(['', 'lo', 'mid', 'hi']);
-    expect(cellOpacity(0)).toBe(1);
-    expect(cellOpacity(7)).toBeCloseTo(0.725);
-    expect(cellOpacity(30)).toBeCloseTo(0.45);
-    expect(cellOpacity(null)).toBe(1);
+describe('kunnáttukort sem hitakort', () => {
+  it('grátt → rautt → gult → grænt, og daufara eftir því sem lengra er síðan æft var', () => {
+    expect(heat(null, 3)).toBe(null);
+    expect(heat(0, 0)).toEqual({ c1: '--heat-lo', c2: '--heat-mid', t: 0, amt: 45 });
+    expect(heat(0.3, 0)).toMatchObject({ c1: '--heat-lo', c2: '--heat-mid', t: 50 });
+    expect(heat(0.6, 0)).toMatchObject({ c1: '--heat-mid', c2: '--heat-hi', t: 0 });
+    expect(heat(1, 0)).toMatchObject({ c1: '--heat-mid', c2: '--heat-hi', t: 100 });
+    expect([heat(0.8, 7).amt, heat(0.8, 14).amt, heat(0.8, 60).amt]).toEqual([33, 20, 20]);
   });
 });
 
