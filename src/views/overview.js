@@ -5,7 +5,7 @@
 import { topicStats, weakest, entriesOf } from '../engine/practice.js';
 import { bankIds } from '../engine/review.js';
 import { pctTxt, plural } from '../ui/format.js';
-import { bar, barCls, esc } from '../ui/dom.js';
+import { bar, barCls, esc, thinBar } from '../ui/dom.js';
 import { ptsTxt } from '../engine/items/index.js';
 import { formatMeta } from './exam.js';
 import { hasSelf, selfOf, selfScore, writtenStats } from '../engine/self.js';
@@ -87,9 +87,12 @@ export function render({ el, course: c, store, go }) {
   }
 
   // ---------- forgangsröð (sjálfsmat) ----------
+  const maxW = self ? Math.max(...Object.values(c.examWeights)) : 1;
   const prio = !self ? '' : `<div class="panel stack" style="gap:10px">
       <div class="row" style="justify-content:space-between"><h2>Forgangsröð</h2><span class="hint">Lítil kunnátta × mikið vægi á prófinu</span></div>
-      <ol class="prio">${weakest(c, S, 5).map((t, i) => { const sc = selfScore(c, S, t), w = writtenStats(c, S, t); return `<li><span class="mono pn">${i + 1}</span><div style="min-width:0"><b>${esc(name(t))}</b><div class="hint">Sjálfsmat ${scTxt(sc)}/10${w.seen >= 3 ? ` · æfing ${pctTxt(w.pct)}` : ''} · um ${c.examWeights[t]}% af prófinu</div></div><button class="btn small" data-act="topic" data-t="${t}">Æfa</button></li>`; }).join('')}</ol>
+      <ol class="prio">${weakest(c, S, 5).map((t, i) => { const sc = selfScore(c, S, t), w = writtenStats(c, S, t), ew = c.examWeights[t];
+        return `<li><span class="mono pn">${i + 1}</span><div style="min-width:0"><b>${esc(name(t))}</b><span class="vh">Sjálfsmat ${scTxt(sc)}/10${w.seen >= 3 ? ` · æfing ${pctTxt(w.pct)}` : ''} · um ${ew}% af prófinu</span>
+          <div class="pmini" aria-hidden="true">${thinBar('Mat', sc, `${scTxt(sc)}/10`)}${thinBar('Vægi', ew / maxW, `${ew}%`)}</div>${w.seen >= 3 ? `<div class="hint">Æfing ${pctTxt(w.pct)}</div>` : ''}</div><button class="btn small" data-act="topic" data-t="${t}">Æfa</button></li>`; }).join('')}</ol>
       <p class="hint">Sjálfsmatið kemur frá Blaðinu (${esc(selfOf(c, S).at || '–')}); breyttu því þar þegar þú lærir kafla. Eftir þrjú æfð dæmi í flokki vegur æfingin til jafns við matið.</p>
     </div>`;
 

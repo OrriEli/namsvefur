@@ -3,12 +3,12 @@
 // Blað hvers fags er flipi á fagsíðunni.
 
 import { COURSES } from '../courses/index.js';
-import { entriesOf } from '../engine/practice.js';
+import { courseProgress } from '../engine/stats.js';
 import { bankIds } from '../engine/review.js';
 import { buildIndex, search } from '../engine/sheets.js';
 import { nextExam, countdownShort } from '../ui/countdown.js';
-import { pctTxt, plural } from '../ui/format.js';
-import { esc } from '../ui/dom.js';
+import { plural } from '../ui/format.js';
+import { esc, progressBars } from '../ui/dom.js';
 
 let index = null;
 let last = '';
@@ -18,11 +18,9 @@ const href = (c, s) => `#/fag/${c.id}/bladid?k=${encodeURIComponent(s.id)}`;
 function courseList(S) {
   const at = c => { const x = nextExam(c.id); return x && x.at ? new Date(x.at).getTime() : Infinity; };
   return `<ul class="rows">${[...COURSES].sort((a, b) => at(a) - at(b)).map(c => {
-    const es = entriesOf(c).filter(e => e.type !== 'card'); let n = 0, k = 0, seen = 0;
-    for (const e of es) { const p = S.items[e.gid]; if (p) { n += p.n; k += p.c; seen++; } }
     const bank = bankIds(S, c.id).length;
     return `<li><a class="rowlink" href="#/fag/${c.id}" style="--cc:var(${c.color})"><span class="rname"><span class="cchip">${c.code}</span><b>${esc(c.name)}</b></span><span class="rright">${countdownShort(nextExam(c.id))}</span>
-      <span class="rsub">${plural(c.items.length, 'spurning', 'spurningar')} og ${plural(c.gens.length, 'rafall', 'rafalar')} · séð ${seen}/${es.length} · rétt ${pctTxt(n ? k / n : null)}${bank ? ` · ${bank} í villubanka` : ''}</span></a></li>`;
+      <span class="rsub">${progressBars(courseProgress(c, S))}<span class="hint">${plural(c.items.length, 'spurning', 'spurningar')} og ${plural(c.gens.length, 'rafall', 'rafalar')}${bank ? ` · ${bank} í villubanka` : ''}</span></span></a></li>`;
   }).join('')}</ul>`;
 }
 

@@ -114,7 +114,7 @@ describe('Yfirlit', () => {
   const draw = (course, S) => { const el = {}; overview({ el, course, store: { state: S }, go() {} }); return el.innerHTML; };
   it('forgangsröð með 5 flokkum, efst Hámörkun; dálkurinn „Mat“ í stað „Séð“', () => {
     const html = draw(c, fresh());
-    const items = [...html.matchAll(/<li><span class="mono pn">(\d)<\/span><div style="min-width:0"><b>([^<]+)<\/b><div class="hint">([^<]+)<\/div>/g)];
+    const items = [...html.matchAll(/<li><span class="mono pn">(\d)<\/span><div style="min-width:0"><b>([^<]+)<\/b><span class="vh">([^<]+)<\/span>/g)];
     expect(items.map(m => m[2])).toEqual(['Hámörkun og umslagssetning', 'Taylor-nálgun', 'Fólgin föll', 'Jöfnukerfi og Cramer', 'Föll af einni breytu og útmörk']);
     expect(items[0][3]).toBe('Sjálfsmat 0/10 · um 22% af prófinu');
     expect(items[2][3]).toBe('Sjálfsmat 3/10 · um 11% af prófinu');

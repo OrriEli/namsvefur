@@ -305,3 +305,7 @@ Allir áfangar eiga að snúast að undirbúningi fyrir lokapróf
 - [ ] Dagsetningar lokaprófa í HAG103G, HAG106G, HAG107G og HAG108G (settar í `config.js` þegar þær liggja fyrir).
 
 HAG101G	Hagræn stærðfræði I	Mið. 25 nóv. 2026 kl. 13:30 - 16:30
+
+### Endurhönnun, áfangi 4 (18. nóv.): fagsíður sem herbergi
+
+Fagsíðan ber lit fagsins (`--cc`): hausinn er tónaður með línu í lit fagsins efst, stóru heiti með letrinu Newsreader og dögum í próf sem stórri tölu í lit fagsins. „séð 0/345 · rétt –“ er orðið að tveimur mjóum stikum (`progressBars`, líka á Fögum). Stikur, valdir hnappar og flokkamerki (`.ttag`) innan fagsíðu nota lit fagsins; texti á lituðum fleti helst í bleklit svo litaskil haldist. Forgangsröð HAG101G sýnir sjálfsmat og vægi á prófi sem tvær litlar stikur.

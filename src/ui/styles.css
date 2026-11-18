@@ -116,7 +116,28 @@ kbd{border-radius:var(--radius-sm)}
 .tabs a:hover{color:var(--ink)}
 .tabs a[aria-current="page"]{color:var(--ink);font-weight:600;border-bottom-color:var(--cc,var(--ink))}
 @media (max-width:420px){.tabs{gap:0}.tabs a{padding:10px 9px}}
-@media print{.course-head,.tabs,.crumbs{display:none!important}}
+@media print{.course-head,.chead,.tabs,.crumbs{display:none!important}}
+/* Fagsíðan er herbergi fagsins: haus í lit fagsins, stórt heiti, „séð“ og „rétt“ sem mjóar stikur og dagar í próf */
+.chead{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--sp-5);align-items:end;margin-top:-6px;padding:var(--sp-5);border-radius:var(--radius-lg);border-top:4px solid var(--cc);background:color-mix(in oklab,var(--cc) 7%,var(--surface));box-shadow:var(--shadow-sm)}
+.ch-main{display:flex;flex-direction:column;gap:var(--sp-2);min-width:0}
+.ch-name{font-family:var(--font-serif);font-size:clamp(2rem,5vw,2.75rem);font-weight:500;line-height:1.1;letter-spacing:-.01em}
+.ch-count{display:flex;align-items:flex-end;gap:var(--sp-3)}
+.bignum{font-family:var(--font-serif);font-size:clamp(3.5rem,10vw,5rem);font-weight:500;line-height:.8;color:var(--cc);font-variant-numeric:lining-nums tabular-nums}
+.ch-lbl{font-size:var(--fs-sm);color:var(--ink-2);line-height:1.4}
+.ch-lbl b{color:var(--ink);font-weight:600}
+@media (max-width:640px){.chead{grid-template-columns:1fr;gap:var(--sp-4);padding:var(--sp-4)}}
+/* raðirnar deila dálkum (display:contents) svo stikurnar verði jafnlangar hvert sem gildið er */
+.pbars,.pmini{display:grid;grid-template-columns:auto minmax(60px,1fr) auto;align-items:center;column-gap:var(--sp-3);row-gap:6px;font-size:var(--fs-sm);color:var(--ink-2)}
+.pbars{max-width:440px;margin-top:var(--sp-1)}
+.pb{display:contents}
+.pb-t{height:4px;border-radius:99px;background:color-mix(in oklab,var(--ink) 10%,transparent);overflow:hidden}
+.pb-t i{display:block;height:100%;border-radius:99px;background:var(--cc,var(--course-accent))}
+.pb-v{white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
+.pmini{row-gap:2px;column-gap:var(--sp-2);margin-top:6px;max-width:320px;font-size:var(--fs-xs)}
+/* litur fagsins á völdum hnöppum, stikum og flokkamerkjum (bakgrunnur blandaður svo bleklitur texti haldi litaskilum) */
+.room .chip[aria-pressed="true"],.room .seg button[aria-pressed="true"]{background:color-mix(in oklab,var(--cc) 16%,var(--surface));border-color:var(--cc);color:var(--ink)}
+.room .bar.lo i,.room .bar.mid i{background:var(--cc)}
+.ttag{display:inline-flex;align-items:center;font-size:var(--fs-xs);font-weight:600;line-height:1.5;color:var(--ink);padding:1px 8px 1px 6px;border-radius:var(--radius-sm);background:color-mix(in oklab,var(--cc,var(--course-accent)) 14%,var(--surface));border-left:3px solid var(--cc,var(--course-accent))}
 
 /* ===================== Listar: prófin framundan og fögin ===================== */
 .rows{margin:0;padding:0;list-style:none;border-top:1px solid var(--rule)}
@@ -127,7 +148,8 @@ kbd{border-radius:var(--radius-sm)}
 .rowlink .rname b{font-weight:600}
 .rowlink .rright{color:var(--ink-2);white-space:nowrap}
 .rowlink .rright b{color:var(--ink);font-weight:600}
-.rowlink .rsub{flex-basis:100%;font-size:var(--fs-sm);color:var(--ink-3);padding-left:17px}
+.rowlink .rsub{flex-basis:100%;font-size:var(--fs-sm);color:var(--ink-3);padding-left:17px;display:flex;flex-direction:column;gap:6px}
+.rowlink .rsub .pbars{max-width:380px;margin:0}
 @media (max-width:560px){.rowlink .rright{white-space:normal;padding-left:17px}}
 
 /* ===================== Efni: KaTeX og blöð ===================== */

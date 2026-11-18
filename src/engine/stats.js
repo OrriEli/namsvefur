@@ -2,6 +2,7 @@
 // og hlutfall „Viss“-svara sem voru röng. Allt reiknað úr lotum (state.sessions).
 
 import { fmtDay } from '../ui/format.js';
+import { entriesOf } from './practice.js';
 
 export const DAY = 864e5;
 
@@ -44,4 +45,11 @@ export function weekText(sum, goal) {
   if (sum.total.sure) L.push(`Viss en rangt: ${sum.total.sureWrong} af ${sum.total.sure} „Viss“-svörum (${perc(sum.total.sureWrong / sum.total.sure)})`);
   if (goal) L.push(`Markmið næstu viku: ${goal}`);
   return L.join('\n');
+}
+
+/** Staða fags: hve mörg atriði (ekki spjöld) hafa sést af öllum, og hlutfall réttra svara (null ef ekkert svar). */
+export function courseProgress(course, state) {
+  const es = entriesOf(course).filter(e => e.type !== 'card'); let n = 0, c = 0, seen = 0;
+  for (const e of es) { const p = state.items[e.gid]; if (p) { n += p.n; c += p.c; seen++; } }
+  return { seen, total: es.length, pct: n ? c / n : null };
 }

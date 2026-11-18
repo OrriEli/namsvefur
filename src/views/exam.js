@@ -131,7 +131,7 @@ export function render(ctx) {
   function drawWritten() {
     const x = X(); const tot = x.items.reduce((s, it) => s + it.w, 0);
     const fmt = c.examFormats.find(f => f.id === x.format) || {};
-    const list = x.items.map((it, i) => `<div class="qcard exam-q" id="eq${i}"><div class="qmeta"><span class="eyebrow">Dæmi ${i + 1} · ${esc(topicLabel(c, it.topic))}</span><span class="wt">${fmtPts(it.w)} stig</span></div><div class="qtext">${it.q}</div></div>`).join('');
+    const list = x.items.map((it, i) => `<div class="qcard exam-q" id="eq${i}"><div class="qmeta"><span class="row" style="gap:8px"><span class="eyebrow">Dæmi ${i + 1}</span><span class="ttag">${esc(topicLabel(c, it.topic))}</span></span><span class="wt">${fmtPts(it.w)} stig</span></div><div class="qtext">${it.q}</div></div>`).join('');
     el.innerHTML = `<div class="stack">
       ${timerBar(x)}
       <p class="notice">${esc(fmt.notice || 'Skrifaðu allar lausnir á blað með millireikningum. Engin reiknivél.')} ${esc(x.label)}, ${x.items.length} dæmi, ${fmtPts(tot)} stig.</p>
@@ -171,7 +171,7 @@ export function render(ctx) {
     const idx = x.items.map((it, i) => i).filter(i => x.items[i].type === 'steps');
     const marks = idx.flatMap(i => x.ans[i].mk); const left = marks.filter(v => v === null).length;
     const list = idx.map(i => { const it = x.items[i];
-      return `<div class="qcard exam-q" id="eq${i}"><div class="qmeta"><span class="eyebrow">Dæmi ${i + 1} · ${esc(topicLabel(c, it.topic))}</span><span class="wt">${fmtPts(sc[i].pts)}/${fmtPts(sc[i].max)} stig</span></div><div class="qtext">${it.q}</div>${x.ans[i].txt ? `<p class="hint">Þitt svar í reitnum:</p><pre class="code">${esc(x.ans[i].txt)}</pre>` : ''}<div data-ex="${i}">${renderSteps(it, x.ans[i], { reveal: true })}</div></div>`; }).join('');
+      return `<div class="qcard exam-q" id="eq${i}"><div class="qmeta"><span class="row" style="gap:8px"><span class="eyebrow">Dæmi ${i + 1}</span><span class="ttag">${esc(topicLabel(c, it.topic))}</span></span><span class="wt">${fmtPts(sc[i].pts)}/${fmtPts(sc[i].max)} stig</span></div><div class="qtext">${it.q}</div>${x.ans[i].txt ? `<p class="hint">Þitt svar í reitnum:</p><pre class="code">${esc(x.ans[i].txt)}</pre>` : ''}<div data-ex="${i}">${renderSteps(it, x.ans[i], { reveal: true })}</div></div>`; }).join('');
     el.innerHTML = `<div class="stack">
       <span class="eyebrow">${esc(x.label)}${x.timeout ? ' · tíminn rann út' : ''} · ${fmtDur(x.used)} notaðar</span>
       <h2>Gefðu þér stig</h2>
