@@ -1,4 +1,5 @@
-// Æfing: síur á flokka, hluta, stig og uppruna; hættir fags (stigvaxandi og spjöld í 106/108, skrifleg dæmi
+// Æfing í einbeitingarham: valmynd og haus fagsins hverfa, efst er mjó stika með leið til baka, titli,
+// framvindu lotunnar sem punktum og hnappnum „Sía“ (Esc lokar síunum). Síur á flokka, hluta, stig og uppruna; hættir fags (stigvaxandi og spjöld í 106/108, skrifleg dæmi
 // og hraðæfing í 101); villubanki. Atriðið sjálft er teiknað af spilaranum (player.js).
 // Fyrirspurnir: ?t=flokkar ?s=uppruni ?m=háttur ?l=stig ?r=due (villur á tíma) ?r=1 (allar villur)
 
@@ -6,14 +7,14 @@ import { entriesOf, weightedPick, cardWeight, instantiate, sourceLabel, inMode, 
 import { inBank, isDue, nextDue } from '../engine/review.js';
 import { SOURCES, SOURCE_LABELS } from '../schema.js';
 import { F, fmtWhen } from '../ui/format.js';
-import { esc } from '../ui/dom.js';
+import { esc, setFocus, dotsHTML } from '../ui/dom.js';
 import { createPlayer } from './player.js';
 
 const states = new Map();   // æfingastaða hvers fags lifir á milli flipa
 
 function stateOf(c) {
   if (!states.has(c.id)) states.set(c.id, { mode: c.modes ? c.modes[0].id : null, topics: new Set(c.topics.map(t => t.id)), levels: new Set([1, 2, 3]), source: 'all', review: null,
-    player: null, n: 0, c: 0, recent: [], filtOpen: window.innerWidth > 720 });
+    player: null, n: 0, c: 0, res: [], recent: [], filtOpen: false });
   return states.get(c.id);
 }
 
@@ -28,7 +29,7 @@ export function render(ctx) {
   const reset = () => { P.player = null; };
 
   // fyrirspurn úr slóð
-  if (query.has('m') && modeOf(c, query.get('m')) && P.mode !== query.get('m')) { P.mode = query.get('m'); P.review = null; reset(); P.n = P.c = 0; }
+  if (query.has('m') && modeOf(c, query.get('m')) && P.mode !== query.get('m')) { P.mode = query.get('m'); P.review = null; reset(); P.n = P.c = 0; P.res = []; }
   if (query.has('t')) { const ts = query.get('t').split(',').filter(t => allTopics.includes(t)); if (ts.length) { P.topics = new Set(ts); P.source = 'all'; P.review = null; reset(); } }
   else if (query.has('m') || query.has('s')) { P.topics = new Set(allTopics); }
   if (query.has('s') && SOURCES.includes(query.get('s'))) { P.source = query.get('s'); P.review = null; reset(); }
@@ -46,8 +47,8 @@ export function render(ctx) {
 
   const hooks = () => ({
     redraw: draw,
-    tally: it => it.type === 'card' ? '<span class="hint">Spjöld telja ekki í einkunn</span>' : `<span class="hint">Lota: <span class="mono">${F.n(Math.round(P.c * 10) / 10)}/${P.n}</span> rétt</span>`,
-    onDone: (score, ok) => { if (P.player.item.type === 'card') return; P.n++; P.c += score; const mm = mode(); if (mm && mm.adapt && !P.review) adaptAfter(ok); },
+    tally: it => it.type === 'card' ? '<span class="hint">Spjöld telja ekki í einkunn</span>' : '',
+    onDone: (score, ok) => { if (P.player.item.type === 'card') return; P.n++; P.c += score; P.res.push(!!ok); const mm = mode(); if (mm && mm.adapt && !P.review) adaptAfter(ok); },
     onNext: () => { next(); draw(); window.scrollTo(0, 0); }
   });
 
@@ -78,14 +79,20 @@ export function render(ctx) {
     const srcs = SOURCES.filter(s => entriesOf(c).some(e => e.source === s && inMode(e, m)));
     const partChips = parts.map(p => { const ts = c.topics.filter(t => t.part === p).map(t => t.id);
       return `<button class="chip" data-part="${esc(p)}" aria-pressed="${ts.length === P.topics.size && ts.every(t => P.topics.has(t))}">${esc(p.split(' · ')[0])}</button>`; }).join('');
-    const summary = `${P.topics.size === allTopics.length ? 'Allir flokkar' : [...P.topics].map(tname).map(esc).join(', ')}${c.levels && !(m && (m.cards || m.adapt)) ? ' · stig ' + [...P.levels].sort().join(', ') : ''}`;
-    return `<details class="filt" ${P.filtOpen ? 'open' : ''}><summary>${summary}</summary><div class="filters">
+    return `<div class="fsheet panel" id="fsheet" ${P.filtOpen ? '' : 'hidden'}><div class="filters">
       <div class="frow"><span class="eyebrow">Flokkar</span><div class="chips">${partChips}${c.topics.map(t => `<button class="chip" data-t="${t.id}" aria-pressed="${P.topics.has(t.id)}">${esc(t.label || t.name)}</button>`).join('')}<button class="chip" data-act="allt">Allir</button></div></div>
       ${c.modes ? `<div class="frow"><span class="eyebrow">Háttur</span><div class="seg">${c.modes.map(x => `<button data-mode="${x.id}" aria-pressed="${P.mode === x.id}">${x.label}</button>`).join('')}</div></div>` : ''}
       ${c.levels && !(m && (m.cards || m.adapt)) ? `<div class="frow"><span class="eyebrow">Stig</span><div class="chips">${[1, 2, 3].map(l => `<button class="chip l${l}" data-lv="${l}" aria-pressed="${P.levels.has(l)}">${l} · ${c.levels[l].name}</button>`).join('')}</div></div>` : ''}
       ${m && m.cards ? '' : `<div class="frow"><span class="eyebrow">Uppruni</span><div class="seg">${['all', ...srcs].map(s => `<button data-s="${s}" aria-pressed="${P.source === s}">${s === 'all' ? 'Allt' : esc(sourceLabel(c, s, SOURCE_LABELS))}</button>`).join('')}</div></div>`}
-      <div class="frow"><span class="eyebrow"></span><span class="hint mono">${pool().length} í pottinum</span></div>
-    </div></details>`;
+      <div class="frow"><span class="eyebrow"></span><span class="row" style="justify-content:space-between;flex:1"><span class="hint mono">${pool().length} í pottinum</span><button class="btn small" data-act="filt">Loka <kbd>Esc</kbd></button></span></div>
+    </div></div>`;
+  }
+
+  /** Stutt lýsing á valinu, undir titlinum. */
+  function summary() {
+    const m = mode();
+    if (P.review) return `${pool().length} eftir í villubankanum`;
+    return `${P.topics.size === allTopics.length ? 'Allir flokkar' : [...P.topics].map(tname).map(esc).join(', ')}${c.levels && !(m && (m.cards || m.adapt)) ? ' · stig ' + [...P.levels].sort().join(', ') : ''}`;
   }
 
   function draw() {
@@ -97,8 +104,13 @@ export function render(ctx) {
     else if (P.review === 'due') { const t = nextDue(S, c.id); body = `<div class="qcard empty">Engin villa er á tíma núna.${t ? ` Næsta verður á tíma ${fmtWhen(t)}.` : ''} <button class="btn small" data-rv="all">Æfa allar villur</button></div>`; }
     else body = `<div class="qcard empty">${P.review ? 'Villubankinn er tómur. Vel gert.' : 'Ekkert passar við valið. Veldu fleiri flokka eða stig.'}</div>`;
     const title = P.review ? 'Villurnar þínar' + (m ? ': ' + m.label.toLowerCase() : '') : m ? m.label : 'Æfing';
-    el.innerHTML = `<div class="stack"><h2>${title}</h2>${filtersHTML()}${adaptBar}${body}</div>`;
-    const fd = el.querySelector('details.filt'); if (fd) fd.addEventListener('toggle', () => { P.filtOpen = fd.open; });
+    const fbar = `<div class="fbar">
+      <a class="fback" href="#/fag/${c.id}">← <span>${c.code}</span></a>
+      <div class="ftitle"><h1>${esc(title)}</h1><span class="hint">${summary()}</span></div>
+      <span class="fprog">${dotsHTML(P.res, { current: !!P.player && !(m && m.cards) })}${P.n ? `<span class="hint mono">${F.n(Math.round(P.c * 10) / 10)}/${P.n}</span>` : ''}</span>
+      ${P.review ? '' : `<button class="btn small" data-act="filt" aria-expanded="${P.filtOpen}" aria-controls="fsheet">Sía</button>`}
+    </div>`;
+    el.innerHTML = `<div class="stack focus-sheet">${fbar}${filtersHTML()}${adaptBar}${body}</div>`;
     if (P.player) P.player.afterDraw(el);
   }
 
@@ -109,16 +121,23 @@ export function render(ctx) {
     if (chip) { const t = chip.dataset.t; if (P.topics.has(t) && P.topics.size > 1) P.topics.delete(t); else P.topics.add(t); next(); return draw(); }
     const pc = e.target.closest('.chip[data-part]'); if (pc) { P.topics = new Set(c.topics.filter(t => t.part === pc.dataset.part).map(t => t.id)); next(); return draw(); }
     const lv = e.target.closest('[data-lv]'); if (lv) { const l = +lv.dataset.lv; if (P.levels.has(l) && P.levels.size > 1) P.levels.delete(l); else P.levels.add(l); next(); return draw(); }
-    const md = e.target.closest('[data-mode]'); if (md) { P.mode = md.dataset.mode; P.source = 'all'; P.review = null; P.n = P.c = 0; next(); return draw(); }
+    const md = e.target.closest('[data-mode]'); if (md) { P.mode = md.dataset.mode; P.source = 'all'; P.review = null; P.n = P.c = 0; P.res = []; next(); return draw(); }
     const seg = e.target.closest('.seg button[data-s]'); if (seg) { P.source = seg.dataset.s; next(); return draw(); }
     const a = e.target.closest('[data-act]'); if (!a || a.disabled) return;
+    if (a.dataset.act === 'filt') { P.filtOpen = !P.filtOpen; draw(); if (P.filtOpen) el.querySelector('#fsheet button')?.focus(); else el.querySelector('.fbar [data-act="filt"]')?.focus(); return; }
     if (a.dataset.act === 'allt') { P.topics = new Set(allTopics); next(); draw(); }
     if (a.dataset.act === 'exitrev') { P.review = null; next(); draw(); }
   };
   el.oninput = e => { if (P.player) P.player.input(e); };
 
+  setFocus(true);
   if (!P.player || P.player.st.done) next(); else P.player.bind(hooks());
   draw();
 
-  return { onKey(e) { if (P.player) P.player.key(e); } };
+  return {
+    onKey(e) {
+      if (e.key === 'Escape' && P.filtOpen) { e.preventDefault(); P.filtOpen = false; draw(); el.querySelector('.fbar [data-act="filt"]')?.focus(); return; }
+      if (P.player) P.player.key(e);
+    }
+  };
 }

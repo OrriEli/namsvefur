@@ -309,3 +309,7 @@ HAG101G	Hagræn stærðfræði I	Mið. 25 nóv. 2026 kl. 13:30 - 16:30
 ### Endurhönnun, áfangi 4 (18. nóv.): fagsíður sem herbergi
 
 Fagsíðan ber lit fagsins (`--cc`): hausinn er tónaður með línu í lit fagsins efst, stóru heiti með letrinu Newsreader og dögum í próf sem stórri tölu í lit fagsins. „séð 0/345 · rétt –“ er orðið að tveimur mjóum stikum (`progressBars`, líka á Fögum). Stikur, valdir hnappar og flokkamerki (`.ttag`) innan fagsíðu nota lit fagsins; texti á lituðum fleti helst í bleklit svo litaskil haldist. Forgangsröð HAG101G sýnir sjálfsmat og vægi á prófi sem tvær litlar stikur.
+
+### Endurhönnun, áfangi 5 (18. nóv.): einbeitingarhamur
+
+Æfing, blönduð upprifjun og próf á tíma (líka sjálfsmat eftir skil) eru í einbeitingarham (`data-focus` á `<html>`, `setFocus` í `ui/dom.js`): valmynd, haus fagsins og flipar hverfa og blaðið er fyrir miðju, um 700 px. Efst er mjó stika: til baka (fagið eða Í dag), titill og val, framvinda lotunnar sem punktar (fylltur = rétt, rauður hringur = rangt) og hnappurinn „Sía“; Esc lokar síunum. Tími prófs og lærdómsblokkar er mjó lína efst. TeX í spurningum er 1,15 em og lausnarskref eru neðar og hógværari. Flýtilyklarnir (H, N, A, R/V, V/H/G, 1–9, Enter) eru óbreyttir.

@@ -266,3 +266,48 @@ kbd{border-radius:var(--radius-sm)}
 .prio{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
 .prio li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--rule);border-radius:var(--radius-md);padding:8px 12px}
 .prio .pn{font-family:var(--font-serif);color:var(--ink-2);font-size:var(--fs-md)}
+
+/* ===================== Einbeitingarhamur (æfing, upprifjun, próf á tíma) ===================== */
+/* Valmynd, haus fagsins og flipar hverfa; autt blað fyrir miðju, um 700 px. Mjó stika efst: til baka,
+   titill, framvinda lotunnar sem punktar og „Sía“. Tíminn er mjó lína efst. */
+[data-focus] .top,[data-focus] .room>.crumbs,[data-focus] .chead,[data-focus] .tabs{display:none}
+[data-focus] main{max-width:calc(var(--read-max) + 2 * max(16px, env(safe-area-inset-left, 0px)))}
+.fbar{position:sticky;top:0;z-index:4;display:flex;align-items:center;gap:var(--sp-3);padding-block:var(--sp-2);background:var(--bg);border-bottom:1px solid var(--rule)}
+.fback{display:inline-flex;align-items:center;gap:4px;min-height:44px;padding-right:var(--sp-2);color:var(--ink-2);text-decoration:none;font-size:var(--fs-sm);font-weight:600;white-space:nowrap}
+.fback:hover{color:var(--ink)}
+.ftitle{display:flex;flex-direction:column;min-width:0;flex:1}
+.ftitle h1{font-family:var(--font-serif);font-size:var(--fs-lg);font-weight:500;line-height:1.2}
+.ftitle .hint{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fprog{display:inline-flex;align-items:center;gap:var(--sp-2)}
+.dots{display:inline-flex;flex-wrap:wrap;gap:4px;max-width:220px}
+.dots i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--rule-strong);box-sizing:border-box}
+.dots i.ok{background:var(--cc,var(--good));border-color:var(--cc,var(--good))}
+.dots i.no{background:var(--bad-weak);border-color:var(--bad)}
+.dots i.cur{border-color:var(--ink);border-width:2px}
+@media (max-width:560px){.fbar{flex-wrap:wrap;row-gap:4px}.ftitle .hint{display:none}.fprog{order:3;flex-basis:100%}}
+.fsheet{position:relative}
+.fsheet[hidden]{display:none}
+[data-focus] .qcard{box-shadow:none;border-color:var(--rule);border-radius:var(--radius-lg);padding:var(--sp-6)}
+@media (max-width:560px){[data-focus] .qcard{padding:var(--sp-4)}}
+[data-focus] .qtext{font-size:var(--fs-md);line-height:1.65}
+[data-focus] .qtext .katex,[data-focus] .opt .katex,[data-focus] .exam-q .katex{font-size:1.15em}
+/* lausnarskref: neðar og hógværari en spurningin */
+[data-focus] .solhead{margin-top:var(--sp-4);padding-top:var(--sp-4);border-top:1px solid var(--rule)}
+[data-focus] .steps{gap:6px}
+[data-focus] .sstep{background:transparent;border-color:var(--rule);font-size:.95em}
+[data-focus] .sstep>header{background:transparent;padding:6px 12px}
+[data-focus] .sstep .ttl{font-weight:500;color:var(--ink-2)}
+[data-focus] .sstep.ok>header{background:transparent}
+[data-focus] .sstep.ok{border-color:color-mix(in oklab,var(--good) 55%,var(--rule))}
+[data-focus] .sstep.miss{border-color:color-mix(in oklab,var(--bad) 55%,var(--rule))}
+/* próf á tíma: tímastikan verður mjó lína efst */
+[data-focus] .timer{top:0;border-bottom:1px solid var(--rule);padding-block:6px 8px}
+[data-focus] .timer .tbar{position:absolute;left:0;right:0;top:0;height:3px;border-radius:0;min-width:0;flex:none}
+[data-focus] .timer .tbar i{border-radius:0}
+[data-focus] .timer .clock{font-size:var(--fs-md)}
+/* lærdómsblokk í gangi: mjó lína efst og stutt lína með klukku og næsta lið */
+.bbar .bline{display:none}
+[data-focus] .bbar.run{max-width:var(--read-max);background:none;border:0;border-radius:0;margin-top:0;padding:6px 0 0;font-size:var(--fs-sm)}
+[data-focus] .bbar.run .hint,[data-focus] .bbar.run [data-blk="end"]{display:none}
+[data-focus] .bbar.run .mono{font-size:var(--fs-sm)}
+[data-focus] .bbar .bline{display:block;position:fixed;top:0;left:0;height:3px;background:var(--action);z-index:10}

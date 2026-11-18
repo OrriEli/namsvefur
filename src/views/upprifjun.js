@@ -7,7 +7,7 @@ import { EXAMS } from '../config.js';
 import { entriesOf, weightedPick, instantiate } from '../engine/practice.js';
 import { daysSince, examFor } from '../engine/today.js';
 import { plural } from '../ui/format.js';
-import { esc } from '../ui/dom.js';
+import { esc, setFocus, dotsHTML } from '../ui/dom.js';
 import { createPlayer } from './player.js';
 
 const N = 10;
@@ -45,7 +45,7 @@ export function render({ app, store }) {
   }
   const hooks = () => ({
     redraw: draw,
-    tally: () => `<span class="hint mono">${R.results.filter(r => r.ok).length}/${R.results.length} rétt</span>`,
+    tally: () => '',
     onDone: (score, ok) => { R.results.push({ course: R.queue[R.i].course, score, ok }); },
     onNext: () => { if (!R.player.st.done) R.results.push({ course: R.queue[R.i].course, score: 0, ok: false, skipped: true }); R.i++; load(); draw(); window.scrollTo(0, 0); }
   });
@@ -61,10 +61,13 @@ export function render({ app, store }) {
 
   function draw() {
     const body = R.player ? R.player.html() : summary();
-    app.innerHTML = `<div class="stack">
-      <nav class="crumbs" aria-label="Brauðmolar"><a href="#/idag">Í dag</a><span aria-hidden="true">›</span><span>Upprifjun</span></nav>
-      <div class="row" style="justify-content:space-between;align-items:baseline"><h1>Blönduð upprifjun</h1><span class="mono hint">${Math.min(R.i + 1, R.queue.length)} af ${R.queue.length}</span></div>
-      <p class="muted" style="max-width:62ch">${plural(R.queue.length, 'atriði', 'atriði')} úr öllum fögum, oftast úr flokkum sem langt er síðan þú æfðir. Fagið birtist þegar þú hefur svarað: reyndu fyrst að þekkja hvers konar dæmi þetta er.</p>
+    app.innerHTML = `<div class="stack focus-sheet">
+      <div class="fbar">
+        <a class="fback" href="#/idag">← <span>Í dag</span></a>
+        <div class="ftitle"><h1>Blönduð upprifjun</h1><span class="hint">Fagið birtist þegar þú hefur svarað</span></div>
+        <span class="fprog">${dotsHTML(R.results.map(r => r.ok), { total: R.queue.length, current: !!R.player })}<span class="hint mono">${Math.min(R.i + 1, R.queue.length)} af ${R.queue.length}</span></span>
+      </div>
+      ${R.player ? `<p class="hint" style="max-width:62ch;margin:0">${plural(R.queue.length, 'atriði', 'atriði')} úr öllum fögum, oftast úr flokkum sem langt er síðan þú æfðir. Reyndu fyrst að þekkja hvers konar dæmi þetta er.</p>` : ''}
       ${body}
     </div>`;
     if (R.player) R.player.afterDraw(app);
@@ -76,6 +79,7 @@ export function render({ app, store }) {
   };
   app.oninput = e => { if (R.player) R.player.input(e); };
 
+  setFocus(true);
   if (!R || !R.player) start(); else R.player.bind(hooks());
   draw();
   return { onKey(e) { if (R.player) R.player.key(e); } };

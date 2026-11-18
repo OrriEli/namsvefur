@@ -14,14 +14,14 @@ import './ui/styles.css';
 import renderMathInElement from 'katex/contrib/auto-render';
 import { createStore } from './store/store.js';
 import { courseById } from './courses/index.js';
-import { $, setTopH } from './ui/dom.js';
+import { $, setTopH, setFocus } from './ui/dom.js';
 import * as coursesView from './views/courses.js';
 import * as courseView from './views/course.js';
 import * as progressView from './views/progress.js';
 import * as settingsView from './views/settings.js';
 import * as todayView from './views/today.js';
 import * as reviewView from './views/upprifjun.js';
-import { barHTML, barKey, clockText, advanceByTime, nextSegment, startSecond } from './views/block.js';
+import { barHTML, barKey, clockText, phaseFrac, advanceByTime, nextSegment, startSecond } from './views/block.js';
 import { dueIds } from './engine/review.js';
 import { COURSES } from './courses/index.js';
 import { redirect } from './routes.js';
@@ -68,6 +68,7 @@ function route() {
   const { parts, query } = parse();
   const app = $('#app');
   app.onclick = app.onchange = app.oninput = null;
+  setFocus(false);   // sýnin kveikja á einbeitingarham ef við á
   const ctx = { app, store, query, go: h => { location.hash = h; } };
   const course = parts[0] === 'fag' ? courseById(parts[1]) : null;
   if (course) current = courseView.render({ ...ctx, course, tab: parts[2] || 'yfirlit' });
@@ -90,6 +91,7 @@ function renderBar() {
   const el = $('#blockbar'); const key = barKey(store.state);
   if (key !== barShown) { barShown = key; el.innerHTML = barHTML(store.state); el.hidden = !key; setTopH(); }
   const clk = el.querySelector('[data-clock]'); if (clk) clk.textContent = clockText(store.state);
+  const line = el.querySelector('[data-bline]'); if (line) line.style.width = Math.round(phaseFrac(store.state) * 1000) / 10 + '%';
 }
 setInterval(() => { if (!store.state.block) return; advanceByTime(store); renderBar(); }, 1000);
 $('#blockbar').addEventListener('click', e => {

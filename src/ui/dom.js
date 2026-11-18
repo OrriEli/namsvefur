@@ -20,6 +20,25 @@ export const thinBar = (label, frac, value) => `<div class="pb"><span class="pb-
 /** „Séð“ og „Rétt“ sem tvær mjóar stikur (í stað „séð 0/345 · rétt –“). */
 export const progressBars = p => `<div class="pbars">${thinBar('Séð', p.total ? p.seen / p.total : 0, `${p.seen} af ${p.total}`)}${thinBar('Rétt', p.pct, p.pct === null ? 'eftir fyrsta svar' : `${Math.round(p.pct * 100)}%`)}</div>`;
 
+/**
+ * Einbeitingarhamur (æfing, upprifjun, próf á tíma): valmynd, haus fagsins og flipar hverfa og blaðið er
+ * fyrir miðju. Leiðsögnin slekkur á honum við hverja síðuskipti; sýnin kveikja á honum.
+ */
+export function setFocus(on) {
+  const root = document.documentElement;
+  if (root.hasAttribute('data-focus') === !!on) return;
+  root.toggleAttribute('data-focus', !!on);
+  setTopH();
+}
+
+/** Framvinda lotu sem punktar: fylltur = rétt, holur rauður = rangt, útlínur = núverandi; `total` bætir við tómum. */
+export function dotsHTML(results, { total = 0, current = true, max = 24 } = {}) {
+  const shown = results.slice(-max);
+  const rest = Math.max(0, total - results.length - (current ? 1 : 0));
+  const n = results.filter(Boolean).length;
+  return `<span class="dots" role="img" aria-label="${n} rétt af ${results.length}${total ? ` · ${total} í lotunni` : ''}">${shown.map(ok => `<i class="${ok ? 'ok' : 'no'}"></i>`).join('')}${current ? '<i class="cur"></i>' : ''}${'<i></i>'.repeat(Math.min(rest, max))}</span>`;
+}
+
 /** Hæð efstu stiku, svo tímamælir prófs festist undir henni. */
 export function setTopH() {
   const top = document.querySelector('.top');

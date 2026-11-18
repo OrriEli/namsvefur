@@ -70,6 +70,9 @@ export function blockStats(state) {
 /** Tíminn sem eftir er af núverandi helmingi eða hléi. */
 export const clockText = (state, now = Date.now()) => state.block ? fmtDur(phaseLen(state.block) - (now - state.block.phaseStart)) : '';
 
+/** Hve stór hluti núverandi helmings er liðinn (0–1): mjóa línan efst í einbeitingarham. */
+export const phaseFrac = (state, now = Date.now()) => state.block ? Math.max(0, Math.min(1, (now - state.block.phaseStart) / phaseLen(state.block))) : 0;
+
 /** Lykill sem breytist aðeins þegar stikan þarf að teiknast upp á nýtt (ekki með klukkunni). */
 export const barKey = state => state.block ? `${state.block.phase}|${state.block.idx}|${state.block.created}` : '';
 
@@ -81,7 +84,7 @@ export function barHTML(state, now = Date.now()) {
   if (B.phase === 'ready') return `<div class="bbar pause"><b>Hléið er búið</b><span class="hint">${esc(segLabel(seg))}</span><button class="btn small primary" data-blk="second">Byrja seinni hluta</button><button class="btn small" data-blk="end">Ljúka blokk</button></div>`;
   if (B.phase === 'done') { const s = blockStats(state); return `<div class="bbar done"><b>Blokkinni lokið</b><span class="hint">${s.n} svör${s.n ? ` · ${Math.round(s.c / s.n * 100)}% rétt` : ''}</span><button class="btn small" data-blk="end">Loka</button></div>`; }
   const inHalf = B.segments.filter(s => s.half === seg.half), k = inHalf.indexOf(seg) + 1;
-  return `<div class="bbar"><b>${B.phase === 'first' ? 'Fyrri hluti' : 'Seinni hluti'}</b><span class="mono">${left}</span>
+  return `<div class="bbar run"><i class="bline" data-bline style="width:${Math.round(phaseFrac(state, now) * 1000) / 10}%"></i><b>${B.phase === 'first' ? 'Fyrri hluti' : 'Seinni hluti'}</b><span class="mono">${left}</span>
     <span class="hint">Liður ${k} af ${inHalf.length}: <a href="${hrefFor(seg)}">${esc(segLabel(seg))}</a></span>
     <button class="btn small" data-blk="next">Næsti liður →</button><button class="btn small" data-blk="end">Ljúka blokk</button></div>`;
 }

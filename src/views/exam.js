@@ -5,7 +5,7 @@
 import { buildExam, finishExam, timeLeft, needsGrading, toGrade, scoreExam, breakdown, pointsOf } from '../engine/exam.js';
 import { answered, renderAnswer, renderSteps, verdictHTML, clickAnswer, inputAnswer, keyToIndex, stepTotal, ptsTxt } from '../engine/items/index.js';
 import { fmtDur, grade10, fmtWhen, durText, plural } from '../ui/format.js';
-import { esc, plain, clip, barCls, setTopH } from '../ui/dom.js';
+import { esc, plain, clip, barCls, setTopH, setFocus } from '../ui/dom.js';
 import { itemMeta, topicLabel } from './itemmeta.js';
 
 const results = new Map();   // nýjasta niðurstaða hvers fags, sýnd þar til nýtt próf hefst
@@ -35,7 +35,7 @@ export function render(ctx) {
 
   // ---------- uppsetning ----------
   function drawSetup() {
-    clearInterval(timer);
+    clearInterval(timer); setFocus(false);
     const last = S.hist.filter(h => h.course === c.id).slice(-8).reverse().map(h => `<tr><td>${esc(h.label)}</td><td class="mono">${fmtPts(h.score)}/${fmtPts(h.max)}</td><td class="mono">${grade10(h.score / (h.max || 1))}</td><td class="hint">${fmtWhen(h.at)}${h.legacy ? ' · gamla síðan' : ''}</td></tr>`).join('');
     const hist = last ? `<div class="panel"><h3 style="margin-bottom:8px">Síðustu próf</h3><div class="scroll"><table class="tt"><thead><tr><th>Próf</th><th>Stig</th><th>Einkunn</th><th></th></tr></thead><tbody>${last}</tbody></table></div></div>` : '';
     const lev = c.examFormats.find(f => f.pick.by === 'levels');
@@ -98,10 +98,11 @@ export function render(ctx) {
   }
 
   function timerBar(x, extra = '') {
-    return `<div class="timer"><span class="clock" id="clk">--:--</span><div class="tbar"><i id="tb" style="width:100%"></i></div>${extra}<button class="btn small ${x.style === 'written' ? 'primary' : ''}" data-act="submit">Skila</button></div>`;
+    return `<div class="timer"><a class="fback" href="#/fag/${c.id}" title="Prófið bíður á meðan">← <span>${c.code}</span></a><span class="clock" id="clk">--:--</span><div class="tbar"><i id="tb" style="width:100%"></i></div>${extra}<button class="btn small ${x.style === 'written' ? 'primary' : ''}" data-act="submit">Skila</button></div>`;
   }
 
   function drawOne() {
+    setFocus(true);
     const x = X(); const it = x.items[x.cur]; const r = x.ans[x.cur];
     const nAns = x.items.filter((q, i) => answered(q, x.ans[i])).length;
     const fmt = c.examFormats.find(f => f.id === x.format);
@@ -129,6 +130,7 @@ export function render(ctx) {
   }
 
   function drawWritten() {
+    setFocus(true);
     const x = X(); const tot = x.items.reduce((s, it) => s + it.w, 0);
     const fmt = c.examFormats.find(f => f.id === x.format) || {};
     const list = x.items.map((it, i) => `<div class="qcard exam-q" id="eq${i}"><div class="qmeta"><span class="row" style="gap:8px"><span class="eyebrow">Dæmi ${i + 1}</span><span class="ttag">${esc(topicLabel(c, it.topic))}</span></span><span class="wt">${fmtPts(it.w)} stig</span></div><div class="qtext">${it.q}</div></div>`).join('');
@@ -166,7 +168,7 @@ export function render(ctx) {
 
   // ---------- sjálfsmat skriflegra dæma ----------
   function drawGrade() {
-    clearInterval(timer);
+    clearInterval(timer); setFocus(true);
     const x = X(); const sc = scoreExam(c, x);
     const idx = x.items.map((it, i) => i).filter(i => x.items[i].type === 'steps');
     const marks = idx.flatMap(i => x.ans[i].mk); const left = marks.filter(v => v === null).length;
@@ -176,7 +178,7 @@ export function render(ctx) {
       <span class="eyebrow">${esc(x.label)}${x.timeout ? ' · tíminn rann út' : ''} · ${fmtDur(x.used)} notaðar</span>
       <h2>Gefðu þér stig</h2>
       <p class="muted" style="max-width:62ch">Berðu blaðið þitt saman við hvert skref og hakaðu heiðarlega. Rétt aðferð með reikningsvillu í lokin fær stig fyrir fyrri skrefin, eins og á prófinu.${idx.length < x.items.length ? ' Hin dæmin eru metin sjálfkrafa.' : ''}</p>
-      <div class="timer"><span class="hint mono">${marks.length - left}/${marks.length} skref metin</span><div class="tbar"><i style="width:${marks.length ? (marks.length - left) / marks.length * 100 : 100}%"></i></div><button class="btn small primary" data-act="finish">Ljúka yfirferð</button></div>
+      <div class="timer"><a class="fback" href="#/fag/${c.id}">← <span>${c.code}</span></a><span class="hint mono">${marks.length - left}/${marks.length} skref metin</span><div class="tbar"><i style="width:${marks.length ? (marks.length - left) / marks.length * 100 : 100}%"></i></div><button class="btn small primary" data-act="finish">Ljúka yfirferð</button></div>
       ${list}
       <button class="btn primary" data-act="finish" style="width:fit-content">Ljúka yfirferð</button>
     </div>`;
@@ -185,6 +187,7 @@ export function render(ctx) {
 
   // ---------- niðurstaða ----------
   function drawResult() {
+    setFocus(false);
     const res = results.get(c.id);
     const byT = breakdown(res, it => it.topic);
     const tbl = (by, label) => Object.keys(by).sort((a, b) => by[a].pts / by[a].max - by[b].pts / by[b].max).map(k => `<tr><td>${label(k)}</td><td class="mono">${fmtPts(by[k].pts)}/${fmtPts(by[k].max)}</td><td style="width:40%"><div class="bar ${barCls(by[k].pts / by[k].max)}"><i style="width:${by[k].pts / by[k].max * 100}%"></i></div></td></tr>`).join('');
