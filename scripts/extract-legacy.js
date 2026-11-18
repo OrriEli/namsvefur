@@ -11,6 +11,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadLegacy, renderToHtml, inlineScripts, clickApp } from './lib/load-legacy.js';
 import hag101gUpdates from '../src/courses/updates/hag101g.js';
+import hag108gUpdates from '../src/courses/updates/hag108g.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'src', 'courses');
@@ -146,7 +147,7 @@ function planDay(d) {
 }
 
 // ---------- breytingar ofan á gömlu síðurnar (src/courses/updates/) ----------
-const UPDATES = { hag101g: hag101gUpdates };
+export const UPDATES = { hag101g: hag101gUpdates, hag108g: hag108gUpdates };
 function applyUpdates(id, course) {
   const u = UPDATES[id]; if (!u) return course;
   const out = { ...course };
@@ -156,6 +157,16 @@ function applyUpdates(id, course) {
   if (u.noteInsert) {
     const note = must(course.examInfo.note && course.examInfo.note.includes(u.noteInsert.before) && course.examInfo.note, 'staðinn fyrir nýju setninguna í skýringunni');
     out.examInfo = { ...course.examInfo, note: note.replace(u.noteInsert.before, u.noteInsert.text + u.noteInsert.before) };
+  }
+  // ný atriði (millilagið bætir þeim aftan við atriðin úr gömlu síðunni), prófsnið, prófupplýsingar og Blaðið
+  if (u.items) out.extraItems = u.items;
+  if (u.examFormats) out.examFormats = [...u.examFormats.prepend, ...course.examFormats.map(f => ({ ...f, ...(u.examFormats.edit || {})[f.id] }))];
+  if (u.examInfo) out.examInfo = { ...out.examInfo, ...u.examInfo };
+  if (u.sheetSections) out.sheet = { ...course.sheet, sections: [...u.sheetSections.prepend, ...course.sheet.sections] };
+  for (const r of u.replace || []) {
+    must(out.examInfo.callout.includes(r.from) && out.sheet.foot.includes(r.from), `„${r.from}“ í prófupplýsingum og á Blaðinu`);
+    out.examInfo = { ...out.examInfo, callout: out.examInfo.callout.replace(r.from, r.to) };
+    out.sheet = { ...out.sheet, foot: out.sheet.foot.replace(r.from, r.to) };
   }
   return out;
 }

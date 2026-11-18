@@ -31,6 +31,7 @@ export default function adapt(meta, L) {
     f: l => genBody(retry(() => g.f(l)))
   }));
 
+  const { extraItems = [], ...rest } = meta;   // dæmi úr src/courses/updates/ (HAG108G: gömlu prófin)
   const sheet = L.A4_HTML ? { ...meta.sheet, a4: { ...meta.sheet.a4, html: L.A4_HTML.join('') } } : meta.sheet;
-  return { ...meta, sheet, items, gens };
+  return { ...rest, sheet, items: [...items, ...extraItems], gens };
 }

@@ -37,7 +37,9 @@ export function pickExam(course, format, state, opts = {}, rnd = Math.random) {
   if (p.by === 'blueprint') {
     const used = [];
     return p.sections.map(sec => {
-      const pool = all.filter(e => sec.topics.includes(e.topic) && !used.includes(e.gid) && (p.gensOnly ? e.kind === 'gen' : (e.kind === 'gen' || e.points >= p.minPoints)));
+      // sæti með föstum lista (HAG108G: sama dæmi úr fjórum prófum) eða flokkum (HAG101G)
+      const pool = sec.ids ? all.filter(e => sec.ids.includes(e.key))
+        : all.filter(e => sec.topics.includes(e.topic) && !used.includes(e.gid) && (p.gensOnly ? e.kind === 'gen' : (e.kind === 'gen' || e.points >= p.minPoints)));
       const e = weightedPick(pool, [], state, rnd); used.push(e.gid);
       return { gid: e.gid, w: sec.weight };
     });
@@ -46,14 +48,14 @@ export function pickExam(course, format, state, opts = {}, rnd = Math.random) {
   throw new Error(`Óþekkt prófsnið ${p.by}`);
 }
 
-// Blandað próf (HAG106G, HAG108G): skipting á stig, dreift á fyrirlestra í hring, mest ⌈n₃/3⌉ skrifleg dæmi á
+// Sérsniðið æfingapróf (HAG106G, HAG108G): skipting á stig, dreift á fyrirlestra í hring, mest ⌈n₃/3⌉ skrifleg dæmi á
 // stigi 3, lágmark R-spurninga ef R-fyrirlesturinn er valinn, og skýringarspjöld aftast.
 function pickLevels(course, p, state, opts, rnd) {
   const groups = opts.groups || course.topics.map(t => t.id);
   const len = p.lengths.find(l => l.id === (opts.len || p.defaultLength)) || p.lengths[0];
   const w = (p.mixes.find(m => m.id === opts.mix) || p.mixes[0]).w;
   const per = w.map(x => Math.round(len.n * x)); per[1] += len.n - per.reduce((a, b) => a + b, 0);
-  const all = entriesOf(course).filter(e => e.type !== 'card' && groups.includes(e.topic));
+  const all = entriesOf(course).filter(e => e.type !== 'card' && !e.paper && groups.includes(e.topic));   // heil gömul prófdæmi eru í eigin prófsniðum
   const byGid = Object.fromEntries(all.map(e => [e.gid, e]));
   const isStep = e => e.type === 'steps';
   let keys = [];

@@ -16,7 +16,7 @@ export function formatMeta(c, f) {
   const p = f.pick;
   const n = p.by === 'quota' ? Object.values(p.quota).reduce((a, b) => a + b, 0) : p.by === 'fixed' ? p.ids.length : p.by === 'blueprint' ? p.sections.length : p.by === 'levels' ? p.lengths.find(l => l.id === p.defaultLength).n : p.n;
   const min = f.minutes || (p.lengths && p.lengths.find(l => l.id === p.defaultLength).minutes);
-  return `${c.engine === 'written' ? `${n} dæmi` : plural(n, 'spurning', 'spurningar')} · ${durText(min)}`;
+  return `${c.engine === 'written' || f.style === 'written' ? `${n} dæmi` : plural(n, 'spurning', 'spurningar')} · ${durText(min)}`;
 }
 
 const fmtPts = v => ptsTxt(v);
@@ -39,20 +39,23 @@ export function render(ctx) {
     const last = S.hist.filter(h => h.course === c.id).slice(-8).reverse().map(h => `<tr><td>${esc(h.label)}</td><td class="mono">${fmtPts(h.score)}/${fmtPts(h.max)}</td><td class="mono">${grade10(h.score / (h.max || 1))}</td><td class="hint">${fmtWhen(h.at)}${h.legacy ? ' · gamla síðan' : ''}</td></tr>`).join('');
     const hist = last ? `<div class="panel"><h3 style="margin-bottom:8px">Síðustu próf</h3><div class="scroll"><table class="tt"><thead><tr><th>Próf</th><th>Stig</th><th>Einkunn</th><th></th></tr></thead><tbody>${last}</tbody></table></div></div>` : '';
     const lev = c.examFormats.find(f => f.pick.by === 'levels');
-    if (lev) return drawLevelsSetup(lev, hist);
+    const fixed = c.examFormats.filter(f => f.pick.by !== 'levels');
+    const cards = fixed.length ? `<div class="actions">${fixed.map((f, i) => `<button class="action ${i === 0 ? 'main' : ''}" data-k="${f.id}"><h3>${esc(f.name)} <span class="mono">${formatMeta(c, f)}</span></h3><p>${f.desc}</p></button>`).join('')}</div>` : '';
     const intro = c.examFormats[0].style === 'written'
       ? 'Eins og á prófinu: dæmin birtast öll í einu, þú skrifar á blað og skilar þegar tíminn er liðinn eða þú ert búinn. Þá birtast lausnirnar og þú gefur þér stig skref fyrir skref.'
       : 'Eins og í Inspera: þú getur flakkað fram og til baka og merkt spurningar. Þú sérð ekki hvað er rétt fyrr en þú skilar. Röng svör fara í villubankann.' + (c.items.some(i => i.pts) ? ' Stig eru gefin eftir gerð og hlutastig fást fyrir hluta af réttu svari.' : '');
+    if (lev) return drawLevelsSetup(lev, hist, fixed.length ? `<p class="muted" style="max-width:62ch">${intro}</p>${cards}` : '');
     el.innerHTML = `<div class="stack">
       <h2>Próf á tíma</h2>
       <p class="muted" style="max-width:62ch">${intro}</p>
-      <div class="actions">${c.examFormats.map((f, i) => `<button class="action ${i === 0 ? 'main' : ''}" data-k="${f.id}"><h3>${esc(f.name)} <span class="mono">${formatMeta(c, f)}</span></h3><p>${f.desc}</p></button>`).join('')}</div>
+      ${cards}
       ${hist}
     </div>`;
     setupClick = e => { const b = e.target.closest('[data-k]'); if (b) start(b.dataset.k); };
   }
 
-  function drawLevelsSetup(f, hist) {
+  // Sérsniðið æfingapróf: fyrirlestrar, blanda og lengd. Fög með gömul próf (HAG108G) sýna þau fyrst í `before`.
+  function drawLevelsSetup(f, hist, before = '') {
     const p = f.pick;
     const XC = setups.get(c.id) || { groups: new Set(c.topics.map(t => t.id)), mix: p.mixes[0].id, len: p.defaultLength, explain: p.explain };
     setups.set(c.id, XC);
@@ -60,6 +63,7 @@ export function render(ctx) {
     const rNote = p.rShare && XC.groups.has(p.rShare.topic) ? ` · minnst ${Math.ceil(p.rShare.share * len.n)} R-spurningar` : '';
     el.innerHTML = `<div class="stack">
       <h2>Próf á tíma</h2>
+      ${before}${before ? `<h3 style="margin-top:8px">${esc(f.name)}</h3>` : ''}
       <p class="muted" style="max-width:64ch">${esc(f.desc)} Hér er blandað próf sjálfgefið: krossar, tölusvör og skrifleg dæmi. Þú getur flakkað og merkt dæmi. Lausnir birtast eftir skil; skriflegu dæmin gefur þú þér stig fyrir sjálfur í yfirferðinni.</p>
       <div class="panel filters">
         <div class="frow"><span class="eyebrow">Fyrirlestrar</span><div class="chips">${c.topics.map(t => `<button class="chip" data-xg="${t.id}" aria-pressed="${XC.groups.has(t.id)}">${esc(t.label || t.id)}</button>`).join('')}<button class="chip" data-act="xall">Allir</button></div></div>
@@ -71,6 +75,7 @@ export function render(ctx) {
       ${hist}
     </div>`;
     setupClick = e => {
+      const k = e.target.closest('[data-k]'); if (k) return start(k.dataset.k);
       const g = e.target.closest('[data-xg]'); if (g) { const id = g.dataset.xg; if (XC.groups.has(id) && XC.groups.size > 1) XC.groups.delete(id); else XC.groups.add(id); return drawSetup(); }
       const m = e.target.closest('[data-mix]'); if (m) { XC.mix = m.dataset.mix; return drawSetup(); }
       const l = e.target.closest('[data-len]'); if (l) { XC.len = l.dataset.len; return drawSetup(); }
@@ -125,10 +130,11 @@ export function render(ctx) {
 
   function drawWritten() {
     const x = X(); const tot = x.items.reduce((s, it) => s + it.w, 0);
-    const list = x.items.map((it, i) => `<div class="qcard exam-q" id="eq${i}"><div class="qmeta"><span class="eyebrow">Dæmi ${i + 1} · ${esc(topicLabel(c, it.topic))}</span><span class="wt">${it.w} stig</span></div><div class="qtext">${it.q}</div></div>`).join('');
+    const fmt = c.examFormats.find(f => f.id === x.format) || {};
+    const list = x.items.map((it, i) => `<div class="qcard exam-q" id="eq${i}"><div class="qmeta"><span class="eyebrow">Dæmi ${i + 1} · ${esc(topicLabel(c, it.topic))}</span><span class="wt">${fmtPts(it.w)} stig</span></div><div class="qtext">${it.q}</div></div>`).join('');
     el.innerHTML = `<div class="stack">
       ${timerBar(x)}
-      <p class="notice">Skrifaðu allar lausnir á blað með millireikningum. Engin reiknivél. ${esc(x.label)}, ${x.items.length} dæmi, ${tot} stig.</p>
+      <p class="notice">${esc(fmt.notice || 'Skrifaðu allar lausnir á blað með millireikningum. Engin reiknivél.')} ${esc(x.label)}, ${x.items.length} dæmi, ${fmtPts(tot)} stig.</p>
       ${list}
       <div class="row"><button class="btn primary" data-act="submit">Skila og fara yfir</button><button class="btn small" data-act="quit">Hætta við prófið</button></div>
     </div>`;

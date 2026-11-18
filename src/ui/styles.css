@@ -77,6 +77,7 @@ kbd{border-radius:var(--radius-sm)}
 .action:hover{border-color:var(--action)}
 .action.main{background:var(--action);border-color:var(--action);color:var(--on-action)}
 .action.main p{color:var(--on-action);opacity:.9}
+.action.main h3,.action.main h3 *{color:var(--on-action)}
 .qcard,.opt,.f,pre.code,.sheet section,.step,details.rv,.grid button,.ans-in,.ninp,.numrow input,.note-in,.flow span,.conf,
 .mx .cell,.flash,.mrow,.mseg button,.sstep,.notice,.sheet .rule,.sheet details.ex,.trap,ul.traps,textarea.scratch,.stp,
 .slideerr,.unconf,.callout,input[type="time"],.wrow{border-radius:var(--radius-md)}

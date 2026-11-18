@@ -535,7 +535,7 @@ Orri uppfærði allar fimm gömlu síðurnar fyrir lokaprófin og bað um að ve
 | `quota` | `quota: {flokkur: fjöldi}` | 103 (*Fullt lokapróf* 50, *Seinni hlutinn* 20), 107 (*Lokapróf* 48, *Hálft*, *Hluti 1–3*) |
 | `fixed` | `ids: string[]`; í skriflegu sniði gildir `examWeight` hvers dæmis | 103 (*Lokapróf 2024*, *2025*), 101 (*Lokapróf 2023*, *2025*, *Miðannarpróf 2025*) |
 | `gens` | `n` | 103, 107 (*Reikningapróf* 15) |
-| `blueprint` | `sections: [{topics, weight}]`, `minPoints`, `gensOnly?` | 101 (*Blandað*, *Rafalapróf*: 7 hlutar, 100 stig) |
+| `blueprint` | `sections: [{topics, weight}]` eða `[{ids, weight}]`, `minPoints`, `gensOnly?` | 101 (*Blandað*, *Rafalapróf*: 7 hlutar, 100 stig), 108 (*Blandað lokapróf*: 15 sæti, hvert með sama dæmi úr fjórum gömlum prófum) |
 | `levels` | `mixes`, `lengths`, `defaultLength`, `explain`, `stepCapL3`, `points`, `rShare?` | 106, 108 |
 
 Samsetning, fjöldi og tími hvers prófsniðs eru lesin með því að keyra `buildExam()` gömlu síðunnar í útdrættinum; `tests/exam.test.js` ber hvert snið saman við hana.
@@ -630,7 +630,7 @@ Sami innflutningur tvisvar breytir engu í seinna skiptið.
 
 ## HAG101G 17. nóv.: sjálfsmat, forgangsröð og ný áætlun
 
-Breytingarnar voru gerðar í sjálfstæðu útgáfu HAG101G-síðunnar. Gamla síðan í `legacy/` er skrifvarin, svo þær eru í `src/courses/updates/hag101g.js` og `scripts/extract-legacy.js` (`applyUpdates`) setur þær ofan á það sem lesið er úr henni. Hin fögin hafa enga slíka skrá.
+Breytingarnar voru gerðar í sjálfstæðu útgáfu HAG101G-síðunnar. Gamla síðan í `legacy/` er skrifvarin, svo þær eru í `src/courses/updates/hag101g.js` og `scripts/extract-legacy.js` (`applyUpdates`) setur þær ofan á það sem lesið er úr henni. HAG108G hefur líka slíka skrá (sjá neðar); hin fögin ekki.
 
 ### Ný svið á `Course` (aðeins HAG101G)
 
@@ -652,3 +652,15 @@ Breytingarnar voru gerðar í sjálfstæðu útgáfu HAG101G-síðunnar. Gamla s
 
 `state.settings.self[fag] = {v: {kafli: 0–10 | null}, at: '17. nóv.', ts}`. Upphafsgildin eru sett inn ef ekkert er vistað (`ts = 0`). Breyting á Blaðinu vistast strax, klemmd á 0–10, með dagsetningu og tíma. Við sameiningu útfluttra gagna gildir það mat sem var breytt síðast. Úr vistun sjálfstæðu síðunnar (`self`, `selfAt`) flyst matið inn nema því hafi verið breytt hér.
 
+
+## HAG108G 18. nóv.: gömul próf
+
+Fjögur gömul próf voru birt: lokapróf des. 2024 og des. 2025 og endurtökupróf jan. 2025 og jan. 2026. Þau eru í `src/courses/updates/hag108g.js`, sem `applyUpdates` setur ofan á gömlu síðuna:
+
+| Breyting | Efni |
+| --- | --- |
+| `extraItems` → `items` | 60 skrifleg dæmi (`steps`, `source: 'old'`, stig 2) með `paper` ('D24', 'J25', 'D25', 'J26') og `examWeight`; millilagið (`adapters/lecture.js`) bætir þeim aftan við atriðin úr gömlu síðunni. Prófin 2025–26 gefa ekki vægi; notað er vægi 2024. |
+| `examFormats` | *Blandað lokapróf* (`blueprint` með `ids`) og prófin fjögur (`fixed`) fremst, öll `written` á 180 mín. með `notice` um leyfð hjálpargögn. Gamla sniðið heitir nú *Sérsniðið æfingapróf* og tekur ekki dæmi með `paper`. |
+| `examInfo`, Blaðið | Sniðið er ekki lengur óstaðfest; nýr kafli fremst á Blaðinu (`hag108g-P`) með sætunum 15, vægi eftir fyrirlestrum og gildrum úr prófunum. |
+
+Tölurnar í lausnunum voru staðfestar í R. `tests/extract.test.js` ber fagið saman við gömlu síðuna að frádregnum þessum viðbótum; `tests/hag108g-old.test.js` prófar viðbæturnar.

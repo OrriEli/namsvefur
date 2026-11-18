@@ -17,6 +17,7 @@ import { hasSelf, byPriority } from './self.js';
  *  @property {boolean} quick
  *  @property {boolean} r           R-spurning (HAG108G)
  *  @property {number} [points]     heildarstig skrefadæmis
+ *  @property {string} [paper]      gamalt próf sem dæmið kemur úr (HAG108G: 'D24', 'J25', …)
  */
 
 const cache = new WeakMap();
@@ -25,7 +26,7 @@ const cache = new WeakMap();
 export function entriesOf(course) {
   if (cache.has(course)) return cache.get(course);
   const items = course.items.map(it => ({ gid: `${course.id}:${it.id}`, key: it.id, course: course.id, topic: it.topic, level: it.level, source: it.source, kind: 'item', type: it.type,
-    quick: !!it.quick, r: !!it.r, points: it.steps ? it.steps.reduce((s, x) => s + x.p, 0) : undefined }));
+    quick: !!it.quick, r: !!it.r, points: it.steps ? it.steps.reduce((s, x) => s + x.p, 0) : undefined, paper: it.paper }));
   const gens = course.gens.flatMap(g => (g.levels || [undefined]).map(l => {
     const key = l === undefined ? g.id : `${g.id}@${l}`;
     return { gid: `${course.id}:${key}`, key, course: course.id, topic: g.topic, level: l, source: 'gen', kind: 'gen', type: 'gen', types: g.types,

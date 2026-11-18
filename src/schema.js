@@ -46,6 +46,7 @@
  *  steps
  *  @property {Step[]} [steps]
  *  @property {number} [examWeight]
+ *  @property {string} [paper]       gamalt próf sem dæmið kemur úr; ekki í sérsniðnu æfingaprófi
  *  card
  *  @property {string[]} [keys]
  *  sjaldgæf
@@ -76,6 +77,7 @@
  *  @property {'inspera'|'written'|'mixed'} style
  *  @property {number} [minutes]
  *  @property {{by:string}} pick     quota | fixed | gens | blueprint | levels (sjá docs/schema.md)
+ *  @property {string} [notice]      texti efst í skriflegu prófi (hjálpargögn); sjálfgefið „Engin reiknivél.“
  */
 
 /** @typedef {Object} SheetSection  @property {string} id  @property {string} n  @property {string} title  @property {string} html */
@@ -206,7 +208,11 @@ export function validateCourse(c) {
     if (!f.minutes && p.by !== 'levels') err.push(`prófsnið ${f.id}: enginn tími`);
     if (p.by === 'quota') for (const t of Object.keys(p.quota)) if (!topics.has(t)) err.push(`prófsnið ${f.id}: óþekktur flokkur ${t}`);
     if (p.by === 'fixed') for (const id of p.ids) if (!ids.has(id)) err.push(`prófsnið ${f.id}: óþekkt atriði ${id}`);
-    if (p.by === 'blueprint') for (const s of p.sections) for (const t of s.topics) if (!topics.has(t)) err.push(`prófsnið ${f.id}: óþekktur flokkur ${t}`);
+    if (p.by === 'blueprint') for (const s of p.sections) {
+      for (const t of s.topics || []) if (!topics.has(t)) err.push(`prófsnið ${f.id}: óþekktur flokkur ${t}`);
+      for (const id of s.ids || []) if (!ids.has(id)) err.push(`prófsnið ${f.id}: óþekkt atriði ${id}`);
+      if (!s.topics && !(s.ids && s.ids.length)) err.push(`prófsnið ${f.id}: sæti án flokka og atriða`);
+    }
   }
   if (!c.sheet || !isStr(c.sheet.head) || !Array.isArray(c.sheet.sections) || !c.sheet.sections.length) err.push('vantar Blaðið');
   if (!isNum(c.passScore) || c.passScore <= 0 || c.passScore > 1) err.push('ógilt passScore');

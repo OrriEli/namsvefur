@@ -3,7 +3,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { extract, stylesheets } from '../scripts/extract-legacy.js';
+import { extract, stylesheets, UPDATES } from '../scripts/extract-legacy.js';
 import { renderToHtml } from '../scripts/lib/load-legacy.js';
 import { entriesOf } from '../src/engine/practice.js';
 import { courses, legacy, inventoryCounts, squash, tally, ROOT } from './helpers.js';
@@ -11,7 +11,9 @@ import { courses, legacy, inventoryCounts, squash, tally, ROOT } from './helpers
 const counts = inventoryCounts();
 const SOURCE_OF = { old: 'old', new: 'new', blad: 'sheet', db: 'sheet', hv: 'sheet', gl: 'slides', mid: 'old', ny: 'new' };
 
-describe.each(courses.map(c => [c.id, c]))('%s', (id, c) => {
+// Gömlu síðurnar + breytingarnar í src/courses/updates/ = fögin. Hér er borið saman við gömlu síðurnar, svo það
+// sem breytingarnar bæta við (HAG108G: gömlu prófin og kaflinn um snið prófsins) er tekið frá.
+describe.each(courses.map(c => [c.id, { ...c, items: c.items.filter(i => !i.paper), sheet: { ...c.sheet, sections: c.sheet.sections.filter(s => !((UPDATES[c.id] || {}).sheetSections || { prepend: [] }).prepend.some(p => p.id === s.id)) } }]))('%s', (id, c) => {
   const V = legacy(id).vars;
 
   it('fjöldi atriða, rafala, færslna og kafla = úttektin', () => {
@@ -20,7 +22,7 @@ describe.each(courses.map(c => [c.id, c]))('%s', (id, c) => {
     expect(tally(c.items.map(i => i.type))).toEqual(k.byType);
     expect(tally(c.items.filter(i => !i.quick).map(i => i.source))).toEqual(k.bySource);
     expect(c.gens.length).toBe(k.gens);
-    expect(entriesOf(c).filter(e => e.type !== 'card').length).toBe(k.entries);
+    expect(entriesOf(c).filter(e => e.type !== 'card' && !e.paper).length).toBe(k.entries);
     expect(c.sheet.sections.length).toBe(k.sheetSections);
   });
 
@@ -73,7 +75,8 @@ describe.each(courses.map(c => [c.id, c]))('%s', (id, c) => {
 
   it('Blaðið sett saman = það sem gamla síðan teiknaði', () => {
     const html = `<div class="sheet">${c.sheet.head}${c.sheet.sections.map(s => s.html).join('')}${c.sheet.foot || ''}</div>`;
-    expect(squash(html)).toBe(squash(renderToHtml(legacy(id), 'renderSheet')));
+    const old = (UPDATES[id] && UPDATES[id].replace || []).reduce((h, r) => h.replace(r.from, r.to), renderToHtml(legacy(id), 'renderSheet'));
+    expect(squash(html)).toBe(squash(old));
   });
 
   it('skrárnar í src/courses eru óbreyttar frá útdrættinum', async () => {

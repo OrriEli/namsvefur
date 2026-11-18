@@ -30,7 +30,10 @@ export function render({ el, course: c, store, go }) {
 
   // ---------- inngangur ----------
   let intro;
-  if (lecture) intro = `${plural(count(e => e.kind === 'item' && e.type !== 'card'), 'fast dæmi', 'föst dæmi')}, ${plural(count(e => e.type === 'card'), 'skilningsspjald', 'skilningsspjöld')} og ${plural(c.gens.length, 'rafall', 'rafalar')} sem búa til ný dæmi á þremur erfiðleikastigum.`;
+  if (lecture) {
+    const papers = new Set(entriesOf(c).filter(e => e.paper).map(e => e.paper)).size, nOld = count(e => !!e.paper);
+    intro = `${plural(count(e => e.kind === 'item' && e.type !== 'card'), 'fast dæmi', 'föst dæmi')}${nOld ? ` (þar af ${nOld} úr ${papers} gömlum prófum)` : ''}, ${plural(count(e => e.type === 'card'), 'skilningsspjald', 'skilningsspjöld')} og ${plural(c.gens.length, 'rafall', 'rafalar')} sem búa til ný dæmi á þremur erfiðleikastigum.`;
+  }
   else if (written) intro = `${plural(count(e => e.kind === 'item' && !e.quick), 'skriflegt dæmi', 'skrifleg dæmi')} með fullum lausnum, ${plural(count(e => e.kind === 'gen' && !e.quick), 'rafall', 'rafalar')} sem gefa ný dæmi með nýjum tölum og ${plural(count(e => e.kind === 'item' && e.quick), 'hraðspurning', 'hraðspurningar')}. Þú leysir á blað og gefur þér stig skref fyrir skref.`;
   else intro = [count(e => e.source === 'old') && `${plural(count(e => e.source === 'old'), 'spurning', 'spurningar')} úr gömlum prófum`, count(e => e.source === 'new') && plural(count(e => e.source === 'new'), 'ný spurning', 'nýjar spurningar'), c.gens.length && `${plural(c.gens.length, 'tegund', 'tegundir')} reikningsdæma sem fá nýjar tölur í hvert sinn`].filter(Boolean).join(', ') + '.';
 
