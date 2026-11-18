@@ -52,12 +52,20 @@ const MON_SHORT = ['jan.', 'feb.', 'mars', 'apr.', 'maí', 'júní', 'júlí', '
 const dayText = d => { const t = new Date(d + 'T12:00:00Z'); return `${DAYS_SHORT[t.getUTCDay()]} ${t.getUTCDate()}. ${MON_SHORT[t.getUTCMonth()]}`; };
 const byId = id => COURSES.find(c => c.id === id);
 
+// Hreyfing 2 af 3: þegar dagurinn í dag er búinn fyllist reiturinn einu sinni (fyrsta sinn sem Í dag sést eftir
+// það). Hvenær það var sýnt er geymt í sessionStorage, ekki með framvindunni.
+const FILLED = 'namsvefur-dagur-fylltur';
+function fillOnce(date) {
+  try { if (sessionStorage.getItem(FILLED) === date) return false; sessionStorage.setItem(FILLED, date); return true; } catch { return false; }
+}
+
 /** Dagaröðin: einn reitur á dag, prófdagar hærri, dagurinn í dag merktur, búnir dagar fylltir. */
 function stripHTML(strip) {
+  const fillToday = !!(strip.todayDay && strip.todayDay.done && !strip.todayDay.exam && fillOnce(strip.todayDay.date));
   const cells = strip.days.map(d => {
     const c = byId(d.course), st = d.stripe && byId(d.stripe);
     const label = `${dayText(d.date)}: ${c.code}${d.exam ? ' lokapróf' : ''}${st ? ` (líka ${st.code})` : ''}${d.today ? ', í dag' : ''}${d.done ? ', lokið' : d.past ? ', ekki lokið' : ''}`;
-    return `<li class="sday ${d.exam ? 'exam' : ''} ${d.done ? 'done' : ''} ${d.today ? 'now' : ''} ${d.past && !d.done ? 'missed' : ''}" style="--cc:var(${c.color})${st ? `;--sc:var(${st.color})` : ''}" title="${esc(label)}"><span class="vh">${esc(label)}</span>${st ? '<i class="stripe"></i>' : ''}</li>`;
+    return `<li class="sday ${d.exam ? 'exam' : ''} ${d.done ? 'done' : ''} ${d.today ? 'now' : ''} ${d.today && fillToday ? 'fillin' : ''} ${d.past && !d.done ? 'missed' : ''}" style="--cc:var(${c.color})${st ? `;--sc:var(${st.color})` : ''}" title="${esc(label)}"><span class="vh">${esc(label)}</span>${st ? '<i class="stripe"></i>' : ''}</li>`;
   }).join('');
   const tbd = EXAMS.filter(x => !x.at && x.kind === 'loka').map(x => { const c = byId(x.course); return `<span class="sx tbd" style="--cc:var(${c.color})"><i></i>${c.code} óstaðfest</span>`; }).join('');
   const exams = strip.days.filter(d => d.exam).map(d => { const c = byId(d.course); return `<span class="sx" style="--cc:var(${c.color})"><i></i>${c.code} ${dayText(d.date)}</span>`; }).join('') + tbd;

@@ -5,6 +5,7 @@
 // í onDone(score, ok) og onNext().
 
 import { recordAnswer } from '../engine/review.js';
+import { topicStats } from '../engine/practice.js';
 import { blank, answered, grade, renderAnswer, renderSteps, verdictHTML, clickAnswer, inputAnswer, keyToIndex, stepTotal } from '../engine/items/index.js';
 import { logActivity } from '../store/store.js';
 import { esc } from '../ui/dom.js';
@@ -27,7 +28,10 @@ export function createPlayer(o) {
     if (st.done) return;
     st.done = true;
     const pts = c.engine === 'written' && it.type === 'steps' ? { pts: score * stepTotal(it), max: stepTotal(it) } : {};
+    const before = topicStats(c, S, it.topic).pct;
     st.ok = recordAnswer(S, it.gid, score, { passScore: c.passScore, conf: st.conf || undefined, ...pts });
+    // hreyfing 1 af 3: við rétt svar fyllist stika flokksins frá gamla hlutfallinu í það nýja
+    if (st.ok) st.grow = { from: Math.round((before || 0) * 100), to: Math.round((topicStats(c, S, it.topic).pct || 0) * 100), played: false };
     logActivity(S, c.id, 'practice', score, Date.now(), { from: st.shown, conf: st.conf, ok: st.ok });
     store.save();
     if (o.onDone) o.onDone(score, st.ok);
@@ -76,6 +80,12 @@ export function createPlayer(o) {
     return `<div class="conf" role="group" aria-label="Öryggismat"><span class="hint">Hversu viss ertu?</span>${CONF.map(([k, l, key]) => `<button class="btn small" data-conf="${k}">${l} <kbd>${key.toUpperCase()}</kbd></button>`).join('')}</div>`;
   }
 
+  function growHTML() {
+    if (!st.done || !st.ok || !st.grow) return '';
+    const g = st.grow, w = g.played ? g.to : g.from;
+    return `<div class="grow pb"><span class="pb-l">${esc(topicLabel(c, it.topic))}</span><span class="pb-t" aria-hidden="true"><i data-grow="${g.to}" style="width:${w}%"></i></span><span class="pb-v">${g.to}% rétt</span></div>`;
+  }
+
   function noteRow() {
     if (!st.done || st.ok || it.type === 'card') return '';
     const p = S.items[it.gid] || {};
@@ -96,7 +106,7 @@ export function createPlayer(o) {
         : st.pending ? '' : `<div class="row"><button class="btn small" data-act="hint" ${r.st.every(x => x >= 1) ? 'disabled' : ''}>Vísbending <kbd>H</kbd></button><button class="btn small" data-act="step" ${shown === it.steps.length ? 'disabled' : ''}>Næsta skref <kbd>N</kbd></button><button class="btn small" data-act="all" ${shown === it.steps.length ? 'disabled' : ''}>Sýna alla lausnina <kbd>A</kbd></button>${shown === it.steps.length ? '<button class="btn small good" data-act="allok">Allt rétt hjá mér</button>' : ''}<button class="btn small" data-act="skip" style="margin-left:auto">Sleppa</button></div>`;
       main = `<div class="qtext">${it.q}</div>
         <div class="solhead"><span class="hint">Leystu á blað fyrst. Lausnin er í ${it.steps.length} skrefum, ${tot} stig.</span>${tally}</div>
-        ${confRow()}${ctrl}${renderSteps(it, r, {})}${done && it.e ? `<div class="expl">${it.e}</div>` : ''}${noteRow()}`;
+        ${confRow()}${ctrl}${growHTML()}${renderSteps(it, r, {})}${done && it.e ? `<div class="expl">${it.e}</div>` : ''}${noteRow()}`;
       foot = '';
     } else if (it.type === 'card') {
       const p = S.items[it.gid];
@@ -104,7 +114,7 @@ export function createPlayer(o) {
       foot = `<div class="row" style="justify-content:space-between">${tally}<span class="row">${done ? `<button class="btn small ${p && p.again ? 'again' : ''}" data-act="again">${p && p.again ? '✓ Sýna aftur' : 'Sýna aftur'}</button><button class="btn primary" data-act="next">Næsta <kbd style="margin-left:6px">Enter</kbd></button>` : '<button class="btn primary" data-act="flip">Snúa spjaldinu <kbd style="margin-left:6px">Enter</kbd></button><button class="btn small" data-act="skip">Sleppa</button>'}</span></div>`;
     } else {
       const sol = it.solution ? (st.showSol ? `<div class="qtext">${it.solution.q}</div>${renderSteps(it.solution, { st: [], mk: it.solution.steps.map(() => null) }, { reveal: true, noMark: true })}` : '<button class="btn small" data-act="sol" style="width:fit-content">Sýna allan útreikninginn</button>') : '';
-      main = `<div class="qtext">${it.q}</div>${renderAnswer(it, r, { reveal: done })}${confRow()}${done ? `<div class="expl">${verdictHTML(it, r, it.pts)}${it.e ? `<div>${it.e}</div>` : ''}${sol}</div>` : ''}${noteRow()}`;
+      main = `<div class="qtext">${it.q}</div>${renderAnswer(it, r, { reveal: done })}${confRow()}${done ? `<div class="expl">${verdictHTML(it, r, it.pts)}${growHTML()}${it.e ? `<div>${it.e}</div>` : ''}${sol}</div>` : ''}${noteRow()}`;
       foot = `<div class="row" style="justify-content:space-between">${tally}<span class="row">${done ? '<button class="btn primary" data-act="next">Næsta spurning <kbd style="margin-left:6px">Enter</kbd></button>'
         : st.pending ? '' : `${it.type !== 'mc' ? `<button class="btn primary small" data-act="submit" ${answered(it, r) ? '' : 'disabled'}>Svara <kbd style="margin-left:6px">Enter</kbd></button>` : ''}<button class="btn small" data-act="skip">Sleppa</button>`}</span></div>`;
     }
@@ -112,13 +122,15 @@ export function createPlayer(o) {
   }
 
   function afterDraw(root) {
+    const gi = root.querySelector('#qc [data-grow]');
+    if (gi && st.grow && !st.grow.played) { st.grow.played = true; gi.getBoundingClientRect(); gi.style.width = gi.dataset.grow + '%'; }
     const inps = root.querySelectorAll('#qc #numin, #qc .ninp');
     if (inps.length && !st.done) {
       inps.forEach(x => x.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submit(); } }));
       if (!st.pending && window.innerWidth > 720) inps[0].focus();
     }
     const ex = root.querySelector('.conf') || (st.done && root.querySelector('#qc .expl, #qc .result'));
-    if (ex && ex.getBoundingClientRect().top > window.innerHeight - 80) ex.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    if (ex && ex.getBoundingClientRect().top > window.innerHeight - 80) ex.scrollIntoView({ block: 'nearest' });
   }
 
   // ---------- atburðir (skila true ef spilarinn átti þá) ----------

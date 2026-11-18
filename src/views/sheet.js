@@ -41,7 +41,7 @@ export function render({ el, course: c, query, go, store }) {
   el.onclick = e => {
     const t = e.target.closest('[data-tab]'); if (t) { tabs.set(c.id, t.dataset.tab); return render({ el, course: c, query: new URLSearchParams(), go, store }); }
     if (e.target.closest('[data-act="print"]')) return window.print();
-    const toc = e.target.closest('[data-toc]'); if (toc) { const node = el.querySelector('#' + CSS.escape(toc.dataset.toc)); if (node) node.scrollIntoView({ block: 'start', behavior: 'smooth' }); return; }
+    const toc = e.target.closest('[data-toc]'); if (toc) { const node = el.querySelector('#' + CSS.escape(toc.dataset.toc)); if (node) node.scrollIntoView({ block: 'start', behavior: 'auto' }); return; }
     const sgo = e.target.closest('[data-sgo]'); if (sgo) { const kind = sgo.dataset.kind; return go(`#/fag/${c.id}/aefing?m=written&t=${sgo.dataset.sgo}${kind && kind !== 'all' ? '&s=' + ({ blad: 'sheet' }[kind] || kind) : ''}`); }
     const sq = e.target.closest('[data-sq]'); if (sq) return go(`#/fag/${c.id}/aefing?m=quick${sq.dataset.sq === 'all' ? '' : '&t=' + sq.dataset.sq}`);
     const x = e.target.closest('[data-exam]'); if (x) return go(`#/fag/${c.id}/prof?start=${x.dataset.exam}`);

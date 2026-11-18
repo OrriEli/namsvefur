@@ -55,7 +55,7 @@ export function render({ app, store }) {
     for (const r of R.results) { const b = by.get(r.course) || { n: 0, ok: 0 }; b.n++; if (r.ok) b.ok++; by.set(r.course, b); }
     const rows = [...by].map(([c, b]) => `<tr><td><span class="cchip" style="--cc:var(${c.color})">${c.code}</span> ${esc(c.short)}</td><td class="mono">${b.ok}/${b.n}</td></tr>`).join('');
     const ok = R.results.filter(r => r.ok).length;
-    return `<div class="panel stack" style="gap:10px"><h2>${ok}/${R.results.length} rétt</h2><div class="scroll"><table class="tt"><tbody>${rows}</tbody></table></div>
+    return `<div class="panel stack calm" style="gap:10px"><h2>${ok}/${R.results.length} rétt</h2><div class="scroll"><table class="tt"><tbody>${rows}</tbody></table></div>
       <div class="row"><button class="btn primary" data-act="again">Ný upprifjun</button><a class="btn" href="#/idag">Í dag</a></div></div>`;
   }
 

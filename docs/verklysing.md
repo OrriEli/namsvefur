@@ -317,3 +317,7 @@ Fagsíðan ber lit fagsins (`--cc`): hausinn er tónaður með línu í lit fags
 ### Endurhönnun, áfangi 6 (18. nóv.): tómt ástand
 
 Engin „–“ eða „0/345“ sem aðalskilaboð: fag sem ekkert hefur sést í segir „Ekki byrjað · 345 atriði bíða“, ósnertir reitir í fylki fyrirlestra × stiga segja „Byrja“ með fjölda dæma, stikur án svars sýna ekkert gildi, og „Á áætlun“ segir „21 lota fram að síðasta prófi“ áður en fyrsta lotan klárast. Villubankinn sýnir hólfin fjögur (1, 3, 7 og 16 dagar) sem dálka með fjölda og hve mörg eru á tíma, og „út“ í lokin. Tómur villubanki er boð („Villur sem þú gerir lenda hér“, „Byrja að æfa“ á næsta próf) og tóm vika líka („Vikan fyllist þegar þú æfir“). Fög sem ekki voru æfð síðustu tvær vikur eru ekki í töflu Vikunnar heldur talin upp í einni línu.
+
+### Endurhönnun, áfangi 7 (18. nóv.): hreyfing
+
+Hreyfing er aðeins á þremur stöðum: (1) við rétt svar fyllist mjó stika flokksins frá gamla hlutfallinu í það nýja (`player.js`), (2) þegar dagurinn í dag er búinn fyllist reiturinn í dagaröðinni einu sinni (geymt í `sessionStorage`, ekki með framvindunni), og (3) samantekt í lok upprifjunar og prófs kemur rólega inn. Allt er innan `@media (prefers-reduced-motion: no-preference)`; annars birtist lokastaðan strax. Mjúkt skrun í spilaranum og efnisyfirliti Blaðsins var tekið út.

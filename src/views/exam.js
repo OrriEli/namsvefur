@@ -203,7 +203,7 @@ export function render(ctx) {
       else body = `<div class="qtext">${it.q}</div>${renderAnswer(it, a, { reveal: true })}<div class="expl">${verdictHTML(it, a, s.max !== 1 ? s.max : undefined)}${it.e ? `<div>${it.e}</div>` : ''}</div>`;
       return `<details class="rv" ${dot === 'b' || (it.type === 'steps' && s.frac < 0.999) ? 'open' : ''}><summary><span class="dot ${dot}"></span><span class="mono">${i + 1}.</span><span style="min-width:0">${esc(clip(plain(it.q), 90))}</span><span class="tag" style="margin-left:auto">${it.type === 'card' ? 'skýring' : `${fmtPts(s.pts)}/${fmtPts(s.max)}`}</span></summary><div>${body}</div></details>`;
     }).join('');
-    el.innerHTML = `<div class="stack">
+    el.innerHTML = `<div class="stack calm">
       <span class="eyebrow">${esc(res.label)}${res.timeout ? ' · tíminn rann út' : ''} · ${fmtDur(res.used)} notaðar</span>
       <div class="score"><b class="mono">${fmtPts(res.score)}/${fmtPts(res.max)}</b><span class="muted">${counts ? '' : 'stig · '}≈ ${grade10(res.score / (res.max || 1))} í einkunn · ${toBank} í villubankann</span></div>
       <div class="cols"><div class="panel"><h3 style="margin-bottom:6px">Eftir flokkum</h3><div class="scroll"><table class="tt"><tbody>${tbl(byT, k => esc(c.topics.find(t => t.id === k).name))}</tbody></table></div></div>${byLevel}</div>
