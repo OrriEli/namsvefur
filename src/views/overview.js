@@ -39,7 +39,7 @@ export function render({ el, course: c, store, go }) {
 
   // ---------- aðgerðir ----------
   const exam = `<button class="action main" data-act="exam"><h3>Taka próf <span class="mono">${formatMeta(c, first)}</span></h3><p>${first.pick.by === 'levels' ? 'Blandað eftir stigum. Lausnir birtast eftir skil.' : first.desc}</p></button>`;
-  const wrong = `<button class="action" data-act="wrong"><h3>Villubankinn <span class="mono">${bank}</span></h3><p>Dæmi fer út þegar þú svarar því rétt tvisvar í röð.</p></button>`;
+  const wrong = `<button class="action" data-act="wrong"><h3>Villubankinn <span class="mono">${bank || ''}</span></h3><p>${bank ? 'Dæmi fer út þegar þú svarar því rétt tvisvar í röð.' : 'Tómur. Villur sem þú gerir lenda hér og koma aftur eftir 1, 3, 7 og 16 daga.'}</p></button>`;
   let actions;
   if (lecture) {
     const A = S.settings.adapt[c.id] || { lvl: 1 };
@@ -61,7 +61,8 @@ export function render({ el, course: c, store, go }) {
     const head = `<tr><th>Fyrirlestur</th>${[1, 2, 3].map(l => `<th><span class="lv lv${l}">Stig ${l} · ${esc(c.levels[l].name)}</span></th>`).join('')}<th class="hide-sm">Spjöld</th></tr>`;
     const rows = c.topics.map(t => {
       const cells = [1, 2, 3].map(l => { const s = topicStats(c, S, t.id, undefined, l);
-        return `<td><button class="cell ${barCls(s.pct) || (s.pct === null ? '' : 'hi')}" data-g="${t.id}" data-l="${l}" aria-label="${esc(t.label || t.id)} stig ${l}: ${pctTxt(s.pct)} rétt, ${s.seen} af ${s.total} séð"><span class="pc">${pctTxt(s.pct)}</span><span class="sn">${s.seen}/${s.total} séð</span></button></td>`; }).join('');
+        const label = s.seen ? `${pctTxt(s.pct)} rétt, ${s.seen} af ${s.total} séð` : `ekki byrjað, ${s.total} dæmi`;
+        return `<td><button class="cell ${barCls(s.pct) || (s.pct === null ? '' : 'hi')}" data-g="${t.id}" data-l="${l}" aria-label="${esc(t.label || t.id)} stig ${l}: ${label}">${s.seen ? `<span class="pc">${pctTxt(s.pct)}</span><span class="sn">${s.seen}/${s.total} séð</span>` : `<span class="pc new">Byrja</span><span class="sn">${s.total} dæmi</span>`}</button></td>`; }).join('');
       const cs = es.filter(e => e.type === 'card' && e.topic === t.id); const seen = cs.filter(e => S.items[e.gid]).length;
       return `<tr><td class="lname"><b>${esc(t.label || t.id)}</b><span>${esc(t.name)}</span></td>${cells}<td class="hide-sm"><button class="cell" data-cards="${t.id}"><span class="pc">${seen}/${cs.length}</span><span class="sn">skoðuð</span></button></td></tr>`;
     }).join('');
@@ -79,7 +80,7 @@ export function render({ el, course: c, store, go }) {
       if (self) { const sc = selfScore(c, S, t.id), qq = topicStats(c, S, t.id, isQ);
         return `<tr><td><b>${esc(t.name)}</b>${t.ref ? `<div class="hint">${esc(t.ref)}</div>` : ''}</td><td class="mono hide-sm">${share}</td><td class="mono"><span class="selfpill ${scCls(sc)}">${scTxt(sc)}</span></td><td style="width:20%">${bar(s.pct, pctTxt(s.pct))}</td><td style="width:20%" class="hide-sm">${bar(qq.pct, pctTxt(qq.pct))}</td>
         <td><button class="btn small" data-act="topic" data-t="${t.id}">Æfa</button></td></tr>`; }
-      return `${grp}<tr><td><b>${esc(t.name)}</b>${t.ref ? `<div class="hint">${esc(t.ref)}</div>` : ''}</td>${share !== null ? `<td class="mono hide-sm">${share}</td>` : ''}<td class="mono">${s.seen}/${s.total}</td>
+      return `${grp}<tr><td><b>${esc(t.name)}</b>${t.ref ? `<div class="hint">${esc(t.ref)}</div>` : ''}</td>${share !== null ? `<td class="mono hide-sm">${share}</td>` : ''}<td class="mono">${s.seen ? `${s.seen}/${s.total}` : `<span class="hint">${s.total} ný</span>`}</td>
         <td style="width:${written ? 20 : 28}%">${bar(s.pct, pctTxt(s.pct))}</td>${quick}<td><button class="btn small" data-act="topic" data-t="${t.id}">Æfa</button></td></tr>`;
     }).join('');
     const head = self ? '<tr><th>Flokkur</th><th class="hide-sm">Vægi</th><th>Mat</th><th>Skrifleg (stig)</th><th class="hide-sm">Hraðæfing</th><th></th></tr>' : `<tr><th>Flokkur</th>${written ? '<th class="hide-sm">Vægi</th>' : quota ? '<th class="hide-sm">Vægi á prófi</th>' : ''}<th>Séð</th><th>${written ? 'Skrifleg (stig)' : 'Rétt'}</th>${written ? '<th>Hraðæfing</th>' : ''}<th></th></tr>`;
@@ -92,7 +93,7 @@ export function render({ el, course: c, store, go }) {
       <div class="row" style="justify-content:space-between"><h2>Forgangsröð</h2><span class="hint">Lítil kunnátta × mikið vægi á prófinu</span></div>
       <ol class="prio">${weakest(c, S, 5).map((t, i) => { const sc = selfScore(c, S, t), w = writtenStats(c, S, t), ew = c.examWeights[t];
         return `<li><span class="mono pn">${i + 1}</span><div style="min-width:0"><b>${esc(name(t))}</b><span class="vh">Sjálfsmat ${scTxt(sc)}/10${w.seen >= 3 ? ` · æfing ${pctTxt(w.pct)}` : ''} · um ${ew}% af prófinu</span>
-          <div class="pmini" aria-hidden="true">${thinBar('Mat', sc, `${scTxt(sc)}/10`)}${thinBar('Vægi', ew / maxW, `${ew}%`)}</div>${w.seen >= 3 ? `<div class="hint">Æfing ${pctTxt(w.pct)}</div>` : ''}</div><button class="btn small" data-act="topic" data-t="${t}">Æfa</button></li>`; }).join('')}</ol>
+          <div class="pmini" aria-hidden="true">${thinBar('Mat', sc, sc === null ? 'ómetið' : `${scTxt(sc)}/10`)}${thinBar('Vægi', ew / maxW, `${ew}%`)}</div>${w.seen >= 3 ? `<div class="hint">Æfing ${pctTxt(w.pct)}</div>` : ''}</div><button class="btn small" data-act="topic" data-t="${t}">Æfa</button></li>`; }).join('')}</ol>
       <p class="hint">Sjálfsmatið kemur frá Blaðinu (${esc(selfOf(c, S).at || '–')}); breyttu því þar þegar þú lærir kafla. Eftir þrjú æfð dæmi í flokki vegur æfingin til jafns við matið.</p>
     </div>`;
 

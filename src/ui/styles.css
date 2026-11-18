@@ -311,3 +311,21 @@ kbd{border-radius:var(--radius-sm)}
 [data-focus] .bbar.run .hint,[data-focus] .bbar.run [data-blk="end"]{display:none}
 [data-focus] .bbar.run .mono{font-size:var(--fs-sm)}
 [data-focus] .bbar .bline{display:block;position:fixed;top:0;left:0;height:3px;background:var(--action);z-index:10}
+
+/* ===================== Tómt ástand og villubankinn ===================== */
+/* Boð í stað tómra taflna, „–“ og „0/345“ */
+.invite{gap:var(--sp-3);border-style:dashed;border-color:var(--rule-strong);box-shadow:none;background:transparent}
+.invite h3{font-family:var(--font-serif);font-size:var(--fs-xl);font-weight:500}
+.pempty{margin:0;font-size:var(--fs-sm);color:var(--ink-2)}
+.mx .cell .pc.new{font-family:var(--font-sans);font-size:var(--fs-sm);font-weight:600;color:var(--ink-2)}
+/* hólfin fjögur (1, 3, 7, 16 dagar) sem dálkar, og „út“ */
+.boxes{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) minmax(0,.8fr);gap:var(--sp-2);align-items:stretch}
+.box{position:relative;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;min-height:132px;padding:var(--sp-3);border:1px solid var(--rule);border-radius:var(--radius-md);background:var(--surface);overflow:hidden;font-size:var(--fs-sm);color:var(--ink-2)}
+.box .bx-fill{position:absolute;left:0;right:0;bottom:0;background:var(--bad-weak)}
+.box>*:not(.bx-fill){position:relative}
+.box .bx-n{font-family:var(--font-serif);font-size:var(--fs-2xl);font-weight:500;line-height:1;color:var(--ink)}
+.box .bx-l b{color:var(--ink);font-weight:600;white-space:nowrap}
+.box .bx-due{font-weight:600;color:var(--bad)}
+.box.out{border-style:dashed;background:transparent}
+.boxes.empty .box{min-height:88px;border-style:dashed;background:transparent}
+@media (max-width:560px){.boxes{grid-template-columns:repeat(2,minmax(0,1fr))}.box.out{grid-column:1/-1;min-height:0}.box{min-height:96px}}

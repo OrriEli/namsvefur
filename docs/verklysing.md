@@ -313,3 +313,7 @@ Fagsíðan ber lit fagsins (`--cc`): hausinn er tónaður með línu í lit fags
 ### Endurhönnun, áfangi 5 (18. nóv.): einbeitingarhamur
 
 Æfing, blönduð upprifjun og próf á tíma (líka sjálfsmat eftir skil) eru í einbeitingarham (`data-focus` á `<html>`, `setFocus` í `ui/dom.js`): valmynd, haus fagsins og flipar hverfa og blaðið er fyrir miðju, um 700 px. Efst er mjó stika: til baka (fagið eða Í dag), titill og val, framvinda lotunnar sem punktar (fylltur = rétt, rauður hringur = rangt) og hnappurinn „Sía“; Esc lokar síunum. Tími prófs og lærdómsblokkar er mjó lína efst. TeX í spurningum er 1,15 em og lausnarskref eru neðar og hógværari. Flýtilyklarnir (H, N, A, R/V, V/H/G, 1–9, Enter) eru óbreyttir.
+
+### Endurhönnun, áfangi 6 (18. nóv.): tómt ástand
+
+Engin „–“ eða „0/345“ sem aðalskilaboð: fag sem ekkert hefur sést í segir „Ekki byrjað · 345 atriði bíða“, ósnertir reitir í fylki fyrirlestra × stiga segja „Byrja“ með fjölda dæma, stikur án svars sýna ekkert gildi, og „Á áætlun“ segir „21 lota fram að síðasta prófi“ áður en fyrsta lotan klárast. Villubankinn sýnir hólfin fjögur (1, 3, 7 og 16 dagar) sem dálka með fjölda og hve mörg eru á tíma, og „út“ í lokin. Tómur villubanki er boð („Villur sem þú gerir lenda hér“, „Byrja að æfa“ á næsta próf) og tóm vika líka („Vikan fyllist þegar þú æfir“). Fög sem ekki voru æfð síðustu tvær vikur eru ekki í töflu Vikunnar heldur talin upp í einni línu.

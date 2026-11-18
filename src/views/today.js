@@ -133,7 +133,7 @@ export function render({ app, store, go }) {
       </div>
       ${strip ? `<div class="panel stack ontrack" style="gap:8px">
         <h2>Á áætlun</h2>
-        <p class="ot-num"><b>${strip.done}</b> / ${strip.total} <span>lotur</span></p>
+        ${strip.done ? `<p class="ot-num"><b>${strip.done}</b> / ${strip.total} <span>lotur</span></p>` : `<p class="ot-num"><b>${strip.total}</b> <span>${strip.total % 10 === 1 && strip.total % 100 !== 11 ? 'lota' : 'lotur'} fram að síðasta prófi</span></p>`}
         <p>${esc(onTrackText(strip))}</p>
         <p class="hint">Ein lota á dag fram að síðasta prófi. Dagur telst búinn eftir ${DONE_MIN} mín. í fagi dagsins, þegar áætlun dagsins er öll hökuð, eða þegar prófinu er lokið.</p>
       </div>` : ''}
