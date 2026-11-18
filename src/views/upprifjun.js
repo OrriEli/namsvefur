@@ -1,4 +1,4 @@
-// Blönduð upprifjun: tíu atriði úr öllum fögum með komandi próf, vegin eftir hve langt er síðan flokkurinn
+// Blönduð upprifjun (lota sem Í dag ræsir, #/upprifjun): tíu atriði úr öllum fögum með komandi próf, vegin eftir hve langt er síðan flokkurinn
 // var æfður. Fagið og flokkurinn sjást ekki fyrr en eftir svar, svo æfingin reyni á að þekkja hvers konar
 // dæmi er á ferðinni. Skrifleg dæmi og spjöld eru ekki með, því þau taka of langan tíma í tíu atriða lotu.
 
@@ -62,6 +62,7 @@ export function render({ app, store }) {
   function draw() {
     const body = R.player ? R.player.html() : summary();
     app.innerHTML = `<div class="stack">
+      <nav class="crumbs" aria-label="Brauðmolar"><a href="#/idag">Í dag</a><span aria-hidden="true">›</span><span>Upprifjun</span></nav>
       <div class="row" style="justify-content:space-between;align-items:baseline"><h1>Blönduð upprifjun</h1><span class="mono hint">${Math.min(R.i + 1, R.queue.length)} af ${R.queue.length}</span></div>
       <p class="muted" style="max-width:62ch">${plural(R.queue.length, 'atriði', 'atriði')} úr öllum fögum, oftast úr flokkum sem langt er síðan þú æfðir. Fagið birtist þegar þú hefur svarað: reyndu fyrst að þekkja hvers konar dæmi þetta er.</p>
       ${body}

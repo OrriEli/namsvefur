@@ -1,4 +1,4 @@
-// Í dag: prófadagatal, tillaga að lærdómsblokk (einn takki, Byrja) og kunnáttukort allra faga.
+// Í dag: prófadagatal, tillaga að lærdómsblokk (einn takki, Byrja), blönduð upprifjun og kunnáttukort allra faga.
 
 import { COURSES } from '../courses/index.js';
 import { EXAMS } from '../config.js';
@@ -65,6 +65,10 @@ export function render({ app, store, go }) {
       <ol class="segs">${sug.segments.map(segRow).join('')}</ol>
       <div class="row">${running ? '<button class="btn primary" data-act="resume">Halda áfram með blokkina</button>' : '<button class="btn primary" data-act="start">Byrja</button>'}<span class="hint">Tímamælir og hlé fylgja; stikan efst sýnir hvar þú ert.</span></div>
     </div>
+    <div class="panel"><div class="row" style="justify-content:space-between;gap:12px">
+      <div style="min-width:0;flex:1 1 280px"><h2>Blönduð upprifjun</h2><p class="hint">Tíu atriði úr öllum fögum, oftast úr flokkum sem langt er síðan þú æfðir. Fagið birtist eftir svar.</p></div>
+      <a class="btn" href="#/upprifjun">Byrja upprifjun</a>
+    </div></div>
     <div class="panel stack" style="gap:10px">
       <div class="row" style="justify-content:space-between"><h2>Kunnáttukort</h2><span class="hint">Smelltu á reit til að æfa flokkinn</span></div>
       ${knowledgeMap(S, now)}

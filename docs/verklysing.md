@@ -148,7 +148,7 @@ Reglur:
 
 ## Skjámyndir og virkni
 
-Efst er stika með: **Í dag · Fög · Villur · Upprifjun · Vikan · Blöðin**, og stillingar í horni. Á síma verður stikan að botnstiku.
+Efst er stika með: **Í dag · Fög · Framvinda**, og tannhjól fyrir Stillingar í horni (endurhönnun, áfangi 2, 18. nóv.). Framvinda sameinar Villubankann og Vikuna; Upprifjun er lota sem Í dag ræsir (`#/upprifjun`); leit í Blöðunum er efst á Fögum og Blað hvers fags er flipi á fagsíðunni. Gamlar slóðir vísa áfram: `#/villur` og `#/vikan` → `#/framvinda/villur` og `#/framvinda/vikan`, `#/bladin` og `#/blodin` (með `?q=`) → `#/fog?q=` (`src/routes.js`). Á síma kemst stikan í eina línu.
 
 ### 1. Í dag (forsíða)
 
@@ -213,7 +213,7 @@ Yfirlit síðustu 7 daga: mínútur, fjöldi atriða og hlutfall réttra svara �
 
 ### 9. Blöðin
 
-Öll „Blöð“ faganna á einum stað, með leit þvert á fög. Leitarorð eins og „núvirði“ eða „Hessian“ sýnir hvaða kafli í hvaða fagi geymir það.
+Leit þvert á Blöð allra faga, efst á Fögum (`#/fog?q=`). Leitarorð eins og „núvirði“ eða „Hessian“ sýnir hvaða kafli í hvaða fagi geymir það.
 
 ### 10. Stillingar
 
